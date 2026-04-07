@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --version)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(\"/c/Users/ekant/OneDrive/My Documents/Ekantik Capital/Ekantik Capital Advisors/Landing Pages/Ekantik 10x/data/tenx_trades.json\")",
+      "Bash(\"/c/Users/ekant/OneDrive/My Documents/Ekantik Capital/Ekantik Capital Advisors/Landing Pages/Ekantik 10x/data/weekly_snapshots.json\")",
+      "Bash(pandoc \"C:\\\\Users\\\\ekant\\\\Downloads\\\\Accelerator-Dashboard-Change-Spec.docx\" -o /tmp/accelerator-spec.md)",
+      "Read(//tmp/**)"
+    ]
+  }
+}

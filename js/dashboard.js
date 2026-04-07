@@ -521,6 +521,131 @@ function renderTenx(k, trades, allK, allTrades) {
 
     // Growth Comparison
     renderGrowthComparisonFromState('chart-growth-comparison-tenx', 'tenx');
+
+    // Evidence Gates & Gain Metrics
+    renderEvidenceGates(allK);
+    renderGainMetrics(allTrades, allK);
+}
+
+// ===== Q0 EVIDENCE GATES =====
+function renderEvidenceGates(allK) {
+    if (!allK) return;
+
+    const gates = [
+        { id: 'trades', value: allK.totalTrades, target: 25, format: v => `${v}/25`, pct: v => Math.min(100, (v / 25) * 100), pass: v => v >= 25 },
+        { id: 'return', value: allK.returnPct, target: 30, format: v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`, pct: v => Math.min(100, Math.max(0, (v / 30) * 100)), pass: v => v >= 30 },
+        { id: 'wr', value: allK.winRate, target: 60, format: v => `${v.toFixed(1)}%`, pct: v => Math.min(100, (v / 60) * 100), pass: v => v >= 60 },
+        { id: 'ev', value: allK.evPerTrade, target: 0, format: v => `${v >= 0 ? '+' : ''}$${Math.abs(v).toFixed(0)}`, pct: v => v > 0 ? 100 : Math.max(0, 50 + (v / (TENX_RISK * 0.1)) * 50), pass: v => v > 0 },
+        { id: 'pf', value: allK.profitFactor, target: 1.5, format: v => v === Infinity ? '∞' : v.toFixed(2), pct: v => Math.min(100, (v / 1.5) * 100), pass: v => v >= 1.5 },
+        { id: 'dd', value: allK.maxDDPct, target: 25, format: v => `-${v.toFixed(1)}%`, pct: v => Math.min(100, Math.max(0, ((25 - v) / 25) * 100)), pass: v => v < 25 }
+    ];
+
+    const insufficientData = allK.totalTrades < 5;
+    let allPassed = true;
+
+    gates.forEach(g => {
+        const valEl = document.getElementById(`gate-${g.id}-value`);
+        const barEl = document.getElementById(`gate-${g.id}-bar`);
+        const cardEl = document.getElementById(`gate-${g.id}`);
+        if (!valEl || !barEl || !cardEl) return;
+
+        if (insufficientData && g.id !== 'trades') {
+            // Grey — insufficient data
+            valEl.textContent = '—';
+            valEl.className = 'text-xl font-bold text-gray-500';
+            barEl.style.width = '0%';
+            barEl.className = 'h-full rounded-full bg-gray-600 transition-all duration-700';
+            cardEl.className = 'bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center';
+            allPassed = false;
+            return;
+        }
+
+        const passed = g.pass(g.value);
+        const pct = g.pct(g.value);
+
+        valEl.textContent = g.format(g.value);
+
+        if (passed) {
+            valEl.className = 'text-xl font-bold text-green-400';
+            barEl.className = 'h-full rounded-full bg-green-500 transition-all duration-700';
+            cardEl.className = 'bg-green-900/10 border border-green-500/30 rounded-xl p-3 text-center';
+        } else if (pct > 60) {
+            valEl.className = 'text-xl font-bold text-amber-400';
+            barEl.className = 'h-full rounded-full bg-amber-500 transition-all duration-700';
+            cardEl.className = 'bg-amber-900/10 border border-amber-500/20 rounded-xl p-3 text-center';
+            allPassed = false;
+        } else {
+            valEl.className = 'text-xl font-bold text-red-400';
+            barEl.className = 'h-full rounded-full bg-red-500 transition-all duration-700';
+            cardEl.className = 'bg-red-900/10 border border-red-500/20 rounded-xl p-3 text-center';
+            allPassed = false;
+        }
+
+        barEl.style.width = `${Math.max(0, Math.min(100, pct)).toFixed(0)}%`;
+    });
+
+    // Validation banner
+    const banner = document.getElementById('gates-validated-banner');
+    if (banner) banner.classList.toggle('hidden', !allPassed || insufficientData);
+}
+
+// ===== GAIN-NOT-GAP METRICS =====
+function renderGainMetrics(allTrades, allK) {
+    if (!allK || !allTrades || allTrades.length === 0) return;
+
+    const setGain = (id, pctId, value) => {
+        const el = document.getElementById(id);
+        const pctEl = document.getElementById(pctId);
+        if (el) {
+            el.textContent = `${value >= 0 ? '+' : '-'}$${Math.abs(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            el.className = `text-${id === 'gain-inception' ? '2xl' : 'lg'} font-bold ${value >= 0 ? 'text-green-400' : 'text-red-400'} mt-1`;
+        }
+        if (pctEl) {
+            const pct = (value / TENX_STARTING_BALANCE * 100);
+            pctEl.textContent = `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}% since start`;
+        }
+    };
+
+    // Gain since inception (all trades)
+    setGain('gain-inception', 'gain-inception-pct', allK.netPL);
+
+    // Gain this month
+    const now = new Date();
+    const monthTrades = allTrades.filter(t => {
+        const d = t.date ? normalizeDate(t.date) : '';
+        if (!d) return false;
+        const parts = d.split('/');
+        return parseInt(parts[0]) === (now.getMonth() + 1) && parseInt(parts[2]) === now.getFullYear();
+    });
+    const monthPL = monthTrades.reduce((s, t) => s + t.dollarPL, 0);
+    const mEl = document.getElementById('gain-month');
+    const mPctEl = document.getElementById('gain-month-pct');
+    if (mEl) {
+        mEl.textContent = `${monthPL >= 0 ? '+' : '-'}$${Math.abs(monthPL).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        mEl.className = `text-lg font-bold ${monthPL >= 0 ? 'text-green-400' : 'text-red-400'} mt-1`;
+    }
+    if (mPctEl) mPctEl.textContent = `${monthTrades.length} trades this month`;
+
+    // Gain this week
+    const dayOfWeek = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((dayOfWeek + 6) % 7));
+    monday.setHours(0, 0, 0, 0);
+    const weekTrades = allTrades.filter(t => {
+        const d = t.date ? normalizeDate(t.date) : '';
+        if (!d) return false;
+        const parts = d.split('/');
+        const td = new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
+        return td >= monday;
+    });
+    const weekPL = weekTrades.reduce((s, t) => s + t.dollarPL, 0);
+    const wEl = document.getElementById('gain-week');
+    const wPctEl = document.getElementById('gain-week-pct');
+    if (wEl) {
+        wEl.textContent = `${weekPL >= 0 ? '+' : '-'}$${Math.abs(weekPL).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        wEl.className = `text-lg font-bold ${weekPL >= 0 ? 'text-green-400' : 'text-red-400'} mt-1`;
+    }
+    if (wPctEl) wPctEl.textContent = `${weekTrades.length} trades this week`;
 }
 
 // ===== HELPER: GET LAST TRADE DATE =====
