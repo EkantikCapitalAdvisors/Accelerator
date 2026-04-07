@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekantik Accelerator | Ekantik Capital</title>
+    <meta name="description" content="Ekantik Accelerator — experimental growth futures strategy with disciplined risk scaling. Real Tradovate fills, updated weekly.">
+    <meta name="theme-color" content="#0a1628">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {
+                fontFamily: { 'playfair': ['Playfair Display', 'serif'], 'inter': ['Inter', 'sans-serif'] },
+                colors: { navy: '#0a1628', gold: '#d4af37' }
+            }}
+        }
+    </script>
+    <style>
+        .gradient-gold { background: linear-gradient(135deg, #d4af37 0%, #f4c430 100%); }
+        .gradient-emerald { background: linear-gradient(135deg, #059669 0%, #34d399 100%); }
+    </style>
+</head>
+<body class="font-inter antialiased bg-[#0a1628] text-gray-100">
+
+    <!-- ===== HEADER (matching main dashboard) ===== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur-md border-b border-[#d4af37]/20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a href="https://cashflow.ekantikcapital.com/" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 gradient-gold rounded-lg flex items-center justify-center">
+                            <span class="text-[#0a1628] font-bold text-xl">ECA</span>
+                        </div>
+                        <div class="hidden sm:block">
+                            <div class="text-[#d4af37] font-playfair font-bold text-lg">Ekantik Capital</div>
+                            <div class="text-gray-400 text-xs tracking-wider">ADVISORS LLC</div>
+                        </div>
+                    </a>
+                </div>
+                <nav class="flex items-center">
+                    <span class="text-emerald-400 font-semibold text-sm flex items-center">
+                        <i class="fas fa-rocket mr-1.5 text-xs"></i><span class="hidden sm:inline">Ekantik Accelerator</span><span class="sm:hidden">Accelerator</span>
+                    </span>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="pt-28 pb-8 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1d35] to-[#0a1628]"></div>
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-500/30 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-5xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <span class="bg-amber-500/15 border border-amber-400/50 rounded-full px-4 py-1.5 text-amber-400 font-bold text-[11px] uppercase tracking-widest"><i class="fas fa-flask mr-1.5"></i>Experimental</span>
+                    <span class="bg-purple-500/15 border border-purple-400/50 rounded-full px-4 py-1.5 text-purple-400 font-bold text-[11px] uppercase tracking-widest"><i class="fas fa-star mr-1.5"></i>Aspirational</span>
+                </div>
+                <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                    Ekantik <span class="text-emerald-400">Accelerator</span>
+                </h1>
+                <p class="text-lg text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+                    An experimental, aspirational growth strategy — ES/MES futures with disciplined risk scaling and yearly compounding.
+                </p>
+                <div class="max-w-2xl mx-auto mb-6 bg-amber-950/30 border border-amber-500/20 rounded-lg px-4 py-2.5">
+                    <p class="text-amber-200/70 text-xs leading-relaxed">
+                        <i class="fas fa-exclamation-triangle text-amber-400 mr-1.5"></i>
+                        <strong class="text-amber-200/90">This is a theoretical framework</strong> based on edge metrics observed in past testing. The growth targets are mathematically derived from historical trade data but have <strong class="text-amber-200/90">not yet been proven</strong> over a full annual cycle. Treat all projections as aspirational goals, not guaranteed outcomes.
+                    </p>
+                </div>
+
+                <!-- Live KPI Badges -->
+                <div class="flex flex-wrap items-center justify-center gap-3 mb-5">
+                    <div class="bg-emerald-500/10 border border-emerald-400/30 rounded-xl px-5 py-3 text-center min-w-[120px]">
+                        <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Starting Capital</p>
+                        <p class="text-2xl font-bold text-emerald-400">$10,000</p>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-400/30 rounded-xl px-5 py-3 text-center min-w-[120px]">
+                        <p class="text-[9px] text-red-400 font-bold uppercase tracking-wider">Daily Risk</p>
+                        <p class="text-2xl font-bold text-red-400">$1,000</p>
+                    </div>
+                    <div class="bg-emerald-500/10 border border-emerald-400/30 rounded-xl px-5 py-3 text-center min-w-[120px]">
+                        <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">3-Year Goal</p>
+                        <p class="text-2xl font-bold text-emerald-400">$100K</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-1">
+                    <div class="bg-emerald-900/20 border border-emerald-400/40 rounded-lg px-6 py-3">
+                        <p class="text-emerald-200 text-sm">
+                            <i class="fas fa-clock mr-2"></i><strong>Last Updated:</strong> <span id="tenx-live-last-updated">—</span>
+                            <span class="text-gray-500 mx-2">|</span>
+                            <span id="tenx-live-trade-count" class="text-gray-400">0 trades (All-Time)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EDUCATIONAL DISCLOSURE BAR ===== -->
+    <div class="bg-amber-950/40 border-y border-amber-500/20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto py-2.5 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <i class="fas fa-graduation-cap text-amber-400 text-xs"></i>
+                    <span class="text-amber-400 text-[10px] font-bold uppercase tracking-widest">Experimental &middot; Not Proven</span>
+                </div>
+                <span class="hidden sm:block text-amber-500/30 text-xs">|</span>
+                <p class="text-amber-200/60 text-[10px] leading-relaxed">
+                    This is an <strong class="text-amber-200/80">experimental and aspirational project</strong>. Growth targets are theoretically possible based on edge metrics from past testing but have <strong class="text-amber-200/80">not been proven</strong> over a full cycle. All projections are mathematical extrapolations from a <strong class="text-amber-200/80">$10,000 starting portfolio</strong> — not guarantees. Past performance is not indicative of future results. Not investment advice.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <section class="py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- ===== ACCELERATOR GROWTH PLAN ===== -->
+    <div class="bg-gradient-to-br from-[#0d351d] to-[#0a1628] border border-emerald-400/30 rounded-2xl p-6 fade-in-up">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 gradient-emerald rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-rocket text-[#0a1628] text-lg"></i>
+            </div>
+            <div>
+                <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white">The Accelerator Compounding Plan <span class="text-amber-400 text-xs font-inter font-semibold align-middle ml-2 bg-amber-500/10 px-2 py-0.5 rounded">THEORETICAL</span></h2>
+                <p class="text-gray-400 text-sm">$10,000 → $100,000 in 3 years through yearly compounding at ~115% CAGR</p>
+            </div>
+        </div>
+
+        <!-- Core Mechanic -->
+        <div class="bg-[#0a1628]/60 border border-emerald-500/15 rounded-lg p-3 mb-4 flex items-start gap-3">
+            <i class="fas fa-cog text-emerald-400 mt-0.5 flex-shrink-0"></i>
+            <p class="text-gray-300 text-xs leading-relaxed">
+                <strong class="text-emerald-300">The rule:</strong> <strong class="text-amber-300">Q0 is a trial quarter</strong> — trade at base risk ($1,000/day) to validate the edge before committing to the scaling plan. Once edge is confirmed, compound <strong class="text-white">~115% annually</strong>. At each year-end, scale risk proportionally to the new account size (always 10%). Same edge, larger position sizes → $10K becomes $100K in 3 years.
+            </p>
+        </div>
+
+        <!-- Compounding Math Callout -->
+        <div class="bg-[#0a1628]/80 border border-emerald-500/10 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fas fa-calculator text-emerald-400 text-xs"></i>
+                <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Compounding Math</span>
+            </div>
+            <p class="text-gray-300 text-xs font-mono text-center mb-1">$10,000 × (1 + 1.154)³ = $100,000</p>
+            <p class="text-gray-500 text-[10px] text-center">Required CAGR: <strong class="text-emerald-300">~115%</strong> · Compounding frequency: <strong class="text-white">Yearly</strong> · Horizon: <strong class="text-white">3 years</strong></p>
+        </div>
+
+        <!-- Growth Roadmap Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b-2 border-emerald-500/30">
+                        <th class="text-left text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">Phase</th>
+                        <th class="text-right text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">Starting Balance</th>
+                        <th class="text-right text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">Risk/Day (10%)</th>
+                        <th class="text-right text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">Annual Return</th>
+                        <th class="text-right text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">End Balance</th>
+                        <th class="text-left text-emerald-400 font-bold px-3 py-2.5 text-[11px] uppercase tracking-wider">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-700/20 hover:bg-amber-500/5 transition-colors" style="border-left: 3px solid rgba(251,191,36,0.4);">
+                        <td class="px-3 py-3 text-amber-300 font-semibold"><i class="fas fa-flask text-amber-400 mr-2 text-xs"></i>Q0 <span class="text-[9px] text-amber-400/60 font-normal">TRIAL</span></td>
+                        <td class="text-right px-3 py-3 text-amber-200/80 font-semibold">$10,000</td>
+                        <td class="text-right px-3 py-3 text-amber-300/70">$1,000</td>
+                        <td class="text-right px-3 py-3 text-amber-300/70">Validate edge</td>
+                        <td class="text-right px-3 py-3 text-amber-200/80 font-semibold">$10,000+</td>
+                        <td class="px-3 py-3 text-amber-400 text-[10px]"><i class="fas fa-check-circle mr-1"></i>Edge confirmed → begin compounding</td>
+                    </tr>
+                    <tr class="border-b border-gray-700/20 hover:bg-emerald-500/5 transition-colors">
+                        <td class="px-3 py-3 text-white font-semibold"><i class="fas fa-seedling text-emerald-400 mr-2 text-xs"></i>Year 1</td>
+                        <td class="text-right px-3 py-3 text-white font-semibold">$10,000</td>
+                        <td class="text-right px-3 py-3 text-emerald-300">$1,000</td>
+                        <td class="text-right px-3 py-3 text-green-400 font-bold">+$11,544 <span class="text-gray-500 text-[9px] font-normal">(+115%)</span></td>
+                        <td class="text-right px-3 py-3 text-white font-semibold">$21,544</td>
+                        <td class="px-3 py-3 text-amber-400 text-[10px]"><i class="fas fa-arrow-up mr-1"></i>Scale risk to 10% of new balance</td>
+                    </tr>
+                    <tr class="border-b border-gray-700/20 hover:bg-emerald-500/5 transition-colors">
+                        <td class="px-3 py-3 text-white font-semibold"><i class="fas fa-leaf text-emerald-400 mr-2 text-xs"></i>Year 2</td>
+                        <td class="text-right px-3 py-3 text-white font-semibold">$21,544</td>
+                        <td class="text-right px-3 py-3 text-emerald-300">$2,154</td>
+                        <td class="text-right px-3 py-3 text-green-400 font-bold">+$24,872 <span class="text-gray-500 text-[9px] font-normal">(+115%)</span></td>
+                        <td class="text-right px-3 py-3 text-white font-semibold">$46,416</td>
+                        <td class="px-3 py-3 text-amber-400 text-[10px]"><i class="fas fa-arrow-up mr-1"></i>Scale risk to 10% of new balance</td>
+                    </tr>
+                    <tr class="hover:bg-emerald-500/5 transition-colors" style="border: 2px solid rgba(52,211,153,0.4); background: rgba(52,211,153,0.06);">
+                        <td class="px-3 py-3 text-emerald-400 font-bold"><i class="fas fa-trophy text-yellow-400 mr-2 text-xs"></i>Year 3</td>
+                        <td class="text-right px-3 py-3 text-emerald-400 font-bold">$46,416</td>
+                        <td class="text-right px-3 py-3 text-emerald-300 font-semibold">$4,642</td>
+                        <td class="text-right px-3 py-3 text-green-400 font-bold">+$53,584 <span class="text-gray-500 text-[9px] font-normal">(+115%)</span></td>
+                        <td class="text-right px-3 py-3 text-emerald-400 font-bold text-lg">$100,000</td>
+                        <td class="px-3 py-3 text-emerald-400 text-[10px] font-bold"><i class="fas fa-flag-checkered mr-1"></i>Goal reached</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Growth Visual -->
+        <div class="mt-5 grid grid-cols-3 gap-3">
+            <div class="text-center">
+                <div class="h-2 rounded-full gradient-emerald opacity-40"></div>
+                <p class="text-[10px] text-gray-500 mt-1">Year 1: $10K → $21.5K</p>
+                <p class="text-[9px] text-gray-600">+115% at $1K/day risk</p>
+            </div>
+            <div class="text-center">
+                <div class="h-2 rounded-full gradient-emerald opacity-70"></div>
+                <p class="text-[10px] text-gray-500 mt-1">Year 2: $21.5K → $46.4K</p>
+                <p class="text-[9px] text-gray-600">+115% at $2.2K/day risk</p>
+            </div>
+            <div class="text-center">
+                <div class="h-2 rounded-full gradient-emerald"></div>
+                <p class="text-[10px] text-emerald-400 mt-1 font-bold">Year 3: $46.4K → $100K</p>
+                <p class="text-[9px] text-emerald-500">+115% at $4.6K/day risk</p>
+            </div>
+        </div>
+
+        <!-- Key insight -->
+        <div class="mt-4 bg-[#0a1628]/60 border border-amber-500/15 rounded-lg p-3 flex items-start gap-3">
+            <i class="fas fa-lightbulb text-amber-400 mt-0.5 flex-shrink-0"></i>
+            <p class="text-gray-400 text-xs leading-relaxed">
+                <strong class="text-amber-300">Important context:</strong> The ~115% annual CAGR is derived from edge metrics observed in past testing. Risk scales conservatively once per year (always 10% of the year-start balance), not intra-year. Q0 exists specifically to validate the edge in live conditions before any compounding begins. This has <strong class="text-amber-200/80">not been proven over a multi-year cycle</strong>. Real-world execution will face drawdowns, slippage, and market regime changes. The yearly compounding approach is deliberately more conservative than quarterly scaling — but sustained ~115% annual returns remain the unproven variable.
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== INFO CARD ===== -->
+    <div class="bg-gradient-to-br from-[#0d351d] to-[#0a1628] border border-emerald-400/30 rounded-2xl p-6 fade-in-up">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h2 class="text-xl font-bold text-white font-playfair flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-emerald-400"></i> Live Performance Tracking
+                </h2>
+                <p class="text-gray-400 text-sm mt-1">Real Tradovate fills from the Ekantik Accelerator execution — every trade, win or loss</p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">ES/MES Futures</span>
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">$5/point (MES)</span>
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">Starting: $10,000</span>
+                    <span class="bg-red-500/20 text-red-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">Risk: $1,000/day (10%)</span>
+                </div>
+            </div>
+            <div class="text-right flex-shrink-0">
+                <p class="text-[10px] text-gray-500">Data Transparency: All trades are real Tradovate fills.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO STATS (7 cards) ===== -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">NET P&L</p>
+            <p id="tenx-hero-pnl" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-pnl-sub" class="text-[10px] text-gray-500 mt-0.5">0 trades</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">RETURN</p>
+            <p id="tenx-hero-return" class="text-2xl font-bold text-white mt-1">—</p>
+            <p class="text-[10px] text-gray-500 mt-0.5">on $10,000</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">EV / TRADE</p>
+            <p id="tenx-hero-ev" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-ev-sub" class="text-[10px] text-gray-500 mt-0.5">$/trade</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">WIN RATE</p>
+            <p id="tenx-hero-wr" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-wr-sub" class="text-[10px] text-gray-500 mt-0.5">0W / 0L</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">PROFIT FACTOR</p>
+            <p id="tenx-hero-pf" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-pf-sub" class="text-[10px] text-gray-500 mt-0.5">gross W / L</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-red-900/20 to-red-950/40 border border-red-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-red-400 font-bold uppercase tracking-wider">MAX DRAWDOWN</p>
+            <p id="tenx-hero-dd" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-dd-sub" class="text-[10px] text-gray-500 mt-0.5">0%</p>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
+            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">NET MES PTS</p>
+            <p id="tenx-hero-mespts" class="text-2xl font-bold text-white mt-1">—</p>
+            <p id="tenx-hero-mespts-sub" class="text-[10px] text-gray-500 mt-0.5">avg W/L pts</p>
+        </div>
+    </div>
+
+    <!-- ===== PORTFOLIO PARAMETERS ===== -->
+    <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Portfolio</p><p class="text-lg font-bold text-white">$10,000</p><p class="text-[10px] text-gray-600">Starting capital</p></div>
+            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Daily Risk</p><p class="text-lg font-bold text-emerald-400">$1,000</p><p class="text-[10px] text-gray-600">10% of portfolio</p></div>
+            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Instrument</p><p class="text-lg font-bold text-white">ES/MES</p><p class="text-[10px] text-gray-600">S&P 500 Futures</p></div>
+            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Contract</p><p class="text-lg font-bold text-white">1</p><p class="text-[10px] text-gray-600">$5/point MES</p></div>
+        </div>
+    </div>
+
+    <!-- ===== MONTHLY RETURNS ===== -->
+    <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
+        <h3 class="text-sm font-bold text-white mb-3 flex items-center"><i class="fas fa-calendar-alt text-emerald-400 mr-2"></i>Monthly Returns</h3>
+        <div id="monthly-summary-tenx" class="trade-table">
+            <p class="text-gray-500 text-sm text-center py-4">Upload trade data to see monthly breakdown</p>
+        </div>
+    </div>
+
+    <!-- ===== GROWTH COMPARISON CHART ===== -->
+    <div class="bg-[#0d1d35] border border-emerald-500/25 rounded-xl p-5" style="border-top: 2px solid #34d399;">
+        <h3 class="text-sm font-bold text-white mb-1 flex items-center"><i class="fas fa-chart-line text-emerald-400 mr-2"></i>Actual Account Performance</h3>
+        <p id="growth-subtitle-tenx" class="text-[10px] text-gray-500 mb-3">Upload trade data to see equity curve</p>
+        <div id="chart-growth-comparison-tenx" style="height: 400px;"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-xs">
+            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">S&P 500</p><p id="growth-spy-tenx" class="text-gray-300 font-semibold">—</p></div>
+            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-emerald-400 font-bold">Ekantik Accelerator</p><p id="growth-tenx-tenx" class="text-white font-semibold">—</p></div>
+            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">vs S&P 500</p><p id="growth-ratio-tenx" class="text-gray-300 text-[10px]">—</p></div>
+            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">Est. Max DD</p><p id="growth-dd-tenx-tenx" class="text-gray-300 text-[10px]">—</p></div>
+        </div>
+    </div>
+
+    <!-- ===== INCEPTION SUMMARY ===== -->
+    <div id="inception-tenx">
+        <p class="text-gray-500 text-sm text-center py-4">Upload trade data to see inception summary</p>
+    </div>
+
+    <!-- ===== UNDERSTANDING THE EDGE (Expandable) ===== -->
+    <div>
+        <button onclick="toggleEdgeSection()" class="w-full flex items-center justify-between bg-[#0d1d35] border border-emerald-500/20 rounded-xl px-5 py-3 hover:border-emerald-400/40 transition-all">
+            <span class="text-sm font-bold text-white flex items-center"><i class="fas fa-brain text-emerald-400 mr-2"></i>Understanding the Edge</span>
+            <i id="icon-edge-theory" class="fas fa-chevron-down text-emerald-400 text-xs"></i>
+        </button>
+        <div id="edge-theory-section" class="hidden mt-3 space-y-4">
+            <!-- Edge Period Filter -->
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-[10px] text-gray-500 font-bold uppercase">Edge Timeframe:</span>
+                <button id="edge-period-tenx-1week" onclick="setEdgePeriod('tenx','1week')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">1 Week</button>
+                <button id="edge-period-tenx-2weeks" onclick="setEdgePeriod('tenx','2weeks')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">2 Weeks</button>
+                <button id="edge-period-tenx-1month" onclick="setEdgePeriod('tenx','1month')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">1 Month</button>
+                <button id="edge-period-tenx-3months" onclick="setEdgePeriod('tenx','3months')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">3 Months</button>
+                <button id="edge-period-tenx-alltime" onclick="setEdgePeriod('tenx','alltime')" class="edge-period-btn active-edge-period-emerald px-2.5 py-1 rounded text-[10px] font-semibold border border-transparent">All-Time</button>
+                <span id="edge-period-label-tenx" class="text-gray-500 text-[10px] ml-2"></span>
+            </div>
+            <!-- Edge Formula Card -->
+            <div class="bg-[#0d1d35] border border-emerald-500/20 rounded-xl p-5">
+                <div class="text-center mb-4">
+                    <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">EDGE PER TRADE</p>
+                    <p id="tenx-ev-hero-big" class="text-3xl font-bold text-white mt-1">—</p>
+                    <p id="tenx-ev-hero-sub" class="text-xs text-gray-500 mt-0.5">—</p>
+                </div>
+                <div id="tenx-ev-actual-risk" class="text-center text-xs text-gray-400 mb-4"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">AVG WIN</p><p id="tenx-edge-avgwin" class="text-lg font-bold text-green-400">—</p><p id="tenx-edge-avgwin-pts" class="text-[10px] text-gray-500">—</p></div>
+                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">AVG LOSS</p><p id="tenx-edge-avgloss" class="text-lg font-bold text-red-400">—</p><p id="tenx-edge-avgloss-pts" class="text-[10px] text-gray-500">—</p></div>
+                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">WIN RATE</p><p id="tenx-edge-wr" class="text-lg font-bold text-white">—</p></div>
+                </div>
+                <p id="tenx-edge-explanation" class="text-gray-400 text-xs text-center italic">Upload trade data to see edge analysis</p>
+                <div class="hidden"><span id="tenx-detail-grosswins"></span><span id="tenx-detail-grosslosses"></span><span id="tenx-detail-wlratio"></span><span id="tenx-detail-netpts"></span></div>
+            </div>
+            <!-- Formula Breakdown -->
+            <div class="bg-[#0a1628] border border-gray-700/30 rounded-lg p-4 text-xs font-mono text-center space-y-1">
+                <p id="txfc-win-rate" class="text-gray-400">—</p>
+                <p id="txfc-formula-line1" class="text-gray-300">—</p>
+                <p id="txfc-formula-line2" class="text-gray-300">—</p>
+                <p id="txfc-formula-result" class="text-emerald-400 font-bold">—</p>
+                <p id="txfc-ev-result" class="text-emerald-300 text-lg font-bold mt-1">—</p>
+            </div>
+            <!-- Edge Trend Chart -->
+            <div id="edge-trend-tenx-section">
+                <h4 class="text-sm font-bold text-white mb-2 flex items-center"><i class="fas fa-chart-bar text-emerald-400 mr-2"></i>Edge %R by Week</h4>
+                <div id="chart-edge-trend-tenx" style="height: 280px;" class="bg-[#0d1d35] rounded-xl border border-emerald-500/15"></div>
+                <p id="edge-trend-tenx-note" class="text-[10px] text-gray-500 mt-1 text-center"></p>
+            </div>
+            <!-- Food Chain -->
+            <div id="foodchain-tenx" class="hidden">
+                <h4 class="text-sm font-bold text-white mb-2 flex items-center"><i class="fas fa-sitemap text-emerald-400 mr-2"></i>Edge on the Food Chain <span id="txfc-period-label" class="text-gray-500 text-xs ml-2"></span></h4>
+                <div id="txfc-annual-r-header-note" class="text-[10px] text-gray-600 mb-2"></div>
+                <div class="trade-table bg-[#0d1d35] border border-emerald-500/15 rounded-xl overflow-hidden">
+                    <table class="w-full text-xs"><thead><tr>
+                        <th class="text-left text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Strategy</th>
+                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Edge/Trade</th>
+                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Trades/Mo</th>
+                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Annual R</th>
+                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Kelly %</th>
+                    </tr></thead><tbody id="txfc-table-body"></tbody></table>
+                </div>
+                <div id="txfc-summary-callout" class="mt-3 bg-emerald-900/10 border border-emerald-500/20 rounded-lg p-3">
+                    <p id="txfc-summary-text" class="text-xs text-gray-300"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                    <div class="bg-[#0a1628] border border-gray-700/20 rounded-lg p-3"><p class="text-[10px] text-emerald-400 font-bold mb-1">WHY MAGNITUDE MATTERS</p><p id="txfc-why-magnitude" class="text-xs text-gray-400">—</p></div>
+                    <div class="bg-[#0a1628] border border-gray-700/20 rounded-lg p-3"><p class="text-[10px] text-emerald-400 font-bold mb-1">WHY FREQUENCY MATTERS</p><p id="txfc-why-frequency" class="text-xs text-gray-400">—</p></div>
+                </div>
+                <div id="txfc-position-chart" style="height: 220px;" class="mt-3 bg-[#0d1d35] rounded-xl border border-emerald-500/15"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DETAILED CHARTS & TRADE LOG (Expandable) ===== -->
+    <div>
+        <button id="btn-details-tenx" onclick="toggleDetailedDashboard('tenx')" class="w-full flex items-center justify-between bg-[#0d1d35] border border-emerald-500/20 rounded-xl px-5 py-3 hover:border-emerald-400/40 transition-all">
+            <span class="text-sm font-bold text-white flex items-center"><i class="fas fa-chart-area text-emerald-400 mr-2"></i>Detailed Charts & Trade Log</span>
+            <i id="icon-details-tenx" class="fas fa-chevron-down text-emerald-400 text-xs"></i>
+        </button>
+        <div id="detailed-dashboard-tenx" class="hidden mt-3 space-y-4">
+            <!-- Period Filter -->
+            <div class="flex flex-wrap items-center gap-2">
+                <button id="period-tenx-weekly" onclick="setPeriod('tenx','weekly')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Weekly</button>
+                <button id="period-tenx-1week" onclick="setPeriod('tenx','1week')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Last 7d</button>
+                <button id="period-tenx-monthly" onclick="setPeriod('tenx','monthly')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Monthly</button>
+                <button id="period-tenx-3months" onclick="setPeriod('tenx','3months')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">3 Months</button>
+                <button id="period-tenx-6months" onclick="setPeriod('tenx','6months')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">6 Months</button>
+                <button id="period-tenx-alltime" onclick="setPeriod('tenx','alltime')" class="period-btn active-period px-3 py-1.5 rounded text-[10px] font-semibold border border-transparent">All-Time</button>
+            </div>
+            <!-- Week Nav -->
+            <div class="flex items-center gap-2">
+                <button onclick="prevPeriod('tenx')" class="week-nav-button bg-[#0d1d35] border border-gray-700 text-gray-400 px-2 py-1 rounded text-sm"><i class="fas fa-chevron-left"></i></button>
+                <select id="week-selector-tenx" onchange="selectWeek('tenx')" class="bg-[#0d1d35] border border-gray-700 text-gray-300 text-xs rounded px-3 py-1.5 flex-1 max-w-xs"></select>
+                <button onclick="nextPeriod('tenx')" class="week-nav-button bg-[#0d1d35] border border-gray-700 text-gray-400 px-2 py-1 rounded text-sm"><i class="fas fa-chevron-right"></i></button>
+                <span id="period-range-tenx" class="text-gray-500 text-xs ml-2"></span>
+            </div>
+            <!-- 4 Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-line text-emerald-400 mr-1"></i>Equity Curve</h4><div id="chart-equity-tenx" style="height: 280px;"></div></div>
+                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-bar text-emerald-400 mr-1"></i>Weekly P&L Trend</h4><div id="chart-weekly-trend-tenx" style="height: 280px;"></div></div>
+                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-bar text-emerald-400 mr-1"></i>P&L Distribution</h4><div id="chart-pldist-tenx" style="height: 280px;"></div></div>
+                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-calendar-day text-emerald-400 mr-1"></i>Daily P&L</h4><div id="chart-daily-tenx" style="height: 280px;"></div></div>
+            </div>
+            <!-- Trade Log -->
+            <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <h4 class="text-sm font-bold text-white flex items-center"><i class="fas fa-list text-emerald-400 mr-2"></i>Trade Log <span id="tenx-trade-count" class="text-gray-500 text-xs font-normal ml-2">0 trades</span></h4>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button id="tenx-filter-all" onclick="filterTradeLog('tenx','all')" class="trade-filter-btn trade-filter-active-emerald px-2.5 py-1 rounded text-[10px] border border-transparent">All</button>
+                        <button id="tenx-filter-win" onclick="filterTradeLog('tenx','win')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Win</button>
+                        <button id="tenx-filter-loss" onclick="filterTradeLog('tenx','loss')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Loss</button>
+                        <button id="tenx-filter-long" onclick="filterTradeLog('tenx','long')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Long</button>
+                        <button id="tenx-filter-short" onclick="filterTradeLog('tenx','short')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Short</button>
+                        <span id="tenx-filter-label" class="text-gray-500 text-[10px] ml-1 self-center"></span>
+                    </div>
+                </div>
+                <div class="trade-table">
+                    <table class="w-full text-xs"><thead><tr>
+                        <th class="text-gray-400 text-[10px]">Date/Time</th>
+                        <th class="text-gray-400 text-[10px]">Trade#</th>
+                        <th class="text-gray-400 text-[10px]">B/S</th>
+                        <th class="text-gray-400 text-[10px]">Entry</th>
+                        <th class="text-gray-400 text-[10px]">Stop</th>
+                        <th class="text-gray-400 text-[10px]">Qty</th>
+                        <th class="text-gray-400 text-[10px] sortable-th" id="tenx-sort-pts" onclick="sortTradeLog('tenx','pts')">Net Pts</th>
+                        <th class="text-gray-400 text-[10px]">Risk(Pts)</th>
+                        <th class="text-gray-400 text-[10px] sortable-th" id="tenx-sort-pl" onclick="sortTradeLog('tenx','pl')">Net$</th>
+                        <th class="text-gray-400 text-[10px]">Result</th>
+                    </tr></thead><tbody id="tenx-trades-body"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== UPLOAD SECTION (Admin Only) ===== -->
+    <div class="admin-only" style="display: none;">
+        <div class="bg-[#0d1d35] border border-emerald-500/20 rounded-xl p-5 space-y-3">
+            <h3 class="text-sm font-bold text-white flex items-center"><i class="fas fa-upload text-emerald-400 mr-2"></i>Trade Data Management</h3>
+            <div class="flex flex-wrap items-center gap-3">
+                <label class="flex-1 min-w-[200px]">
+                    <span class="text-[10px] text-gray-500 font-bold block mb-1">Upload Tradovate CSV</span>
+                    <input type="file" accept=".csv" onchange="handleTenxCSVUpload(event)" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-900/30 file:text-emerald-300 hover:file:bg-emerald-900/50 cursor-pointer">
+                </label>
+                <button id="export-btn-tenx" onclick="exportTenxData()" class="hidden px-4 py-2 bg-emerald-900/30 text-emerald-300 rounded-lg text-sm font-semibold hover:bg-emerald-900/50"><i class="fas fa-download mr-1"></i>Export</button>
+                <button onclick="clearData('tenx')" class="px-4 py-2 bg-red-900/20 text-red-400 rounded-lg text-sm font-semibold hover:bg-red-900/40"><i class="fas fa-trash mr-1"></i>Clear</button>
+                <button id="gh-sync-btn" onclick="showGitHubSettings()" class="px-4 py-2 bg-gray-700/30 text-gray-400 rounded-lg text-sm font-semibold hover:bg-gray-700/50"><i class="fas fa-cog mr-1"></i>GitHub Sync</button>
+            </div>
+            <div id="upload-status-tenx" class="hidden"></div>
+            <div id="sync-status-tenx" class="hidden sync-status-badge">
+                <span id="sync-status-tenx-text" class="text-[10px] text-gray-500"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DISCLAIMER ===== -->
+    <div class="text-center py-6 border-t border-gray-800/50">
+        <div class="flex items-center justify-center gap-3 mb-2">
+            <a href="https://cashflow.ekantikcapital.com/" class="flex items-center gap-2">
+                <div class="w-8 h-8 gradient-gold rounded-md flex items-center justify-center"><span class="text-[#0a1628] font-bold text-xs">ECA</span></div>
+                <span class="text-[#d4af37] font-playfair font-bold text-sm">Ekantik Capital Advisors</span>
+            </a>
+        </div>
+        <p class="text-[10px] text-gray-600 max-w-2xl mx-auto">Past performance is not indicative of future results. Trading futures involves substantial risk of loss. This dashboard displays real execution data for transparency and educational purposes only. Nothing herein constitutes investment advice.</p>
+    </div>
+
+    </div>
+    </div>
+    </section>
+
+<script src="js/parser.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
