@@ -13,7 +13,7 @@ const PPT_BY_PRODUCT = { ES: 50, MES: 5 };
 // ===== DATABASE API — GitHub-backed persistence =====
 const DB = {
     OWNER: 'EkantikCapitalAdvisors',
-    REPO:  'Dashboard',
+    REPO:  'Accelerator',
     BRANCH: 'main',
 
     _token() { return localStorage.getItem('gh-token') || ''; },
