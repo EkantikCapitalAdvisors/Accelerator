@@ -286,9 +286,12 @@ function updateEdgeSection(method) {
 
     const evBig = document.getElementById('tenx-ev-hero-big');
     if (evBig) evBig.textContent = `${edgeK.evPlannedR >= 0 ? '+' : ''}${edgeK.evPlannedR.toFixed(1)}%R`;
-    setEl('tenx-ev-hero-sub', `${fmtDollar(edgeK.evPerTrade)} per trade (10% daily risk)`);
+    const edgeAvgR = edgeK.avgRiskDollars;
+    setEl('tenx-ev-hero-sub', edgeAvgR > 0 ? `${fmtDollar(edgeK.evPerTrade)} per trade · 1R = ${fmtDollar(edgeAvgR)}` : `${fmtDollar(edgeK.evPerTrade)} per trade`);
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
-    if (actualRisk) actualRisk.innerHTML = `<strong>Risk budget:</strong> $1,000/day (10%)`;
+    if (actualRisk) actualRisk.innerHTML = edgeAvgR > 0
+        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${edgeAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(edgeK.avgWinDollar), 1);
     setEl('tenx-edge-avgwin-pts', `+${edgeK.avgWinPts.toFixed(2)} pts`);
@@ -443,7 +446,17 @@ function renderTenx(k, trades, allK, allTrades) {
 
     setColor('tenx-hero-ev', `${fmtPct(k.evPlannedR)}R`, k.evPlannedR);
     const evSub = document.getElementById('tenx-hero-ev-sub');
-    if (evSub) evSub.textContent = `${fmtDollar(k.evPerTrade)}/trade`;
+    if (evSub) {
+        const avgR = k.avgRiskDollars;
+        evSub.textContent = avgR > 0 ? `${fmtDollar(k.evPerTrade)}/trade · 1R = ${fmtDollar(avgR)}` : `${fmtDollar(k.evPerTrade)}/trade`;
+    }
+
+    // Update the avg risk badge in info section
+    const avgRiskBadge = document.getElementById('tenx-avg-risk-badge');
+    if (avgRiskBadge && k.avgRiskDollars > 0) {
+        avgRiskBadge.textContent = `1R = $${k.avgRiskDollars.toFixed(0)} avg risk/trade`;
+        avgRiskBadge.classList.remove('hidden');
+    }
 
     const wrEl = document.getElementById('tenx-hero-wr');
     if (wrEl) wrEl.textContent = `${k.winRate.toFixed(1)}%`;
@@ -472,9 +485,12 @@ function renderTenx(k, trades, allK, allTrades) {
     const evBig = document.getElementById('tenx-ev-hero-big');
     if (evBig) evBig.textContent = `${k.evPlannedR >= 0 ? '+' : ''}${k.evPlannedR.toFixed(1)}%R`;
     const evHeroSub = document.getElementById('tenx-ev-hero-sub');
-    if (evHeroSub) evHeroSub.textContent = `${fmtDollar(k.evPerTrade)} per trade ($1,000/day risk)`;
+    const mainAvgR = k.avgRiskDollars;
+    if (evHeroSub) evHeroSub.textContent = mainAvgR > 0 ? `${fmtDollar(k.evPerTrade)} per trade · 1R = ${fmtDollar(mainAvgR)}` : `${fmtDollar(k.evPerTrade)} per trade ($1,000/day risk)`;
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
-    if (actualRisk) actualRisk.innerHTML = `<strong>Risk budget:</strong> $1,000/day (10%)`;
+    if (actualRisk) actualRisk.innerHTML = mainAvgR > 0
+        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${mainAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(k.avgWinDollar), 1);
     const awPts = document.getElementById('tenx-edge-avgwin-pts');
