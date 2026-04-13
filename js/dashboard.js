@@ -290,8 +290,8 @@ function updateEdgeSection(method) {
     setEl('tenx-ev-hero-sub', edgeAvgR > 0 ? `${fmtDollar(edgeK.evPerTrade)} per trade · 1R = ${fmtDollar(edgeAvgR)}` : `${fmtDollar(edgeK.evPerTrade)} per trade`);
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
     if (actualRisk) actualRisk.innerHTML = edgeAvgR > 0
-        ? `<strong>Risk budget:</strong> $500/day · <strong>Avg risk/trade:</strong> $${edgeAvgR.toFixed(0)} (1R)`
-        : `<strong>Risk budget:</strong> $500/day (10%)`;
+        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${edgeAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(edgeK.avgWinDollar), 1);
     setEl('tenx-edge-avgwin-pts', `+${edgeK.avgWinPts.toFixed(2)} pts`);
@@ -486,11 +486,11 @@ function renderTenx(k, trades, allK, allTrades) {
     if (evBig) evBig.textContent = `${k.evPlannedR >= 0 ? '+' : ''}${k.evPlannedR.toFixed(1)}%R`;
     const evHeroSub = document.getElementById('tenx-ev-hero-sub');
     const mainAvgR = k.avgRiskDollars;
-    if (evHeroSub) evHeroSub.textContent = mainAvgR > 0 ? `${fmtDollar(k.evPerTrade)} per trade · 1R = ${fmtDollar(mainAvgR)}` : `${fmtDollar(k.evPerTrade)} per trade ($500/day risk)`;
+    if (evHeroSub) evHeroSub.textContent = mainAvgR > 0 ? `${fmtDollar(k.evPerTrade)} per trade · 1R = ${fmtDollar(mainAvgR)}` : `${fmtDollar(k.evPerTrade)} per trade ($1,000/day risk)`;
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
     if (actualRisk) actualRisk.innerHTML = mainAvgR > 0
-        ? `<strong>Risk budget:</strong> $500/day · <strong>Avg risk/trade:</strong> $${mainAvgR.toFixed(0)} (1R)`
-        : `<strong>Risk budget:</strong> $500/day (10%)`;
+        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${mainAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(k.avgWinDollar), 1);
     const awPts = document.getElementById('tenx-edge-avgwin-pts');
@@ -1097,7 +1097,7 @@ function renderGrowthComparison(containerId, suffix) {
     const mc = monteCarloMaxDD('tenx');
     if (mc) setH(`growth-dd-tenx-${suffix}`, `<i class="fas fa-dice mr-0.5"></i>Est. Max DD: <strong>${mc.ddPct.toFixed(1)}%</strong> <span style="color:#6b7280;font-size:8px;">(Monte Carlo 95th %ile · ${mc.simulations.toLocaleString()} sims · ${mc.sampleSize} trades)</span>`);
 
-    setH(`growth-subtitle-${suffix}`, `Actual realized P&L on <strong style="color:#34d399;">$5,000</strong> account · <strong style="color:#34d399;">${trades.length} trades</strong> · ${fmtDate(sorted[0].exitTime || sorted[0].datetime)} to ${fmtDate(sorted[sorted.length - 1].exitTime || sorted[sorted.length - 1].datetime)}`);
+    setH(`growth-subtitle-${suffix}`, `Actual realized P&L on <strong style="color:#34d399;">$10,000</strong> account · <strong style="color:#34d399;">${trades.length} trades</strong> · ${fmtDate(sorted[0].exitTime || sorted[0].datetime)} to ${fmtDate(sorted[sorted.length - 1].exitTime || sorted[sorted.length - 1].datetime)}`);
 
     const allVals = [...equityValues, ...spyValues];
     const pad = (Math.max(...allVals) - Math.min(...allVals)) * 0.1 || startBalance * 0.05;
