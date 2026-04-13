@@ -665,7 +665,7 @@ function renderGainMetrics(allTrades, allK) {
     if (wPctEl) wPctEl.textContent = `${weekTrades.length} trades this week`;
 }
 
-// ===== 90-DAY DEMO PROGRESS =====
+// ===== 180-DAY DEMO PROGRESS =====
 function renderDemoProgress(allTrades, allK) {
     if (!allTrades || allTrades.length === 0) return;
 
@@ -679,7 +679,7 @@ function renderDemoProgress(allTrades, allK) {
     const fp = firstDate.split('/');
     const startDate = new Date(parseInt(fp[2]), parseInt(fp[0])-1, parseInt(fp[1]));
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 90);
+    endDate.setDate(endDate.getDate() + 180);
 
     const now = new Date();
     const daysRemaining = Math.max(0, Math.ceil((endDate - now) / (1000*60*60*24)));
