@@ -523,6 +523,12 @@ function refreshDashboard(method) {
     state[method].kpis = kpis;
     const allTimeKPIs = calculateKPIs(allTrades, TENX_RISK, TENX_PPT, TENX_STARTING_BALANCE);
 
+    // Compute Setup Quality on ALL trades (needs full chronological sequence)
+    const sqResult = computeSetupQuality(allTrades);
+    state[method].setupQuality = sqResult;
+    // Replace allTrades with enriched versions (adds r1-r4 fields to each trade)
+    state[method].allTrades = sqResult.trades;
+
     const rangeEl = document.getElementById(`period-range-${method}`);
     if (rangeEl) {
         if (period === 'weekly') rangeEl.textContent = getWeekRange(selectedWeek);
@@ -796,10 +802,11 @@ function renderAdherenceScorecard(allTrades, allK) {
     const totalTrades = allK ? allK.totalTrades : 0;
     el('adherence-trades-done', totalTrades.toString());
 
-    // SPEC-M adherence % — requires manual entry or separate data source
-    // For now, check localStorage for manually-set values
-    const specm = localStorage.getItem('tenx-adherence-specm');
-    if (specm) el('adherence-specm', specm);
+    // Setup Quality % — computed from the 4-rule engine
+    const sq = state.tenx.setupQuality;
+    if (sq && sq.totalCount > 0) {
+        el('adherence-specm', `${Math.round(sq.setupQualityPct)}%`);
+    }
 
     // Risk limit adherence % — calculate from trades that stayed within 1R
     if (allTrades && allTrades.length > 0 && allK) {
@@ -1407,6 +1414,11 @@ function renderTenxTradeLog(tbodyId, trades) {
             <td class="text-gray-400 text-[11px]">${t.riskPoints ? t.riskPoints.toFixed(1) : '—'}</td>
             <td class="${plColor} text-[11px] font-semibold">${t.dollarPL >= 0 ? '+' : ''}$${t.dollarPL.toFixed(2)}</td>
             <td>${badge}</td>
+            <td class="text-center">${t.setup_valid === true
+                ? '<span class="text-green-400 text-[10px]" title="All 4 rules passed">✓✓✓✓</span>'
+                : t.setup_valid === false
+                ? `<span class="text-red-400 text-[10px] cursor-help" title="${buildSetupTooltip(t)}">${t.r1_pass ? '✓' : '✗'}${t.r2_pass ? '✓' : '✗'}${t.r3_pass ? '✓' : '✗'}${t.r4_pass ? '✓' : '✗'}</span>`
+                : '<span class="text-gray-600 text-[10px]">—</span>'}</td>
         </tr>`;
     }).join('');
 }

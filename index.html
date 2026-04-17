@@ -168,8 +168,9 @@
                 <p id="adherence-trades" class="text-5xl font-playfair font-bold text-white"><span id="adherence-trades-done">0</span> <span class="text-xl text-gray-500">/ 100</span></p>
             </div>
             <div class="bg-[#0a1628]/60 border border-[#d4af37]/20 rounded-xl p-5 text-center">
-                <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">SPEC-M Adherence</p>
+                <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">Setup Quality</p>
                 <p id="adherence-specm" class="text-5xl font-playfair font-bold text-white">&mdash; <span class="text-xl text-gray-500">%</span></p>
+                <a href="/methodology" class="text-[9px] text-[#d4af37]/60 hover:text-[#d4af37] mt-1 inline-block">How is this measured? &rarr;</a>
             </div>
             <div class="bg-[#0a1628]/60 border border-[#d4af37]/20 rounded-xl p-5 text-center">
                 <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">Risk Limit Adherence</p>
@@ -183,7 +184,7 @@
         </div>
 
         <div class="space-y-1.5 text-xs text-gray-500">
-            <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>SPEC-M validated pre-entry, every trade.</p>
+            <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>Setup Quality scored per trade — 4 rules, binary pass/fail.</p>
             <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>Risk limits respected at trade, day, and week scope.</p>
             <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>One non-adherent trade resets the streak to 0.</p>
         </div>
@@ -511,6 +512,7 @@
                         <th class="text-gray-400 text-[10px]">Risk(Pts)</th>
                         <th class="text-gray-400 text-[10px] sortable-th" id="tenx-sort-pl" onclick="sortTradeLog('tenx','pl')">Net$</th>
                         <th class="text-gray-400 text-[10px]">Result</th>
+                        <th class="text-gray-400 text-[10px]">Setup</th>
                     </tr></thead><tbody id="tenx-trades-body"></tbody></table>
                 </div>
             </div>

@@ -519,6 +519,153 @@ function parseDiscordJSON(jsonArray) {
     });
 }
 
+// ===== SETUP QUALITY MEASUREMENT PROTOCOL v3.0 =====
+// Four binary rules per trade. All must pass for setup-valid.
+// See /methodology for full documentation.
+
+function parseTradeTimestamp(trade) {
+    // Try datetime first, then entryTime, then construct from date
+    const raw = trade.datetime || trade.entryTime || '';
+    if (!raw) return null;
+
+    // Handle "YYYY-MM-DD HH:MM:SS" or "YYYY-MM-DD HH:MM AM/PM"
+    if (/^\d{4}-\d{2}-\d{2}/.test(raw)) {
+        const d = new Date(raw.replace(' ', 'T'));
+        if (!isNaN(d.getTime())) return d;
+    }
+
+    // Handle "M/D/YYYY H:MM AM/PM" or "M/D/YYYY HH:MM"
+    const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(.+)$/);
+    if (m) {
+        const d = new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}T${convertTo24h(m[4])}`);
+        if (!isNaN(d.getTime())) return d;
+    }
+
+    return null;
+}
+
+function convertTo24h(timeStr) {
+    const m = timeStr.trim().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+    if (!m) return '00:00:00';
+    let h = parseInt(m[1]), min = m[2], sec = m[3] || '00';
+    const ampm = (m[4] || '').toUpperCase();
+    if (ampm === 'PM' && h < 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+    return `${String(h).padStart(2,'0')}:${min}:${sec}`;
+}
+
+function computeSetupQuality(trades) {
+    if (!trades || trades.length === 0) return { trades: [], setupQualityPct: 0, validCount: 0, totalCount: 0 };
+
+    // Sort chronologically (safety measure)
+    const sorted = [...trades].sort((a, b) => {
+        const da = parseTradeTimestamp(a), db = parseTradeTimestamp(b);
+        if (da && db) return da - db;
+        // Fallback to date string comparison
+        const na = normalizeDate(a.date || ''), nb = normalizeDate(b.date || '');
+        return na.localeCompare(nb);
+    });
+
+    let cumPL = 0;
+    let validCount = 0;
+    const enriched = [];
+
+    for (let i = 0; i < sorted.length; i++) {
+        const t = { ...sorted[i] };
+        const equityBefore = TENX_STARTING_BALANCE + cumPL;
+        t.equity_before = equityBefore;
+
+        const ppt = PPT_BY_PRODUCT[t.product] || t.ppt || 50;
+        const contracts = t.contracts || 1;
+
+        // ── Rule 1: Max Loss Per Trade 1-3% ──
+        if (t.stopPrice && t.stopPrice > 0 && t.entryPrice > 0) {
+            const riskDollars = Math.abs(t.entryPrice - t.stopPrice) * contracts * ppt;
+            t.risk_pct = riskDollars / equityBefore;
+            t.r1_pass = t.risk_pct >= 0.01 && t.risk_pct <= 0.03;
+        } else {
+            // No stop data — cannot verify
+            t.risk_pct = null;
+            t.r1_pass = false;
+        }
+
+        // ── Rule 2: Min Profit on Winners ≥1% ──
+        if (t.dollarPL <= 0) {
+            // Losers/breakeven: auto-pass (rule does not apply)
+            t.r2_pass = true;
+            t.r2_na = true;
+        } else {
+            const profitPct = t.dollarPL / equityBefore;
+            t.realized_profit_pct = profitPct;
+            t.r2_pass = profitPct >= 0.01;
+            t.r2_na = false;
+        }
+
+        // ── Rule 3: 60-min Cooldown After Loss ──
+        t.r3_pass = true; // default pass
+        if (i > 0) {
+            const prev = enriched[i - 1];
+            if (prev.dollarPL < 0) {
+                // Previous trade was a loss — check cooldown
+                const prevTime = parseTradeTimestamp(prev);
+                const currTime = parseTradeTimestamp(t);
+                if (prevTime && currTime) {
+                    const elapsedMin = (currTime - prevTime) / (1000 * 60);
+                    t.minutes_since_last_loss = Math.round(elapsedMin);
+                    t.r3_pass = elapsedMin >= 60;
+                } else {
+                    // Cannot determine — benefit of the doubt
+                    t.minutes_since_last_loss = null;
+                    t.r3_pass = true;
+                }
+            }
+        }
+
+        // ── Rule 4: Aggregate Limits Intact at Entry ──
+        const tradeDate = normalizeDate(t.date || '');
+        const tradeWeek = t.date ? getWeekKey(t.date) : '';
+
+        let dailyLoss = 0, weeklyLoss = 0;
+        for (let j = 0; j < i; j++) {
+            const prior = enriched[j];
+            if (prior.dollarPL < 0) {
+                const priorDate = normalizeDate(prior.date || '');
+                const priorWeek = prior.date ? getWeekKey(prior.date) : '';
+                if (priorDate === tradeDate) dailyLoss += prior.dollarPL;
+                if (priorWeek === tradeWeek) weeklyLoss += prior.dollarPL;
+            }
+        }
+        const dailyLossPct = Math.abs(dailyLoss) / equityBefore;
+        const weeklyLossPct = Math.abs(weeklyLoss) / equityBefore;
+        t.daily_loss_pct = dailyLossPct;
+        t.weekly_loss_pct = weeklyLossPct;
+        t.r4_pass = dailyLossPct < 0.05 && weeklyLossPct < 0.10;
+
+        // ── Composite ──
+        t.setup_valid = t.r1_pass && t.r2_pass && t.r3_pass && t.r4_pass;
+        if (t.setup_valid) validCount++;
+
+        cumPL += t.dollarPL;
+        enriched.push(t);
+    }
+
+    return {
+        trades: enriched,
+        setupQualityPct: enriched.length > 0 ? (validCount / enriched.length) * 100 : 0,
+        validCount,
+        totalCount: enriched.length
+    };
+}
+
+function buildSetupTooltip(t) {
+    const rules = [];
+    if (t.r1_pass === false) rules.push('R1: Risk outside 1-3%');
+    if (t.r2_pass === false && !t.r2_na) rules.push('R2: Winner profit <1%');
+    if (t.r3_pass === false) rules.push('R3: No 60min cooldown');
+    if (t.r4_pass === false) rules.push('R4: Aggregate limit breached');
+    return rules.join(' | ') || 'Setup invalid';
+}
+
 // ===== KPI CALCULATOR =====
 function calculateKPIs(trades, riskBudget, pointMultiplier, startingBalance = TENX_STARTING_BALANCE) {
     if (!trades || trades.length === 0) return null;

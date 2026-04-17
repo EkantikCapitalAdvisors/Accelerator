@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Quality Measurement Protocol | Ekantik Capital</title>
+    <meta name="description" content="How Setup Quality is measured. Four rules. Binary pass/fail. Computed per trade. Auditable against any closed position.">
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { playfair: ['Playfair Display', 'serif'], dm: ['DM Sans', 'sans-serif'], inter: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .gradient-gold { background: linear-gradient(135deg, #d4af37 0%, #f4c430 100%); }
+        .rule-card { background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(212, 175, 55, 0.15); }
+        .formula-block { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); }
+    </style>
+</head>
+<body class="font-inter antialiased bg-[#0a1628] text-gray-100">
+
+    <!-- ===== HEADER ===== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur-md border-b border-[#d4af37]/20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 gradient-gold rounded-lg flex items-center justify-center">
+                        <span class="text-[#0a1628] font-bold text-xl">ECA</span>
+                    </div>
+                    <div class="hidden sm:block">
+                        <div class="text-[#d4af37] font-playfair font-bold text-lg">Ekantik Capital</div>
+                        <div class="text-gray-400 text-xs tracking-wider">ADVISORS LLC</div>
+                    </div>
+                </a>
+                <nav class="flex items-center gap-4">
+                    <a href="/" class="text-emerald-400 font-semibold text-sm flex items-center hover:text-emerald-300 transition-colors">
+                        <i class="fas fa-arrow-left mr-1.5 text-xs"></i>Back to Scorecard
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTENT ===== -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl pt-28 pb-20">
+
+        <!-- Title -->
+        <div class="text-center mb-12">
+            <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-[0.2em] mb-4">Setup Quality Measurement Protocol v3.0</p>
+            <h1 class="text-4xl sm:text-5xl font-playfair font-bold mb-4">How Setup Quality<br><span class="text-[#d4af37]">Is Measured.</span></h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Four rules. Binary pass/fail. Computed per trade. Auditable against any closed position.</p>
+        </div>
+
+        <!-- Opening Frame -->
+        <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-6 sm:p-8 mb-10">
+            <p class="text-gray-300 leading-relaxed mb-4">Setup Quality is not a subjective judgment. It is a binary score against four non-negotiable risk rules, computed per trade from actual trade data.</p>
+            <p class="text-gray-300 leading-relaxed mb-4">All four rules must pass for a trade to count as setup-valid. Any single failure makes it setup-invalid — regardless of whether the trade made money.</p>
+            <p class="text-gray-300 leading-relaxed mb-4">A profitable trade that violated the rules still counts as setup-invalid. A losing trade that followed all four rules still counts as setup-valid.</p>
+            <p class="text-[#d4af37] font-semibold italic">This is intentional. The point is the process, not the P&L.</p>
+        </div>
+
+        <!-- The Four Rules -->
+        <h2 class="text-2xl font-playfair font-bold mb-6">The Four Rules</h2>
+
+        <!-- Rule 1 -->
+        <div class="rule-card rounded-xl p-6 sm:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R1</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Max Loss Per Trade</h3>
+                    <p class="text-[#d4af37] text-sm font-semibold">1% &ndash; 3% of account equity</p>
+                </div>
+            </div>
+            <p class="text-gray-300 text-sm mb-4">Every trade sized so the maximum loss (stop distance x position size) is between 1% and 3% of current account equity, inclusive. Below 1% is undersized. Above 3% is unacceptable blowup risk.</p>
+            <div class="formula-block rounded-lg p-4 mb-4">
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">risk_pct = abs(entry_price - stop_price) x contracts x point_value / account_equity
+
+PASS if 0.01 &le; risk_pct &le; 0.03
+FAIL otherwise</pre>
+            </div>
+            <div class="text-xs text-gray-500 space-y-1">
+                <p><strong class="text-gray-400">Edge cases:</strong> Stop moved to breakeven mid-trade &rarr; original risk at entry counts. Stop widened during trade &rarr; original stop at entry counts. No stop data &rarr; FAIL (cannot verify).</p>
+            </div>
+        </div>
+
+        <!-- Rule 2 -->
+        <div class="rule-card rounded-xl p-6 sm:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R2</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Minimum Profit on Winners</h3>
+                    <p class="text-[#d4af37] text-sm font-semibold">&ge;1% of account equity</p>
+                </div>
+            </div>
+            <p class="text-gray-300 text-sm mb-4">Every closed winning trade must realize a profit of at least 1% of account equity. Losers and breakeven trades are exempt &mdash; Rule 1 handles the downside. Without this rule, a trader takes premature scalps while letting losses grow.</p>
+            <div class="formula-block rounded-lg p-4 mb-4">
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">realized_profit_pct = trade_pnl / account_equity
+
+For winners (pnl > 0):
+  PASS if realized_profit_pct &ge; 0.01
+  FAIL if realized_profit_pct < 0.01
+
+For losers/breakeven (pnl &le; 0):
+  N/A &mdash; auto-pass (rule does not apply)</pre>
+            </div>
+            <div class="text-xs text-gray-500">
+                <p><strong class="text-gray-400">Note:</strong> This rule is outcome-based, not intent-based. It measures whether winners were held long enough to be meaningful, using data already captured at trade close.</p>
+            </div>
+        </div>
+
+        <!-- Rule 3 -->
+        <div class="rule-card rounded-xl p-6 sm:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R3</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Minimum Cooldown After Loss</h3>
+                    <p class="text-[#d4af37] text-sm font-semibold">60 minutes</p>
+                </div>
+            </div>
+            <p class="text-gray-300 text-sm mb-4">After any closed losing trade, no new trade may be entered for 60 minutes. Revenge trading is the #1 cause of blowups. A 60-minute cooldown breaks the emotional reactivity loop.</p>
+            <div class="formula-block rounded-lg p-4 mb-4">
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">If previous trade P&L < 0:
+  elapsed = current_entry_time - previous_close_time
+  PASS if elapsed &ge; 60 minutes
+  FAIL if elapsed < 60 minutes
+
+If previous trade P&L &ge; 0:
+  PASS automatically</pre>
+            </div>
+            <div class="text-xs text-gray-500">
+                <p><strong class="text-gray-400">Edge cases:</strong> Multiple losses in sequence &rarr; cooldown resets from most recent loss. Breakeven trade &rarr; not a loss, no cooldown required.</p>
+            </div>
+        </div>
+
+        <!-- Rule 4 -->
+        <div class="rule-card rounded-xl p-6 sm:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R4</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Aggregate Limits Intact at Entry</h3>
+                    <p class="text-[#d4af37] text-sm font-semibold">Daily &lt;5%, Weekly &lt;10%</p>
+                </div>
+            </div>
+            <p class="text-gray-300 text-sm mb-4">At entry, cumulative daily losses have not hit the 5% daily cap, and cumulative weekly losses have not hit the 10% weekly cap. Caps are meaningless if violated.</p>
+            <div class="formula-block rounded-lg p-4 mb-4">
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">daily_loss_pct = sum(today's losses) / account_equity
+weekly_loss_pct = sum(this week's losses) / account_equity
+
+PASS if daily_loss_pct < 5% AND weekly_loss_pct < 10%
+FAIL if either cap breached at entry</pre>
+            </div>
+        </div>
+
+        <!-- Scoring Formula -->
+        <h2 class="text-2xl font-playfair font-bold mb-6 mt-12">The Scoring Formula</h2>
+        <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-6 sm:p-8 mb-6">
+            <div class="formula-block rounded-lg p-4 mb-6">
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">For every trade:
+  setup_valid = R1_pass AND R2_pass AND R3_pass AND R4_pass
+  (All four must pass. No partial credit.)
+
+Setup Quality % = (trades with setup_valid) / (total trades) x 100</pre>
+            </div>
+            <blockquote class="border-l-3 border-[#d4af37] pl-5 my-6">
+                <p class="text-lg font-playfair italic text-gray-300">"No partial credit. Three of four does not count. Adherence is absolute."</p>
+            </blockquote>
+            <p class="text-gray-400 text-sm italic">Setup Quality is computed on every closed trade in the log. No trades excluded. No retroactive adjustments.</p>
+        </div>
+
+        <!-- Equity Approximation -->
+        <h2 class="text-2xl font-playfair font-bold mb-6 mt-12">Account Equity Method</h2>
+        <div class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-6 sm:p-8 mb-6">
+            <p class="text-gray-300 text-sm mb-3">Account equity at each trade entry is approximated using:</p>
+            <div class="formula-block rounded-lg p-4 mb-4">
+                <pre class="text-sm font-mono text-emerald-300">equity_at_entry = $10,000 (starting balance) + cumulative_P&L_before_this_trade</pre>
+            </div>
+            <p class="text-gray-400 text-xs">This is sufficient for a small proof-of-concept account. Automated Tradovate API snapshots may replace this in a future phase.</p>
+        </div>
+
+        <!-- Data Source & Audit -->
+        <h2 class="text-2xl font-playfair font-bold mb-6 mt-12">How This Is Verified</h2>
+        <div class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-6 sm:p-8 mb-6 space-y-4">
+            <div>
+                <h4 class="text-white font-bold text-sm mb-1">1. Data Source</h4>
+                <p class="text-gray-400 text-sm">All trade data comes from fills posted publicly in the Ekantik Discord &mdash; entry price, stop price, direction, and realized P&L. Account equity is tracked as starting balance plus cumulative P&L.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-1">2. Rule Computation</h4>
+                <p class="text-gray-400 text-sm">Each rule is computed by a deterministic formula (published above) applied to the trade's data. There is no subjective scoring step. The same inputs always produce the same output.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-1">3. Public Audit Trail</h4>
+                <p class="text-gray-400 text-sm">Every trade in the <a href="/" class="text-emerald-400 hover:text-emerald-300">live trade log</a> shows its per-rule breakdown. Any visitor can verify any Setup Quality claim by checking the trade log against the rules on this page.</p>
+            </div>
+            <p class="text-gray-500 text-xs italic border-t border-gray-700/30 pt-4">If a trade in the log is marked setup-valid but the data shows a rule violation, that is a material public error that will be corrected with timestamped disclosure.</p>
+        </div>
+
+        <!-- Version History -->
+        <h2 class="text-2xl font-playfair font-bold mb-6 mt-12">Version History</h2>
+        <div class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-6 sm:p-8 mb-6">
+            <p class="text-gray-300 text-sm mb-1"><strong class="text-white">v3.0</strong> &mdash; April 2026</p>
+            <p class="text-gray-400 text-xs mb-4">Initial protocol. Four rules as above. Outcome-based Rule 2. All trades scoreable from inception.</p>
+            <p class="text-gray-500 text-xs italic">No changes to rules may be made during the 100-trade commitment without public disclosure and a version bump.</p>
+        </div>
+
+        <!-- The Commitment -->
+        <div class="bg-[#0a1628]/60 border border-[#d4af37]/25 rounded-xl p-6 sm:p-8 mb-10">
+            <h3 class="text-lg font-playfair font-bold text-[#d4af37] mb-4">The Commitment</h3>
+            <div class="text-gray-300 text-sm space-y-3">
+                <p>These four rules were written once. They will not change during the 100-trade consistency proof. If I find a better rule, a better threshold, or a better measurement approach, I will note it publicly &mdash; but I will not apply it retroactively. The 100 trades are committed to the rules as written above.</p>
+                <p>This is not because the rules are perfect. It is because mid-commitment rule changes destroy the commitment.</p>
+                <p>After 100 trades, the rules can evolve. Until then, they are frozen.</p>
+                <p class="text-[#d4af37] font-semibold pt-2">&mdash; The Operator</p>
+            </div>
+        </div>
+
+        <!-- Back link -->
+        <div class="text-center">
+            <a href="/" class="inline-flex items-center gap-2 text-emerald-400 font-semibold hover:text-emerald-300 transition-colors">
+                <i class="fas fa-arrow-left text-xs"></i> Back to Live Scorecard
+            </a>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl pb-16">
+        <div class="border-t border-gray-800/50 pt-8">
+            <div class="text-center mb-4">
+                <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest mb-3">The Ekantik Architecture</p>
+                <div class="flex flex-wrap items-center justify-center gap-4 text-xs">
+                    <a href="https://doubles.ekantikcapital.com" class="text-[#d4af37] hover:text-[#f4c430] transition-colors font-semibold">The Doctrine &rarr;</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="/" class="text-emerald-400 hover:text-emerald-300 transition-colors font-semibold">The Proof &rarr;</a>
+                    <span class="text-gray-700">|</span>
+                    <span class="text-gray-400 font-semibold">Methodology <span class="text-gray-600 text-[9px]">(you are here)</span></span>
+                </div>
+            </div>
+            <p class="text-center text-[10px] text-gray-600 max-w-2xl mx-auto">Ekantik Capital Advisors LLC. This page documents the measurement methodology for the Setup Quality metric. It is not investment advice.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
