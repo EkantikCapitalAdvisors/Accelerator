@@ -178,5 +178,41 @@
     "cumulative_pl": 4925,
     "cumulative_balance": 14925,
     "cumulative_return": 49.25
+  },
+  {
+    "method": "tenx",
+    "week_key": "04/13/2026",
+    "net_pl": -400,
+    "net_points": -8,
+    "return_pct": -4,
+    "total_trades": 3,
+    "win_count": 1,
+    "loss_count": 2,
+    "win_rate": 33.33333333333333,
+    "profit_factor": 0.36,
+    "ev_planned_r": -26.666666666666668,
+    "ev_actual_r": -47.05882352941177,
+    "max_dd": 625,
+    "cumulative_pl": 4525,
+    "cumulative_balance": 14525,
+    "cumulative_return": 45.25
+  },
+  {
+    "method": "tenx",
+    "week_key": "",
+    "net_pl": -50,
+    "net_points": -1,
+    "return_pct": -0.5,
+    "total_trades": 1,
+    "win_count": 0,
+    "loss_count": 1,
+    "win_rate": 0,
+    "profit_factor": 0,
+    "ev_planned_r": -10,
+    "ev_actual_r": -100,
+    "max_dd": 50,
+    "cumulative_pl": 4475,
+    "cumulative_balance": 14475,
+    "cumulative_return": 44.75
   }
 ]
