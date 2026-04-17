@@ -838,7 +838,7 @@
   {
     "week_key": "",
     "trade_num": "F38",
-    "entry_time": "",
+    "entry_time": "2026-04-13 12:00 PM",
     "exit_time": "",
     "direction": "Sell",
     "entry_price": 6894.25,
@@ -851,7 +851,7 @@
     "risk_dollars": 50,
     "reward_risk": 0,
     "is_win": false,
-    "trade_date": "",
+    "trade_date": "4/13/2026",
     "product": "ES",
     "ppt": 50,
     "source": "discord",
