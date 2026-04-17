@@ -1390,13 +1390,15 @@ function renderTenxTradeLog(tbodyId, trades) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
     tbody.innerHTML = trades.map((t, i) => {
-        const dirLabel = t.direction === 'Short' ? 'S' : 'L';
-        const dirColor = t.direction === 'Short' ? 'text-red-400' : 'text-emerald-400';
+        const dirLabel = (t.direction === 'Short' || t.direction === 'Sell') ? 'S' : 'L';
+        const dirColor = (t.direction === 'Short' || t.direction === 'Sell') ? 'text-red-400' : 'text-emerald-400';
         const plColor = t.dollarPL > 0 ? 'text-green-400' : t.dollarPL < 0 ? 'text-red-400' : 'text-gray-400';
         const badge = t.isWin ? '<span class="bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded text-[10px] font-bold">W</span>' : '<span class="bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold">L</span>';
+        const dateDisplay = t.entryTime || t.datetime || t.date || '';
+        const tradeLabel = t.tradeNum || (i + 1);
         return `<tr class="hover:bg-emerald-500/5 transition-colors">
-            <td class="text-gray-300 text-[11px]">${t.entryTime || ''}</td>
-            <td class="text-gray-500 text-[11px]">${i + 1}</td>
+            <td class="text-gray-300 text-[11px]">${dateDisplay}</td>
+            <td class="text-gray-500 text-[11px] font-semibold">${tradeLabel}</td>
             <td class="${dirColor} text-[11px] font-semibold">${dirLabel}</td>
             <td class="text-gray-300 text-[11px]">${t.entryPrice.toFixed(2)}</td>
             <td class="text-gray-400 text-[11px]">${t.stopPrice ? t.stopPrice.toFixed(2) : '—'}</td>
