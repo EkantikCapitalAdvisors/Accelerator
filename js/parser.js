@@ -578,7 +578,7 @@ function computeSetupQuality(trades) {
         const ppt = PPT_BY_PRODUCT[t.product] || t.ppt || 50;
         const contracts = t.contracts || 1;
 
-        // ── Rule 1: Max Loss Per Trade 1-3% ──
+        // ── Rule 1: Max Loss Per Trade 2-3% ──
         // Use stop price if available, otherwise derive from riskPoints, default 10 pts
         let riskDollarsR1;
         if (t.stopPrice && t.stopPrice > 0 && t.entryPrice > 0) {
@@ -589,7 +589,7 @@ function computeSetupQuality(trades) {
             riskDollarsR1 = riskPts * ppt * contracts;
         }
         t.risk_pct = riskDollarsR1 / equityBefore;
-        t.r1_pass = t.risk_pct >= 0.01 && t.risk_pct <= 0.03;
+        t.r1_pass = t.risk_pct >= 0.02 && t.risk_pct <= 0.03;
 
         // ── Rule 2: Min Profit on Winners ≥1% ──
         if (t.dollarPL <= 0) {
@@ -661,7 +661,7 @@ function computeSetupQuality(trades) {
 
 function buildSetupTooltip(t) {
     const rules = [];
-    if (t.r1_pass === false) rules.push('R1: Risk outside 1-3%');
+    if (t.r1_pass === false) rules.push('R1: Risk outside 2-3%');
     if (t.r2_pass === false && !t.r2_na) rules.push('R2: Winner profit <1%');
     if (t.r3_pass === false) rules.push('R3: No 60min cooldown');
     if (t.r4_pass === false) rules.push('R4: Aggregate limit breached');

@@ -68,18 +68,18 @@
                 <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R1</span>
                 <div>
                     <h3 class="text-lg font-bold text-white">Max Loss Per Trade</h3>
-                    <p class="text-[#d4af37] text-sm font-semibold">1% &ndash; 3% of account equity</p>
+                    <p class="text-[#d4af37] text-sm font-semibold">2% &ndash; 3% of account equity</p>
                 </div>
             </div>
-            <p class="text-gray-300 text-sm mb-4">Every trade sized so the maximum loss (stop distance x position size) is between 1% and 3% of current account equity, inclusive. Below 1% is undersized. Above 3% is unacceptable blowup risk.</p>
+            <p class="text-gray-300 text-sm mb-4">Every trade sized so the maximum loss (stop distance x position size) is between 2% and 3% of current account equity, inclusive. Below 2% is undersized. Above 3% is unacceptable blowup risk. Default stop is 10 points.</p>
             <div class="formula-block rounded-lg p-4 mb-4">
                 <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">risk_pct = abs(entry_price - stop_price) x contracts x point_value / account_equity
 
-PASS if 0.01 &le; risk_pct &le; 0.03
+PASS if 0.02 &le; risk_pct &le; 0.03
 FAIL otherwise</pre>
             </div>
             <div class="text-xs text-gray-500 space-y-1">
-                <p><strong class="text-gray-400">Edge cases:</strong> Stop moved to breakeven mid-trade &rarr; original risk at entry counts. Stop widened during trade &rarr; original stop at entry counts. No stop data &rarr; FAIL (cannot verify).</p>
+                <p><strong class="text-gray-400">Edge cases:</strong> Stop moved to breakeven mid-trade &rarr; original risk at entry counts. Stop widened during trade &rarr; original stop at entry counts. No stop data &rarr; default 10-point stop used for calculation.</p>
             </div>
         </div>
 
