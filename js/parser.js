@@ -558,6 +558,106 @@ function convertTo24h(timeStr) {
     return `${String(h).padStart(2,'0')}:${min}:${sec}`;
 }
 
+// =====================================================
+// OBSERVED MONTHLY RATE — Geometric mean from cumulative return
+// Powers the dual doubling ladder on the main page
+// =====================================================
+function computeObservedMonthlyRate(trades) {
+    const DAYS_PER_MONTH = 30.4375; // 365.25 / 12
+    const TARGET_RATE = 0.025; // 2.5% monthly
+    const MIN_SAMPLE = 10;
+    const MULTIPLES = [
+        { key: '20k', multiple: 2 },
+        { key: '40k', multiple: 4 },
+        { key: '80k', multiple: 8 },
+        { key: '100k', multiple: 10 },
+        { key: '1m', multiple: 100 }
+    ];
+
+    if (!trades || trades.length === 0) {
+        return { sampleBelowMinimum: true, tradeCount: 0 };
+    }
+
+    // Sort chronologically
+    const sorted = [...trades].sort((a, b) => {
+        const da = parseTradeTimestamp(a), db = parseTradeTimestamp(b);
+        if (da && db) return da - db;
+        return 0;
+    });
+
+    const N = sorted.length;
+    const cumPL = sorted.reduce((s, t) => s + (t.dollarPL || 0), 0);
+    const startingEquity = TENX_STARTING_BALANCE;
+    const endingEquity = startingEquity + cumPL;
+    const cumReturn = cumPL / startingEquity;
+
+    // Calendar months elapsed
+    const firstTime = parseTradeTimestamp(sorted[0]);
+    const lastTime = parseTradeTimestamp(sorted[N - 1]);
+    let monthsElapsed = 0;
+    if (firstTime && lastTime && lastTime > firstTime) {
+        const daysElapsed = (lastTime - firstTime) / (1000 * 60 * 60 * 24);
+        monthsElapsed = daysElapsed / DAYS_PER_MONTH;
+    }
+
+    // Sample size guard
+    if (N < MIN_SAMPLE) {
+        return {
+            sampleBelowMinimum: true,
+            tradeCount: N,
+            minRequired: MIN_SAMPLE
+        };
+    }
+
+    // Guard: zero or near-zero time span
+    if (monthsElapsed < 0.1) {
+        return {
+            sampleBelowMinimum: false,
+            tradeCount: N,
+            rateNegative: cumReturn <= 0,
+            rateBelowTarget: true,
+            observedRate: 0,
+            observedRatePct: '0.00',
+            monthsElapsed,
+            cumReturn,
+            ladderMonths: null
+        };
+    }
+
+    // Geometric mean monthly rate
+    let observedRate;
+    let rateNegative = false;
+
+    if (cumReturn <= 0) {
+        rateNegative = true;
+        observedRate = cumReturn <= -1 ? -1 : (Math.pow(1 + cumReturn, 1 / monthsElapsed) - 1);
+    } else {
+        observedRate = Math.pow(1 + cumReturn, 1 / monthsElapsed) - 1;
+    }
+
+    // Ladder months at each rung
+    let ladderMonths = null;
+    if (observedRate > 0) {
+        ladderMonths = {};
+        for (const { key, multiple } of MULTIPLES) {
+            ladderMonths[key] = Math.round(Math.log(multiple) / Math.log(1 + observedRate) * 10) / 10;
+        }
+    }
+
+    return {
+        sampleBelowMinimum: false,
+        tradeCount: N,
+        observedRate,
+        observedRatePct: (observedRate * 100).toFixed(2),
+        monthsElapsed: Math.round(monthsElapsed * 100) / 100,
+        cumReturn,
+        cumReturnPct: (cumReturn * 100).toFixed(1),
+        rateNegative,
+        rateBelowTarget: observedRate < TARGET_RATE,
+        ladderMonths
+    };
+}
+
 function computeSetupQuality(trades) {
     if (!trades || trades.length === 0) return { trades: [], setupQualityPct: 0, validCount: 0, totalCount: 0 };
 

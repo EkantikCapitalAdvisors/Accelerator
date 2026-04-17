@@ -671,6 +671,7 @@ function renderTenx(k, trades, allK, allTrades) {
     renderEvidenceGates(allK);
     renderGainMetrics(allTrades, allK);
     renderAdherenceScorecard(allTrades, allK);
+    renderDoublingLadder(allTrades);
 }
 
 // ===== Q0 EVIDENCE GATES =====
@@ -849,6 +850,53 @@ function renderAdherenceScorecard(allTrades, allK) {
             else break;
         }
         el('adherence-streak', `${streak} days`);
+    }
+}
+
+// ===== DOUBLING LADDER — Dynamic observed column =====
+function renderDoublingLadder(trades) {
+    const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+    const elH = (id, val) => { const e = document.getElementById(id); if (e) e.innerHTML = val; };
+
+    const obs = computeObservedMonthlyRate(trades);
+
+    if (!obs || obs.sampleBelowMinimum) {
+        const msg = obs && obs.tradeCount > 0
+            ? `${obs.tradeCount}/${obs.minRequired || 10} trades`
+            : 'awaiting data';
+        el('ladder-observed-rate', '—');
+        el('ladder-observed-label', `(min 10 trades required — ${msg})`);
+        ['20k','40k','80k','100k','1m'].forEach(k => el(`ladder-obs-${k}`, '—'));
+        el('ladder-observed-note', '');
+        return;
+    }
+
+    // Rate display
+    el('ladder-observed-rate', obs.observedRatePct);
+    el('ladder-observed-label', `(live, through Trade ${obs.tradeCount})*`);
+
+    // Handle negative / zero rate
+    if (obs.rateNegative || !obs.ladderMonths) {
+        ['20k','40k','80k','100k','1m'].forEach(k =>
+            elH(`ladder-obs-${k}`, '<span class="text-gray-500 text-[9px] italic">&infin;</span>')
+        );
+        el('ladder-observed-note', 'Observed rate not yet positive. Doublings at this rate are infinite. Published for transparency.');
+        return;
+    }
+
+    // Render ladder months
+    const lm = obs.ladderMonths;
+    el('ladder-obs-20k', `~${lm['20k']} mo`);
+    el('ladder-obs-40k', `~${lm['40k']} mo`);
+    el('ladder-obs-80k', `~${lm['80k']} mo`);
+    el('ladder-obs-100k', `~${lm['100k']} mo`);
+    el('ladder-obs-1m', `~${lm['1m']} mo`);
+
+    // Note for below-target
+    if (obs.rateBelowTarget) {
+        el('ladder-observed-note', 'Observed rate currently below strategy target. Favor the target column for planning.');
+    } else {
+        el('ladder-observed-note', `Cumulative return: ${obs.cumReturnPct}% over ~${obs.monthsElapsed} months.`);
     }
 }
 

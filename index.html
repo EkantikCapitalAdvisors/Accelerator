@@ -232,80 +232,104 @@
         <p class="text-gray-400 text-sm mb-6">The edge is small. The compound is the weapon.</p>
 
         <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
-            <p>The edge targets 2&ndash;3% net per month when executed with adherence. That sounds unimpressive. The math says otherwise.</p>
+            <p>The strategy targets 2&ndash;3% net per month when executed with adherence. That sounds unimpressive. The math says otherwise.</p>
             <p>One hundred trades is not the finish line. It is the proof that the operator can execute. What comes after is compounding &mdash; and compounding is the only force that matters at multi-year timelines.</p>
         </div>
 
-        <!-- The Doubling Ladder -->
-        <div class="max-w-2xl mx-auto mb-8">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-4">The Doubling Ladder <span class="text-gray-500 font-normal normal-case tracking-normal">&mdash; at 2.5% monthly compounded</span></p>
+        <!-- The Dual Doubling Ladder -->
+        <div class="max-w-3xl mx-auto mb-8">
+            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-5">The Doubling Ladder</p>
+
+            <!-- Column Headers -->
+            <div class="grid grid-cols-12 gap-2 mb-3 px-2">
+                <div class="col-span-4"></div>
+                <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-[10px]">&times;</span></div>
+                <div class="col-span-3 text-center">
+                    <p class="text-[#d4af37] font-bold text-[10px] uppercase tracking-wider">At 2.5%/mo</p>
+                    <p class="text-gray-600 text-[8px]">(strategy target)</p>
+                </div>
+                <div class="col-span-4 text-center">
+                    <p class="text-emerald-400 font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1">
+                        At <span id="ladder-observed-rate">—</span>%/mo
+                        <span class="relative group cursor-help">
+                            <i class="fas fa-info-circle text-emerald-400/50 text-[8px]"></i>
+                            <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-48 bg-gray-900 border border-gray-700 text-gray-300 text-[9px] rounded-lg p-2 hidden group-hover:block z-10 text-left font-normal normal-case tracking-normal">Computed from live trade data via geometric mean. Updates as new trades close.</span>
+                        </span>
+                    </p>
+                    <p class="text-gray-600 text-[8px]" id="ladder-observed-label">(live, through Trade —)*</p>
+                </div>
+            </div>
+
+            <!-- Ladder Rows -->
             <div class="space-y-2">
-                <div class="flex items-center justify-between bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-mono text-sm">$10,000</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/40 text-xs"></i>
-                        <span class="text-white font-bold font-mono text-sm">$20,000</span>
+                <!-- $20K row -->
+                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
+                    <div class="col-span-4 flex items-center gap-2">
+                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
+                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
+                        <span class="text-white font-bold font-mono text-sm">$20K</span>
                     </div>
-                    <div class="flex items-center gap-4 text-right">
-                        <span class="text-gray-500 text-xs">~28 months</span>
-                        <span class="text-gray-600 text-[10px]">1 doubling</span>
-                        <span class="text-[#d4af37] font-bold text-sm w-12 text-right">2&times;</span>
-                    </div>
+                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">2&times;</span></div>
+                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~28 mo</span></div>
+                    <div class="col-span-4 text-center"><span id="ladder-obs-20k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
                 </div>
-                <div class="flex items-center justify-between bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-mono text-sm">$10,000</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/40 text-xs"></i>
-                        <span class="text-white font-bold font-mono text-sm">$40,000</span>
+                <!-- $40K row -->
+                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
+                    <div class="col-span-4 flex items-center gap-2">
+                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
+                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
+                        <span class="text-white font-bold font-mono text-sm">$40K</span>
                     </div>
-                    <div class="flex items-center gap-4 text-right">
-                        <span class="text-gray-500 text-xs">~56 months</span>
-                        <span class="text-gray-600 text-[10px]">2 doublings</span>
-                        <span class="text-[#d4af37] font-bold text-sm w-12 text-right">4&times;</span>
-                    </div>
+                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">4&times;</span></div>
+                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~56 mo</span></div>
+                    <div class="col-span-4 text-center"><span id="ladder-obs-40k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
                 </div>
-                <div class="flex items-center justify-between bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-mono text-sm">$10,000</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/40 text-xs"></i>
-                        <span class="text-white font-bold font-mono text-sm">$80,000</span>
+                <!-- $80K row -->
+                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
+                    <div class="col-span-4 flex items-center gap-2">
+                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
+                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
+                        <span class="text-white font-bold font-mono text-sm">$80K</span>
                     </div>
-                    <div class="flex items-center gap-4 text-right">
-                        <span class="text-gray-500 text-xs">~84 months</span>
-                        <span class="text-gray-600 text-[10px]">3 doublings</span>
-                        <span class="text-[#d4af37] font-bold text-sm w-12 text-right">8&times;</span>
-                    </div>
+                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">8&times;</span></div>
+                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~84 mo</span></div>
+                    <div class="col-span-4 text-center"><span id="ladder-obs-80k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
                 </div>
-                <div class="flex items-center justify-between bg-[#0a1628]/80 border-2 border-[#d4af37]/30 rounded-lg px-4 py-3" style="background: rgba(212,175,55,0.04);">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-mono text-sm">$10,000</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/60 text-xs"></i>
-                        <span class="text-[#d4af37] font-bold font-mono text-sm">$100,000</span>
+                <!-- $100K row (highlighted) -->
+                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/80 border-2 border-[#d4af37]/30 rounded-lg px-3 sm:px-4 py-3" style="background: rgba(212,175,55,0.04);">
+                    <div class="col-span-4 flex items-center gap-2">
+                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
+                        <i class="fas fa-arrow-right text-[#d4af37]/50 text-[8px]"></i>
+                        <span class="text-[#d4af37] font-bold font-mono text-sm">$100K</span>
                     </div>
-                    <div class="flex items-center gap-4 text-right">
-                        <span class="text-gray-400 text-xs">~94 months</span>
-                        <span class="text-gray-500 text-[10px]">3.3 doublings</span>
-                        <span class="text-[#d4af37] font-bold text-lg w-12 text-right">10&times;</span>
-                    </div>
+                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-lg">10&times;</span></div>
+                    <div class="col-span-3 text-center"><span class="text-gray-300 text-xs font-semibold">~94 mo</span></div>
+                    <div class="col-span-4 text-center"><span id="ladder-obs-100k" class="text-emerald-300 text-xs font-semibold">&mdash;</span></div>
                 </div>
-                <div class="flex items-center justify-between bg-[#0a1628]/60 border border-gray-700/20 rounded-lg px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-mono text-sm">$10,000</span>
-                        <i class="fas fa-arrow-right text-gray-600 text-xs"></i>
-                        <span class="text-gray-300 font-bold font-mono text-sm">$1,000,000</span>
+                <!-- $1M row -->
+                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-gray-700/20 rounded-lg px-3 sm:px-4 py-3">
+                    <div class="col-span-4 flex items-center gap-2">
+                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
+                        <i class="fas fa-arrow-right text-gray-600 text-[8px]"></i>
+                        <span class="text-gray-300 font-bold font-mono text-sm">$1M</span>
                     </div>
-                    <div class="flex items-center gap-4 text-right">
-                        <span class="text-gray-600 text-xs">~188 months</span>
-                        <span class="text-gray-700 text-[10px]">6.6 doublings</span>
-                        <span class="text-gray-500 font-bold text-sm w-12 text-right">100&times;</span>
-                    </div>
+                    <div class="col-span-1 text-center"><span class="text-gray-500 font-bold text-sm">100&times;</span></div>
+                    <div class="col-span-3 text-center"><span class="text-gray-500 text-xs">~188 mo</span></div>
+                    <div class="col-span-4 text-center"><span id="ladder-obs-1m" class="text-emerald-300/50 text-xs">&mdash;</span></div>
                 </div>
+            </div>
+
+            <!-- Doublings footer row -->
+            <div class="flex justify-between items-center mt-3 px-2">
+                <span class="text-gray-600 text-[9px]">Doublings needed: 1 &rarr; 6.6</span>
+                <span id="ladder-observed-note" class="text-gray-600 text-[9px] italic"></span>
             </div>
         </div>
 
         <!-- Commentary -->
         <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
-            <p>Every doubling is the same mechanic: a disciplined edge, held through regimes that break aggressive traders. The compound is the weapon.</p>
+            <p>Every doubling uses the same mechanic: a disciplined edge, held through regimes that break aggressive traders. The compound is the weapon.</p>
+            <p>The target rate is what the strategy was designed around and what the 100-trade consistency proof tests the operator against. The observed rate is what the sample is producing right now &mdash; and may or may not persist. Both are shown because radical transparency requires both.</p>
             <p>3.3 doublings is not a promise. It is what the math produces if the adherence holds. The adherence is what this page is testing.</p>
         </div>
 
@@ -327,7 +351,7 @@
 
         <!-- Required caveat -->
         <p class="text-gray-600 text-[10px] italic text-center max-w-3xl mx-auto leading-relaxed">
-            Illustrative. The doubling ladder assumes consistent execution of the edge across market regimes. Past and hypothetical returns do not predict future results. The 100-trade consistency proof is what determines whether adherence is sustainable at the operator level.
+            * Illustrative. Both columns of the doubling ladder are math derivatives from monthly compounding at the stated rate. The target rate is pre-committed and frozen. The observed rate is computed from live trade data and will change as more trades close. Neither represents a guarantee or projection of future performance. Past and live-sample returns do not predict future results. The 100-trade consistency proof is what determines whether adherence &mdash; and therefore the rate &mdash; is sustainable.
         </p>
     </div>
 
