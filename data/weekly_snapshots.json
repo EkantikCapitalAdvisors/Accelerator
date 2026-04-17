@@ -160,5 +160,23 @@
     "cumulative_pl": 4975,
     "cumulative_balance": 14975,
     "cumulative_return": 49.75
+  },
+  {
+    "method": "tenx",
+    "week_key": "04/06/2026",
+    "net_pl": -50,
+    "net_points": -1,
+    "return_pct": -0.5,
+    "total_trades": 2,
+    "win_count": 1,
+    "loss_count": 1,
+    "win_rate": 50,
+    "profit_factor": 0.8,
+    "ev_planned_r": -5,
+    "ev_actual_r": -11.11111111111111,
+    "max_dd": 250,
+    "cumulative_pl": 4925,
+    "cumulative_balance": 14925,
+    "cumulative_return": 49.25
   }
 ]
