@@ -159,12 +159,15 @@ FAIL if either cap breached at entry</pre>
   setup_valid = R1_pass AND R2_pass AND R3_pass AND R4_pass
   (All four must pass. No partial credit.)
 
-Setup Quality % = (trades with setup_valid) / (total trades) x 100</pre>
+Setup Quality % = (forward trades with setup_valid) / (total forward trades) x 100
+
+Tracking start date: April 18, 2026
+Trades before this date: annotated per-rule but NOT counted in aggregate %</pre>
             </div>
             <blockquote class="border-l-3 border-[#d4af37] pl-5 my-6">
                 <p class="text-lg font-playfair italic text-gray-300">"No partial credit. Three of four does not count. Adherence is absolute."</p>
             </blockquote>
-            <p class="text-gray-400 text-sm italic">Setup Quality is computed on every closed trade in the log. No trades excluded. No retroactive adjustments.</p>
+            <p class="text-gray-400 text-sm italic">Setup Quality is computed on all trades entered on or after April 18, 2026 &mdash; the date the measurement protocol was formally adopted. Earlier trades are still annotated per-rule in the trade log but do not affect the scorecard percentage.</p>
         </div>
 
         <!-- Equity Approximation -->

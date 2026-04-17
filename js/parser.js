@@ -10,6 +10,10 @@ const TENX_STARTING_BALANCE = 10000; // $10,000 starting portfolio
 // PPT lookup for mixed instruments
 const PPT_BY_PRODUCT = { ES: 50, MES: 5 };
 
+// Setup Quality tracking: only count trades ON or AFTER this date toward aggregate %
+// Pre-tracking trades still get per-rule annotations but don't affect the scorecard number
+const SETUP_QUALITY_START_DATE = '2026-04-18'; // YYYY-MM-DD — first trade after rule adoption
+
 // ===== DATABASE API — GitHub-backed persistence =====
 const DB = {
     OWNER: 'EkantikCapitalAdvisors',
@@ -568,6 +572,9 @@ function computeSetupQuality(trades) {
 
     let cumPL = 0;
     let validCount = 0;
+    let forwardValid = 0;
+    let forwardTotal = 0;
+    const startDate = SETUP_QUALITY_START_DATE; // 'YYYY-MM-DD'
     const enriched = [];
 
     for (let i = 0; i < sorted.length; i++) {
@@ -647,15 +654,28 @@ function computeSetupQuality(trades) {
         t.setup_valid = t.r1_pass && t.r2_pass && t.r3_pass && t.r4_pass;
         if (t.setup_valid) validCount++;
 
+        // Determine if this trade counts toward the forward aggregate
+        const tNorm = normalizeDate(t.date || '');
+        t.is_forward = tNorm >= startDate;
+        if (t.is_forward) {
+            forwardTotal++;
+            if (t.setup_valid) forwardValid++;
+        }
+
         cumPL += t.dollarPL;
         enriched.push(t);
     }
 
+    // Scorecard % uses ONLY forward trades (post-adoption)
+    // If no forward trades yet, show '—' via 0/0
     return {
         trades: enriched,
-        setupQualityPct: enriched.length > 0 ? (validCount / enriched.length) * 100 : 0,
-        validCount,
-        totalCount: enriched.length
+        setupQualityPct: forwardTotal > 0 ? (forwardValid / forwardTotal) * 100 : null,
+        validCount: forwardValid,
+        totalCount: forwardTotal,
+        // Keep all-time stats available for diagnostics
+        allTimeValid: validCount,
+        allTimeTotal: enriched.length
     };
 }
 
