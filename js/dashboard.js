@@ -1533,6 +1533,21 @@ function showSkeletonKPIs() {
 }
 
 // ===== INITIALIZATION =====
+// ===== AUTO-TOKEN SETUP =====
+// If ?admin&token=xxx is in the URL, save the token to localStorage automatically
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token) {
+        localStorage.setItem('gh-token', token);
+        // Strip token from URL for security (don't leave it in address bar)
+        params.delete('token');
+        const clean = params.toString();
+        const newUrl = window.location.pathname + (clean ? '?' + clean : '');
+        window.history.replaceState({}, '', newUrl);
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', async function () {
     updateGitHubSyncIndicators();
     updateSyncStatus('tenx');
