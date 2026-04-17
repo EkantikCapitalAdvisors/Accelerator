@@ -96,6 +96,129 @@ async function handleTenxCSVUpload(event) {
     })();
 }
 
+// ===== DISCORD TRADE HANDLERS =====
+
+// Handle Discord JSON file upload (discord_trades.json format)
+async function handleDiscordJSONUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    showUploadProgress('tenx', `Parsing ${file.name}...`);
+
+    const text = await file.text();
+    let jsonData;
+    try {
+        jsonData = JSON.parse(text);
+    } catch (e) {
+        showUploadError('tenx', 'Invalid JSON file.');
+        return;
+    }
+
+    const newTrades = parseDiscordJSON(jsonData);
+    if (newTrades.length === 0) {
+        showUploadError('tenx', 'No valid trades found in JSON.');
+        return;
+    }
+
+    mergeDiscordTrades(newTrades, `${file.name} — ${newTrades.length} trades`);
+}
+
+// Handle Discord text paste (multi-line Discord format)
+function handleDiscordTextSubmit() {
+    const textarea = document.getElementById('discord-trade-input');
+    const dateInput = document.getElementById('discord-trade-date');
+    if (!textarea) return;
+
+    const text = textarea.value.trim();
+    if (!text) {
+        showUploadError('tenx', 'Paste Discord trade messages first.');
+        return;
+    }
+
+    const newTrades = parseDiscordTradeText(text);
+    if (newTrades.length === 0) {
+        showUploadError('tenx', 'No completed trades found. Make sure each trade has an entry line and a result line (e.g. F37: s 6837.5 then F37: +4.5).');
+        return;
+    }
+
+    // Apply date if provided
+    const tradeDate = dateInput ? dateInput.value : '';
+    if (tradeDate) {
+        const parts = tradeDate.split('-'); // yyyy-mm-dd
+        const formatted = `${parseInt(parts[1])}/${parseInt(parts[2])}/${parts[0]}`;
+        for (const t of newTrades) {
+            if (!t.date) t.date = formatted;
+            if (!t.datetime) t.datetime = tradeDate;
+        }
+    }
+
+    mergeDiscordTrades(newTrades, `${newTrades.length} Discord trades parsed`);
+    textarea.value = '';
+}
+
+// Merge Discord trades into state, dedup by tradeNum
+function mergeDiscordTrades(newTrades, successMsg) {
+    let existingTrades = state.tenx.allTrades;
+    if (existingTrades.length === 0) {
+        try {
+            const lsJson = localStorage.getItem('tenx-trades');
+            if (lsJson) existingTrades = JSON.parse(lsJson) || [];
+        } catch (e) {}
+    }
+
+    // Dedup by tradeNum for discord trades, standard key for others
+    const existingNums = new Set(existingTrades.filter(t => t.tradeNum).map(t => t.tradeNum));
+    const norm = v => Math.round(parseFloat(v) * 10000) / 10000;
+    const existingKeys = new Set(existingTrades.map(t =>
+        t.tradeNum ? t.tradeNum : `${t.entryTime}|${t.exitTime}|${t.direction}|${norm(t.dollarPL)}`
+    ));
+
+    const uniqueNew = newTrades.filter(t => {
+        const key = t.tradeNum ? t.tradeNum : `${t.entryTime}|${t.exitTime}|${t.direction}|${norm(t.dollarPL)}`;
+        return !existingKeys.has(key);
+    });
+
+    const allTrades = [...existingTrades, ...uniqueNew].sort((a, b) => {
+        const da = a.datetime || a.entryTime || a.date || '';
+        const db = b.datetime || b.entryTime || b.date || '';
+        return new Date(da) - new Date(db);
+    });
+
+    state.tenx.allTrades = allTrades;
+
+    try {
+        localStorage.setItem('tenx-trades', JSON.stringify(allTrades));
+        localStorage.setItem('tenx-upload-time', Date.now().toString());
+    } catch (e) {
+        try { localStorage.removeItem('tenx-trades'); localStorage.setItem('tenx-trades', JSON.stringify(allTrades)); } catch (e2) {}
+    }
+
+    const weeks = getWeeksList(allTrades);
+    state.tenx.selectedWeek = weeks[0];
+    populateWeekSelector('tenx', weeks);
+    setPeriod('tenx', 'alltime');
+
+    const snapshots = generateWeeklySnapshots(allTrades, 'tenx', TENX_RISK, TENX_PPT, TENX_STARTING_BALANCE);
+    state.tenx.snapshots = snapshots;
+    try { localStorage.setItem('tenx-snapshots', JSON.stringify(snapshots)); } catch (e) {}
+
+    showUploadSuccess('tenx', `${successMsg} (${uniqueNew.length} new, ${allTrades.length} total)`);
+    showExportButton('tenx');
+
+    renderGrowthComparisonFromState('chart-growth-comparison-tenx', 'tenx');
+
+    // Background DB sync
+    (async () => {
+        try {
+            const batchId = `tenx-${Date.now()}`;
+            await DB.saveTrades('tenx_trades', uniqueNew.length > 0 ? uniqueNew : allTrades, batchId);
+            await DB.saveAllWeeklySnapshots('tenx', snapshots);
+            recordSyncTime('tenx');
+        } catch (e) {
+            console.warn('DB sync failed:', e);
+        }
+    })();
+}
+
 // ===== UPLOAD STATUS HELPERS =====
 function showUploadProgress(method, msg) {
     const el = document.getElementById(`upload-status-${method}`);

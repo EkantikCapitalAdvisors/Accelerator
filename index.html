@@ -554,6 +554,25 @@
                 <button onclick="clearData('tenx')" class="px-4 py-2 bg-red-900/20 text-red-400 rounded-lg text-sm font-semibold hover:bg-red-900/40"><i class="fas fa-trash mr-1"></i>Clear</button>
                 <button id="gh-sync-btn" onclick="showGitHubSettings()" class="px-4 py-2 bg-gray-700/30 text-gray-400 rounded-lg text-sm font-semibold hover:bg-gray-700/50"><i class="fas fa-cog mr-1"></i>GitHub Sync</button>
             </div>
+            <!-- Discord Trade Input -->
+            <div class="mt-4 border-t border-gray-700/50 pt-4">
+                <h4 class="text-xs font-bold text-gray-400 mb-2 flex items-center"><i class="fab fa-discord text-indigo-400 mr-2"></i>Discord Trade Entry</h4>
+                <div class="flex flex-wrap items-start gap-3">
+                    <label class="flex-1 min-w-[200px]">
+                        <span class="text-[10px] text-gray-500 font-bold block mb-1">Upload Discord JSON</span>
+                        <input type="file" accept=".json" onchange="handleDiscordJSONUpload(event)" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-900/30 file:text-indigo-300 hover:file:bg-indigo-900/50 cursor-pointer">
+                    </label>
+                    <div class="w-full">
+                        <span class="text-[10px] text-gray-500 font-bold block mb-1">Or Paste Discord Messages</span>
+                        <div class="flex gap-2 mb-2">
+                            <input type="date" id="discord-trade-date" class="bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 focus:border-indigo-500 focus:outline-none" placeholder="Trade Date">
+                            <button onclick="handleDiscordTextSubmit()" class="px-4 py-2 bg-indigo-900/30 text-indigo-300 rounded-lg text-sm font-semibold hover:bg-indigo-900/50 whitespace-nowrap"><i class="fas fa-paper-plane mr-1"></i>Parse & Add</button>
+                        </div>
+                        <textarea id="discord-trade-input" rows="4" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 font-mono placeholder-gray-600 focus:border-indigo-500 focus:outline-none resize-y" placeholder="F37: s 6837.5&#10;F37: +4.5&#10;F38: sell 6894.25 stp 6897&#10;F38: -1"></textarea>
+                        <p class="text-[9px] text-gray-600 mt-1">Format: <code class="text-gray-500">F##: s|sell|b|buy PRICE [stp STOP]</code> then <code class="text-gray-500">F##: +/-POINTS</code>. ES contract ($50/pt).</p>
+                    </div>
+                </div>
+            </div>
             <div id="upload-status-tenx" class="hidden"></div>
             <div id="sync-status-tenx" class="hidden sync-status-badge">
                 <span id="sync-status-tenx-text" class="text-[10px] text-gray-500"></span>

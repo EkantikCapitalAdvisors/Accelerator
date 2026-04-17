@@ -83,20 +83,25 @@ const DB = {
         const norm = v => Math.round(parseFloat(v) * 10000) / 10000;
 
         // tenx_trades uses same format as ecfs_trades (Tradovate CSV round-trips)
-        const keys = new Set(existing.map(r =>
-            `${r.entry_time}|${r.exit_time}|${r.direction}|${norm(r.dollar_pl)}`
-        ));
+        const makeKey = (r) => r.trade_num
+            ? r.trade_num
+            : `${r.entry_time}|${r.exit_time}|${r.direction}|${norm(r.dollar_pl)}`;
+        const makeTradeKey = (t) => t.tradeNum
+            ? t.tradeNum
+            : `${t.entryTime}|${t.exitTime}|${t.direction}|${norm(t.dollarPL)}`;
+        const keys = new Set(existing.map(makeKey));
         const newRows = trades
-            .filter(t => !keys.has(`${t.entryTime}|${t.exitTime}|${t.direction}|${norm(t.dollarPL)}`))
+            .filter(t => !keys.has(makeTradeKey(t)))
             .map(t => ({
                 week_key:     getWeekKey(t.date),
-                entry_time:   t.entryTime   || '',
+                trade_num:    t.tradeNum    || '',
+                entry_time:   t.entryTime   || t.datetime || '',
                 exit_time:    t.exitTime    || '',
                 direction:    t.direction,
                 entry_price:  t.entryPrice,
-                exit_price:   t.exitPrice,
+                exit_price:   t.exitPrice   || 0,
                 stop_price:   t.stopPrice   || 0,
-                contracts:    t.contracts,
+                contracts:    t.contracts   || 1,
                 points_pl:    t.pointsPL,
                 dollar_pl:    t.dollarPL,
                 risk_points:  t.riskPoints  || 0,
@@ -106,6 +111,7 @@ const DB = {
                 trade_date:   t.date,
                 product:      t.product     || 'MES',
                 ppt:          t.ppt         || 5,
+                source:       t.source      || 'tradovate',
                 upload_batch: batchId
             }));
         const merged = [...existing, ...newRows];
@@ -160,8 +166,10 @@ function parseWeekKey(wk) {
 // Convert DB row back to trade object
 function dbRowToTenxTrade(row) {
     return {
+        tradeNum:    row.trade_num || '',
         entryTime:   row.entry_time,
         exitTime:    row.exit_time,
+        datetime:    row.entry_time || '',
         direction:   row.direction,
         entryPrice:  row.entry_price,
         exitPrice:   row.exit_price,
@@ -176,6 +184,8 @@ function dbRowToTenxTrade(row) {
         date:        row.trade_date,
         product:     row.product || 'MES',
         ppt:         row.ppt || 5,
+        source:      row.source || 'tradovate',
+        outcome:     row.is_win ? 'Win' : 'Loss',
         uploadBatch: row.upload_batch
     };
 }
@@ -349,6 +359,111 @@ function extractDate(datetime) {
     if (!datetime) return '';
     const dateOnly = datetime.split(/[ T]/)[0];
     return normalizeDate(dateOnly);
+}
+
+// ===== DISCORD TRADE PARSER =====
+// Parses Discord-style trade messages into trade objects.
+// Format examples:
+//   F37: s 6837.5          → entry (sell at 6837.5)
+//   F37: exit              → exit marker
+//   F37: +4.5              → result (+4.5 pts)
+//   F41: sell 7153 stp 7156 → entry with stop
+//   F41: -3                → result (-3 pts)
+//   f40: s 6992            → entry (case insensitive)
+//   f40: -10               → result
+// Can also parse the JSON format from discord_trades.json directly.
+
+function parseDiscordTradeText(text) {
+    const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const pending = {};   // tradeNum → { direction, entryPrice, stopPrice, datetime }
+    const completed = []; // finished trade objects
+
+    for (const line of lines) {
+        // Match: F##: <content>  (case insensitive)
+        const m = line.match(/^(F\d+)\s*:\s*(.+)$/i);
+        if (!m) continue;
+        const tradeNum = m[1].toUpperCase();
+        const body = m[2].trim();
+
+        // Is this a result line? e.g. "+4.5", "-3", "-10"
+        const resultMatch = body.match(/^([+-]?\d+\.?\d*)$/);
+        if (resultMatch) {
+            const pts = parseFloat(resultMatch[1]);
+            const entry = pending[tradeNum];
+            const direction = entry ? entry.direction : (pts > 0 ? 'Sell' : 'Sell');
+            const entryPrice = entry ? entry.entryPrice : 0;
+            const stopPrice = entry ? entry.stopPrice : 0;
+            const riskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(pts);
+            const ppt = 50; // ES contract ($50/pt) — Discord trades are ES
+            const dollarPL = pts * ppt;
+            const riskDollars = riskPts * ppt;
+
+            completed.push({
+                tradeNum,
+                datetime: entry ? entry.datetime : '',
+                date: entry ? entry.date : '',
+                direction: entry ? entry.direction : 'Unknown',
+                entryPrice,
+                stopPrice,
+                trailingProfit: '—',
+                pointsPL: pts,
+                riskPoints: riskPts,
+                dollarPL,
+                riskDollars,
+                isWin: pts > 0,
+                outcome: pts > 0 ? 'Win' : 'Loss',
+                product: 'ES',
+                ppt: 50,
+                source: 'discord'
+            });
+            delete pending[tradeNum];
+            continue;
+        }
+
+        // Is this an "exit" marker? (just sets a flag, result line follows)
+        if (/^exit$/i.test(body)) continue;
+
+        // Is this an entry line? e.g. "s 6837.5", "sell 7153 stp 7156", "b 6992", "buy 6855"
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)\s*(?:stp\s+(\d+\.?\d*))?$/i);
+        if (entryMatch) {
+            const dirRaw = entryMatch[1].toLowerCase();
+            const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
+            const entryPrice = parseFloat(entryMatch[2]);
+            const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
+
+            // Try to extract date from line context — caller may prepend date
+            pending[tradeNum] = { direction, entryPrice, stopPrice, datetime: '', date: '' };
+            continue;
+        }
+    }
+
+    return completed;
+}
+
+// Parse the discord_trades.json format (array of trade objects)
+function parseDiscordJSON(jsonArray) {
+    if (!Array.isArray(jsonArray)) return [];
+    return jsonArray.map(t => {
+        const date = t.date || '';
+        return {
+            tradeNum: t.tradeNum || '',
+            datetime: t.datetime || '',
+            date: normalizeDate(date),
+            direction: (t.direction || '').charAt(0).toUpperCase() + (t.direction || '').slice(1).toLowerCase(),
+            entryPrice: t.entryPrice || 0,
+            stopPrice: t.stopPrice || 0,
+            trailingProfit: t.trailingProfit || '—',
+            pointsPL: t.pointsPL || 0,
+            riskPoints: t.riskPoints || Math.abs(t.pointsPL || 0),
+            dollarPL: t.dollarPL || 0,
+            riskDollars: t.riskDollars || 0,
+            isWin: t.isWin !== undefined ? t.isWin : (t.pointsPL > 0),
+            outcome: t.outcome || (t.pointsPL > 0 ? 'Win' : 'Loss'),
+            product: 'ES',
+            ppt: 50,
+            source: 'discord'
+        };
+    });
 }
 
 // ===== KPI CALCULATOR =====
