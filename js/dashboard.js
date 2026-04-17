@@ -290,8 +290,8 @@ function updateEdgeSection(method) {
     setEl('tenx-ev-hero-sub', edgeAvgR > 0 ? `${fmtDollar(edgeK.evPerTrade)} per trade · 1R = ${fmtDollar(edgeAvgR)}` : `${fmtDollar(edgeK.evPerTrade)} per trade`);
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
     if (actualRisk) actualRisk.innerHTML = edgeAvgR > 0
-        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${edgeAvgR.toFixed(0)} (1R)`
-        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
+        ? `<strong>Risk budget:</strong> $500/day · <strong>Avg risk/trade:</strong> $${edgeAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $500/day (5%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(edgeK.avgWinDollar), 1);
     setEl('tenx-edge-avgwin-pts', `+${edgeK.avgWinPts.toFixed(2)} pts`);
@@ -486,11 +486,11 @@ function renderTenx(k, trades, allK, allTrades) {
     if (evBig) evBig.textContent = `${k.evPlannedR >= 0 ? '+' : ''}${k.evPlannedR.toFixed(1)}%R`;
     const evHeroSub = document.getElementById('tenx-ev-hero-sub');
     const mainAvgR = k.avgRiskDollars;
-    if (evHeroSub) evHeroSub.textContent = mainAvgR > 0 ? `${fmtDollar(k.evPerTrade)} per trade · 1R = ${fmtDollar(mainAvgR)}` : `${fmtDollar(k.evPerTrade)} per trade ($1,000/day risk)`;
+    if (evHeroSub) evHeroSub.textContent = mainAvgR > 0 ? `${fmtDollar(k.evPerTrade)} per trade · 1R = ${fmtDollar(mainAvgR)}` : `${fmtDollar(k.evPerTrade)} per trade ($500/day risk)`;
     const actualRisk = document.getElementById('tenx-ev-actual-risk');
     if (actualRisk) actualRisk.innerHTML = mainAvgR > 0
-        ? `<strong>Risk budget:</strong> $1,000/day · <strong>Avg risk/trade:</strong> $${mainAvgR.toFixed(0)} (1R)`
-        : `<strong>Risk budget:</strong> $1,000/day (10%)`;
+        ? `<strong>Risk budget:</strong> $500/day · <strong>Avg risk/trade:</strong> $${mainAvgR.toFixed(0)} (1R)`
+        : `<strong>Risk budget:</strong> $500/day (5%)`;
 
     setColor('tenx-edge-avgwin', fmtDollar(k.avgWinDollar), 1);
     const awPts = document.getElementById('tenx-edge-avgwin-pts');
