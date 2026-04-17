@@ -726,25 +726,25 @@
     "upload_batch": "initial-seed"
   },
   {
-    "week_key": "03/30/2026",
-    "trade_num": "F34",
-    "entry_time": "2026-04-02 10:12 AM",
+    "week_key": "04/06/2026",
+    "trade_num": "F36",
+    "entry_time": "2026-04-10 8:54 AM",
     "exit_time": "",
-    "direction": "Sell",
-    "entry_price": 6624,
+    "direction": "Buy",
+    "entry_price": 6869,
     "exit_price": 0,
     "stop_price": 0,
     "contracts": 1,
-    "points_pl": 3,
-    "dollar_pl": 150,
-    "risk_points": 3,
-    "risk_dollars": 150,
+    "points_pl": -5,
+    "dollar_pl": -250,
+    "risk_points": 5,
+    "risk_dollars": 250,
     "reward_risk": 0,
-    "is_win": true,
-    "trade_date": "4/2/2026",
+    "is_win": false,
+    "trade_date": "4/10/2026",
     "product": "ES",
     "ppt": 50,
     "source": "discord",
-    "upload_batch": "tenx-1776440128011"
+    "upload_batch": "tenx-1776440191803"
   }
 ]
