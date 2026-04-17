@@ -362,24 +362,77 @@ function extractDate(datetime) {
 }
 
 // ===== DISCORD TRADE PARSER =====
-// Parses Discord-style trade messages into trade objects.
-// Format examples:
-//   F37: s 6837.5          → entry (sell at 6837.5)
-//   F37: exit              → exit marker
-//   F37: +4.5              → result (+4.5 pts)
-//   F41: sell 7153 stp 7156 → entry with stop
-//   F41: -3                → result (-3 pts)
-//   f40: s 6992            → entry (case insensitive)
-//   f40: -10               → result
-// Can also parse the JSON format from discord_trades.json directly.
+// Parses Discord-style trade messages pasted from Discord.
+// Automatically extracts timestamps from Discord message headers and date dividers.
+//
+// Discord copy-paste format:
+//   Ekantik Capital  4/13/2026 8:33 AM
+//   F37: s 6837.5
+//   F37: exit
+//   F37: +4.5
+//   — April 14, 2026 —
+//   Ekantik Capital  4/14/2026 2:05 PM
+//   f40: s 6992
+//   Ekantik Capital  4/15/2026 8:34 AM
+//   f40: -10
+//
+// Also handles bare trade lines with no timestamps (uses fallback date or blank).
+
+const MONTH_NAMES = {
+    'january':1,'february':2,'march':3,'april':4,'may':5,'june':6,
+    'july':7,'august':8,'september':9,'october':10,'november':11,'december':12
+};
 
 function parseDiscordTradeText(text) {
     const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
-    const pending = {};   // tradeNum → { direction, entryPrice, stopPrice, datetime }
+    const pending = {};   // tradeNum → { direction, entryPrice, stopPrice, datetime, date }
     const completed = []; // finished trade objects
+    let currentDatetime = '';
+    let currentDate = '';
 
     for (const line of lines) {
-        // Match: F##: <content>  (case insensitive)
+        // 1. Discord date divider: "— April 14, 2026 —" or "April 14, 2026"
+        const dividerMatch = line.match(/^—?\s*(\w+)\s+(\d{1,2}),?\s+(\d{4})\s*—?$/);
+        if (dividerMatch) {
+            const monthNum = MONTH_NAMES[dividerMatch[1].toLowerCase()];
+            if (monthNum) {
+                const day = parseInt(dividerMatch[2]);
+                const year = parseInt(dividerMatch[3]);
+                currentDate = `${monthNum}/${day}/${year}`;
+                currentDatetime = `${year}-${String(monthNum).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            }
+            continue;
+        }
+
+        // 2. Discord message header: "Ekantik Capital  4/13/2026 8:33 AM" or "Username  4/13/2026 1:58 PM"
+        //    Also handles: "Ekantik Capital  9:29 AM" (time only, keep current date)
+        //    Also handles: "Ekantik Capital — 4/13/2026 8:33 AM" or with (edited)
+        const headerMatch = line.match(/^.+?\s+(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
+        if (headerMatch) {
+            const datePart = headerMatch[1]; // e.g. "4/13/2026"
+            const timePart = headerMatch[2]; // e.g. "8:33 AM"
+            const dp = datePart.split('/');
+            const month = parseInt(dp[0]), day = parseInt(dp[1]), year = parseInt(dp[2]);
+            currentDate = `${month}/${day}/${year}`;
+            currentDatetime = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')} ${timePart.trim()}`;
+            continue;
+        }
+
+        // 2b. Time-only header: "Ekantik Capital  9:29 AM" (no date, use current date)
+        const timeOnlyMatch = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
+        if (timeOnlyMatch && !line.match(/^F\d+/i)) {
+            const timePart = timeOnlyMatch[1];
+            if (currentDatetime) {
+                // Update time portion only
+                currentDatetime = currentDatetime.split(' ')[0] + ' ' + timePart.trim();
+            }
+            continue;
+        }
+
+        // 3. Skip "(edited)" lines or other non-trade lines
+        if (/^\(edited\)$/.test(line)) continue;
+
+        // 4. Match trade line: F##: <content>  (case insensitive)
         const m = line.match(/^(F\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
         const tradeNum = m[1].toUpperCase();
@@ -390,7 +443,6 @@ function parseDiscordTradeText(text) {
         if (resultMatch) {
             const pts = parseFloat(resultMatch[1]);
             const entry = pending[tradeNum];
-            const direction = entry ? entry.direction : (pts > 0 ? 'Sell' : 'Sell');
             const entryPrice = entry ? entry.entryPrice : 0;
             const stopPrice = entry ? entry.stopPrice : 0;
             const riskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(pts);
@@ -400,8 +452,8 @@ function parseDiscordTradeText(text) {
 
             completed.push({
                 tradeNum,
-                datetime: entry ? entry.datetime : '',
-                date: entry ? entry.date : '',
+                datetime: entry ? entry.datetime : currentDatetime,
+                date: entry ? entry.date : currentDate,
                 direction: entry ? entry.direction : 'Unknown',
                 entryPrice,
                 stopPrice,
@@ -431,8 +483,7 @@ function parseDiscordTradeText(text) {
             const entryPrice = parseFloat(entryMatch[2]);
             const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
 
-            // Try to extract date from line context — caller may prepend date
-            pending[tradeNum] = { direction, entryPrice, stopPrice, datetime: '', date: '' };
+            pending[tradeNum] = { direction, entryPrice, stopPrice, datetime: currentDatetime, date: currentDate };
             continue;
         }
     }
