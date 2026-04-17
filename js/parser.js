@@ -579,15 +579,17 @@ function computeSetupQuality(trades) {
         const contracts = t.contracts || 1;
 
         // ── Rule 1: Max Loss Per Trade 1-3% ──
+        // Use stop price if available, otherwise derive from riskPoints, default 10 pts
+        let riskDollarsR1;
         if (t.stopPrice && t.stopPrice > 0 && t.entryPrice > 0) {
-            const riskDollars = Math.abs(t.entryPrice - t.stopPrice) * contracts * ppt;
-            t.risk_pct = riskDollars / equityBefore;
-            t.r1_pass = t.risk_pct >= 0.01 && t.risk_pct <= 0.03;
+            riskDollarsR1 = Math.abs(t.entryPrice - t.stopPrice) * contracts * ppt;
         } else {
-            // No stop data — cannot verify
-            t.risk_pct = null;
-            t.r1_pass = false;
+            // Default stop = 10 points when not explicitly set
+            const riskPts = t.riskPoints || 10;
+            riskDollarsR1 = riskPts * ppt * contracts;
         }
+        t.risk_pct = riskDollarsR1 / equityBefore;
+        t.r1_pass = t.risk_pct >= 0.01 && t.risk_pct <= 0.03;
 
         // ── Rule 2: Min Profit on Winners ≥1% ──
         if (t.dollarPL <= 0) {
