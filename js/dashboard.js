@@ -538,10 +538,10 @@ function renderTenx(k, trades, allK, allTrades) {
     // Growth Comparison
     renderGrowthComparisonFromState('chart-growth-comparison-tenx', 'tenx');
 
-    // Evidence Gates, Gain Metrics & Demo Progress
+    // Evidence Gates, Gain Metrics & Adherence Scorecard
     renderEvidenceGates(allK);
     renderGainMetrics(allTrades, allK);
-    renderDemoProgress(allTrades, allK);
+    renderAdherenceScorecard(allTrades, allK);
 }
 
 // ===== Q0 EVIDENCE GATES =====
@@ -665,46 +665,58 @@ function renderGainMetrics(allTrades, allK) {
     if (wPctEl) wPctEl.textContent = `${weekTrades.length} trades this week`;
 }
 
-// ===== 180-DAY DEMO PROGRESS =====
-function renderDemoProgress(allTrades, allK) {
-    if (!allTrades || allTrades.length === 0) return;
-
-    // Find first trade date as demo start
-    const sorted = [...allTrades].sort((a, b) => {
-        const da = normalizeDate(a.date), db = normalizeDate(b.date);
-        const pa = da.split('/'), pb = db.split('/');
-        return new Date(pa[2], pa[0]-1, pa[1]) - new Date(pb[2], pb[0]-1, pb[1]);
-    });
-    const firstDate = normalizeDate(sorted[0].date);
-    const fp = firstDate.split('/');
-    const startDate = new Date(parseInt(fp[2]), parseInt(fp[0])-1, parseInt(fp[1]));
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 180);
-
-    const now = new Date();
-    const daysRemaining = Math.max(0, Math.ceil((endDate - now) / (1000*60*60*24)));
-    const currentBalance = TENX_STARTING_BALANCE + (allK ? allK.netPL : 0);
-    const target = TENX_STARTING_BALANCE * 2;
-    const gain = currentBalance - TENX_STARTING_BALANCE;
-    const progressPct = Math.max(0, Math.min(100, (gain / TENX_STARTING_BALANCE) * 100));
-
-    const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const fmtBal = (v) => `$${v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-
+// ===== ADHERENCE SCORECARD =====
+function renderAdherenceScorecard(allTrades, allK) {
     const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-    el('demo-start-date', fmt(startDate));
-    el('demo-end-date', fmt(endDate));
-    el('demo-days-remaining', daysRemaining.toString());
-    el('demo-progress-pct', `${progressPct.toFixed(1)}% of target`);
 
-    const balEl = document.getElementById('demo-current-balance');
-    if (balEl) {
-        balEl.textContent = fmtBal(currentBalance);
-        balEl.className = `text-lg font-bold ${currentBalance >= TENX_STARTING_BALANCE ? 'text-emerald-400' : 'text-red-400'}`;
+    // Trades completed — from actual parsed data
+    const totalTrades = allK ? allK.totalTrades : 0;
+    el('adherence-trades-done', totalTrades.toString());
+
+    // SPEC-M adherence % — requires manual entry or separate data source
+    // For now, check localStorage for manually-set values
+    const specm = localStorage.getItem('tenx-adherence-specm');
+    if (specm) el('adherence-specm', specm);
+
+    // Risk limit adherence % — calculate from trades that stayed within 1R
+    if (allTrades && allTrades.length > 0 && allK) {
+        const avgRisk = allK.avgRiskDollars || TENX_RISK;
+        // A trade "adheres" if its loss didn't exceed 1.5x the average risk
+        const threshold = avgRisk * 1.5;
+        const adherent = allTrades.filter(t => {
+            const pl = typeof t.dollarPL === 'number' ? t.dollarPL : 0;
+            return pl >= 0 || Math.abs(pl) <= threshold;
+        }).length;
+        const riskPct = totalTrades > 0 ? Math.round((adherent / totalTrades) * 100) : 0;
+        el('adherence-risk', `${riskPct}%`);
     }
 
-    const bar = document.getElementById('demo-progress-bar');
-    if (bar) bar.style.width = `${progressPct}%`;
+    // Process streak — consecutive trading days with all trades within risk limits
+    if (allTrades && allTrades.length > 0) {
+        const byDate = {};
+        for (const t of allTrades) {
+            const d = normalizeDate(t.date);
+            if (!byDate[d]) byDate[d] = [];
+            byDate[d].push(t);
+        }
+        const avgRisk = allK ? (allK.avgRiskDollars || TENX_RISK) : TENX_RISK;
+        const threshold = avgRisk * 1.5;
+        const dates = Object.keys(byDate).sort((a, b) => {
+            const pa = a.split('/'), pb = b.split('/');
+            return new Date(pa[2], pa[0]-1, pa[1]) - new Date(pb[2], pb[0]-1, pb[1]);
+        });
+        let streak = 0;
+        for (let i = dates.length - 1; i >= 0; i--) {
+            const dayTrades = byDate[dates[i]];
+            const allWithin = dayTrades.every(t => {
+                const pl = typeof t.dollarPL === 'number' ? t.dollarPL : 0;
+                return pl >= 0 || Math.abs(pl) <= threshold;
+            });
+            if (allWithin) streak++;
+            else break;
+        }
+        el('adherence-streak', `${streak} days`);
+    }
 }
 
 // ===== HELPER: GET LAST TRADE DATE =====
