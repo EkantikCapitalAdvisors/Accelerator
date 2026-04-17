@@ -404,11 +404,10 @@ function parseDiscordTradeText(text) {
             continue;
         }
 
-        // 2. Discord message header: "Ekantik Capital  4/13/2026 8:33 AM" or "Username  4/13/2026 1:58 PM"
-        //    Also handles: "Ekantik Capital  9:29 AM" (time only, keep current date)
+        // 2. Date+time line: "Ekantik Capital  4/13/2026 8:33 AM" or bare "4/2/2026 10:12 AM"
         //    Also handles: "Ekantik Capital — 4/13/2026 8:33 AM" or with (edited)
-        const headerMatch = line.match(/^.+?\s+(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
-        if (headerMatch) {
+        const headerMatch = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
+        if (headerMatch && !line.match(/^F\d+/i)) {
             const datePart = headerMatch[1]; // e.g. "4/13/2026"
             const timePart = headerMatch[2]; // e.g. "8:33 AM"
             const dp = datePart.split('/');
@@ -438,10 +437,13 @@ function parseDiscordTradeText(text) {
         const tradeNum = m[1].toUpperCase();
         const body = m[2].trim();
 
-        // Is this a result line? e.g. "+4.5", "-3", "-10"
-        const resultMatch = body.match(/^([+-]?\d+\.?\d*)$/);
+        // Is this a result line? e.g. "+4.5", "-3", "-10", "+ 3", "- 2.5"
+        const resultMatch = body.match(/^([+-])\s*(\d+\.?\d*)$/) || body.match(/^(\d+\.?\d*)$/);
         if (resultMatch) {
-            const pts = parseFloat(resultMatch[1]);
+            // Handle both "sign number" (2 groups) and bare "number" (1 group) matches
+            const pts = resultMatch[2] !== undefined
+                ? parseFloat(resultMatch[1] + resultMatch[2])   // e.g. ["+", "3"] → +3
+                : parseFloat(resultMatch[1]);                    // e.g. ["3"] → 3
             const entry = pending[tradeNum];
             const entryPrice = entry ? entry.entryPrice : 0;
             const stopPrice = entry ? entry.stopPrice : 0;
