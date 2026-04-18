@@ -710,22 +710,41 @@ function computeSetupQuality(trades) {
             t.r2_na = false;
         }
 
-        // ── Rule 3: 60-min Cooldown After Loss ──
-        t.r3_pass = true; // default pass
-        if (i > 0) {
+        // ── Rule 3: Max 1 Loser/Day + 30-min Cooldown After Win ──
+        // Two sub-rules:
+        //   3a. Only 1 losing trade per day — if a loss already occurred today, FAIL
+        //   3b. 30-min cooldown after a winning trade
+        t.r3_pass = true;
+        t.r3_reason = null;
+        const currTradeDate = normalizeDate(t.date || '');
+
+        // 3a: Count losses already closed today before this trade
+        let dailyLosses = 0;
+        for (let j = 0; j < i; j++) {
+            const prior = enriched[j];
+            if (prior.dollarPL < 0 && normalizeDate(prior.date || '') === currTradeDate) {
+                dailyLosses++;
+            }
+        }
+        if (dailyLosses >= 1) {
+            // A loss already occurred today — no more trades allowed
+            t.r3_pass = false;
+            t.r3_reason = `${dailyLosses} loss(es) already today`;
+        }
+
+        // 3b: 30-min cooldown after previous winning trade
+        if (i > 0 && t.r3_pass) {
             const prev = enriched[i - 1];
-            if (prev.dollarPL < 0) {
-                // Previous trade was a loss — check cooldown
+            if (prev.dollarPL > 0) {
                 const prevTime = parseTradeTimestamp(prev);
                 const currTime = parseTradeTimestamp(t);
                 if (prevTime && currTime) {
                     const elapsedMin = (currTime - prevTime) / (1000 * 60);
-                    t.minutes_since_last_loss = Math.round(elapsedMin);
-                    t.r3_pass = elapsedMin >= 60;
-                } else {
-                    // Cannot determine — benefit of the doubt
-                    t.minutes_since_last_loss = null;
-                    t.r3_pass = true;
+                    t.minutes_since_last_trade = Math.round(elapsedMin);
+                    if (elapsedMin < 30) {
+                        t.r3_pass = false;
+                        t.r3_reason = `${Math.round(elapsedMin)}min after win (need 30)`;
+                    }
                 }
             }
         }
@@ -785,7 +804,7 @@ function buildSetupTooltip(t) {
     const rules = [];
     if (t.r1_pass === false) rules.push('R1: Risk outside 2-3%');
     if (t.r2_pass === false && !t.r2_na) rules.push('R2: Winner profit <1%');
-    if (t.r3_pass === false) rules.push('R3: No 60min cooldown');
+    if (t.r3_pass === false) rules.push(`R3: ${t.r3_reason || '1 loser/day or 30min cooldown'}`);
     if (t.r4_pass === false) rules.push('R4: Aggregate limit breached');
     return rules.join(' | ') || 'Setup invalid';
 }

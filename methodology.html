@@ -113,22 +113,25 @@ For losers/breakeven (pnl &le; 0):
             <div class="flex items-center gap-3 mb-4">
                 <span class="w-10 h-10 bg-[#d4af37]/20 rounded-lg flex items-center justify-center text-[#d4af37] font-bold text-sm">R3</span>
                 <div>
-                    <h3 class="text-lg font-bold text-white">Minimum Cooldown After Loss</h3>
-                    <p class="text-[#d4af37] text-sm font-semibold">60 minutes</p>
+                    <h3 class="text-lg font-bold text-white">Trade Discipline: 1 Loss/Day + 30-min Cooldown</h3>
+                    <p class="text-[#d4af37] text-sm font-semibold">Max 1 loser per day &middot; 30-min cooldown after wins</p>
                 </div>
             </div>
-            <p class="text-gray-300 text-sm mb-4">After any closed losing trade, no new trade may be entered for 60 minutes. Revenge trading is the #1 cause of blowups. A 60-minute cooldown breaks the emotional reactivity loop.</p>
+            <p class="text-gray-300 text-sm mb-4">Two sub-rules that prevent revenge trading and overtrading. <strong>Sub-rule 3a:</strong> Only 1 losing trade per day. If a loss has already occurred today, no more trades until the next session. <strong>Sub-rule 3b:</strong> After a winning trade, wait at least 30 minutes before entering the next trade. Prevents euphoria-driven overtrading.</p>
             <div class="formula-block rounded-lg p-4 mb-4">
-                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">If previous trade P&L < 0:
-  elapsed = current_entry_time - previous_close_time
-  PASS if elapsed &ge; 60 minutes
-  FAIL if elapsed < 60 minutes
+                <pre class="text-sm font-mono text-emerald-300 whitespace-pre-wrap">Sub-rule 3a &mdash; Max 1 loser per day:
+  daily_losses = count(today's closed trades where P&L < 0)
+  FAIL if daily_losses &ge; 1 at time of new entry
 
-If previous trade P&L &ge; 0:
-  PASS automatically</pre>
+Sub-rule 3b &mdash; 30-min cooldown after win:
+  If previous trade P&L > 0:
+    elapsed = current_entry_time - previous_close_time
+    FAIL if elapsed < 30 minutes
+
+Both sub-rules must PASS for R3 to PASS.</pre>
             </div>
             <div class="text-xs text-gray-500">
-                <p><strong class="text-gray-400">Edge cases:</strong> Multiple losses in sequence &rarr; cooldown resets from most recent loss. Breakeven trade &rarr; not a loss, no cooldown required.</p>
+                <p><strong class="text-gray-400">Edge cases:</strong> Breakeven trade (P&L = 0) &rarr; not a loss, does not trigger 3a. Does not trigger 30-min cooldown under 3b. First trade of the day &rarr; auto-pass on both sub-rules.</p>
             </div>
         </div>
 
