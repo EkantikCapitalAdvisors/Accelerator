@@ -807,9 +807,14 @@ function renderAdherenceScorecard(allTrades, allK) {
     const sq = state.tenx.setupQuality;
     if (sq && sq.setupQualityPct !== null && sq.totalCount > 0) {
         el('adherence-specm', `${Math.round(sq.setupQualityPct)}%`);
+        el('adherence-specm-context', `${sq.validCount}/${sq.totalCount} trades passing all 4 rules`);
     } else {
         // No forward trades yet — show dash with context
         el('adherence-specm', '—%');
+        const preTradeCount = sq ? sq.allTimeTotal : 0;
+        el('adherence-specm-context', preTradeCount > 0
+            ? `${preTradeCount} pre-tracking trades scored \u2022 Tracking begins Apr 18`
+            : 'Tracking begins Apr 18, 2026');
     }
 
     // Risk limit adherence % — calculate from trades that stayed within 1R

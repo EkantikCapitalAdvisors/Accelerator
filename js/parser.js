@@ -755,8 +755,10 @@ function computeSetupQuality(trades) {
         if (t.setup_valid) validCount++;
 
         // Determine if this trade counts toward the forward aggregate
-        const tNorm = normalizeDate(t.date || '');
-        t.is_forward = tNorm >= startDate;
+        // Compare using Date objects to avoid format mismatch (normalizeDate returns M/D/YYYY, startDate is YYYY-MM-DD)
+        const tDateObj = parseTradeTimestamp(t) || new Date(t.date || '');
+        const startDateObj = new Date(startDate + 'T00:00:00');
+        t.is_forward = tDateObj instanceof Date && !isNaN(tDateObj) && tDateObj >= startDateObj;
         if (t.is_forward) {
             forwardTotal++;
             if (t.setup_valid) forwardValid++;
