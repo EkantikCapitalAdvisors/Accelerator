@@ -355,6 +355,104 @@
         </p>
     </div>
 
+    <!-- ===== 4.4c — THE PORTFOLIO CONTEXT: WHY THIS STRATEGY EXISTS ===== -->
+    <div class="bg-gradient-to-br from-[#0d1d35] to-[#0a1628] border border-[#d4af37]/15 rounded-2xl p-6 sm:p-8 fade-in-up">
+        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Why This Strategy Exists.</h2>
+        <p class="text-gray-400 text-sm mb-6">A 5% allocation that changes the math of a portfolio.</p>
+
+        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
+            <p>Viewed in isolation, this strategy looks aggressive. 10% daily risk. Futures. $10,000 account.</p>
+            <p>Viewed in portfolio context, it is a <strong class="text-white">5% speculative allocation</strong> &mdash; sized to be survivable at zero, designed to dominate returns if adherence holds.</p>
+        </div>
+
+        <!-- Portfolio Pie — Two slices -->
+        <div class="max-w-3xl mx-auto mb-8">
+            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-5">Portfolio Allocation at Inception</p>
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-6">
+                <div class="bg-[#0a1628]/60 border border-gray-600/30 rounded-xl p-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 border-2 border-blue-400/40 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-blue-400 font-bold text-lg">95</span>
+                    </div>
+                    <p class="text-white font-bold text-2xl">95%</p>
+                    <p class="text-gray-400 text-xs mt-1">Market Returns</p>
+                    <p class="text-gray-600 text-[10px] mt-0.5">~10% CAGR (S&P 500)</p>
+                </div>
+                <div class="bg-[#0a1628]/60 border-2 border-[#d4af37]/30 rounded-xl p-5 text-center" style="background: rgba(212,175,55,0.03);">
+                    <div class="w-12 h-12 rounded-full bg-[#d4af37]/20 border-2 border-[#d4af37]/40 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-[#d4af37] font-bold text-lg">5</span>
+                    </div>
+                    <p class="text-[#d4af37] font-bold text-2xl">5%</p>
+                    <p class="text-gray-300 text-xs mt-1">Speculative (This Strategy)</p>
+                    <p class="text-gray-600 text-[10px] mt-0.5">~100% CAGR target</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Flip — Year 10 Outcome -->
+        <div class="max-w-3xl mx-auto mb-8">
+            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-4">What Happens by Year 10</p>
+            <p class="text-gray-500 text-[9px] text-center mb-4">$100K starting portfolio &middot; 95/5 allocation &middot; each sleeve compounds independently</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div class="bg-[#0a1628]/60 border border-gray-600/30 rounded-xl p-4 text-center">
+                    <p class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mb-1">95% at Market (10% CAGR)</p>
+                    <p class="text-white font-bold text-xl">$246K</p>
+                    <p class="text-gray-500 text-[10px]">2.6&times; from start</p>
+                    <p class="text-blue-400/60 font-bold text-lg mt-1" id="port-market-pct">4.6%</p>
+                    <p class="text-gray-600 text-[9px]">of total portfolio</p>
+                </div>
+                <div class="bg-[#0a1628]/80 border-2 border-[#d4af37]/30 rounded-xl p-4 text-center" style="background: rgba(212,175,55,0.04);">
+                    <p class="text-[9px] text-[#d4af37] font-bold uppercase tracking-wider mb-1">5% at 100% CAGR</p>
+                    <p class="text-[#d4af37] font-bold text-xl">$5.1M</p>
+                    <p class="text-gray-400 text-[10px]">1,024&times; from start</p>
+                    <p class="text-[#d4af37] font-bold text-2xl mt-1" id="port-spec-pct">95.4%</p>
+                    <p class="text-gray-500 text-[9px]">of total portfolio</p>
+                </div>
+                <div class="bg-[#0a1628]/60 border border-emerald-500/20 rounded-xl p-4 text-center">
+                    <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Total Portfolio</p>
+                    <p class="text-emerald-400 font-bold text-xl">$5.35M</p>
+                    <p class="text-gray-400 text-[10px]">53.5&times; starting capital</p>
+                    <p class="text-gray-500 text-lg mt-1">vs</p>
+                    <p class="text-gray-600 text-[9px]">$259K without the 5% sleeve</p>
+                </div>
+            </div>
+
+            <!-- Composition bar -->
+            <div class="max-w-md mx-auto">
+                <div class="flex h-6 rounded-full overflow-hidden border border-gray-700/40">
+                    <div class="bg-blue-500/40 flex items-center justify-center" style="width: 4.6%;">
+                    </div>
+                    <div class="bg-gradient-to-r from-[#d4af37] to-[#f4c430] flex items-center justify-center" style="width: 95.4%;">
+                        <span class="text-[#0a1628] text-[9px] font-bold">5% allocation &rarr; 95% of value</span>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-1 text-[9px]">
+                    <span class="text-blue-400/60">Market (4.6%)</span>
+                    <span class="text-[#d4af37]">Speculative (95.4%)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- The insight -->
+        <div class="max-w-2xl mx-auto text-center mb-8">
+            <blockquote class="border-l-3 border-[#d4af37] pl-6 text-left">
+                <p class="pull-quote text-lg sm:text-xl text-[#d4af37] leading-relaxed">
+                    &ldquo;A 5% speculative allocation compounding at 100% CAGR becomes 95% of total portfolio value by Year 10. The other 95% barely matters. That is why proving this engine works is worth the effort.&rdquo;
+                </p>
+            </blockquote>
+        </div>
+
+        <!-- Context paragraph -->
+        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-sm leading-relaxed mb-6">
+            <p>This is why the 100-trade consistency proof matters beyond this account. If adherence holds and the engine compounds, a 5% allocation to this strategy inside a diversified portfolio reshapes the entire portfolio&rsquo;s trajectory.</p>
+            <p class="text-gray-500">The risk is capped. If the speculative sleeve goes to zero, the portfolio loses 5%. If it compounds, it dominates. The asymmetry is the architecture.</p>
+        </div>
+
+        <!-- Caveat -->
+        <p class="text-gray-600 text-[10px] italic text-center max-w-3xl mx-auto leading-relaxed">
+            Illustrative. Assumes 10% CAGR for market allocation (S&P 500 historical average) and 100% CAGR for speculative allocation (strategy target, not guaranteed). Actual returns depend on adherence, market regime, and execution quality. This is portfolio math, not a projection. The 100-trade consistency proof determines whether the speculative rate is achievable.
+        </p>
+    </div>
+
     <!-- ===== 4.5 — LIVE PERFORMANCE: THE BYPRODUCT ===== -->
     <div class="bg-gradient-to-br from-[#0d351d] to-[#0a1628] border border-emerald-400/30 rounded-2xl p-6 fade-in-up">
         <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Live Performance.</h2>
