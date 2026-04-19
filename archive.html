@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Archive · Ekantik 10x</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <header class="nav">
+        <div class="nav__inner">
+            <a class="nav__brand" href="/">ECA<span class="nav__brand-sub">Ekantik Capital</span></a>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="/">Live Proof</a></li>
+                <li><a class="nav__link nav__link--active" aria-current="page">Archive</a></li>
+                <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="section section--cream">
+        <div class="section__inner">
+            <span class="eyebrow">Archive</span>
+            <h2 id="archive-title">Battery snapshot</h2>
+            <p class="subhead" id="archive-sub">Frozen state of the 8-test battery at a point in time.</p>
+            <div id="archive-body">Loading…</div>
+            <p class="mt-4"><a class="btn btn--tertiary" href="/">← Back to live proof</a></p>
+        </div>
+    </section>
+
+    <script src="js/battery.js"></script>
+    <script src="js/battery-ui.js"></script>
+    <script>
+    (function(){
+        const params = new URLSearchParams(location.search);
+        const month = params.get('m');
+        const titleEl = document.getElementById('archive-title');
+        const subEl = document.getElementById('archive-sub');
+        const bodyEl = document.getElementById('archive-body');
+
+        if (!month) {
+            bodyEl.innerHTML = '<p class="muted italic">No month specified. Use the version-history table on the live page to select a snapshot.</p>';
+            return;
+        }
+        titleEl.textContent = `Battery snapshot — ${month}`;
+        fetch('data/archive/' + month + '.json').then(r => {
+            if (!r.ok) throw new Error('Snapshot not found.');
+            return r.json();
+        }).then(snapshot => {
+            subEl.textContent = `Sample: ${snapshot.meta.sampleSize} trades · Computed ${new Date(snapshot.meta.computedAt).toLocaleString()}.`;
+            bodyEl.innerHTML = '<div id="archive-table"></div><div class="glossary"><h3 class="glossary__title">Glossary</h3><div id="archive-glossary"></div></div>';
+            Ekantik.BatteryUI.renderTable(document.getElementById('archive-table'), snapshot);
+            Ekantik.BatteryUI.renderGlossary(document.getElementById('archive-glossary'), snapshot);
+        }).catch(e => {
+            bodyEl.innerHTML = `<p style="color:var(--fail)">Error: ${e.message}</p>`;
+        });
+    })();
+    </script>
+</body>
+</html>

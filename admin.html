@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin · Ekantik 10x — Operator Tools</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <header class="nav">
+        <div class="nav__inner">
+            <a class="nav__brand" href="/">ECA<span class="nav__brand-sub">Admin</span></a>
+            <ul class="nav__links">
+                <li><a class="nav__link" href="/">Public page</a></li>
+                <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="trust-strip">
+        <div class="trust-strip__inner">
+            <span><strong>Operator tools.</strong> Not linked from the public site. Intended for Ekantik operators only.</span>
+            <span class="mono" id="admin-status">Ready.</span>
+        </div>
+    </div>
+
+    <section class="section section--cream">
+        <div class="section__inner">
+            <h2>Trade Data Management</h2>
+            <p class="subhead">Ingest fills from Tradovate CSV exports or Discord message dumps. Commits push to the Accelerator repo so the public page reads fresh data on its next load.</p>
+
+            <!-- GitHub auth -->
+            <div class="card mt-3">
+                <div class="card__header"><h3>GitHub sync</h3><span class="mono" id="gh-status">Disconnected</span></div>
+                <p class="muted" style="font-size:13px">Provide a GitHub personal access token with <code>repo</code> scope. Token is stored in localStorage only.</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <input type="password" id="gh-token-input" placeholder="ghp_…" style="flex:1;min-width:260px;padding:10px;border:1px solid var(--divider);border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:13px;background:var(--white)">
+                    <button class="btn btn--primary btn--sm" type="button" id="gh-save">Save token</button>
+                    <button class="btn btn--tertiary btn--sm" type="button" id="gh-clear">Clear</button>
+                </div>
+            </div>
+
+            <!-- Tradovate CSV upload -->
+            <div class="card mt-3">
+                <div class="card__header"><h3>Tradovate CSV</h3></div>
+                <p class="muted" style="font-size:13px">Export from Tradovate → Orders → CSV. Drop the file here; round-trip trades are paired automatically.</p>
+                <input type="file" id="csv-file" accept=".csv">
+                <button class="btn btn--primary btn--sm mt-2" type="button" id="csv-upload">Parse & commit</button>
+                <div id="csv-result" class="mt-2 mono" style="font-size:13px"></div>
+            </div>
+
+            <!-- Discord paste -->
+            <div class="card mt-3">
+                <div class="card__header"><h3>Discord paste</h3></div>
+                <p class="muted" style="font-size:13px">Paste Discord <code>#alerts</code> messages or a Discord JSON export.</p>
+                <textarea id="discord-text" rows="6" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:1px solid var(--divider);border-radius:var(--radius-sm);background:var(--white)"></textarea>
+                <button class="btn btn--primary btn--sm mt-2" type="button" id="discord-upload">Parse & commit</button>
+                <div id="discord-result" class="mt-2 mono" style="font-size:13px"></div>
+            </div>
+
+            <!-- Export / clear -->
+            <div class="card mt-3">
+                <div class="card__header"><h3>Maintenance</h3></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="btn btn--secondary btn--sm" type="button" id="btn-export">Export tenx_trades.json</button>
+                    <button class="btn btn--tertiary btn--sm" type="button" id="btn-reload">Reload from GitHub</button>
+                </div>
+                <div id="maint-result" class="mt-2 mono" style="font-size:13px"></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/parser.js"></script>
+    <script>
+    (function(){
+        const $ = id => document.getElementById(id);
+        const status = (msg) => { $('admin-status').textContent = msg; };
+
+        function updateGHIndicator() {
+            const t = localStorage.getItem('gh-token') || '';
+            $('gh-status').textContent = t ? `Connected · ${t.slice(0,7)}…` : 'Disconnected';
+            $('gh-status').style.color = t ? 'var(--pass)' : 'var(--muted)';
+        }
+        updateGHIndicator();
+
+        $('gh-save').addEventListener('click', () => {
+            const t = $('gh-token-input').value.trim();
+            if (!t) return;
+            localStorage.setItem('gh-token', t);
+            $('gh-token-input').value = '';
+            updateGHIndicator();
+            status('Token saved.');
+        });
+        $('gh-clear').addEventListener('click', () => {
+            localStorage.removeItem('gh-token'); updateGHIndicator(); status('Token cleared.');
+        });
+
+        $('csv-upload').addEventListener('click', async () => {
+            const file = $('csv-file').files[0];
+            if (!file) { $('csv-result').textContent = 'Choose a CSV first.'; return; }
+            try {
+                const text = await file.text();
+                const trades = parseTradovateCSV(text);
+                $('csv-result').textContent = `Parsed ${trades.length} round-trip trades. Committing…`;
+                const batchId = 'tenx-' + Date.now();
+                await DB.saveTrades('tenx_trades', trades, batchId);
+                $('csv-result').textContent = `Committed ${trades.length} trades as batch ${batchId}.`;
+                $('csv-result').style.color = 'var(--pass)';
+            } catch (e) {
+                $('csv-result').textContent = 'Error: ' + e.message;
+                $('csv-result').style.color = 'var(--fail)';
+            }
+        });
+
+        $('discord-upload').addEventListener('click', async () => {
+            const text = $('discord-text').value.trim();
+            if (!text) return;
+            try {
+                let trades;
+                try {
+                    const json = JSON.parse(text);
+                    trades = Array.isArray(json) ? parseDiscordJSON(json) : parseDiscordTradeText(text);
+                } catch (e) {
+                    trades = parseDiscordTradeText(text);
+                }
+                if (trades.length === 0) { $('discord-result').textContent = 'No trades detected.'; return; }
+                $('discord-result').textContent = `Parsed ${trades.length} trades. Committing…`;
+                const batchId = 'discord-' + Date.now();
+                await DB.saveTrades('tenx_trades', trades, batchId);
+                $('discord-result').textContent = `Committed ${trades.length} trades as batch ${batchId}.`;
+                $('discord-result').style.color = 'var(--pass)';
+            } catch (e) {
+                $('discord-result').textContent = 'Error: ' + e.message;
+                $('discord-result').style.color = 'var(--fail)';
+            }
+        });
+
+        $('btn-export').addEventListener('click', async () => {
+            try {
+                const data = await DB.loadTrades('tenx_trades');
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `tenx_trades-${new Date().toISOString().slice(0,10)}.json`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                $('maint-result').textContent = `Exported ${data.length} trades.`;
+            } catch (e) { $('maint-result').textContent = 'Error: ' + e.message; }
+        });
+
+        $('btn-reload').addEventListener('click', async () => {
+            try {
+                const data = await DB.loadTrades('tenx_trades');
+                $('maint-result').textContent = `GitHub has ${data.length} trades.`;
+            } catch (e) { $('maint-result').textContent = 'Error: ' + e.message; }
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,913 +1,463 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekantik Accelerator — The Doctrine, Executed | Ekantik Capital</title>
-    <meta name="description" content="The Doubling Engine Doctrine, executed in public. One structural edge. One disciplined operator. $10,000 of personal capital. Every trade real. Every adherence score public.">
-    <meta name="theme-color" content="#0a1628">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>Ekantik Capital — One Structural Edge. Verified Eight Ways. Live.</title>
+    <meta name="description" content="A live, transparent demonstration of a documented structural edge in ES / MES futures. 8-test sustainability battery re-run against public fills.">
+    <meta name="theme-color" content="#1B2A4A">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: {
-                fontFamily: { 'playfair': ['Playfair Display', 'serif'], 'inter': ['Inter', 'sans-serif'], 'dm': ['DM Sans', 'sans-serif'] },
-                colors: { navy: '#0a1628', gold: '#d4af37' }
-            }}
-        }
-    </script>
-    <style>
-        .gradient-gold { background: linear-gradient(135deg, #d4af37 0%, #f4c430 100%); }
-        .gradient-emerald { background: linear-gradient(135deg, #059669 0%, #34d399 100%); }
-        .doctrine-quote { border-left: 3px solid #d4af37; padding-left: 1.25rem; }
-        .pull-quote { font-family: 'Playfair Display', serif; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 </head>
-<body class="font-inter antialiased bg-[#0a1628] text-gray-100">
+<body>
 
-    <!-- ===== HEADER ===== -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur-md border-b border-[#d4af37]/20">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center">
-                    <a href="https://cashflow.ekantikcapital.com/" class="flex items-center space-x-3">
-                        <div class="w-12 h-12 gradient-gold rounded-lg flex items-center justify-center">
-                            <span class="text-[#0a1628] font-bold text-xl">ECA</span>
-                        </div>
-                        <div class="hidden sm:block">
-                            <div class="text-[#d4af37] font-playfair font-bold text-lg">Ekantik Capital</div>
-                            <div class="text-gray-400 text-xs tracking-wider">ADVISORS LLC</div>
-                        </div>
-                    </a>
-                </div>
-                <nav class="flex items-center gap-4">
-                    <a href="https://doubles.ekantikcapital.com" class="text-[#d4af37] font-semibold text-sm flex items-center hover:text-[#f4c430] transition-colors">
-                        The Doctrine <i class="fas fa-arrow-right ml-1.5 text-xs"></i>
-                    </a>
-                    <span class="text-gray-600">|</span>
-                    <span class="text-gray-400 font-semibold text-sm flex items-center">
-                        <i class="fas fa-broadcast-tower mr-1.5 text-xs text-emerald-400"></i>Live Proof
-                    </span>
-                    <span class="text-gray-600 hidden sm:inline">|</span>
-                    <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener" class="hidden sm:flex text-[#5865F2] font-semibold text-sm items-center hover:text-[#7289DA] transition-colors">
-                        <i class="fab fa-discord mr-1.5 text-xs"></i>Discord
-                    </a>
-                </nav>
-            </div>
+    <!-- ═══ REGION 1 — NAV + TRUST STRIP (spec §3) ═══ -->
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="https://cashflow.ekantikcapital.com/">
+                ECA<span class="nav__brand-sub">Ekantik Capital</span>
+            </a>
+            <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link nav__link--active" href="/" aria-current="page">Live Proof</a></li>
+                <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+                <li><a class="nav__link" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Discord</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- ===== 4.1 — HERO: THE DOCTRINE, EXECUTED ===== -->
-    <section class="pt-28 pb-12 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1d35] to-[#0a1628]"></div>
-        <div class="absolute inset-0 opacity-15">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-[#d4af37]/30 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl"></div>
+    <div class="trust-strip" role="status" aria-live="polite">
+        <div class="trust-strip__inner">
+            <div class="trust-strip__group">
+                <span><span class="live-dot"></span>LIVE</span>
+                <span class="trust-strip__sep">|</span>
+                <span>Adherence: <strong id="trust-adherence">—</strong></span>
+                <span class="trust-strip__sep">|</span>
+                <span>Last fill: <strong id="trust-last-fill">—</strong></span>
+            </div>
+            <div class="trust-strip__group">
+                <span>Updated: <strong id="trust-updated">—</strong></span>
+            </div>
         </div>
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center mb-6">
-                    <span class="bg-[#d4af37]/10 border border-[#d4af37]/50 rounded-full px-5 py-2 text-[#d4af37] font-bold text-[11px] uppercase tracking-widest">Ekantik Doubling Engine &mdash; Live Proof</span>
-                </div>
-                <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                    The Doctrine, <span class="text-[#d4af37]">Executed.</span>
-                </h1>
+    </div>
 
-                <div class="max-w-2xl mx-auto mb-8">
-                    <div class="doctrine-quote">
-                        <p class="text-lg text-gray-300 italic leading-relaxed font-playfair">
-                            &ldquo;Don&rsquo;t pick a profession. Pick a mechanism.&rdquo;
-                        </p>
-                        <p class="text-sm text-[#d4af37]/70 mt-1">&mdash; The Doubling Engine Doctrine</p>
-                    </div>
-                </div>
+    <!-- ═══ REGION 2 — HERO (spec §4) ═══ -->
+    <section class="hero" aria-labelledby="hero-h1">
+        <div class="hero__inner">
+            <span class="eyebrow">Ekantik Capital Advisors · Live Proof</span>
+            <h1 class="hero__h1" id="hero-h1">
+                <span>One Structural Edge.</span>
+                <span>Verified Eight Ways.</span>
+                <span style="color: var(--gold)">Live.</span>
+            </h1>
 
-                <p class="text-gray-400 text-base mb-4 max-w-3xl mx-auto leading-relaxed">
-                    This page is the public execution layer of that doctrine. One structural edge. One disciplined operator. $10,000 of personal capital. Every trade real. Every adherence score public. Every deviation documented.
-                </p>
-                <p class="text-gray-500 text-sm mb-8 max-w-2xl mx-auto leading-relaxed">
-                    Not a trade service. Not a managed account. A live demonstration of what happens when a mechanism with a structural edge is applied with 100% adherence.
-                </p>
-
-                <div class="flex flex-wrap items-center justify-center gap-3 mb-5">
-                    <a href="https://doubles.ekantikcapital.com" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#d4af37] to-[#f4c430] text-[#0a1628] font-bold px-6 py-3 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                        <i class="fas fa-book-open"></i> Read The Doctrine
-                    </a>
-                    <a href="#adherence-scorecard" class="inline-flex items-center gap-2 bg-[#0a1628] border border-[#d4af37]/40 text-[#d4af37] font-bold px-6 py-3 rounded-lg text-sm hover:border-[#d4af37]/70 transition-colors">
-                        <i class="fas fa-clipboard-check"></i> Jump To Scorecard
-                    </a>
-                    <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-[#5865F2] text-white font-bold px-6 py-3 rounded-lg text-sm hover:bg-[#4752C4] transition-colors">
-                        <i class="fab fa-discord"></i> Follow Live Trades
-                    </a>
+            <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
+                <div class="stat-card">
+                    <p class="stat-card__label">Win Rate</p>
+                    <p class="stat-card__value" id="hero-stat-1">—</p>
+                    <p class="stat-card__caption">Live, updated from Discord fills.</p>
                 </div>
-
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <div class="bg-emerald-900/20 border border-emerald-400/40 rounded-lg px-6 py-3">
-                        <p class="text-emerald-200 text-sm">
-                            <i class="fas fa-clock mr-2"></i><strong>Last Updated:</strong> <span id="tenx-live-last-updated">&mdash;</span>
-                            <span class="text-gray-500 mx-2">|</span>
-                            <span id="tenx-live-trade-count" class="text-gray-400">0 trades (All-Time)</span>
-                        </p>
-                    </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">Profit Factor</p>
+                    <p class="stat-card__value" id="hero-stat-2">—</p>
+                    <p class="stat-card__caption">Gross wins ÷ gross losses.</p>
                 </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">EV / Trade (R)</p>
+                    <p class="stat-card__value" id="hero-stat-3">—</p>
+                    <p class="stat-card__caption">Average profit per unit of risk.</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">EV / Trade ($)</p>
+                    <p class="stat-card__value" id="hero-stat-4">—</p>
+                    <p class="stat-card__caption">Dollars earned per trade, on average.</p>
+                </div>
+            </div>
+            <p class="muted mono" style="font-size:12px;margin-top:12px" id="hero-sample-size">Loading…</p>
+
+            <p class="hero__subline">
+                A 5% allocation. 3.3 doublings.<br>
+                The math that reshapes a portfolio.
+            </p>
+
+            <div class="hero__ctas">
+                <a class="btn btn--primary" href="#section-b">See the Evidence →</a>
+                <a class="btn btn--secondary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
             </div>
         </div>
     </section>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <section class="py-8">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="max-w-6xl mx-auto space-y-6">
+    <!-- ═══ REGION 3 — SECTION A: Edge Power (spec §5) ═══ -->
+    <section class="section section--white" id="section-a" aria-labelledby="a-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 1 — Prove the edge exists</span>
+            <h2 id="a-h2">The Edge.</h2>
+            <p class="subhead">Measured across the full backtest. Re-measured live as trades close.</p>
 
-    <!-- ===== 4.2 — RISK ARCHITECTURE: THE DISCIPLINE, PRE-COMMITTED ===== -->
-    <div class="bg-gradient-to-br from-[#0d1d35] to-[#0a1628] border border-[#d4af37]/20 rounded-2xl p-6 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">The Discipline, Pre-Committed.</h2>
-        <p class="text-gray-400 text-sm mb-5">Risk limits are not suggestions. They are the architecture that makes compounding possible.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-5">
-                <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-wider mb-2">Per Trade</p>
-                <p class="text-2xl font-bold text-white mb-2">2&ndash;3%</p>
-                <p class="text-xs text-gray-400 leading-relaxed">Every position sized so the stop loss risks between 2% and 3% of current equity. Default stop: 10 points. Hard broker stop enforced.</p>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-5">
-                <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-wider mb-2">Per Day</p>
-                <p class="text-2xl font-bold text-white mb-2">5% max</p>
-                <p class="text-xs text-gray-400 leading-relaxed">Daily cap is a hard stop. If reached, trading halts for the session. No exceptions.</p>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-5">
-                <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-wider mb-2">Per Week</p>
-                <p class="text-2xl font-bold text-white mb-2">10% max</p>
-                <p class="text-xs text-gray-400 leading-relaxed">Weekly cap is a hard stop. If reached, trading halts for the week. No exceptions.</p>
-            </div>
-        </div>
-
-        <div class="bg-red-950/30 border border-red-500/20 rounded-xl p-4 flex items-start gap-3">
-            <i class="fas fa-shield-alt text-red-400 mt-0.5 flex-shrink-0"></i>
-            <div>
-                <p class="text-red-300 text-xs font-bold uppercase tracking-wider mb-1">Circuit Breaker</p>
-                <p class="text-gray-400 text-xs leading-relaxed">Three consecutive non-adherent trades trigger a 48-hour trading pause. No override. The architecture protects the operator from himself.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 4.3 — ADHERENCE SCORECARD: THE PRIMARY METRIC ===== -->
-    <div id="adherence-scorecard" class="bg-gradient-to-br from-[#1a2a3a] to-[#0d1d35] border-2 border-[#d4af37]/40 rounded-2xl p-6 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">The Adherence Scorecard.</h2>
-        <p class="text-gray-400 text-sm mb-6">The only metric that matters while the doctrine proves itself in live markets.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/20 rounded-xl p-5 text-center">
-                <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">Trades Completed</p>
-                <p id="adherence-trades" class="text-5xl font-playfair font-bold text-white"><span id="adherence-trades-done">0</span> <span class="text-xl text-gray-500">/ 100</span></p>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/20 rounded-xl p-5 text-center">
-                <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">Setup Quality</p>
-                <p id="adherence-specm" class="text-5xl font-playfair font-bold text-white">&mdash;%</p>
-                <p id="adherence-specm-context" class="text-[9px] text-gray-500 mt-1">Tracking begins Apr 18, 2026</p>
-                <a href="/methodology" class="text-[9px] text-[#d4af37]/60 hover:text-[#d4af37] mt-1 inline-block">How is this measured? &rarr;</a>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-[#d4af37]/20 rounded-xl p-5 text-center">
-                <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-2">Risk Limit Adherence</p>
-                <p id="adherence-risk" class="text-5xl font-playfair font-bold text-white">&mdash;%</p>
-            </div>
-        </div>
-
-        <div class="bg-[#0a1628]/60 border border-[#d4af37]/15 rounded-xl p-4 text-center mb-4">
-            <p class="text-[11px] text-[#d4af37] font-dm font-bold uppercase tracking-wider mb-1">Process Streak</p>
-            <p id="adherence-streak" class="text-3xl font-playfair font-bold text-white">0 <span class="text-base text-gray-500">days</span></p>
-            <p class="text-[9px] text-gray-600 mt-1">Consecutive trading days with all trades within risk limits</p>
-        </div>
-
-        <div class="bg-[#0a1628]/40 border border-[#d4af37]/10 rounded-lg p-4 mb-4">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-wider mb-2">What Setup Quality Measures</p>
-            <p class="text-gray-400 text-xs leading-relaxed mb-3">Every trade is scored against 4 binary rules: position risk within 2&ndash;3% of equity (R1), winning trades realize &ge;1% profit (R2), max 1 loser per day plus 30-minute cooldown after wins (R3), and daily/weekly loss limits intact at entry (R4). All four must pass. No partial credit.</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
-                <div class="bg-[#0a1628]/80 rounded-lg p-2">
-                    <p class="text-[9px] text-gray-500 font-bold">R1</p>
-                    <p class="text-[10px] text-gray-300">Risk 2&ndash;3%</p>
+            <!-- A.2 Edge stated plainly -->
+            <div class="edge-triplet">
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">Win Rate</p>
+                    <p class="stat-card__value" id="edge-wr">—</p>
+                    <p class="stat-card__caption">of closed fills</p>
                 </div>
-                <div class="bg-[#0a1628]/80 rounded-lg p-2">
-                    <p class="text-[9px] text-gray-500 font-bold">R2</p>
-                    <p class="text-[10px] text-gray-300">Winners &ge;1%</p>
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">Profit Factor</p>
+                    <p class="stat-card__value" id="edge-pf">—</p>
+                    <p class="stat-card__caption">institutional grade &gt; 1.50</p>
                 </div>
-                <div class="bg-[#0a1628]/80 rounded-lg p-2">
-                    <p class="text-[9px] text-gray-500 font-bold">R3</p>
-                    <p class="text-[10px] text-gray-300">1 loss/day + 30m</p>
-                </div>
-                <div class="bg-[#0a1628]/80 rounded-lg p-2">
-                    <p class="text-[9px] text-gray-500 font-bold">R4</p>
-                    <p class="text-[10px] text-gray-300">Caps intact</p>
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">R-Expectancy</p>
+                    <p class="stat-card__value" id="edge-rexp">—</p>
+                    <p class="stat-card__caption">per unit of risk deployed</p>
                 </div>
             </div>
-        </div>
 
-        <div class="space-y-1.5 text-xs text-gray-500">
-            <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>Setup Quality scored per trade &mdash; 4 rules, binary pass/fail. <span class="text-gray-600">Tracking starts Apr 18, 2026.</span></p>
-            <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>Risk limits respected at trade, day, and week scope.</p>
-            <p><i class="fas fa-check text-[#d4af37] mr-2 w-3"></i>Process streak counts consecutive trading days with all trades within limits.</p>
-        </div>
-    </div>
+            <p class="lede">
+                The strategy is a mechanical system for ES / MES futures with a documented edge across the full backtest: a 67.5% win rate, a 2.07 profit factor, and top-decile risk-adjusted returns. The live sample, visible above and in the public trade log below, is the same edge being expressed in real markets. The 8-Test Sustainability Battery in the next section is how we know the edge is not a lucky sample.
+            </p>
 
-    <!-- ===== 4.4 — WHY ADHERENCE IS THE ALPHA ===== -->
-    <div class="bg-[#0a1628] border border-gray-800/50 rounded-2xl p-8 fade-in-up" style="border-left: 4px solid #d4af37;">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Why Adherence Is The Alpha.</h2>
-        <p class="text-gray-400 text-sm mb-6">Everyone has an edge in a spreadsheet. Nobody has adherence in live markets.</p>
+            <!-- A.3 Doubling Ladder -->
+            <h3 class="mt-4">Doubling Ladder — target vs. live</h3>
+            <p class="muted" style="font-size:13px">Live rate (computed as geometric mean from actual Discord fills, minimum 25 closed trades): <strong class="mono" id="ladder-live-rate">—</strong></p>
+            <table class="ladder">
+                <thead>
+                    <tr>
+                        <th>Progression</th>
+                        <th style="text-align:right">Doublings</th>
+                        <th style="text-align:right">At 2.5%/mo (target)</th>
+                        <th style="text-align:right">At live rate</th>
+                    </tr>
+                </thead>
+                <tbody id="ladder-body"></tbody>
+            </table>
+            <p class="callout__body muted" style="font-size:13px"><em>The target rate is what the strategy was designed around. The live rate is what the sample is producing now. Both are shown because radical transparency requires both.</em></p>
 
-        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed" style="font-family: 'Playfair Display', serif;">
-            <p>The Doubling Engine doctrine says three things must be true for doubling to happen systematically:</p>
-            <ol class="list-decimal list-inside space-y-1 pl-4 text-gray-200">
-                <li>A repeatable structural edge.</li>
-                <li>Systematic discipline in execution.</li>
-                <li>Defined risk per trade.</li>
-            </ol>
-            <p>The edge has already been documented in backtesting: 67.5% win rate, 2.07 profit factor, top-decile Sharpe. The math is real. You can read the full edge analysis in <a href="https://doubles.ekantikcapital.com" class="text-[#d4af37] underline hover:text-[#f4c430]">the doctrine</a>.</p>
-            <p>What has <em>not</em> been documented &mdash; until now &mdash; is whether the operator can execute that edge with 100% adherence in live markets, under real capital pressure, across multiple regimes.</p>
-            <p>That gap &mdash; the gap between backtest and live, between model and execution &mdash; is where 90% of systematic traders fail. The industry pretends the gap doesn&rsquo;t exist. We&rsquo;re publishing the gap. In real time. Trade by trade.</p>
-            <p>If adherence holds &rarr; the edge compounds as the doctrine predicts.<br>If adherence breaks &rarr; the data tells us exactly where, and rebuilding becomes a diagnostic problem, not a mystery.</p>
-            <p>Either outcome is research. The only failure mode is untested belief.</p>
-            <p>A profitable 100 trades with 70% adherence tells us nothing &mdash; it could be luck. A breakeven 100 trades with 100% adherence tells us everything &mdash; the operator executes.</p>
-        </div>
+            <!-- A.4 95/5 Portfolio Reshaper -->
+            <h3 class="mt-4">The 5% Allocation Portfolio Reshaper</h3>
+            <p class="muted" style="font-size:13px">Editable illustration. Move the sliders — the math updates.</p>
 
-        <!-- Pull Quote -->
-        <div class="max-w-2xl mx-auto mt-8 text-center">
-            <p class="pull-quote text-xl sm:text-2xl text-[#d4af37] font-bold leading-snug">
-                We are not trading to make money.<br>
-                We are trading to prove the doctrine.<br>
-                <span class="text-white">Money is what a proven doctrine produces.</span>
+            <div class="portfolio-reshaper">
+                <div class="portfolio-reshaper__slider-grid">
+                    <div class="slider-field">
+                        <label for="reshaper-start">Starting portfolio · <span class="slider-value" id="reshaper-start-val">$100,000</span></label>
+                        <input id="reshaper-start" type="range" min="50" max="500" step="25" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-market-cagr">Market CAGR · <span class="slider-value" id="reshaper-market-cagr-val">10%</span></label>
+                        <input id="reshaper-market-cagr" type="range" min="0" max="15" step="1" value="10">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-spec-cagr">Speculative CAGR · <span class="slider-value" id="reshaper-spec-cagr-val">100%</span></label>
+                        <input id="reshaper-spec-cagr" type="range" min="0" max="150" step="5" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-horizon">Horizon (years) · <span class="slider-value" id="reshaper-horizon-val">10 yrs</span></label>
+                        <input id="reshaper-horizon" type="range" min="1" max="20" step="1" value="10">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-alloc">Speculative allocation · <span class="slider-value" id="reshaper-alloc-val">5%</span></label>
+                        <input id="reshaper-alloc" type="range" min="1" max="20" step="1" value="5">
+                    </div>
+                </div>
+
+                <div class="edge-triplet">
+                    <div class="stat-card">
+                        <p class="stat-card__label">Year-N Total</p>
+                        <p class="stat-card__value" id="reshaper-total">—</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Market Sleeve</p>
+                        <p class="stat-card__value" id="reshaper-market">—</p>
+                        <p class="stat-card__caption"><span id="reshaper-market-share">—</span> of final value</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Speculative Sleeve</p>
+                        <p class="stat-card__value" id="reshaper-spec">—</p>
+                        <p class="stat-card__caption"><span id="reshaper-spec-share">—</span> of final value</p>
+                    </div>
+                </div>
+
+                <div class="portfolio-reshaper__bar" aria-hidden="true">
+                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--market" id="reshaper-bar-market"></div>
+                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--spec"   id="reshaper-bar-spec"></div>
+                </div>
+                <div class="portfolio-reshaper__labels">
+                    <span>Market sleeve</span>
+                    <span>Speculative sleeve</span>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p class="callout__body italic">
+                    A 5% allocation compounding at 100% CAGR becomes 95% of total portfolio value by Year 10. The other 95% barely matters. That is why proving this engine works is worth the effort.
+                </p>
+            </div>
+            <p class="muted" style="font-size:13px">
+                If the speculative sleeve goes to zero, the portfolio loses 5%. If it compounds, it dominates. The asymmetry is the architecture.
+            </p>
+
+            <p class="lede mt-4" style="color: var(--muted)">
+                The math above is only as real as the edge that drives it. The next section is how we prove — statistically and publicly — that the edge is not a lucky sample.
             </p>
         </div>
-
-        <div class="text-center mt-6">
-            <a href="https://doubles.ekantikcapital.com" class="inline-flex items-center gap-2 text-[#d4af37] font-bold text-sm hover:text-[#f4c430] transition-colors">
-                <i class="fas fa-book-open"></i> Read the full doctrine &rarr; doubles.ekantikcapital.com
-            </a>
-        </div>
-    </div>
-
-    <!-- ===== 4.4b — WHY 100 TRADES MATTERS: THE DOUBLING MATH ===== -->
-    <div class="bg-gradient-to-br from-[#0d1d35] to-[#0a1628] border border-[#d4af37]/20 rounded-2xl p-6 sm:p-8 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Why 100 Trades Matters.</h2>
-        <p class="text-gray-400 text-sm mb-6">The edge is small. The compound is the weapon.</p>
-
-        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
-            <p>The strategy targets 2&ndash;3% net per month when executed with adherence. That sounds unimpressive. The math says otherwise.</p>
-            <p>One hundred trades is not the finish line. It is the proof that the operator can execute. What comes after is compounding &mdash; and compounding is the only force that matters at multi-year timelines.</p>
-        </div>
-
-        <!-- The Dual Doubling Ladder -->
-        <div class="max-w-3xl mx-auto mb-8">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-5">The Doubling Ladder</p>
-
-            <!-- Column Headers -->
-            <div class="grid grid-cols-12 gap-2 mb-3 px-2">
-                <div class="col-span-4"></div>
-                <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-[10px]">&times;</span></div>
-                <div class="col-span-3 text-center">
-                    <p class="text-[#d4af37] font-bold text-[10px] uppercase tracking-wider">At 2.5%/mo</p>
-                    <p class="text-gray-600 text-[8px]">(strategy target)</p>
-                </div>
-                <div class="col-span-4 text-center">
-                    <p class="text-emerald-400 font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1">
-                        At <span id="ladder-observed-rate">—</span>%/mo
-                        <span class="relative group cursor-help">
-                            <i class="fas fa-info-circle text-emerald-400/50 text-[8px]"></i>
-                            <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-48 bg-gray-900 border border-gray-700 text-gray-300 text-[9px] rounded-lg p-2 hidden group-hover:block z-10 text-left font-normal normal-case tracking-normal">Computed from live trade data via geometric mean. Updates as new trades close.</span>
-                        </span>
-                    </p>
-                    <p class="text-gray-600 text-[8px]" id="ladder-observed-label">(live, through Trade —)*</p>
-                </div>
-            </div>
-
-            <!-- Ladder Rows -->
-            <div class="space-y-2">
-                <!-- $20K row -->
-                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
-                    <div class="col-span-4 flex items-center gap-2">
-                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
-                        <span class="text-white font-bold font-mono text-sm">$20K</span>
-                    </div>
-                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">2&times;</span></div>
-                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~28 mo</span></div>
-                    <div class="col-span-4 text-center"><span id="ladder-obs-20k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
-                </div>
-                <!-- $40K row -->
-                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
-                    <div class="col-span-4 flex items-center gap-2">
-                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
-                        <span class="text-white font-bold font-mono text-sm">$40K</span>
-                    </div>
-                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">4&times;</span></div>
-                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~56 mo</span></div>
-                    <div class="col-span-4 text-center"><span id="ladder-obs-40k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
-                </div>
-                <!-- $80K row -->
-                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-[#d4af37]/10 rounded-lg px-3 sm:px-4 py-3">
-                    <div class="col-span-4 flex items-center gap-2">
-                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/30 text-[8px]"></i>
-                        <span class="text-white font-bold font-mono text-sm">$80K</span>
-                    </div>
-                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-sm">8&times;</span></div>
-                    <div class="col-span-3 text-center"><span class="text-gray-400 text-xs">~84 mo</span></div>
-                    <div class="col-span-4 text-center"><span id="ladder-obs-80k" class="text-emerald-300/70 text-xs">&mdash;</span></div>
-                </div>
-                <!-- $100K row (highlighted) -->
-                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/80 border-2 border-[#d4af37]/30 rounded-lg px-3 sm:px-4 py-3" style="background: rgba(212,175,55,0.04);">
-                    <div class="col-span-4 flex items-center gap-2">
-                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
-                        <i class="fas fa-arrow-right text-[#d4af37]/50 text-[8px]"></i>
-                        <span class="text-[#d4af37] font-bold font-mono text-sm">$100K</span>
-                    </div>
-                    <div class="col-span-1 text-center"><span class="text-[#d4af37] font-bold text-lg">10&times;</span></div>
-                    <div class="col-span-3 text-center"><span class="text-gray-300 text-xs font-semibold">~94 mo</span></div>
-                    <div class="col-span-4 text-center"><span id="ladder-obs-100k" class="text-emerald-300 text-xs font-semibold">&mdash;</span></div>
-                </div>
-                <!-- $1M row -->
-                <div class="grid grid-cols-12 gap-2 items-center bg-[#0a1628]/60 border border-gray-700/20 rounded-lg px-3 sm:px-4 py-3">
-                    <div class="col-span-4 flex items-center gap-2">
-                        <span class="text-gray-500 font-mono text-xs hidden sm:inline">$10K</span>
-                        <i class="fas fa-arrow-right text-gray-600 text-[8px]"></i>
-                        <span class="text-gray-300 font-bold font-mono text-sm">$1M</span>
-                    </div>
-                    <div class="col-span-1 text-center"><span class="text-gray-500 font-bold text-sm">100&times;</span></div>
-                    <div class="col-span-3 text-center"><span class="text-gray-500 text-xs">~188 mo</span></div>
-                    <div class="col-span-4 text-center"><span id="ladder-obs-1m" class="text-emerald-300/50 text-xs">&mdash;</span></div>
-                </div>
-            </div>
-
-            <!-- Doublings footer row -->
-            <div class="flex justify-between items-center mt-3 px-2">
-                <span class="text-gray-600 text-[9px]">Doublings needed: 1 &rarr; 6.6</span>
-                <span id="ladder-observed-note" class="text-gray-600 text-[9px] italic"></span>
-            </div>
-        </div>
-
-        <!-- Commentary -->
-        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
-            <p>Every doubling uses the same mechanic: a disciplined edge, held through regimes that break aggressive traders. The compound is the weapon.</p>
-            <p>The target rate is what the strategy was designed around and what the 100-trade consistency proof tests the operator against. The observed rate is what the sample is producing right now &mdash; and may or may not persist. Both are shown because radical transparency requires both.</p>
-            <p>3.3 doublings is not a promise. It is what the math produces if the adherence holds. The adherence is what this page is testing.</p>
-        </div>
-
-        <!-- Pull Quote -->
-        <div class="max-w-2xl mx-auto text-center mb-8">
-            <blockquote class="border-l-3 border-[#d4af37] pl-6 text-left">
-                <p class="pull-quote text-lg sm:text-xl text-[#d4af37] leading-relaxed">
-                    &ldquo;3.3 doublings separates a $100K account from a $1M account. Not a moonshot. Just math &mdash; plus the one thing almost no one has: the discipline to sit through every doubling without breaking.&rdquo;
-                </p>
-            </blockquote>
-        </div>
-
-        <!-- Cross-link -->
-        <div class="text-center mb-6">
-            <a href="https://doubles.ekantikcapital.com" class="inline-flex items-center gap-2 text-[#d4af37] font-bold text-sm hover:text-[#f4c430] transition-colors">
-                <i class="fas fa-book-open"></i> Read the full doubling doctrine &rarr; doubles.ekantikcapital.com
-            </a>
-        </div>
-
-        <!-- Required caveat -->
-        <p class="text-gray-600 text-[10px] italic text-center max-w-3xl mx-auto leading-relaxed">
-            * Illustrative. Both columns of the doubling ladder are math derivatives from monthly compounding at the stated rate. The target rate is pre-committed and frozen. The observed rate is computed from live trade data and will change as more trades close. Neither represents a guarantee or projection of future performance. Past and live-sample returns do not predict future results. The 100-trade consistency proof is what determines whether adherence &mdash; and therefore the rate &mdash; is sustainable.
-        </p>
-    </div>
-
-    <!-- ===== 4.4c — THE PORTFOLIO CONTEXT: WHY THIS STRATEGY EXISTS ===== -->
-    <div class="bg-gradient-to-br from-[#0d1d35] to-[#0a1628] border border-[#d4af37]/15 rounded-2xl p-6 sm:p-8 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Why This Strategy Exists.</h2>
-        <p class="text-gray-400 text-sm mb-6">A 5% allocation that changes the math of a portfolio.</p>
-
-        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-base leading-relaxed mb-8" style="font-family: 'Playfair Display', serif;">
-            <p>Viewed in isolation, this strategy looks aggressive. 10% daily risk. Futures. $10,000 account.</p>
-            <p>Viewed in portfolio context, it is a <strong class="text-white">5% speculative allocation</strong> &mdash; sized to be survivable at zero, designed to dominate returns if adherence holds.</p>
-        </div>
-
-        <!-- Portfolio Pie — Two slices -->
-        <div class="max-w-3xl mx-auto mb-8">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-5">Portfolio Allocation at Inception</p>
-            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-6">
-                <div class="bg-[#0a1628]/60 border border-gray-600/30 rounded-xl p-5 text-center">
-                    <div class="w-12 h-12 rounded-full bg-blue-500/20 border-2 border-blue-400/40 flex items-center justify-center mx-auto mb-3">
-                        <span class="text-blue-400 font-bold text-lg">95</span>
-                    </div>
-                    <p class="text-white font-bold text-2xl">95%</p>
-                    <p class="text-gray-400 text-xs mt-1">Market Returns</p>
-                    <p class="text-gray-600 text-[10px] mt-0.5">~10% CAGR (S&P 500)</p>
-                </div>
-                <div class="bg-[#0a1628]/60 border-2 border-[#d4af37]/30 rounded-xl p-5 text-center" style="background: rgba(212,175,55,0.03);">
-                    <div class="w-12 h-12 rounded-full bg-[#d4af37]/20 border-2 border-[#d4af37]/40 flex items-center justify-center mx-auto mb-3">
-                        <span class="text-[#d4af37] font-bold text-lg">5</span>
-                    </div>
-                    <p class="text-[#d4af37] font-bold text-2xl">5%</p>
-                    <p class="text-gray-300 text-xs mt-1">Speculative (This Strategy)</p>
-                    <p class="text-gray-600 text-[10px] mt-0.5">~100% CAGR target</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- The Flip — Year 10 Outcome -->
-        <div class="max-w-3xl mx-auto mb-8">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-4">What Happens by Year 10</p>
-            <p class="text-gray-500 text-[9px] text-center mb-4">$100K starting portfolio &middot; 95/5 allocation &middot; each sleeve compounds independently</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                <div class="bg-[#0a1628]/60 border border-gray-600/30 rounded-xl p-4 text-center">
-                    <p class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mb-1">95% at Market (10% CAGR)</p>
-                    <p class="text-white font-bold text-xl">$246K</p>
-                    <p class="text-gray-500 text-[10px]">2.6&times; from start</p>
-                    <p class="text-blue-400/60 font-bold text-lg mt-1" id="port-market-pct">4.6%</p>
-                    <p class="text-gray-600 text-[9px]">of total portfolio</p>
-                </div>
-                <div class="bg-[#0a1628]/80 border-2 border-[#d4af37]/30 rounded-xl p-4 text-center" style="background: rgba(212,175,55,0.04);">
-                    <p class="text-[9px] text-[#d4af37] font-bold uppercase tracking-wider mb-1">5% at 100% CAGR</p>
-                    <p class="text-[#d4af37] font-bold text-xl">$5.1M</p>
-                    <p class="text-gray-400 text-[10px]">1,024&times; from start</p>
-                    <p class="text-[#d4af37] font-bold text-2xl mt-1" id="port-spec-pct">95.4%</p>
-                    <p class="text-gray-500 text-[9px]">of total portfolio</p>
-                </div>
-                <div class="bg-[#0a1628]/60 border border-emerald-500/20 rounded-xl p-4 text-center">
-                    <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Total Portfolio</p>
-                    <p class="text-emerald-400 font-bold text-xl">$5.35M</p>
-                    <p class="text-gray-400 text-[10px]">53.5&times; starting capital</p>
-                    <p class="text-gray-500 text-lg mt-1">vs</p>
-                    <p class="text-gray-600 text-[9px]">$259K without the 5% sleeve</p>
-                </div>
-            </div>
-
-            <!-- Composition bar -->
-            <div class="max-w-md mx-auto">
-                <div class="flex h-6 rounded-full overflow-hidden border border-gray-700/40">
-                    <div class="bg-blue-500/40 flex items-center justify-center" style="width: 4.6%;">
-                    </div>
-                    <div class="bg-gradient-to-r from-[#d4af37] to-[#f4c430] flex items-center justify-center" style="width: 95.4%;">
-                        <span class="text-[#0a1628] text-[9px] font-bold">5% allocation &rarr; 95% of value</span>
-                    </div>
-                </div>
-                <div class="flex justify-between mt-1 text-[9px]">
-                    <span class="text-blue-400/60">Market (4.6%)</span>
-                    <span class="text-[#d4af37]">Speculative (95.4%)</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- The insight -->
-        <div class="max-w-2xl mx-auto text-center mb-8">
-            <blockquote class="border-l-3 border-[#d4af37] pl-6 text-left">
-                <p class="pull-quote text-lg sm:text-xl text-[#d4af37] leading-relaxed">
-                    &ldquo;A 5% speculative allocation compounding at 100% CAGR becomes 95% of total portfolio value by Year 10. The other 95% barely matters. That is why proving this engine works is worth the effort.&rdquo;
-                </p>
-            </blockquote>
-        </div>
-
-        <!-- Context paragraph -->
-        <div class="max-w-3xl mx-auto space-y-4 text-gray-300 text-sm leading-relaxed mb-6">
-            <p>This is why the 100-trade consistency proof matters beyond this account. If adherence holds and the engine compounds, a 5% allocation to this strategy inside a diversified portfolio reshapes the entire portfolio&rsquo;s trajectory.</p>
-            <p class="text-gray-500">The risk is capped. If the speculative sleeve goes to zero, the portfolio loses 5%. If it compounds, it dominates. The asymmetry is the architecture.</p>
-        </div>
-
-        <!-- Caveat -->
-        <p class="text-gray-600 text-[10px] italic text-center max-w-3xl mx-auto leading-relaxed">
-            Illustrative. Assumes 10% CAGR for market allocation (S&P 500 historical average) and 100% CAGR for speculative allocation (strategy target, not guaranteed). Actual returns depend on adherence, market regime, and execution quality. This is portfolio math, not a projection. The 100-trade consistency proof determines whether the speculative rate is achievable.
-        </p>
-    </div>
-
-    <!-- ===== 4.5 — LIVE PERFORMANCE: THE BYPRODUCT ===== -->
-    <div class="bg-gradient-to-br from-[#0d351d] to-[#0a1628] border border-emerald-400/30 rounded-2xl p-6 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">Live Performance.</h2>
-        <p class="text-gray-400 text-sm mb-3">The byproduct of adherence, not the target. Published because radical transparency requires it.</p>
-        <p class="text-gray-500 text-xs italic mb-5 max-w-3xl">These numbers are the byproduct of disciplined execution. They are published for transparency, not promoted as a target. If adherence holds, these numbers will compound as the doctrine predicts. If adherence breaks, these numbers will tell us where.</p>
-
-        <!-- Info badges -->
-        <div class="flex flex-wrap gap-2 mb-5">
-            <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">ES Futures (S&P 500)</span>
-            <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">$50/point</span>
-            <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">Starting: $10,000</span>
-            <span class="bg-red-500/20 text-red-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">Risk: $500/day (5%)</span>
-            <span id="tenx-avg-risk-badge" class="bg-yellow-500/20 text-yellow-300 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider hidden">1R = &mdash;</span>
-        </div>
-    </div>
-
-    <!-- ===== HERO STATS (7 cards) ===== -->
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">NET P&L</p>
-            <p id="tenx-hero-pnl" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-pnl-sub" class="text-[10px] text-gray-500 mt-0.5">0 trades</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">RETURN</p>
-            <p id="tenx-hero-return" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p class="text-[10px] text-gray-500 mt-0.5">on $10,000</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">EV / TRADE</p>
-            <p id="tenx-hero-ev" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-ev-sub" class="text-[10px] text-gray-500 mt-0.5">$/trade</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">WIN RATE</p>
-            <p id="tenx-hero-wr" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-wr-sub" class="text-[10px] text-gray-500 mt-0.5">0W / 0L</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">PROFIT FACTOR</p>
-            <p id="tenx-hero-pf" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-pf-sub" class="text-[10px] text-gray-500 mt-0.5">gross W / L</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-red-900/20 to-red-950/40 border border-red-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-red-400 font-bold uppercase tracking-wider">MAX DRAWDOWN</p>
-            <p id="tenx-hero-dd" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-dd-sub" class="text-[10px] text-gray-500 mt-0.5">0%</p>
-        </div>
-        <div class="stat-card bg-gradient-to-br from-emerald-900/20 to-emerald-950/40 border border-emerald-500/20 rounded-xl p-4 text-center">
-            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">NET PTS</p>
-            <p id="tenx-hero-mespts" class="text-2xl font-bold text-white mt-1">&mdash;</p>
-            <p id="tenx-hero-mespts-sub" class="text-[10px] text-gray-500 mt-0.5">avg W/L pts</p>
-        </div>
-    </div>
-
-    <!-- ===== EDGE EVIDENCE GATES ===== -->
-    <div class="bg-gradient-to-br from-[#0d351d] to-[#0a1628] border border-emerald-400/30 rounded-2xl p-6 fade-in-up">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 bg-amber-500/15 border border-amber-400/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-flask text-amber-400 text-lg"></i>
-            </div>
-            <div>
-                <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white">Edge Evidence Gates <span class="text-emerald-400 text-xs font-inter font-semibold align-middle ml-2">&mdash; Live Validation</span></h2>
-                <p class="text-gray-400 text-sm">Real-time edge metrics from actual ES fills posted in Discord</p>
-            </div>
-        </div>
-
-        <div id="gates-validated-banner" class="hidden mb-4 bg-green-900/20 border border-green-400/40 rounded-lg px-4 py-3 text-center">
-            <p class="text-green-400 font-bold text-sm"><i class="fas fa-check-circle mr-2"></i>EDGE VALIDATED &mdash; All gates passed.</p>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="evidence-gates-grid">
-            <div id="gate-trades" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Min Trades</p>
-                <p id="gate-trades-value" class="text-xl font-bold text-gray-500">0/25</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-trades-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: 25 trades</p>
-            </div>
-            <div id="gate-return" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Return</p>
-                <p id="gate-return-value" class="text-xl font-bold text-gray-500">0%</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-return-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: >30%</p>
-            </div>
-            <div id="gate-wr" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Win Rate</p>
-                <p id="gate-wr-value" class="text-xl font-bold text-gray-500">&mdash;</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-wr-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: >60%</p>
-            </div>
-            <div id="gate-ev" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">EV / Trade</p>
-                <p id="gate-ev-value" class="text-xl font-bold text-gray-500">&mdash;</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-ev-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: Positive</p>
-            </div>
-            <div id="gate-pf" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Profit Factor</p>
-                <p id="gate-pf-value" class="text-xl font-bold text-gray-500">&mdash;</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-pf-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: >1.5</p>
-            </div>
-            <div id="gate-dd" class="bg-[#0a1628]/60 border border-gray-700/30 rounded-xl p-3 text-center">
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Max Drawdown</p>
-                <p id="gate-dd-value" class="text-xl font-bold text-gray-500">&mdash;</p>
-                <div class="mt-2 h-1.5 rounded-full bg-gray-800 overflow-hidden"><div id="gate-dd-bar" class="h-full rounded-full bg-gray-600 transition-all duration-700" style="width: 0%"></div></div>
-                <p class="text-[8px] text-gray-600 mt-1">Target: &lt;25%</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== GAIN-NOT-GAP METRICS ===== -->
-    <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-                <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Gain Since Inception</p>
-                <p id="gain-inception" class="text-2xl font-bold text-green-400 mt-1">&mdash;</p>
-                <p id="gain-inception-pct" class="text-[10px] text-gray-500">&mdash;</p>
-            </div>
-            <div>
-                <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Gain This Month</p>
-                <p id="gain-month" class="text-lg font-bold text-green-400 mt-1">&mdash;</p>
-                <p id="gain-month-pct" class="text-[10px] text-gray-500">&mdash;</p>
-            </div>
-            <div>
-                <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Gain This Week</p>
-                <p id="gain-week" class="text-lg font-bold text-green-400 mt-1">&mdash;</p>
-                <p id="gain-week-pct" class="text-[10px] text-gray-500">&mdash;</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== PORTFOLIO PARAMETERS ===== -->
-    <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Portfolio</p><p class="text-lg font-bold text-white">$10,000</p><p class="text-[10px] text-gray-600">Personal capital</p></div>
-            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Daily Risk</p><p class="text-lg font-bold text-emerald-400">$500</p><p class="text-[10px] text-gray-600">5% of portfolio</p></div>
-            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Instrument</p><p class="text-lg font-bold text-white">ES</p><p class="text-[10px] text-gray-600">S&P 500 Futures</p></div>
-            <div><p class="text-[10px] text-gray-500 font-bold uppercase">Point Value</p><p class="text-lg font-bold text-white">$50/pt</p><p class="text-[10px] text-gray-600">ES contract</p></div>
-        </div>
-    </div>
-
-    <!-- ===== MONTHLY RETURNS ===== -->
-    <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
-        <h3 class="text-sm font-bold text-white mb-3 flex items-center"><i class="fas fa-calendar-alt text-emerald-400 mr-2"></i>Monthly Returns</h3>
-        <div id="monthly-summary-tenx" class="trade-table">
-            <p class="text-gray-500 text-sm text-center py-4">Upload trade data to see monthly breakdown</p>
-        </div>
-    </div>
-
-    <!-- ===== GROWTH COMPARISON CHART ===== -->
-    <div class="bg-[#0d1d35] border border-emerald-500/25 rounded-xl p-5" style="border-top: 2px solid #34d399;">
-        <h3 class="text-sm font-bold text-white mb-1 flex items-center"><i class="fas fa-chart-line text-emerald-400 mr-2"></i>Actual Account Performance</h3>
-        <p id="growth-subtitle-tenx" class="text-[10px] text-gray-500 mb-3">Upload trade data to see equity curve</p>
-        <div id="chart-growth-comparison-tenx" style="height: 400px;"></div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-xs">
-            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">S&P 500</p><p id="growth-spy-tenx" class="text-gray-300 font-semibold">&mdash;</p></div>
-            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-emerald-400 font-bold">Ekantik Accelerator</p><p id="growth-tenx-tenx" class="text-white font-semibold">&mdash;</p></div>
-            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">vs S&P 500</p><p id="growth-ratio-tenx" class="text-gray-300 text-[10px]">&mdash;</p></div>
-            <div class="bg-[#0a1628] rounded-lg p-2.5 text-center"><p class="text-[10px] text-gray-500 font-bold">Est. Max DD</p><p id="growth-dd-tenx-tenx" class="text-gray-300 text-[10px]">&mdash;</p></div>
-        </div>
-    </div>
-
-    <!-- ===== INCEPTION SUMMARY ===== -->
-    <div id="inception-tenx">
-        <p class="text-gray-500 text-sm text-center py-4">Upload trade data to see inception summary</p>
-    </div>
-
-    <!-- ===== UNDERSTANDING THE EDGE (Expandable) ===== -->
-    <div>
-        <button onclick="toggleEdgeSection()" class="w-full flex items-center justify-between bg-[#0d1d35] border border-emerald-500/20 rounded-xl px-5 py-3 hover:border-emerald-400/40 transition-all">
-            <span class="text-sm font-bold text-white flex items-center"><i class="fas fa-brain text-emerald-400 mr-2"></i>Understanding the Edge</span>
-            <i id="icon-edge-theory" class="fas fa-chevron-down text-emerald-400 text-xs"></i>
-        </button>
-        <div id="edge-theory-section" class="hidden mt-3 space-y-4">
-            <div class="flex flex-wrap items-center gap-2">
-                <span class="text-[10px] text-gray-500 font-bold uppercase">Edge Timeframe:</span>
-                <button id="edge-period-tenx-1week" onclick="setEdgePeriod('tenx','1week')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">1 Week</button>
-                <button id="edge-period-tenx-2weeks" onclick="setEdgePeriod('tenx','2weeks')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">2 Weeks</button>
-                <button id="edge-period-tenx-1month" onclick="setEdgePeriod('tenx','1month')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">1 Month</button>
-                <button id="edge-period-tenx-3months" onclick="setEdgePeriod('tenx','3months')" class="edge-period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-2.5 py-1 rounded text-[10px] font-semibold">3 Months</button>
-                <button id="edge-period-tenx-alltime" onclick="setEdgePeriod('tenx','alltime')" class="edge-period-btn active-edge-period-emerald px-2.5 py-1 rounded text-[10px] font-semibold border border-transparent">All-Time</button>
-                <span id="edge-period-label-tenx" class="text-gray-500 text-[10px] ml-2"></span>
-            </div>
-            <div class="bg-[#0d1d35] border border-emerald-500/20 rounded-xl p-5">
-                <div class="text-center mb-4">
-                    <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">EDGE PER TRADE</p>
-                    <p id="tenx-ev-hero-big" class="text-3xl font-bold text-white mt-1">&mdash;</p>
-                    <p id="tenx-ev-hero-sub" class="text-xs text-gray-500 mt-0.5">&mdash;</p>
-                </div>
-                <div id="tenx-ev-actual-risk" class="text-center text-xs text-gray-400 mb-4"></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">AVG WIN</p><p id="tenx-edge-avgwin" class="text-lg font-bold text-green-400">&mdash;</p><p id="tenx-edge-avgwin-pts" class="text-[10px] text-gray-500">&mdash;</p></div>
-                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">AVG LOSS</p><p id="tenx-edge-avgloss" class="text-lg font-bold text-red-400">&mdash;</p><p id="tenx-edge-avgloss-pts" class="text-[10px] text-gray-500">&mdash;</p></div>
-                    <div class="text-center"><p class="text-[10px] text-gray-500 font-bold">WIN RATE</p><p id="tenx-edge-wr" class="text-lg font-bold text-white">&mdash;</p></div>
-                </div>
-                <p id="tenx-edge-explanation" class="text-gray-400 text-xs text-center italic">Upload trade data to see edge analysis</p>
-                <div class="hidden"><span id="tenx-detail-grosswins"></span><span id="tenx-detail-grosslosses"></span><span id="tenx-detail-wlratio"></span><span id="tenx-detail-netpts"></span></div>
-            </div>
-            <div class="bg-[#0a1628] border border-gray-700/30 rounded-lg p-4 text-xs font-mono text-center space-y-1">
-                <p id="txfc-win-rate" class="text-gray-400">&mdash;</p>
-                <p id="txfc-formula-line1" class="text-gray-300">&mdash;</p>
-                <p id="txfc-formula-line2" class="text-gray-300">&mdash;</p>
-                <p id="txfc-formula-result" class="text-emerald-400 font-bold">&mdash;</p>
-                <p id="txfc-ev-result" class="text-emerald-300 text-lg font-bold mt-1">&mdash;</p>
-            </div>
-            <div id="edge-trend-tenx-section">
-                <h4 class="text-sm font-bold text-white mb-2 flex items-center"><i class="fas fa-chart-bar text-emerald-400 mr-2"></i>Edge %R by Week</h4>
-                <div id="chart-edge-trend-tenx" style="height: 280px;" class="bg-[#0d1d35] rounded-xl border border-emerald-500/15"></div>
-                <p id="edge-trend-tenx-note" class="text-[10px] text-gray-500 mt-1 text-center"></p>
-            </div>
-            <div id="foodchain-tenx" class="hidden">
-                <h4 class="text-sm font-bold text-white mb-2 flex items-center"><i class="fas fa-sitemap text-emerald-400 mr-2"></i>Edge on the Food Chain <span id="txfc-period-label" class="text-gray-500 text-xs ml-2"></span></h4>
-                <div id="txfc-annual-r-header-note" class="text-[10px] text-gray-600 mb-2"></div>
-                <div class="trade-table bg-[#0d1d35] border border-emerald-500/15 rounded-xl overflow-hidden">
-                    <table class="w-full text-xs"><thead><tr>
-                        <th class="text-left text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Strategy</th>
-                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Edge/Trade</th>
-                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Trades/Mo</th>
-                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Annual R</th>
-                        <th class="text-right text-gray-400 font-bold px-3 py-2 border-b border-gray-700/30">Kelly %</th>
-                    </tr></thead><tbody id="txfc-table-body"></tbody></table>
-                </div>
-                <div id="txfc-summary-callout" class="mt-3 bg-emerald-900/10 border border-emerald-500/20 rounded-lg p-3">
-                    <p id="txfc-summary-text" class="text-xs text-gray-300"></p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                    <div class="bg-[#0a1628] border border-gray-700/20 rounded-lg p-3"><p class="text-[10px] text-emerald-400 font-bold mb-1">WHY MAGNITUDE MATTERS</p><p id="txfc-why-magnitude" class="text-xs text-gray-400">&mdash;</p></div>
-                    <div class="bg-[#0a1628] border border-gray-700/20 rounded-lg p-3"><p class="text-[10px] text-emerald-400 font-bold mb-1">WHY FREQUENCY MATTERS</p><p id="txfc-why-frequency" class="text-xs text-gray-400">&mdash;</p></div>
-                </div>
-                <div id="txfc-position-chart" style="height: 220px;" class="mt-3 bg-[#0d1d35] rounded-xl border border-emerald-500/15"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== DETAILED CHARTS & TRADE LOG (Expandable) ===== -->
-    <div>
-        <button id="btn-details-tenx" onclick="toggleDetailedDashboard('tenx')" class="w-full flex items-center justify-between bg-[#0d1d35] border border-emerald-500/20 rounded-xl px-5 py-3 hover:border-emerald-400/40 transition-all">
-            <span class="text-sm font-bold text-white flex items-center"><i class="fas fa-chart-area text-emerald-400 mr-2"></i>Detailed Charts & Trade Log</span>
-            <i id="icon-details-tenx" class="fas fa-chevron-down text-emerald-400 text-xs"></i>
-        </button>
-        <div id="detailed-dashboard-tenx" class="hidden mt-3 space-y-4">
-            <div class="flex flex-wrap items-center gap-2">
-                <button id="period-tenx-weekly" onclick="setPeriod('tenx','weekly')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Weekly</button>
-                <button id="period-tenx-1week" onclick="setPeriod('tenx','1week')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Last 7d</button>
-                <button id="period-tenx-monthly" onclick="setPeriod('tenx','monthly')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">Monthly</button>
-                <button id="period-tenx-3months" onclick="setPeriod('tenx','3months')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">3 Months</button>
-                <button id="period-tenx-6months" onclick="setPeriod('tenx','6months')" class="period-btn bg-[#0d1d35] text-gray-400 border border-gray-700 px-3 py-1.5 rounded text-[10px] font-semibold">6 Months</button>
-                <button id="period-tenx-alltime" onclick="setPeriod('tenx','alltime')" class="period-btn active-period px-3 py-1.5 rounded text-[10px] font-semibold border border-transparent">All-Time</button>
-            </div>
-            <div class="flex items-center gap-2">
-                <button onclick="prevPeriod('tenx')" class="week-nav-button bg-[#0d1d35] border border-gray-700 text-gray-400 px-2 py-1 rounded text-sm"><i class="fas fa-chevron-left"></i></button>
-                <select id="week-selector-tenx" onchange="selectWeek('tenx')" class="bg-[#0d1d35] border border-gray-700 text-gray-300 text-xs rounded px-3 py-1.5 flex-1 max-w-xs"></select>
-                <button onclick="nextPeriod('tenx')" class="week-nav-button bg-[#0d1d35] border border-gray-700 text-gray-400 px-2 py-1 rounded text-sm"><i class="fas fa-chevron-right"></i></button>
-                <span id="period-range-tenx" class="text-gray-500 text-xs ml-2"></span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-line text-emerald-400 mr-1"></i>Equity Curve</h4><div id="chart-equity-tenx" style="height: 280px;"></div></div>
-                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-bar text-emerald-400 mr-1"></i>Weekly P&L Trend</h4><div id="chart-weekly-trend-tenx" style="height: 280px;"></div></div>
-                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-chart-bar text-emerald-400 mr-1"></i>P&L Distribution</h4><div id="chart-pldist-tenx" style="height: 280px;"></div></div>
-                <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-3"><h4 class="text-xs font-bold text-gray-400 mb-2"><i class="fas fa-calendar-day text-emerald-400 mr-1"></i>Daily P&L</h4><div id="chart-daily-tenx" style="height: 280px;"></div></div>
-            </div>
-            <div class="bg-[#0d1d35] border border-emerald-500/15 rounded-xl p-4">
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <h4 class="text-sm font-bold text-white flex items-center"><i class="fas fa-list text-emerald-400 mr-2"></i>Trade Log <span id="tenx-trade-count" class="text-gray-500 text-xs font-normal ml-2">0 trades</span></h4>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button id="tenx-filter-all" onclick="filterTradeLog('tenx','all')" class="trade-filter-btn trade-filter-active-emerald px-2.5 py-1 rounded text-[10px] border border-transparent">All</button>
-                        <button id="tenx-filter-win" onclick="filterTradeLog('tenx','win')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Win</button>
-                        <button id="tenx-filter-loss" onclick="filterTradeLog('tenx','loss')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Loss</button>
-                        <button id="tenx-filter-long" onclick="filterTradeLog('tenx','long')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Long</button>
-                        <button id="tenx-filter-short" onclick="filterTradeLog('tenx','short')" class="trade-filter-btn px-2.5 py-1 rounded text-[10px] font-semibold bg-[#0d1d35] text-gray-400 border border-gray-700">Short</button>
-                        <span id="tenx-filter-label" class="text-gray-500 text-[10px] ml-1 self-center"></span>
-                    </div>
-                </div>
-                <div class="trade-table">
-                    <table class="w-full text-xs"><thead><tr>
-                        <th class="text-gray-400 text-[10px]">Date/Time</th>
-                        <th class="text-gray-400 text-[10px]">Trade#</th>
-                        <th class="text-gray-400 text-[10px]">B/S</th>
-                        <th class="text-gray-400 text-[10px]">Entry</th>
-                        <th class="text-gray-400 text-[10px]">Stop</th>
-                        <th class="text-gray-400 text-[10px]">Qty</th>
-                        <th class="text-gray-400 text-[10px] sortable-th" id="tenx-sort-pts" onclick="sortTradeLog('tenx','pts')">Net Pts</th>
-                        <th class="text-gray-400 text-[10px]">Risk(Pts)</th>
-                        <th class="text-gray-400 text-[10px] sortable-th" id="tenx-sort-pl" onclick="sortTradeLog('tenx','pl')">Net$</th>
-                        <th class="text-gray-400 text-[10px]">Result</th>
-                        <th class="text-gray-400 text-[10px]">Setup</th>
-                    </tr></thead><tbody id="tenx-trades-body"></tbody></table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 4.6 — THE ROAD AHEAD: THREE CONDITIONAL HORIZONS ===== -->
-    <div class="bg-gradient-to-br from-[#0d1d35] to-[#0a1628] border border-gray-700/30 rounded-2xl p-6 fade-in-up">
-        <h2 class="font-playfair text-xl sm:text-2xl font-bold text-white mb-1">The Road Ahead.</h2>
-        <p class="text-gray-400 text-sm mb-5">Where the story goes if the 100 trades prove out. Every step is earned. None are promised.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-            <div class="bg-[#0a1628]/60 border-2 border-emerald-500/30 rounded-xl p-5" style="background: rgba(52,211,153,0.03);">
-                <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Horizon 1 &mdash; The Proof</p>
-                <p class="text-[9px] text-emerald-300 mb-3">&mdash; current &mdash;</p>
-                <p class="text-xs text-gray-300 leading-relaxed mb-3">Single account. $10,000 personal capital. 2&ndash;3% risk per trade. 100 trades. 100% adherence target.</p>
-                <p class="text-[10px] text-gray-500"><strong class="text-gray-400">What&rsquo;s proven:</strong> the operator can execute a documented edge with discipline.</p>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-gray-700/20 rounded-xl p-5">
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Horizon 2 &mdash; The Scale Test</p>
-                <p class="text-[9px] text-gray-600 mb-3">&mdash; conditional &mdash;</p>
-                <p class="text-xs text-gray-400 leading-relaxed mb-3">Extension to larger personal capital and one additional consent-based friends-and-family account. Same edge. Same adherence framework. Tested at 5&ndash;10x the size.</p>
-                <p class="text-[10px] text-gray-600"><strong class="text-gray-500">What&rsquo;s proven:</strong> the edge survives capacity, slippage, and execution complexity.</p>
-            </div>
-            <div class="bg-[#0a1628]/60 border border-gray-700/20 rounded-xl p-5">
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Horizon 3 &mdash; The Architecture</p>
-                <p class="text-[9px] text-gray-600 mb-3">&mdash; conditional &mdash;</p>
-                <p class="text-xs text-gray-400 leading-relaxed mb-3">Fiduciary infrastructure built. RIA registration, E&O insurance, custodian relationships, compliance.</p>
-                <p class="text-[10px] text-gray-600"><strong class="text-gray-500">What&rsquo;s proven:</strong> the Doubling Engine can be deployed through the Ekantik five-pillar architecture.</p>
-            </div>
-        </div>
-
-        <p class="text-gray-500 text-xs italic text-center max-w-3xl mx-auto leading-relaxed">
-            The Doubling Engine is a mechanism, not a promise. This page proves whether it works for one operator, at small size, under real conditions. The horizons ahead are contingent on that proof. Nothing downstream is offered until Horizon 1 is complete.
-        </p>
-    </div>
-
-    <!-- ===== UPLOAD SECTION (Admin Only) ===== -->
-    <div class="admin-only" style="display: none;">
-        <div class="bg-[#0d1d35] border border-emerald-500/20 rounded-xl p-5 space-y-3">
-            <h3 class="text-sm font-bold text-white flex items-center"><i class="fas fa-upload text-emerald-400 mr-2"></i>Trade Data Management</h3>
-            <div class="flex flex-wrap items-center gap-3">
-                <label class="flex-1 min-w-[200px]">
-                    <span class="text-[10px] text-gray-500 font-bold block mb-1">Upload Tradovate CSV</span>
-                    <input type="file" accept=".csv" onchange="handleTenxCSVUpload(event)" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-900/30 file:text-emerald-300 hover:file:bg-emerald-900/50 cursor-pointer">
-                </label>
-                <button id="export-btn-tenx" onclick="exportTenxData()" class="hidden px-4 py-2 bg-emerald-900/30 text-emerald-300 rounded-lg text-sm font-semibold hover:bg-emerald-900/50"><i class="fas fa-download mr-1"></i>Export</button>
-                <button onclick="clearData('tenx')" class="px-4 py-2 bg-red-900/20 text-red-400 rounded-lg text-sm font-semibold hover:bg-red-900/40"><i class="fas fa-trash mr-1"></i>Clear</button>
-                <button id="gh-sync-btn" onclick="showGitHubSettings()" class="px-4 py-2 bg-gray-700/30 text-gray-400 rounded-lg text-sm font-semibold hover:bg-gray-700/50"><i class="fas fa-cog mr-1"></i>GitHub Sync</button>
-            </div>
-            <!-- Discord Trade Input -->
-            <div class="mt-4 border-t border-gray-700/50 pt-4">
-                <h4 class="text-xs font-bold text-gray-400 mb-2 flex items-center"><i class="fab fa-discord text-indigo-400 mr-2"></i>Discord Trade Entry</h4>
-                <div class="flex flex-wrap items-start gap-3">
-                    <label class="flex-1 min-w-[200px]">
-                        <span class="text-[10px] text-gray-500 font-bold block mb-1">Upload Discord JSON</span>
-                        <input type="file" accept=".json" onchange="handleDiscordJSONUpload(event)" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-900/30 file:text-indigo-300 hover:file:bg-indigo-900/50 cursor-pointer">
-                    </label>
-                    <div class="w-full">
-                        <span class="text-[10px] text-gray-500 font-bold block mb-1">Or Paste Discord Messages</span>
-                        <div class="flex gap-2 mb-2">
-                            <input type="date" id="discord-trade-date" class="bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 focus:border-indigo-500 focus:outline-none" placeholder="Trade Date">
-                            <button onclick="handleDiscordTextSubmit()" class="px-4 py-2 bg-indigo-900/30 text-indigo-300 rounded-lg text-sm font-semibold hover:bg-indigo-900/50 whitespace-nowrap"><i class="fas fa-paper-plane mr-1"></i>Parse & Add</button>
-                        </div>
-                        <textarea id="discord-trade-input" rows="4" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 font-mono placeholder-gray-600 focus:border-indigo-500 focus:outline-none resize-y" placeholder="F37: s 6837.5&#10;F37: +4.5&#10;F38: sell 6894.25 stp 6897&#10;F38: -1"></textarea>
-                        <p class="text-[9px] text-gray-600 mt-1">Format: <code class="text-gray-500">F##: s|sell|b|buy PRICE [stp STOP]</code> then <code class="text-gray-500">F##: +/-POINTS</code>. ES contract ($50/pt).</p>
-                    </div>
-                </div>
-            </div>
-            <div id="upload-status-tenx" class="hidden"></div>
-            <div id="sync-status-tenx" class="hidden sync-status-badge">
-                <span id="sync-status-tenx-text" class="text-[10px] text-gray-500"></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 4.7 — FOOTER: LEGAL & CROSS-PROPERTY LINKS ===== -->
-    <div class="border-t border-gray-800/50 pt-8 mt-8">
-        <!-- Ekantik Architecture — Sequenced Status -->
-        <div class="max-w-lg mx-auto mb-6">
-            <p class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest text-center mb-5">The Ekantik Architecture</p>
-            <div class="space-y-3">
-                <a href="https://doubles.ekantikcapital.com" class="flex items-center gap-3 group">
-                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-check text-emerald-400 text-[8px]"></i>
-                    </span>
-                    <span class="font-playfair font-bold text-gray-200 text-sm group-hover:text-white transition-colors flex-1">The Doctrine</span>
-                    <span class="text-[9px] text-emerald-400/70 font-dm uppercase tracking-wider">active</span>
-                    <span class="text-[9px] text-gray-400 hidden sm:inline">doubles.ekantikcapital.com</span>
-                </a>
-                <div class="flex items-center gap-3">
-                    <span class="w-5 h-5 rounded-full bg-[#d4af37]/20 border-2 border-[#d4af37]/60 flex items-center justify-center flex-shrink-0">
-                        <span class="w-2 h-2 rounded-full bg-[#d4af37]"></span>
-                    </span>
-                    <span class="font-playfair font-bold text-white text-sm flex-1">The Proof</span>
-                    <span class="text-[9px] text-[#d4af37] font-dm uppercase tracking-wider">active &middot; you are here</span>
-                </div>
-                <a href="https://alpha.ekantikcapital.com" class="flex items-center gap-3 group">
-                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-check text-emerald-400 text-[8px]"></i>
-                    </span>
-                    <span class="font-playfair font-bold text-gray-200 text-sm group-hover:text-white transition-colors flex-1">The Research</span>
-                    <span class="text-[9px] text-emerald-400/70 font-dm uppercase tracking-wider">active</span>
-                    <span class="text-[9px] text-gray-400 hidden sm:inline">alpha.ekantikcapital.com</span>
-                </a>
-                <a href="https://epig.ekantikcapital.com" class="flex items-center gap-3 group">
-                    <span class="w-5 h-5 rounded-full border border-gray-500/60 flex items-center justify-center flex-shrink-0">
-                        <span class="w-2 h-2 rounded-full border border-gray-400"></span>
-                    </span>
-                    <span class="font-playfair font-bold text-gray-400 text-sm group-hover:text-gray-300 transition-colors flex-1">The Vehicle</span>
-                    <span class="text-[9px] text-gray-500 font-dm uppercase tracking-wider">in development</span>
-                    <span class="text-[9px] text-gray-500 hidden sm:inline" style="text-decoration: underline dotted;">epig.ekantikcapital.com</span>
-                </a>
-            </div>
-            <div class="flex items-center justify-center mt-4">
-                <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener" class="text-[#5865F2] hover:text-[#7289DA] transition-colors font-semibold text-xs"><i class="fab fa-discord mr-1"></i>Join the Discord &rarr;</a>
-            </div>
-        </div>
-
-        <!-- ECA Logo -->
-        <div class="flex items-center justify-center gap-3 mb-4">
-            <a href="https://cashflow.ekantikcapital.com/" class="flex items-center gap-2">
-                <div class="w-8 h-8 gradient-gold rounded-md flex items-center justify-center"><span class="text-[#0a1628] font-bold text-xs">ECA</span></div>
-                <span class="text-[#d4af37] font-playfair font-bold text-sm">Ekantik Capital Advisors</span>
-            </a>
-        </div>
-
-        <!-- Legal -->
-        <div class="max-w-3xl mx-auto text-[9px] text-gray-600 leading-relaxed space-y-2 text-center">
-            <p>This page is an educational transparency demonstration. Ekantik Capital Advisors is running a 100-trade consistency proof in live ES futures markets via Tradovate. All fills are real. All metrics are sourced from trades posted publicly in the Ekantik Discord.</p>
-            <p>Nothing on this page constitutes investment advice, a solicitation of managed money, or an offer of any investment product. Past performance does not guarantee future results. Trading futures involves substantial risk of loss and is not suitable for all investors.</p>
-            <p>Performance figures shown represent actual trading in a single account at small size. Results at larger account sizes would be subject to capacity effects, slippage, and execution quality that this demo does not test. No extrapolation from these results to larger size is implied or warranted.</p>
-            <p>The operator&rsquo;s capital is at risk. This is personal risk capital, deployed to produce a public execution record. It is not pooled, managed, or shared capital.</p>
-            <p class="text-gray-700">For the full Doubling Engine doctrine, see doubles.ekantikcapital.com. For research subscriptions, see alpha.ekantikcapital.com. For managed strategies, see epig.ekantikcapital.com. The Proof layer (this page) is not an AUM product and no AUM is accepted here.</p>
-            <p class="text-gray-700 mt-3">&copy; 2026 Ekantik Capital Advisors LLC.</p>
-        </div>
-    </div>
-
-    </div>
-    </div>
     </section>
 
-<script src="js/parser.js"></script>
-<script src="js/dashboard.js"></script>
+    <!-- ═══ REGION 4 — SECTION B: Sustainability (spec §6) ═══ -->
+    <section class="section section--cream" id="section-b" aria-labelledby="b-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 2 — Prove it will continue</span>
+            <h2 id="b-h2">Sustainability — Verified Eight Ways.</h2>
+            <p class="subhead">
+                Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn't.
+            </p>
+
+            <p class="mono" style="font-size:13px" id="battery-status-banner">Loading…</p>
+
+            <!-- Controls bar (spec §6.4) -->
+            <div class="controls-bar" role="toolbar" aria-label="Battery controls">
+                <div class="controls-bar__group">
+                    <span>Last recalculated: <strong id="battery-last-recalc">—</strong></span>
+                    <span class="trust-strip__sep">|</span>
+                    <span>Sample size: <strong id="battery-sample-size">—</strong> trades</span>
+                </div>
+                <div class="controls-bar__buttons">
+                    <button type="button" class="btn btn--secondary btn--sm" id="btn-recalculate">Recalculate now</button>
+                    <button type="button" class="btn btn--tertiary btn--sm" id="btn-reset-data">Reset to Ekantik sample</button>
+                </div>
+            </div>
+
+            <div class="upload-banner hide" id="battery-user-banner">
+                <span>Showing YOUR uploaded data. Results below are computed on your trades.</span>
+                <span class="mono">Click "Reset to Ekantik sample" to return.</span>
+            </div>
+
+            <!-- B.2 8-Test Battery table -->
+            <div id="battery-table" aria-live="polite">Loading battery…</div>
+
+            <!-- B.5 Data upload panel -->
+            <details class="upload-panel">
+                <summary class="upload-panel__summary">Run the battery on your own data</summary>
+                <div class="upload-panel__body">
+                    <p>
+                        Upload a Tradovate CSV, Discord JSON export, or paste raw Discord alert messages. The full 8-test battery runs in your browser — your data never leaves your device.
+                    </p>
+                    <div class="upload-panel__step">
+                        <h4>Step 1 — Upload a file</h4>
+                        <input type="file" id="upload-file" accept=".csv,.json,.txt">
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 2 — or paste text</h4>
+                        <textarea id="upload-textarea" rows="5" style="width:100%; font-family:var(--font-mono); font-size:12px; padding:8px; border:1px solid var(--divider); border-radius:var(--radius-sm); background:var(--white);" placeholder="F37: s 6837.5&#10;F37: +4.5"></textarea>
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 3 — Run the battery</h4>
+                        <button type="button" class="btn btn--primary btn--sm" id="btn-run-upload">Run battery on this data</button>
+                        <div id="upload-preview" class="mt-2"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- B.3 Interactive glossary -->
+            <div class="glossary">
+                <h3 class="glossary__title">Full Glossary — Understanding the 8 Tests</h3>
+                <div id="battery-glossary">Loading glossary…</div>
+            </div>
+
+            <!-- B.6 Version history -->
+            <details class="version-history">
+                <summary class="version-history__summary">Battery history — every past run, archived</summary>
+                <table class="data-table mt-2">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th class="num">Sample Size</th>
+                            <th class="num">Tests Passed</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="version-history-body">
+                        <tr><td colspan="4" class="muted italic">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </details>
+
+            <!-- B.8 Transparency link -->
+            <a class="transparency-link" href="https://github.com/EkantikCapitalAdvisors" target="_blank" rel="noopener">View the battery source code →</a>
+
+            <p class="lede mt-4" style="color: var(--muted)">
+                A battery is only as credible as the data feeding it. The next section is how you can see every fill, in real time, as it happens.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 5 — SECTION C: Validation (spec §7) ═══ -->
+    <section class="section section--white" id="section-c" aria-labelledby="c-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 3 — Let the audience validate it themselves</span>
+            <h2 id="c-h2">Validation. Your eyes, not our word.</h2>
+            <p class="subhead">
+                Every fill is posted the moment it closes. Every metric on this page is computed from those fills. You can watch it happen.
+            </p>
+
+            <!-- C.2 Today -->
+            <div class="validation-row">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Live Alerts</h3>
+                        <span class="mono muted" style="font-size:11px">Last 5 fills</span>
+                    </div>
+                    <div id="discord-feed" class="discord-feed">Loading…</div>
+                    <div class="mt-3">
+                        <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+                    </div>
+                    <p class="muted italic mt-2" style="font-size:12px">Every alert, timestamped, public. Free to join.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Public Trade Log</h3>
+                        <span class="mono muted" style="font-size:11px">Last 25 closed trades</span>
+                    </div>
+                    <div class="data-table__wrap">
+                        <table class="data-table" style="font-size:12px">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Dir</th>
+                                    <th class="num">Entry</th>
+                                    <th class="num">Exit</th>
+                                    <th class="num">Pts</th>
+                                    <th class="num">$ P&amp;L</th>
+                                    <th>Result</th>
+                                    <th class="num">R</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trade-log-body">
+                                <tr><td colspan="8" class="muted italic">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button type="button" class="btn btn--secondary btn--sm" id="btn-download-csv">Download full trade log (CSV)</button>
+                        <button type="button" class="btn btn--tertiary btn--sm" id="btn-view-equity">View equity curve</button>
+                    </div>
+                    <p class="muted italic mt-2" style="font-size:12px">Full log available. Download it, run it through any evaluator you trust.</p>
+                </div>
+            </div>
+
+            <!-- C.3 Tomorrow: Roadmap -->
+            <h3 class="mt-4">Tomorrow — Autotrading + Managed Futures</h3>
+            <p class="muted">Honest roadmap. No dates promised. Status changes only when rails are real.</p>
+            <div class="roadmap">
+                <div class="roadmap__track">
+                    <h3>Autotrading <span class="roadmap__status roadmap__status--progress">In progress</span></h3>
+                    <p class="muted" style="font-size:13px">Discord fills → broker webhook → copy-trade execution on participant accounts.</p>
+                    <ul>
+                        <li>Parse Discord alerts to signed orders</li>
+                        <li>Integrate with Topstep / Tradovate webhook API</li>
+                        <li>Latency validation against posted fills</li>
+                        <li>Participant opt-in UI (non-binding waitlist)</li>
+                    </ul>
+                </div>
+                <div class="roadmap__track">
+                    <h3>Managed Futures <span class="roadmap__status roadmap__status--compliance">Pending compliance</span></h3>
+                    <p class="muted" style="font-size:13px">CTA registration, fund structure, and gating only after the 100-trade consistency proof completes.</p>
+                    <ul>
+                        <li>CTA registration with the NFA</li>
+                        <li>Fund structure (pooled vs. separately-managed)</li>
+                        <li>Securities attorney documentation review</li>
+                        <li>Accredited-investor verification rails</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interest capture (Formspree) -->
+            <form class="interest-form" id="interest-form"
+                  action="https://formspree.io/f/__FORMSPREE_ID__"
+                  method="POST"
+                  novalidate>
+                <label for="interest-email" style="font-weight:600;color:var(--navy)">
+                    Want to be notified when autotrading or the managed product opens?
+                </label>
+                <p class="muted" style="font-size:13px">
+                    Leave your email. We'll contact you when rails are ready. No waitlist is binding, no capital is being solicited.
+                </p>
+                <div class="interest-form__row">
+                    <input type="email" name="email" id="interest-email" placeholder="you@example.com" required>
+                    <button type="submit" class="btn btn--primary">Notify me</button>
+                </div>
+                <input type="text" name="_gotcha" class="interest-form__honeypot" tabindex="-1" autocomplete="off">
+                <p id="interest-confirm" class="hide mt-2 mono" style="font-size:13px"></p>
+            </form>
+
+            <!-- C.4 Final CTA block -->
+            <div class="cta-row">
+                <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+                <a class="btn btn--secondary" href="#section-b">Re-run the battery →</a>
+                <a class="btn btn--tertiary" href="https://doubles.ekantikcapital.com">Read the doctrine</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 6 — FOOTER (spec §10.5) ═══ -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__architecture">
+                <div>
+                    <p class="eyebrow">Doctrine</p>
+                    <a href="https://doubles.ekantikcapital.com">The Doubling Engine →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Live Proof</p>
+                    <a href="/">10x.ekantikcapital.com →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Methodology</p>
+                    <a href="methodology.html">Adherence rules →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Research</p>
+                    <a href="https://cashflow.ekantikcapital.com/">cashflow.ekantikcapital.com →</a>
+                </div>
+            </div>
+
+            <div class="footer__disclosure">
+                <p>This page is an educational transparency demonstration. Ekantik Capital Advisors LLC is running a public 100-trade consistency proof in live ES futures markets via Tradovate. All fills are real. All metrics are sourced from trades posted publicly in the Ekantik Discord.</p>
+                <p>Nothing on this page constitutes investment advice, a solicitation of managed money, or an offer of any investment product. Past performance does not guarantee future results. Trading futures involves substantial risk of loss and is not suitable for all investors.</p>
+                <p>The operator's capital is at risk. This is personal risk capital, deployed to produce a public execution record. It is not pooled, managed, or shared capital.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Equity curve modal -->
+    <div class="modal" id="equity-modal" role="dialog" aria-labelledby="equity-modal-title" aria-hidden="true">
+        <div class="modal__dialog">
+            <button type="button" class="modal__close" id="equity-modal-close" aria-label="Close">×</button>
+            <h3 id="equity-modal-title">Equity Curve</h3>
+            <p class="muted" style="font-size:13px">Cumulative account balance from $10,000 start, computed from posted fills.</p>
+            <div style="height:360px"><canvas id="equity-canvas"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script src="js/parser.js"></script>
+    <script src="js/battery.js"></script>
+    <script src="js/battery-ui.js"></script>
+    <script src="js/kpis.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/render-hero.js"></script>
+    <script src="js/render-section-a.js"></script>
+    <script src="js/render-section-b.js"></script>
+    <script src="js/render-section-c.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
