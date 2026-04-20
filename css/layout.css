@@ -188,7 +188,7 @@ body {
 .footer__inner { max-width: var(--max-wide); margin: 0 auto; }
 .footer__architecture {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--s-3);
     margin-bottom: var(--s-4);
     padding-bottom: var(--s-4);

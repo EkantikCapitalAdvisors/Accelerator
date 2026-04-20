@@ -26,7 +26,6 @@
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
                 <li><a class="nav__link nav__link--active" href="/" aria-current="page">Live Proof</a></li>
-                <li><a class="nav__link" href="methodology.html">Methodology</a></li>
                 <li><a class="nav__link" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Discord</a></li>
             </ul>
         </div>
@@ -241,6 +240,9 @@
             <!-- B.2 8-Test Battery table -->
             <div id="battery-table" aria-live="polite">Loading battery…</div>
 
+            <!-- Failure interpretation note (bucket A/B/C) — hidden when all 8 pass -->
+            <div id="battery-failure-note" aria-live="polite"></div>
+
             <!-- B.5 Data upload panel -->
             <details class="upload-panel">
                 <summary class="upload-panel__summary">Run the battery on your own data</summary>
@@ -417,10 +419,6 @@
                 <div>
                     <p class="eyebrow">Live Proof</p>
                     <a href="/">10x.ekantikcapital.com →</a>
-                </div>
-                <div>
-                    <p class="eyebrow">Methodology</p>
-                    <a href="methodology.html">Adherence rules →</a>
                 </div>
                 <div>
                     <p class="eyebrow">Research</p>

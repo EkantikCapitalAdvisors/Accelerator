@@ -201,6 +201,39 @@ a:hover { color: var(--gold); }
 }
 .callout__body { margin: 0; color: var(--ink); }
 
+/* ─── Failure interpretation note (below battery table) ─── */
+.failure-note {
+    margin: var(--s-3) 0 var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    border-left: 4px solid var(--gold);
+    background: var(--cream-2);
+    border-radius: var(--radius-sm);
+}
+.failure-note h4 {
+    margin: 0 0 var(--s-1);
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--navy);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+}
+.failure-note p {
+    margin: 0 0 var(--s-1);
+    line-height: 1.6;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+}
+.failure-note p:last-child { margin-bottom: 0; }
+.failure-note__footer {
+    font-size: var(--fs-small);
+    color: var(--muted);
+    font-style: italic;
+}
+.failure-note--a { border-left-color: var(--gold); }          /* context — gold */
+.failure-note--b { border-left-color: #B00020; }              /* genuine concern — red */
+.failure-note--c { border-left-color: #D97706; }              /* watch — amber */
+
 /* ─── Pulsing live dot ─── */
 .live-dot {
     display: inline-block;
