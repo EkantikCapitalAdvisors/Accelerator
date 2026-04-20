@@ -153,13 +153,36 @@
         recompute();
     }
 
+    // ─── Inline equity curve + monthly P&L bars ───
+    function renderEquityAndMonthly(state) {
+        const trades = state.trades || [];
+        if (trades.length === 0) return;
+        const eq = document.getElementById('section-a-equity');
+        const mo = document.getElementById('section-a-monthly');
+        if (eq && root.Ekantik.Charts) root.Ekantik.Charts.equityCurve(eq, trades);
+        if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
+
+        // Running stats below the curve
+        const netPL = trades.reduce((s, t) => s + (t.dollar_pl || 0), 0);
+        const retPct = (netPL / 10000) * 100;
+        const end = 10000 + netPL;
+
+        const netEl = document.getElementById('section-a-net');
+        const retEl = document.getElementById('section-a-return');
+        const balEl = document.getElementById('section-a-balance');
+        if (netEl) netEl.textContent = (netPL >= 0 ? '+' : '−') + '$' + Math.abs(netPL).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        if (retEl) retEl.textContent = (retPct >= 0 ? '+' : '') + retPct.toFixed(1) + '%';
+        if (balEl) balEl.textContent = '$' + end.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    }
+
     function init() {
         root.Ekantik.Data.onChange(state => {
             renderEdgeTriplet(state);
             renderLadder(state);
+            renderEquityAndMonthly(state);
         });
         const s = root.Ekantik.Data.get();
-        if (s.summary) { renderEdgeTriplet(s); renderLadder(s); }
+        if (s.summary) { renderEdgeTriplet(s); renderLadder(s); renderEquityAndMonthly(s); }
         renderReshaper();
     }
 

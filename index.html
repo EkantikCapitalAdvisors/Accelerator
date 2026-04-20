@@ -122,6 +122,27 @@
                 The strategy is a mechanical system for ES / MES futures with a documented edge across the full backtest: a 67.5% win rate, a 2.07 profit factor, and top-decile risk-adjusted returns. The live sample, visible above and in the public trade log below, is the same edge being expressed in real markets. The 8-Test Sustainability Battery in the next section is how we know the edge is not a lucky sample.
             </p>
 
+            <!-- A.2b Live equity curve — compounding, rendered -->
+            <h3 class="mt-4">Equity Curve — $10,000 start</h3>
+            <p class="muted" style="font-size:13px">The curve prints as each fill closes. Every dollar shown is sourced from a public Discord alert.</p>
+            <div class="mini-chart">
+                <canvas id="section-a-equity"></canvas>
+            </div>
+            <div class="mini-stats">
+                <div>
+                    <span class="mini-stats__label">Current balance</span>
+                    <span class="mini-stats__val" id="section-a-balance">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Net P&amp;L</span>
+                    <span class="mini-stats__val" id="section-a-net">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Return</span>
+                    <span class="mini-stats__val" id="section-a-return">—</span>
+                </div>
+            </div>
+
             <!-- A.3 Doubling Ladder -->
             <h3 class="mt-4">Doubling Ladder — target vs. live</h3>
             <p class="muted" style="font-size:13px">Live rate (computed as geometric mean from actual Discord fills, minimum 25 closed trades): <strong class="mono" id="ladder-live-rate">—</strong></p>
@@ -137,6 +158,13 @@
                 <tbody id="ladder-body"></tbody>
             </table>
             <p class="callout__body muted" style="font-size:13px"><em>The target rate is what the strategy was designed around. The live rate is what the sample is producing now. Both are shown because radical transparency requires both.</em></p>
+
+            <!-- A.3b Monthly P&L bars -->
+            <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
+            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month.</p>
+            <div class="mini-chart mini-chart--bars">
+                <canvas id="section-a-monthly"></canvas>
+            </div>
 
             <!-- A.4 95/5 Portfolio Reshaper -->
             <h3 class="mt-4">The 5% Allocation Portfolio Reshaper</h3>
@@ -348,7 +376,6 @@
                     </div>
                     <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
                         <button type="button" class="btn btn--secondary btn--sm" id="btn-download-csv">Download full trade log (CSV)</button>
-                        <button type="button" class="btn btn--tertiary btn--sm" id="btn-view-equity">View equity curve</button>
                     </div>
                     <p class="muted italic mt-2" style="font-size:12px">Full log available. Download it, run it through any evaluator you trust.</p>
                 </div>
@@ -434,16 +461,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Equity curve modal -->
-    <div class="modal" id="equity-modal" role="dialog" aria-labelledby="equity-modal-title" aria-hidden="true">
-        <div class="modal__dialog">
-            <button type="button" class="modal__close" id="equity-modal-close" aria-label="Close">×</button>
-            <h3 id="equity-modal-title">Equity Curve</h3>
-            <p class="muted" style="font-size:13px">Cumulative account balance from $10,000 start, computed from posted fills.</p>
-            <div style="height:360px"><canvas id="equity-canvas"></canvas></div>
-        </div>
-    </div>
 
     <!-- ═══ SCRIPTS ═══ -->
     <script src="js/parser.js"></script>

@@ -201,6 +201,51 @@ a:hover { color: var(--gold); }
 }
 .callout__body { margin: 0; color: var(--ink); }
 
+/* ─── Inline charts (Section A — equity curve + monthly bars) ─── */
+.mini-chart {
+    position: relative;
+    height: 220px;
+    margin: var(--s-2) 0 var(--s-2);
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-md);
+    padding: var(--s-2);
+}
+.mini-chart--bars { height: 180px; }
+.mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-2);
+    margin-bottom: var(--s-3);
+}
+.mini-stats > div {
+    background: var(--cream-2);
+    border-radius: var(--radius-sm);
+    padding: 10px var(--s-2);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.mini-stats__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.mini-stats__val {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    color: var(--navy);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+@media (max-width: 640px) {
+    .mini-stats { grid-template-columns: 1fr; }
+    .mini-chart { height: 180px; }
+}
+
 /* ─── Failure interpretation note (below battery table) ─── */
 .failure-note {
     margin: var(--s-3) 0 var(--s-4);

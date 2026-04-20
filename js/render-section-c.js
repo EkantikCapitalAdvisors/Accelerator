@@ -111,25 +111,6 @@
         });
     }
 
-    // ─── Equity curve modal ───
-    function wireEquityModal() {
-        const openBtn = $('btn-view-equity');
-        const closeBtn = $('equity-modal-close');
-        const modal = $('equity-modal');
-        if (!openBtn || !modal) return;
-        openBtn.addEventListener('click', () => {
-            modal.classList.add('modal--open');
-            const canvas = $('equity-canvas');
-            const trades = root.Ekantik.Data.get().trades || [];
-            if (canvas && root.Ekantik.Charts) {
-                root.Ekantik.Charts.equityCurve(canvas, trades);
-            }
-        });
-        const close = () => { modal.classList.remove('modal--open'); root.Ekantik.Charts && root.Ekantik.Charts.destroyAll(); };
-        if (closeBtn) closeBtn.addEventListener('click', close);
-        modal.addEventListener('click', e => { if (e.target === modal) close(); });
-    }
-
     // ─── Formspree handler ───
     function wireInterestForm() {
         const form = $('interest-form');
@@ -162,7 +143,6 @@
             renderTradeLog(state);
         });
         wireCSVDownload();
-        wireEquityModal();
         wireInterestForm();
         const s = root.Ekantik.Data.get();
         if (s.trades) { renderDiscordCard(s); renderTradeLog(s); }
