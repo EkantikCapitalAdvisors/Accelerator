@@ -169,5 +169,26 @@
     "is_win": true,
     "outcome": "Win",
     "trade_date": "3/25/2026"
+  },
+  {
+    "datetime": "",
+    "entry_time": "",
+    "exit_time": "",
+    "trade_num": "O11",
+    "ticker": "SPX",
+    "option_type": "PUT",
+    "strike": 7090,
+    "expiry": "ODTE",
+    "direction": "Buy",
+    "entry_price": 5.6,
+    "stop_price": 4,
+    "notes": "",
+    "dollar_pl": 800,
+    "risk_dollars": 160,
+    "is_win": true,
+    "outcome": "Win",
+    "trade_date": "",
+    "source": "discord",
+    "upload_batch": "opt-1776737695260"
   }
 ]
