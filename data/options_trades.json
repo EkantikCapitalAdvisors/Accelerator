@@ -120,7 +120,7 @@
     "trade_num": "O8",
     "ticker": "SPX",
     "option_type": "PUT",
-    "strike": 5555,
+    "strike": 6555,
     "expiry": "0DTE",
     "direction": "Buy",
     "entry_price": 5,
