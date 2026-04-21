@@ -391,50 +391,8 @@
                 </div>
             </div>
 
-            <!-- C.3 Tomorrow: Roadmap -->
-            <h3 class="mt-4">Tomorrow — Autotrading + Managed Futures</h3>
-            <p class="muted">Honest roadmap. No dates promised. Status changes only when rails are real.</p>
-            <div class="roadmap">
-                <div class="roadmap__track">
-                    <h3>Autotrading <span class="roadmap__status roadmap__status--progress">In progress</span></h3>
-                    <p class="muted" style="font-size:13px">Discord fills → broker webhook → copy-trade execution on participant accounts.</p>
-                    <ul>
-                        <li>Parse Discord alerts to signed orders</li>
-                        <li>Integrate with Topstep / Tradovate webhook API</li>
-                        <li>Latency validation against posted fills</li>
-                        <li>Participant opt-in UI (non-binding waitlist)</li>
-                    </ul>
-                </div>
-                <div class="roadmap__track">
-                    <h3>Managed Futures <span class="roadmap__status roadmap__status--compliance">Pending compliance</span></h3>
-                    <p class="muted" style="font-size:13px">CTA registration, fund structure, and gating only after the 100-trade consistency proof completes.</p>
-                    <ul>
-                        <li>CTA registration with the NFA</li>
-                        <li>Fund structure (pooled vs. separately-managed)</li>
-                        <li>Securities attorney documentation review</li>
-                        <li>Accredited-investor verification rails</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Interest capture (Formspree) -->
-            <form class="interest-form" id="interest-form"
-                  action="https://formspree.io/f/__FORMSPREE_ID__"
-                  method="POST"
-                  novalidate>
-                <label for="interest-email" style="font-weight:600;color:var(--navy)">
-                    Want to be notified when autotrading or the managed product opens?
-                </label>
-                <p class="muted" style="font-size:13px">
-                    Leave your email. We'll contact you when rails are ready. No waitlist is binding, no capital is being solicited.
-                </p>
-                <div class="interest-form__row">
-                    <input type="email" name="email" id="interest-email" placeholder="you@example.com" required>
-                    <button type="submit" class="btn btn--primary">Notify me</button>
-                </div>
-                <input type="text" name="_gotcha" class="interest-form__honeypot" tabindex="-1" autocomplete="off">
-                <p id="interest-confirm" class="hide mt-2 mono" style="font-size:13px"></p>
-            </form>
+            <!-- Roadmap + interest capture intentionally omitted on the options page —
+                 the autotrading / managed-futures rails are strategy-specific to futures. -->
 
             <!-- C.4 Final CTA block -->
             <div class="cta-row">

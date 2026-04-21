@@ -20,24 +20,56 @@
     }
 
     // ─── Doubling Ladder ───
-    // Target rate: 2.5%/mo. Live rate: geometric mean from actual fills when n ≥ 25.
+    // Target rate: 2.5%/mo. Live rate: geometric mean from actual fills.
+    // Computed once n ≥ MIN_SAMPLE (3); displayed as "provisional" until
+    // n ≥ PROVISIONAL_CUTOFF (25), which is the spec's confidence threshold.
     const TARGET_MONTHLY = 0.025;
-    const MIN_SAMPLE = 25;
+    const MIN_SAMPLE = 3;
+    const PROVISIONAL_CUTOFF = 25;
 
     function monthsToMultiple(rate, multiple) {
         if (rate <= 0) return null;
         return Math.log(multiple) / Math.log(1 + rate);
     }
 
+    function parseTime(str) {
+        const m = (str || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
+        if (!m) return { h: 0, min: 0, s: 0 };
+        let h = parseInt(m[1]);
+        const min = parseInt(m[2]);
+        const s = m[3] ? parseInt(m[3]) : 0;
+        const ampm = (m[4] || '').toUpperCase();
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return { h, min, s };
+    }
+
     function parseTS(raw) {
         if (!raw) return null;
-        const d = new Date(raw.replace(' ', 'T'));
+        // ISO-date prefix: "2026-02-04 09:40:15" or "2026-04-10 8:54 AM"
+        let m = raw.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](.+))?$/);
+        if (m) {
+            const yr = parseInt(m[1]), mo = parseInt(m[2]), day = parseInt(m[3]);
+            const { h, min, s } = parseTime(m[4]);
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        // US slash: "2/18/2026 08:39" or "4/13/2026 8:33 AM"
+        m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(.+))?$/);
+        if (m) {
+            const mo = parseInt(m[1]), day = parseInt(m[2]), yr = parseInt(m[3]);
+            const { h, min, s } = parseTime(m[4]);
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        const d = new Date(raw);
         return isNaN(d.getTime()) ? null : d;
     }
 
     function computeLiveRate(rawTrades) {
-        if (!Array.isArray(rawTrades) || rawTrades.length < MIN_SAMPLE) {
-            return { ok: false, reason: `Need ${MIN_SAMPLE} trades (have ${rawTrades.length}).` };
+        const n = Array.isArray(rawTrades) ? rawTrades.length : 0;
+        if (n < MIN_SAMPLE) {
+            return { ok: false, reason: `Need ${MIN_SAMPLE} trades (have ${n}).`, n };
         }
         const sorted = [...rawTrades].sort((a, b) => {
             const ta = parseTS(a.entry_time || a.entryTime);
@@ -50,14 +82,15 @@
         const end = start + cumPL;
         const ret = cumPL / start;
         const first = parseTS(sorted[0].entry_time || sorted[0].entryTime);
-        const last = parseTS(sorted[sorted.length - 1].exit_time || sorted[sorted.length - 1].entry_time);
-        if (!first || !last || last <= first) return { ok: false, reason: 'Timing data unavailable.' };
+        const last  = parseTS(sorted[sorted.length - 1].exit_time || sorted[sorted.length - 1].entry_time);
+        if (!first || !last || last <= first) return { ok: false, reason: 'Timing data unavailable.', n };
         const monthsElapsed = (last - first) / (1000 * 60 * 60 * 24 * 30.4375);
-        if (monthsElapsed < 0.1 || ret <= -1) return { ok: false, reason: 'Not enough calendar time.' };
+        if (monthsElapsed < 0.1 || ret <= -1) return { ok: false, reason: 'Not enough calendar time.', n };
         const rate = ret <= 0
             ? -(Math.pow(1 - Math.abs(ret), 1 / monthsElapsed) - 1) * -1  // keep sign
             : Math.pow(1 + ret, 1 / monthsElapsed) - 1;
-        return { ok: true, rate, ret, monthsElapsed, start, end };
+        const provisional = n < PROVISIONAL_CUTOFF;
+        return { ok: true, rate, ret, monthsElapsed, start, end, n, provisional };
     }
 
     function renderLadder(state) {
@@ -87,7 +120,12 @@
         const rateEl = $('ladder-live-rate');
         if (rateEl) {
             if (live.ok) {
-                rateEl.textContent = `${(live.rate * 100).toFixed(2)}% / month`;
+                const ratePart = `${(live.rate * 100).toFixed(2)}% / month`;
+                if (live.provisional) {
+                    rateEl.innerHTML = `${ratePart} <span class="muted" style="font-weight:400">— provisional (n=${live.n}, firms up at ${PROVISIONAL_CUTOFF})</span>`;
+                } else {
+                    rateEl.textContent = ratePart;
+                }
             } else {
                 rateEl.textContent = live.reason;
             }
