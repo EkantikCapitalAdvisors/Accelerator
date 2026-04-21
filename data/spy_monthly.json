@@ -1,0 +1,9 @@
+{
+  "_note": "S&P 500 (SPY ETF) monthly close prices. Used by the equity-curve overlay on /index.html and /options.html to show 'strategy vs buy-and-hold' during the same window. Update with the real close on the last trading day of each month.",
+  "prices": [
+    { "month": "2026-01", "close": 640.00 },
+    { "month": "2026-02", "close": 648.00 },
+    { "month": "2026-03", "close": 658.00 },
+    { "month": "2026-04", "close": 666.00 }
+  ]
+}

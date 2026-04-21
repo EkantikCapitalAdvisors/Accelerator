@@ -197,7 +197,7 @@
         if (trades.length === 0) return;
         const eq = document.getElementById('section-a-equity');
         const mo = document.getElementById('section-a-monthly');
-        if (eq && root.Ekantik.Charts) root.Ekantik.Charts.equityCurve(eq, trades);
+        if (eq && root.Ekantik.Charts) root.Ekantik.Charts.equityCurve(eq, trades, state.spyMonthly);
         if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
 
         // Running stats below the curve

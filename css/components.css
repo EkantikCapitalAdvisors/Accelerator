@@ -204,7 +204,7 @@ a:hover { color: var(--gold); }
 /* ─── Inline charts (Section A — equity curve + monthly bars) ─── */
 .mini-chart {
     position: relative;
-    height: 220px;
+    height: 260px;
     margin: var(--s-2) 0 var(--s-2);
     background: var(--white);
     border: 1px solid var(--divider);

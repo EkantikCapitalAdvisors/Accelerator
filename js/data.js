@@ -10,6 +10,7 @@
     const CONFIG = root.EKANTIK_CONFIG || {};
     const TRADES_URL  = CONFIG.dataSource || 'data/tenx_trades.json';
     const ARCHIVE_URL = CONFIG.archiveIndex || 'data/archive/index.json';
+    const SPY_URL     = CONFIG.spyData || 'data/spy_monthly.json';
     const SESSION_KEY = CONFIG.sessionKey || 'eka-10x-live';
 
     const state = {
@@ -17,6 +18,7 @@
         battery: null,       // result of Battery.runTests(trades)
         summary: null,       // Battery.summaryStats(trades)
         archiveIndex: null,
+        spyMonthly: null,    // { prices: [{month, close}, ...] }
         computedAt: null,
         source: null         // 'default' | 'user-upload'
     };
@@ -59,12 +61,14 @@
 
         // Always fetch fresh trades in the background (or on explicit bust)
         try {
-            const [trades, archiveIndex] = await Promise.all([
+            const [trades, archiveIndex, spyMonthly] = await Promise.all([
                 fetchJSON(TRADES_URL, bust),
-                fetchJSON(ARCHIVE_URL, bust).catch(() => ({ archives: [] }))
+                fetchJSON(ARCHIVE_URL, bust).catch(() => ({ archives: [] })),
+                fetchJSON(SPY_URL, bust).catch(() => null)
             ]);
             computeFromTrades(trades);
             state.archiveIndex = archiveIndex;
+            state.spyMonthly = spyMonthly;
             state.source = 'default';
             try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ trades })); } catch (e) { /* quota */ }
             notify();

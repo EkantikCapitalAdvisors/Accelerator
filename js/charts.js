@@ -51,56 +51,143 @@
         });
     }
 
-    // ── Inline equity curve (Section A) — compact, no axis labels on x ──
-    function equityCurve(canvas, trades, opts) {
+    // ── Interpolate SPY close at an arbitrary date ──
+    // monthlyData = { prices: [{month: "YYYY-MM", close: N}, ...] }
+    function interpolateSpyAt(monthlyData, date) {
+        if (!monthlyData || !Array.isArray(monthlyData.prices) || !date) return null;
+        const pts = monthlyData.prices
+            .map(p => {
+                // Treat each entry as mid-month (day 15) for smoother interpolation.
+                const [y, m] = p.month.split('-').map(Number);
+                return { t: new Date(y, m - 1, 15).getTime(), v: p.close };
+            })
+            .filter(p => !isNaN(p.t) && typeof p.v === 'number')
+            .sort((a, b) => a.t - b.t);
+        if (pts.length === 0) return null;
+        const ms = date.getTime();
+        if (ms <= pts[0].t) return pts[0].v;
+        if (ms >= pts[pts.length - 1].t) return pts[pts.length - 1].v;
+        for (let i = 0; i < pts.length - 1; i++) {
+            if (ms >= pts[i].t && ms <= pts[i + 1].t) {
+                const frac = (ms - pts[i].t) / (pts[i + 1].t - pts[i].t);
+                return pts[i].v + frac * (pts[i + 1].v - pts[i].v);
+            }
+        }
+        return null;
+    }
+
+    // ── Inline equity curve (Section A) — month-labelled x-axis + S&P overlay ──
+    function equityCurve(canvas, trades, spyMonthly) {
         if (!canvas || !root.Chart) return;
         const key = canvas.id || 'equity';
         if (instances[key]) instances[key].destroy();
 
         const sorted = sortChronological(trades);
         const labels = [];
-        const data = [];
+        const fullLabels = [];
+        const strategyData = [];
+        const dates = [];
         let cum = STARTING_BALANCE;
+        let lastMonthLabel = '';
         sorted.forEach((t, i) => {
+            const ts = parseTS(t.entry_time || t.entryTime || t.datetime);
             cum += (t.dollar_pl != null ? t.dollar_pl : (t.dollarPL || 0));
-            labels.push('T' + (i + 1));
-            data.push(cum);
+            dates.push(ts);
+            strategyData.push(cum);
+            if (ts) {
+                const monthLabel = ts.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+                // Only label the x-axis at month boundaries; leave the rest blank so the chart
+                // reads as a timeline rather than a dense text blob.
+                labels.push(monthLabel !== lastMonthLabel ? monthLabel : '');
+                lastMonthLabel = monthLabel;
+                fullLabels.push(ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+            } else {
+                labels.push('');
+                fullLabels.push('Trade ' + (i + 1));
+            }
         });
 
-        const peak = Math.max(STARTING_BALANCE, ...data);
-        const low  = Math.min(STARTING_BALANCE, ...data);
+        // Build S&P overlay if monthly data is available AND we have at least one real timestamp.
+        const firstDate = dates.find(d => d != null);
+        let spyData = null;
+        if (spyMonthly && firstDate) {
+            const baseSpy = interpolateSpyAt(spyMonthly, firstDate);
+            if (baseSpy) {
+                spyData = dates.map(d => {
+                    if (!d) return null;
+                    const sp = interpolateSpyAt(spyMonthly, d);
+                    return sp ? Math.round(STARTING_BALANCE * (sp / baseSpy)) : null;
+                });
+            }
+        }
+
+        const datasets = [{
+            label: 'Strategy',
+            data: strategyData,
+            borderColor: '#C8A951',
+            backgroundColor: 'rgba(200, 169, 81, 0.12)',
+            fill: true,
+            tension: 0.25,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            borderWidth: 2
+        }];
+        if (spyData) {
+            datasets.push({
+                label: 'S&P 500 (buy-and-hold)',
+                data: spyData,
+                borderColor: '#1B2A4A',
+                backgroundColor: 'rgba(27, 42, 74, 0.04)',
+                fill: false,
+                tension: 0.2,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                borderWidth: 2,
+                borderDash: [4, 3]
+            });
+        }
+
+        const allValues = [...strategyData, ...(spyData || []).filter(v => v != null), STARTING_BALANCE];
+        const peak = Math.max(...allValues);
+        const low  = Math.min(...allValues);
 
         instances[key] = new root.Chart(canvas, {
             type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Balance',
-                    data,
-                    borderColor: '#C8A951',
-                    backgroundColor: 'rgba(200, 169, 81, 0.12)',
-                    fill: true,
-                    tension: 0.25,
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    borderWidth: 2
-                }]
-            },
+            data: { labels, datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: { display: false },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        align: 'start',
+                        labels: {
+                            color: '#1A1A1A',
+                            font: { size: 12, family: "'DM Sans', sans-serif" },
+                            usePointStyle: true,
+                            pointStyle: 'line',
+                            boxWidth: 24
+                        }
+                    },
                     tooltip: {
                         callbacks: {
-                            title: items => `Trade ${items[0].dataIndex + 1}`,
-                            label: ctx => `Balance: $${ctx.parsed.y.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+                            title: items => fullLabels[items[0].dataIndex] || '',
+                            label: ctx => `${ctx.dataset.label}: $${Number(ctx.parsed.y).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
                         }
                     }
                 },
                 scales: {
-                    x: { display: false },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            color: '#6B6B6B',
+                            font: { size: 11, family: "'DM Sans', sans-serif" },
+                            maxRotation: 0,
+                            autoSkip: false
+                        }
+                    },
                     y: {
                         grid: { color: '#E5E0D0' },
                         ticks: {
