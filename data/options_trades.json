@@ -171,8 +171,8 @@
     "trade_date": "3/25/2026"
   },
   {
-    "datetime": "",
-    "entry_time": "",
+    "datetime": "4/20/2026 09:20",
+    "entry_time": "4/20/2026 09:20",
     "exit_time": "",
     "trade_num": "O11",
     "ticker": "SPX",
@@ -187,7 +187,7 @@
     "risk_dollars": 160,
     "is_win": true,
     "outcome": "Win",
-    "trade_date": "",
+    "trade_date": "4/20/2026",
     "source": "discord",
     "upload_batch": "opt-1776737975861"
   }
