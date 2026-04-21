@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekantik Capital — 10x Options. One Edge. Verified Eight Ways. Live.</title>
+    <meta name="description" content="Live, transparent demonstration of a documented structural edge in 0-DTE options on SPY / SPX / single names. 8-test sustainability battery re-run against public fills.">
+    <meta name="theme-color" content="#1B2A4A">
+    <meta name="robots" content="noindex, nofollow">
+    <script>
+      // Point the data loader at options trades instead of futures.
+      window.EKANTIK_CONFIG = {
+        dataSource: 'data/options_trades.json',
+        sessionKey: 'eka-10x-options',
+        instrument: 'options'
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+    <!-- ═══ REGION 1 — NAV + TRUST STRIP (spec §3) ═══ -->
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="https://cashflow.ekantikcapital.com/">
+                ECA<span class="nav__brand-sub">Ekantik Capital</span>
+            </a>
+            <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link" href="/">Futures</a></li>
+                <li><a class="nav__link nav__link--active" href="options.html" aria-current="page">Options</a></li>
+                <li><a class="nav__link" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Discord</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="trust-strip" role="status" aria-live="polite">
+        <div class="trust-strip__inner">
+            <div class="trust-strip__group">
+                <span><span class="live-dot"></span>LIVE</span>
+                <span class="trust-strip__sep">|</span>
+                <span>Adherence: <strong id="trust-adherence">—</strong></span>
+                <span class="trust-strip__sep">|</span>
+                <span>Last fill: <strong id="trust-last-fill">—</strong></span>
+            </div>
+            <div class="trust-strip__group">
+                <span>Updated: <strong id="trust-updated">—</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ REGION 2 — HERO (spec §4) ═══ -->
+    <section class="hero" aria-labelledby="hero-h1">
+        <div class="hero__inner">
+            <span class="eyebrow">Ekantik Capital Advisors · 10x Options · Live Proof</span>
+            <h1 class="hero__h1" id="hero-h1">
+                <span>One Structural Edge.</span>
+                <span>Verified Eight Ways.</span>
+                <span style="color: var(--gold)">Live.</span>
+            </h1>
+
+            <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
+                <div class="stat-card">
+                    <p class="stat-card__label">Win Rate</p>
+                    <p class="stat-card__value" id="hero-stat-1">—</p>
+                    <p class="stat-card__caption">Live, updated from Discord fills.</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">Profit Factor</p>
+                    <p class="stat-card__value" id="hero-stat-2">—</p>
+                    <p class="stat-card__caption">Gross wins ÷ gross losses.</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">EV / Trade (R)</p>
+                    <p class="stat-card__value" id="hero-stat-3">—</p>
+                    <p class="stat-card__caption">Average profit per unit of risk.</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-card__label">EV / Trade ($)</p>
+                    <p class="stat-card__value" id="hero-stat-4">—</p>
+                    <p class="stat-card__caption">Dollars earned per trade, on average.</p>
+                </div>
+            </div>
+            <p class="muted mono" style="font-size:12px;margin-top:12px" id="hero-sample-size">Loading…</p>
+
+            <p class="hero__subline">
+                A 5% allocation. 3.3 doublings.<br>
+                The math that reshapes a portfolio.
+            </p>
+
+            <div class="hero__ctas">
+                <a class="btn btn--primary" href="#section-b">See the Evidence →</a>
+                <a class="btn btn--secondary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 3 — SECTION A: Edge Power (spec §5) ═══ -->
+    <section class="section section--white" id="section-a" aria-labelledby="a-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 1 — Prove the edge exists</span>
+            <h2 id="a-h2">The Edge.</h2>
+            <p class="subhead">Measured across the full backtest. Re-measured live as trades close.</p>
+
+            <!-- A.2 Edge stated plainly -->
+            <div class="edge-triplet">
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">Win Rate</p>
+                    <p class="stat-card__value" id="edge-wr">—</p>
+                    <p class="stat-card__caption">of closed fills</p>
+                </div>
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">Profit Factor</p>
+                    <p class="stat-card__value" id="edge-pf">—</p>
+                    <p class="stat-card__caption">institutional grade &gt; 1.50</p>
+                </div>
+                <div class="stat-card stat-card--lg stat-card--dark">
+                    <p class="stat-card__label">R-Expectancy</p>
+                    <p class="stat-card__value" id="edge-rexp">—</p>
+                    <p class="stat-card__caption">per unit of risk deployed</p>
+                </div>
+            </div>
+
+            <p class="lede">
+                The strategy is a mechanical 0-DTE options system — SPY / SPX index options and selective single-name names — with a documented edge measured across the full sample. The live numbers above and in the public trade log below are the same edge expressed in real markets, in real time. The 8-Test Sustainability Battery in the next section is how we know the edge is not a lucky sample.
+            </p>
+
+            <!-- A.2b Live equity curve — compounding, rendered -->
+            <h3 class="mt-4">Equity Curve — $10,000 start</h3>
+            <p class="muted" style="font-size:13px">The curve prints as each fill closes. Every dollar shown is sourced from a public Discord alert.</p>
+            <div class="mini-chart">
+                <canvas id="section-a-equity"></canvas>
+            </div>
+            <div class="mini-stats">
+                <div>
+                    <span class="mini-stats__label">Current balance</span>
+                    <span class="mini-stats__val" id="section-a-balance">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Net P&amp;L</span>
+                    <span class="mini-stats__val" id="section-a-net">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Return</span>
+                    <span class="mini-stats__val" id="section-a-return">—</span>
+                </div>
+            </div>
+
+            <!-- A.3 Doubling Ladder -->
+            <h3 class="mt-4">Doubling Ladder — target vs. live</h3>
+            <p class="muted" style="font-size:13px">Live rate (computed as geometric mean from actual Discord fills, minimum 25 closed trades): <strong class="mono" id="ladder-live-rate">—</strong></p>
+            <table class="ladder">
+                <thead>
+                    <tr>
+                        <th>Progression</th>
+                        <th style="text-align:right">Doublings</th>
+                        <th style="text-align:right">At 2.5%/mo (target)</th>
+                        <th style="text-align:right">At live rate</th>
+                    </tr>
+                </thead>
+                <tbody id="ladder-body"></tbody>
+            </table>
+            <p class="callout__body muted" style="font-size:13px"><em>The target rate is what the strategy was designed around. The live rate is what the sample is producing now. Both are shown because radical transparency requires both.</em></p>
+
+            <!-- A.3b Monthly P&L bars -->
+            <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
+            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month.</p>
+            <div class="mini-chart mini-chart--bars">
+                <canvas id="section-a-monthly"></canvas>
+            </div>
+
+            <!-- A.4 95/5 Portfolio Reshaper -->
+            <h3 class="mt-4">The 5% Allocation Portfolio Reshaper</h3>
+            <p class="muted" style="font-size:13px">Editable illustration. Move the sliders — the math updates.</p>
+
+            <div class="portfolio-reshaper">
+                <div class="portfolio-reshaper__slider-grid">
+                    <div class="slider-field">
+                        <label for="reshaper-start">Starting portfolio · <span class="slider-value" id="reshaper-start-val">$100,000</span></label>
+                        <input id="reshaper-start" type="range" min="50" max="500" step="25" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-market-cagr">Market CAGR · <span class="slider-value" id="reshaper-market-cagr-val">10%</span></label>
+                        <input id="reshaper-market-cagr" type="range" min="0" max="15" step="1" value="10">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-spec-cagr">Speculative CAGR · <span class="slider-value" id="reshaper-spec-cagr-val">100%</span></label>
+                        <input id="reshaper-spec-cagr" type="range" min="0" max="150" step="5" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-horizon">Horizon (years) · <span class="slider-value" id="reshaper-horizon-val">10 yrs</span></label>
+                        <input id="reshaper-horizon" type="range" min="1" max="20" step="1" value="10">
+                    </div>
+                    <div class="slider-field">
+                        <label for="reshaper-alloc">Speculative allocation · <span class="slider-value" id="reshaper-alloc-val">5%</span></label>
+                        <input id="reshaper-alloc" type="range" min="1" max="20" step="1" value="5">
+                    </div>
+                </div>
+
+                <div class="edge-triplet">
+                    <div class="stat-card">
+                        <p class="stat-card__label">Year-N Total</p>
+                        <p class="stat-card__value" id="reshaper-total">—</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Market Sleeve</p>
+                        <p class="stat-card__value" id="reshaper-market">—</p>
+                        <p class="stat-card__caption"><span id="reshaper-market-share">—</span> of final value</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Speculative Sleeve</p>
+                        <p class="stat-card__value" id="reshaper-spec">—</p>
+                        <p class="stat-card__caption"><span id="reshaper-spec-share">—</span> of final value</p>
+                    </div>
+                </div>
+
+                <div class="portfolio-reshaper__bar" aria-hidden="true">
+                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--market" id="reshaper-bar-market"></div>
+                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--spec"   id="reshaper-bar-spec"></div>
+                </div>
+                <div class="portfolio-reshaper__labels">
+                    <span>Market sleeve</span>
+                    <span>Speculative sleeve</span>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p class="callout__body italic">
+                    A 5% allocation compounding at 100% CAGR becomes 95% of total portfolio value by Year 10. The other 95% barely matters. That is why proving this engine works is worth the effort.
+                </p>
+            </div>
+            <p class="muted" style="font-size:13px">
+                If the speculative sleeve goes to zero, the portfolio loses 5%. If it compounds, it dominates. The asymmetry is the architecture.
+            </p>
+
+            <p class="lede mt-4" style="color: var(--muted)">
+                The math above is only as real as the edge that drives it. The next section is how we prove — statistically and publicly — that the edge is not a lucky sample.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 4 — SECTION B: Sustainability (spec §6) ═══ -->
+    <section class="section section--cream" id="section-b" aria-labelledby="b-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 2 — Prove it will continue</span>
+            <h2 id="b-h2">Sustainability — Verified Eight Ways.</h2>
+            <p class="subhead">
+                Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn't.
+            </p>
+
+            <p class="mono" style="font-size:13px" id="battery-status-banner">Loading…</p>
+
+            <!-- Controls bar (spec §6.4) -->
+            <div class="controls-bar" role="toolbar" aria-label="Battery controls">
+                <div class="controls-bar__group">
+                    <span>Last recalculated: <strong id="battery-last-recalc">—</strong></span>
+                    <span class="trust-strip__sep">|</span>
+                    <span>Sample size: <strong id="battery-sample-size">—</strong> trades</span>
+                </div>
+                <div class="controls-bar__buttons">
+                    <button type="button" class="btn btn--secondary btn--sm" id="btn-recalculate">Recalculate now</button>
+                    <button type="button" class="btn btn--tertiary btn--sm" id="btn-reset-data">Reset to Ekantik sample</button>
+                </div>
+            </div>
+
+            <div class="upload-banner hide" id="battery-user-banner">
+                <span>Showing YOUR uploaded data. Results below are computed on your trades.</span>
+                <span class="mono">Click "Reset to Ekantik sample" to return.</span>
+            </div>
+
+            <!-- B.2 8-Test Battery table -->
+            <div id="battery-table" aria-live="polite">Loading battery…</div>
+
+            <!-- Failure interpretation note (bucket A/B/C) — hidden when all 8 pass -->
+            <div id="battery-failure-note" aria-live="polite"></div>
+
+            <!-- B.5 Data upload panel -->
+            <details class="upload-panel">
+                <summary class="upload-panel__summary">Run the battery on your own data</summary>
+                <div class="upload-panel__body">
+                    <p>
+                        Upload a Tradovate CSV, Discord JSON export, or paste raw Discord alert messages. The full 8-test battery runs in your browser — your data never leaves your device.
+                    </p>
+                    <div class="upload-panel__step">
+                        <h4>Step 1 — Upload a file</h4>
+                        <input type="file" id="upload-file" accept=".csv,.json,.txt">
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 2 — or paste text</h4>
+                        <textarea id="upload-textarea" rows="5" style="width:100%; font-family:var(--font-mono); font-size:12px; padding:8px; border:1px solid var(--divider); border-radius:var(--radius-sm); background:var(--white);" placeholder="F37: s 6837.5&#10;F37: +4.5"></textarea>
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 3 — Run the battery</h4>
+                        <button type="button" class="btn btn--primary btn--sm" id="btn-run-upload">Run battery on this data</button>
+                        <div id="upload-preview" class="mt-2"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- B.3 Interactive glossary -->
+            <div class="glossary">
+                <h3 class="glossary__title">Full Glossary — Understanding the 8 Tests</h3>
+                <div id="battery-glossary">Loading glossary…</div>
+            </div>
+
+            <!-- B.6 Version history -->
+            <details class="version-history">
+                <summary class="version-history__summary">Battery history — every past run, archived</summary>
+                <table class="data-table mt-2">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th class="num">Sample Size</th>
+                            <th class="num">Tests Passed</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="version-history-body">
+                        <tr><td colspan="4" class="muted italic">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </details>
+
+            <!-- B.8 Transparency link -->
+            <a class="transparency-link" href="https://github.com/EkantikCapitalAdvisors" target="_blank" rel="noopener">View the battery source code →</a>
+
+            <p class="lede mt-4" style="color: var(--muted)">
+                A battery is only as credible as the data feeding it. The next section is how you can see every fill, in real time, as it happens.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 5 — SECTION C: Validation (spec §7) ═══ -->
+    <section class="section section--white" id="section-c" aria-labelledby="c-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Objective 3 — Let the audience validate it themselves</span>
+            <h2 id="c-h2">Validation. Your eyes, not our word.</h2>
+            <p class="subhead">
+                Every fill is posted the moment it closes. Every metric on this page is computed from those fills. You can watch it happen.
+            </p>
+
+            <!-- C.2 Today -->
+            <div class="validation-row">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Live Alerts</h3>
+                        <span class="mono muted" style="font-size:11px">Last 5 fills</span>
+                    </div>
+                    <div id="discord-feed" class="discord-feed">Loading…</div>
+                    <div class="mt-3">
+                        <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+                    </div>
+                    <p class="muted italic mt-2" style="font-size:12px">Every alert, timestamped, public. Free to join.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Public Trade Log</h3>
+                        <span class="mono muted" style="font-size:11px">Last 25 closed trades</span>
+                    </div>
+                    <div class="data-table__wrap">
+                        <table class="data-table" style="font-size:12px">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Dir</th>
+                                    <th class="num">Entry</th>
+                                    <th class="num">Exit</th>
+                                    <th class="num">Pts</th>
+                                    <th class="num">$ P&amp;L</th>
+                                    <th>Result</th>
+                                    <th class="num">R</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trade-log-body">
+                                <tr><td colspan="8" class="muted italic">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button type="button" class="btn btn--secondary btn--sm" id="btn-download-csv">Download full trade log (CSV)</button>
+                    </div>
+                    <p class="muted italic mt-2" style="font-size:12px">Full log available. Download it, run it through any evaluator you trust.</p>
+                </div>
+            </div>
+
+            <!-- C.3 Tomorrow: Roadmap -->
+            <h3 class="mt-4">Tomorrow — Autotrading + Managed Futures</h3>
+            <p class="muted">Honest roadmap. No dates promised. Status changes only when rails are real.</p>
+            <div class="roadmap">
+                <div class="roadmap__track">
+                    <h3>Autotrading <span class="roadmap__status roadmap__status--progress">In progress</span></h3>
+                    <p class="muted" style="font-size:13px">Discord fills → broker webhook → copy-trade execution on participant accounts.</p>
+                    <ul>
+                        <li>Parse Discord alerts to signed orders</li>
+                        <li>Integrate with Topstep / Tradovate webhook API</li>
+                        <li>Latency validation against posted fills</li>
+                        <li>Participant opt-in UI (non-binding waitlist)</li>
+                    </ul>
+                </div>
+                <div class="roadmap__track">
+                    <h3>Managed Futures <span class="roadmap__status roadmap__status--compliance">Pending compliance</span></h3>
+                    <p class="muted" style="font-size:13px">CTA registration, fund structure, and gating only after the 100-trade consistency proof completes.</p>
+                    <ul>
+                        <li>CTA registration with the NFA</li>
+                        <li>Fund structure (pooled vs. separately-managed)</li>
+                        <li>Securities attorney documentation review</li>
+                        <li>Accredited-investor verification rails</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interest capture (Formspree) -->
+            <form class="interest-form" id="interest-form"
+                  action="https://formspree.io/f/__FORMSPREE_ID__"
+                  method="POST"
+                  novalidate>
+                <label for="interest-email" style="font-weight:600;color:var(--navy)">
+                    Want to be notified when autotrading or the managed product opens?
+                </label>
+                <p class="muted" style="font-size:13px">
+                    Leave your email. We'll contact you when rails are ready. No waitlist is binding, no capital is being solicited.
+                </p>
+                <div class="interest-form__row">
+                    <input type="email" name="email" id="interest-email" placeholder="you@example.com" required>
+                    <button type="submit" class="btn btn--primary">Notify me</button>
+                </div>
+                <input type="text" name="_gotcha" class="interest-form__honeypot" tabindex="-1" autocomplete="off">
+                <p id="interest-confirm" class="hide mt-2 mono" style="font-size:13px"></p>
+            </form>
+
+            <!-- C.4 Final CTA block -->
+            <div class="cta-row">
+                <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+                <a class="btn btn--secondary" href="#section-b">Re-run the battery →</a>
+                <a class="btn btn--tertiary" href="https://doubles.ekantikcapital.com">Read the doctrine</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 6 — FOOTER (spec §10.5) ═══ -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__architecture">
+                <div>
+                    <p class="eyebrow">Doctrine</p>
+                    <a href="https://doubles.ekantikcapital.com">The Doubling Engine →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Live Proof</p>
+                    <a href="/">10x.ekantikcapital.com →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Research</p>
+                    <a href="https://cashflow.ekantikcapital.com/">cashflow.ekantikcapital.com →</a>
+                </div>
+            </div>
+
+            <div class="footer__disclosure">
+                <p>This page is an educational transparency demonstration. Ekantik Capital Advisors LLC is running a public 100-trade consistency proof in live ES futures markets via Tradovate. All fills are real. All metrics are sourced from trades posted publicly in the Ekantik Discord.</p>
+                <p>Nothing on this page constitutes investment advice, a solicitation of managed money, or an offer of any investment product. Past performance does not guarantee future results. Trading futures involves substantial risk of loss and is not suitable for all investors.</p>
+                <p>The operator's capital is at risk. This is personal risk capital, deployed to produce a public execution record. It is not pooled, managed, or shared capital.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script src="js/parser.js"></script>
+    <script src="js/battery.js"></script>
+    <script src="js/battery-ui.js"></script>
+    <script src="js/kpis.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/render-hero.js"></script>
+    <script src="js/render-section-a.js"></script>
+    <script src="js/render-section-b.js"></script>
+    <script src="js/render-section-c.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

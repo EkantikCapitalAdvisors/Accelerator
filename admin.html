@@ -55,8 +55,13 @@
             <!-- Discord paste -->
             <div class="card mt-3">
                 <div class="card__header"><h3>Discord paste</h3></div>
-                <p class="muted" style="font-size:13px">Paste Discord <code>#alerts</code> messages or a Discord JSON export.</p>
-                <textarea id="discord-text" rows="6" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:1px solid var(--divider);border-radius:var(--radius-sm);background:var(--white)"></textarea>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+                    <span class="mono" style="font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">Strategy</span>
+                    <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="radio" name="strategy" value="futures" checked> Futures (ES/MES)</label>
+                    <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="radio" name="strategy" value="options"> Options (SPX/SPY/etc.)</label>
+                </div>
+                <p class="muted" style="font-size:13px"><span class="strategy-hint strategy-hint--futures">Paste Discord <code>#alerts</code> messages (<code>F##: s 6940</code> / <code>F##: +12.5</code>) or a Discord JSON export. Points-based.</span><span class="strategy-hint strategy-hint--options hide">Paste Discord <code>#options</code> alerts in the multi-line <code>ID: n / Ticker / Type / Strike / Expiry / Entry / Stop price / Default: -N points / ID n: +$$$</code> format. Dollar-based P&amp;L.</span></p>
+                <textarea id="discord-text" rows="8" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:1px solid var(--divider);border-radius:var(--radius-sm);background:var(--white)"></textarea>
                 <button class="btn btn--primary btn--sm mt-2" type="button" id="discord-upload">Parse & commit</button>
                 <div id="discord-result" class="mt-2 mono" style="font-size:13px"></div>
             </div>
@@ -115,23 +120,64 @@
             }
         });
 
+        // Strategy radio → toggle inline hint
+        function currentStrategy() {
+            const sel = document.querySelector('input[name="strategy"]:checked');
+            return sel ? sel.value : 'futures';
+        }
+        function updateStrategyHint() {
+            const s = currentStrategy();
+            document.querySelectorAll('.strategy-hint').forEach(el => el.classList.add('hide'));
+            const show = document.querySelector(`.strategy-hint--${s}`);
+            if (show) show.classList.remove('hide');
+        }
+        document.querySelectorAll('input[name="strategy"]').forEach(r => r.addEventListener('change', updateStrategyHint));
+        updateStrategyHint();
+
+        // Commit options trades directly (snake_case from parser), bypassing
+        // DB.saveTrades' futures-specific mapper.
+        async function commitOptionsTrades(tableName, newTrades, batchId) {
+            const existing = await DB._read(tableName);
+            const keyOf = r => `${r.trade_num || ''}|${r.entry_time || ''}|${r.dollar_pl || 0}`;
+            const have = new Set(existing.map(keyOf));
+            const deduped = newTrades
+                .filter(t => !have.has(keyOf(t)))
+                .map(t => Object.assign({}, t, { upload_batch: batchId }));
+            const merged = [...existing, ...deduped];
+            await DB._write(tableName, merged, `Options: +${deduped.length} trades [${batchId}]`);
+            return deduped.length;
+        }
+
         $('discord-upload').addEventListener('click', async () => {
             const text = $('discord-text').value.trim();
             if (!text) return;
+            const strategy = currentStrategy();
             try {
-                let trades;
-                try {
-                    const json = JSON.parse(text);
-                    trades = Array.isArray(json) ? parseDiscordJSON(json) : parseDiscordTradeText(text);
-                } catch (e) {
-                    trades = parseDiscordTradeText(text);
+                if (strategy === 'options') {
+                    const trades = parseDiscordOptionsText(text);
+                    if (trades.length === 0) { $('discord-result').textContent = 'No options trades detected.'; $('discord-result').style.color = 'var(--fail)'; return; }
+                    $('discord-result').textContent = `Parsed ${trades.length} options trades. Committing…`;
+                    $('discord-result').style.color = 'var(--muted)';
+                    const batchId = 'opt-' + Date.now();
+                    const added = await commitOptionsTrades('options_trades', trades, batchId);
+                    $('discord-result').textContent = `Committed ${added}/${trades.length} options trades as batch ${batchId} (dupes skipped).`;
+                    $('discord-result').style.color = 'var(--pass)';
+                } else {
+                    let trades;
+                    try {
+                        const json = JSON.parse(text);
+                        trades = Array.isArray(json) ? parseDiscordJSON(json) : parseDiscordTradeText(text);
+                    } catch (e) {
+                        trades = parseDiscordTradeText(text);
+                    }
+                    if (trades.length === 0) { $('discord-result').textContent = 'No trades detected.'; $('discord-result').style.color = 'var(--fail)'; return; }
+                    $('discord-result').textContent = `Parsed ${trades.length} trades. Committing…`;
+                    $('discord-result').style.color = 'var(--muted)';
+                    const batchId = 'discord-' + Date.now();
+                    await DB.saveTrades('tenx_trades', trades, batchId);
+                    $('discord-result').textContent = `Committed ${trades.length} trades as batch ${batchId}.`;
+                    $('discord-result').style.color = 'var(--pass)';
                 }
-                if (trades.length === 0) { $('discord-result').textContent = 'No trades detected.'; return; }
-                $('discord-result').textContent = `Parsed ${trades.length} trades. Committing…`;
-                const batchId = 'discord-' + Date.now();
-                await DB.saveTrades('tenx_trades', trades, batchId);
-                $('discord-result').textContent = `Committed ${trades.length} trades as batch ${batchId}.`;
-                $('discord-result').style.color = 'var(--pass)';
             } catch (e) {
                 $('discord-result').textContent = 'Error: ' + e.message;
                 $('discord-result').style.color = 'var(--fail)';

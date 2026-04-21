@@ -497,6 +497,187 @@ function parseDiscordTradeText(text) {
     return completed;
 }
 
+// =====================================================
+// DISCORD OPTIONS ALERT PARSER
+// =====================================================
+// Parses multi-line Discord options alerts in the Ekantik format:
+//
+//   ID: 11
+//   Ticker: SPX
+//   Type: buy put
+//   Strike: 7090
+//   Expiry: ODTE
+//   Entry: 5.6
+//   Stop price: 4
+//   Default: -2 points
+//   ID 11: +800
+//
+// Entry is a multi-line block keyed on "ID: <n>". The result line is
+// "ID <n>: <+/-$>". Date dividers and per-message timestamps are handled
+// the same way as the futures parser (see parseDiscordTradeText).
+//
+// Returns snake_case objects matching the options_trades.json schema.
+
+const OPTIONS_CONTRACT_MULTIPLIER = 100;  // standard equity-option multiplier
+
+function parseDiscordOptionsText(text) {
+    const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const pending = {};
+    const completed = [];
+    let current = null;           // trade being accumulated
+    let currentDate = '';
+    let currentDatetime = '';
+
+    const finishTrade = (t, dollarPL) => {
+        const entry = t._entry_price || 0;
+        const stop  = t._stop_price  || 0;
+        let riskDollars;
+        if (stop > 0 && entry > 0) {
+            riskDollars = Math.abs(entry - stop) * OPTIONS_CONTRACT_MULTIPLIER;
+        } else if (t._default_points != null) {
+            riskDollars = Math.abs(t._default_points) * OPTIONS_CONTRACT_MULTIPLIER;
+        } else {
+            riskDollars = 0;
+        }
+        // Round to 2 decimals — kills floating-point artifacts like 159.9999999.
+        riskDollars = Math.round(riskDollars * 100) / 100;
+        return {
+            datetime:    t._datetime || '',
+            entry_time:  t._datetime || '',
+            exit_time:   '',
+            trade_num:   'O' + t._id,
+            ticker:      t._ticker || '',
+            option_type: t._option_type || '',
+            strike:      t._strike != null ? t._strike : 0,
+            expiry:      t._expiry || '',
+            direction:   t._direction || 'Buy',
+            entry_price: entry,
+            stop_price:  stop,
+            notes:       t._notes || '',
+            dollar_pl:   dollarPL,
+            risk_dollars: riskDollars,
+            is_win:      dollarPL > 0,
+            outcome:     dollarPL > 0 ? 'Win' : 'Loss',
+            trade_date:  t._trade_date || '',
+            source:      'discord'
+        };
+    };
+
+    for (const raw of lines) {
+        const line = raw;
+
+        // 1. Date divider: "— April 14, 2026 —" or "April 14, 2026"
+        const dividerMatch = line.match(/^—?\s*(\w+)\s+(\d{1,2}),?\s+(\d{4})\s*—?$/);
+        if (dividerMatch) {
+            const monthNum = MONTH_NAMES[dividerMatch[1].toLowerCase()];
+            if (monthNum) {
+                const day = parseInt(dividerMatch[2]);
+                const year = parseInt(dividerMatch[3]);
+                currentDate = `${monthNum}/${day}/${year}`;
+                currentDatetime = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+            continue;
+        }
+
+        // 2. Date+time header: "Ekantik Capital  4/13/2026 8:33 AM" or bare slash-date.
+        const headerMatch = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
+        if (headerMatch && !/^ID\b/i.test(line)) {
+            const dp = headerMatch[1].split('/');
+            const month = parseInt(dp[0]), day = parseInt(dp[1]), year = parseInt(dp[2]);
+            currentDate = `${month}/${day}/${year}`;
+            currentDatetime = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${headerMatch[2].trim()}`;
+            continue;
+        }
+
+        // 3. Result line: "ID 11: +800" (space between ID and number, no leading colon after ID)
+        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*\$?\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*$/i);
+        if (resultMatch) {
+            const id = resultMatch[1];
+            const sign = resultMatch[2] === '-' ? -1 : 1;
+            const dollars = parseFloat(resultMatch[3]) * sign;
+
+            if (current && current._id === id) {
+                completed.push(finishTrade(current, dollars));
+                current = null;
+                continue;
+            }
+            if (pending[id]) {
+                completed.push(finishTrade(pending[id], dollars));
+                delete pending[id];
+                continue;
+            }
+            // Result arrived without a known entry — skip silently
+            continue;
+        }
+
+        // 4. Key-value line: "Ticker: SPX" / "Entry: 5.6" / etc.
+        const kv = line.match(/^([A-Za-z][A-Za-z\s]*?)\s*:\s*(.+?)\s*$/);
+        if (!kv) continue;
+        const key = kv[1].toLowerCase().replace(/\s+/g, ' ').trim();
+        const val = kv[2].trim();
+
+        if (key === 'id') {
+            if (current && current._id) pending[current._id] = current;
+            current = {
+                _id: val.replace(/[^0-9]/g, ''),
+                _datetime: currentDatetime,
+                _trade_date: currentDate
+            };
+            continue;
+        }
+        if (!current) continue;
+
+        switch (key) {
+            case 'ticker':
+                current._ticker = val.toUpperCase();
+                break;
+            case 'type': {
+                const parts = val.toLowerCase().split(/\s+/);
+                if (parts.includes('sell') || parts.includes('short')) current._direction = 'Sell';
+                else current._direction = 'Buy';
+                if (parts.includes('put'))  current._option_type = 'PUT';
+                else if (parts.includes('call')) current._option_type = 'CALL';
+                break;
+            }
+            case 'strike': {
+                const n = parseFloat(val.replace(/[^0-9.]/g, ''));
+                if (!isNaN(n)) current._strike = n;
+                break;
+            }
+            case 'expiry':
+                current._expiry = val;
+                break;
+            case 'entry':
+            case 'entry price': {
+                const n = parseFloat(val.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(n)) current._entry_price = n;
+                break;
+            }
+            case 'stop':
+            case 'stop price': {
+                const n = parseFloat(val.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(n)) current._stop_price = n;
+                break;
+            }
+            case 'default': {
+                const m = val.match(/(-?\d+\.?\d*)\s*(?:points?|pts?)?/i);
+                if (m) current._default_points = parseFloat(m[1]);
+                break;
+            }
+            case 'notes':
+            case 'note':
+                current._notes = val;
+                break;
+            // Unknown keys — ignore
+        }
+    }
+
+    // Flush any started-but-unfinished entries into pending (no result yet).
+    // We do NOT emit half-trades; callers get only closed fills.
+
+    return completed;
+}
+
 // Parse the discord_trades.json format (array of trade objects)
 function parseDiscordJSON(jsonArray) {
     if (!Array.isArray(jsonArray)) return [];

@@ -5,9 +5,12 @@
 (function (root) {
     'use strict';
 
-    const TRADES_URL  = 'data/tenx_trades.json';
-    const ARCHIVE_URL = 'data/archive/index.json';
-    const SESSION_KEY = 'eka-10x-live';
+    // Allow the host page to override the data source (e.g., options.html sets
+    // window.EKANTIK_CONFIG = { dataSource: 'data/options_trades.json', ... })
+    const CONFIG = root.EKANTIK_CONFIG || {};
+    const TRADES_URL  = CONFIG.dataSource || 'data/tenx_trades.json';
+    const ARCHIVE_URL = CONFIG.archiveIndex || 'data/archive/index.json';
+    const SESSION_KEY = CONFIG.sessionKey || 'eka-10x-live';
 
     const state = {
         trades: null,

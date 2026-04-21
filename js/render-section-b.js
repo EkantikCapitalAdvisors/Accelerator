@@ -161,26 +161,40 @@
             });
         }
 
+        const isOptionsMode = () => (root.EKANTIK_CONFIG && root.EKANTIK_CONFIG.instrument === 'options');
+
         async function parseInput() {
             const file = fileInput && fileInput.files && fileInput.files[0];
             const pasted = textarea ? textarea.value.trim() : '';
+            const optionsMode = isOptionsMode();
 
             let trades = [];
             if (file) {
                 const text = await readFile(file);
                 if (file.name.toLowerCase().endsWith('.json')) {
                     const json = JSON.parse(text);
-                    trades = Array.isArray(json) ? root.parseDiscordJSON(json) : [];
+                    trades = Array.isArray(json) ? json : [];
+                } else if (optionsMode) {
+                    trades = root.parseDiscordOptionsText(text);
                 } else {
                     trades = root.parseTradovateCSV(text);
                 }
             } else if (pasted.length > 0) {
-                // Try JSON first, else Discord text
-                try {
-                    const json = JSON.parse(pasted);
-                    if (Array.isArray(json)) trades = root.parseDiscordJSON(json);
-                } catch (e) {
-                    trades = root.parseDiscordTradeText(pasted);
+                if (optionsMode) {
+                    try {
+                        const json = JSON.parse(pasted);
+                        if (Array.isArray(json)) trades = json;
+                        else trades = root.parseDiscordOptionsText(pasted);
+                    } catch (e) {
+                        trades = root.parseDiscordOptionsText(pasted);
+                    }
+                } else {
+                    try {
+                        const json = JSON.parse(pasted);
+                        if (Array.isArray(json)) trades = root.parseDiscordJSON(json);
+                    } catch (e) {
+                        trades = root.parseDiscordTradeText(pasted);
+                    }
                 }
             }
             return trades;
@@ -188,23 +202,29 @@
 
         runBtn.addEventListener('click', async () => {
             try {
-                const camelTrades = await parseInput();
-                if (!camelTrades || camelTrades.length === 0) {
-                    previewEl.innerHTML = '<p class="muted">No trades detected. Upload a Tradovate CSV or paste Discord alerts.</p>';
+                const parsed = await parseInput();
+                if (!parsed || parsed.length === 0) {
+                    const hint = isOptionsMode()
+                        ? 'Paste Discord options alerts (ID/Ticker/Type/Strike/Expiry/Entry/...) or upload an options JSON.'
+                        : 'Upload a Tradovate CSV or paste Discord alerts.';
+                    previewEl.innerHTML = `<p class="muted">No trades detected. ${hint}</p>`;
                     return;
                 }
-                // Convert to the snake_case shape the battery accepts.
-                const uploaded = camelTrades.map(t => ({
-                    dollar_pl:    t.dollarPL    || 0,
-                    risk_dollars: t.riskDollars || 0,
-                    is_win:       t.isWin,
-                    entry_time:   t.entryTime || t.datetime || '',
-                    exit_time:    t.exitTime  || '',
-                    direction:    t.direction,
-                    entry_price:  t.entryPrice || 0,
-                    exit_price:   t.exitPrice  || 0,
-                    points_pl:    t.pointsPL   || 0
-                }));
+                // Options parser already returns snake_case; futures parser returns camelCase.
+                const optionsMode = isOptionsMode();
+                const uploaded = optionsMode
+                    ? parsed  // already snake_case from parseDiscordOptionsText
+                    : parsed.map(t => ({
+                        dollar_pl:    t.dollarPL    || 0,
+                        risk_dollars: t.riskDollars || 0,
+                        is_win:       t.isWin,
+                        entry_time:   t.entryTime || t.datetime || '',
+                        exit_time:    t.exitTime  || '',
+                        direction:    t.direction,
+                        entry_price:  t.entryPrice || 0,
+                        exit_price:   t.exitPrice  || 0,
+                        points_pl:    t.pointsPL   || 0
+                    }));
 
                 const first5 = uploaded.slice(0, 5);
                 previewEl.innerHTML = `
