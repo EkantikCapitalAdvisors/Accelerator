@@ -201,6 +201,46 @@ a:hover { color: var(--gold); }
 }
 .callout__body { margin: 0; color: var(--ink); }
 
+/* ─── Filter pills (trade log day-range) ─── */
+.filter-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: var(--s-1) 0 var(--s-2);
+}
+.filter-pill {
+    padding: 6px 14px;
+    min-height: 32px;
+    border: 1px solid var(--divider);
+    background: var(--white);
+    color: var(--ink);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.filter-pill:hover { border-color: var(--navy); }
+.filter-pill--active {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+}
+
+/* Scrollable trade log body when there are many trades */
+.data-table__wrap--scroll {
+    max-height: 480px;
+    overflow-y: auto;
+    border-radius: var(--radius-md);
+}
+.data-table__wrap--scroll .data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 /* ─── Inline charts (Section A — equity curve + monthly bars) ─── */
 .mini-chart {
     position: relative;

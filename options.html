@@ -363,9 +363,10 @@
                 <div class="card">
                     <div class="card__header">
                         <h3>Public Trade Log</h3>
-                        <span class="mono muted" style="font-size:11px">Last 25 closed trades</span>
+                        <span class="mono muted" style="font-size:11px" id="trade-log-count">—</span>
                     </div>
-                    <div class="data-table__wrap">
+                    <div class="filter-bar" id="trade-log-filter" role="group" aria-label="Filter trades by date range"></div>
+                    <div class="data-table__wrap data-table__wrap--scroll">
                         <table class="data-table" style="font-size:12px">
                             <thead>
                                 <tr>

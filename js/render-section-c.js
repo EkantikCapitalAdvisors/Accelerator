@@ -17,11 +17,67 @@
         return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
     }
 
+    function parseTradeTS(t) {
+        const raw = t.exit_time || t.entry_time || t.datetime || '';
+        if (!raw) return null;
+        // ISO-date prefix: "2026-02-04 09:40:15" or "2026-04-10 8:54 AM"
+        let m = raw.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](.+))?$/);
+        if (m) {
+            const yr = +m[1], mo = +m[2], day = +m[3];
+            const tm = (m[4] || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
+            let h = 0, min = 0, s = 0;
+            if (tm) {
+                h = +tm[1]; min = +tm[2]; s = tm[3] ? +tm[3] : 0;
+                const ap = (tm[4] || '').toUpperCase();
+                if (ap === 'PM' && h < 12) h += 12;
+                if (ap === 'AM' && h === 12) h = 0;
+            }
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(.+))?$/);
+        if (m) {
+            const mo = +m[1], day = +m[2], yr = +m[3];
+            const tm = (m[4] || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
+            let h = 0, min = 0, s = 0;
+            if (tm) {
+                h = +tm[1]; min = +tm[2]; s = tm[3] ? +tm[3] : 0;
+                const ap = (tm[4] || '').toUpperCase();
+                if (ap === 'PM' && h < 12) h += 12;
+                if (ap === 'AM' && h === 12) h = 0;
+            }
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        const d = new Date(raw);
+        return isNaN(d.getTime()) ? null : d;
+    }
+
     function sortDesc(trades) {
         return [...trades].sort((a, b) => {
-            const ta = new Date((a.exit_time || a.entry_time || '').replace(' ', 'T'));
-            const tb = new Date((b.exit_time || b.entry_time || '').replace(' ', 'T'));
-            return tb - ta;
+            const ta = parseTradeTS(a); const tb = parseTradeTS(b);
+            if (ta && tb) return tb - ta;
+            return 0;
+        });
+    }
+
+    // ─── Day-range filter state (one shared global; both sections re-render on change) ───
+    // Windows expressed in days; null = "All"
+    const FILTER_OPTIONS = [
+        { key: '7',   label: '7D',  days: 7 },
+        { key: '30',  label: '30D', days: 30 },
+        { key: '90',  label: '90D', days: 90 },
+        { key: 'all', label: 'All', days: null }
+    ];
+    let activeFilterKey = 'all';
+
+    function applyDayFilter(trades) {
+        const opt = FILTER_OPTIONS.find(o => o.key === activeFilterKey);
+        if (!opt || opt.days == null) return trades;
+        const cutoff = Date.now() - opt.days * 24 * 60 * 60 * 1000;
+        return trades.filter(t => {
+            const d = parseTradeTS(t);
+            return d && d.getTime() >= cutoff;
         });
     }
 
@@ -62,16 +118,38 @@
         }).join('');
     }
 
-    // ─── Public trade log — last 25 trades ───
+    // ─── Public trade log — full log with day-range filter ───
     // Columns auto-adapt based on whether trades are futures (pts/exit) or
     // options (ticker/type/strike/expiry).
+    function renderFilterPills() {
+        const wrap = $('trade-log-filter');
+        if (!wrap) return;
+        wrap.innerHTML = FILTER_OPTIONS.map(o =>
+            `<button type="button" class="filter-pill${activeFilterKey === o.key ? ' filter-pill--active' : ''}" data-filter="${o.key}">${o.label}</button>`
+        ).join('');
+        wrap.querySelectorAll('[data-filter]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeFilterKey = btn.getAttribute('data-filter');
+                const state = root.Ekantik.Data.get();
+                renderTradeLog(state);
+            });
+        });
+    }
+
     function renderTradeLog(state) {
         const tbody = $('trade-log-body');
         const thead = document.querySelector('#trade-log-body')?.closest('table')?.querySelector('thead');
+        const countEl = $('trade-log-count');
         if (!tbody) return;
         const allTrades = state.trades || [];
-        const trades = sortDesc(allTrades).slice(0, 25);
         const optionsMode = allTrades.length > 0 && isOptionsTrade(allTrades[0]);
+        const filtered = applyDayFilter(allTrades);
+        const trades = sortDesc(filtered);
+
+        if (countEl) {
+            countEl.textContent = `Showing ${trades.length} of ${allTrades.length} closed trade${allTrades.length === 1 ? '' : 's'}`;
+        }
+        renderFilterPills();
 
         // Swap column headers to match the mode
         if (thead) {
