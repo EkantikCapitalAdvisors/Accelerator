@@ -900,5 +900,27 @@
     "ppt": 50,
     "source": "discord",
     "upload_batch": "tenx-sync-1776441014818"
+  },
+  {
+    "week_key": "04/20/2026",
+    "trade_num": "F42",
+    "entry_time": "2026-04-21 1:12 PM",
+    "exit_time": "",
+    "direction": "Sell",
+    "entry_price": 7120,
+    "exit_price": 0,
+    "stop_price": 0,
+    "contracts": 1,
+    "points_pl": 3,
+    "dollar_pl": 150,
+    "risk_points": 3,
+    "risk_dollars": 150,
+    "reward_risk": 0,
+    "is_win": true,
+    "trade_date": "4/21/2026",
+    "product": "ES",
+    "ppt": 50,
+    "source": "discord",
+    "upload_batch": "discord-1776795315224"
   }
 ]
