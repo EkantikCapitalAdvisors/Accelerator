@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <!-- Best-effort cache hints so admin-side JS stays current. -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Admin · Ekantik 10x — Operator Tools</title>
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/layout.css">
@@ -78,7 +82,14 @@
         </div>
     </section>
 
-    <script src="js/parser.js"></script>
+    <!-- Dynamic cache-buster so the operator never commits with stale JS.
+         document.write is fine here (runs during parse, synchronous). -->
+    <script>
+      (function() {
+        var v = Date.now();
+        document.write('<script src="js/parser.js?v=' + v + '"><\/script>');
+      })();
+    </script>
     <script>
     (function(){
         const $ = id => document.getElementById(id);
