@@ -155,6 +155,7 @@
         if (thead) {
             thead.innerHTML = optionsMode ? `
                 <tr>
+                  <th>ID</th>
                   <th>Date/Time</th>
                   <th>Ticker</th>
                   <th>Type</th>
@@ -166,6 +167,7 @@
                   <th class="num">R</th>
                 </tr>` : `
                 <tr>
+                  <th>ID</th>
                   <th>Date/Time</th>
                   <th>Dir</th>
                   <th class="num">Entry</th>
@@ -178,7 +180,7 @@
         }
 
         if (trades.length === 0) {
-            const colspan = optionsMode ? 9 : 8;
+            const colspan = optionsMode ? 10 : 9;
             tbody.innerHTML = `<tr><td colspan="${colspan}" class="muted italic">Awaiting first fills.</td></tr>`;
             return;
         }
@@ -186,6 +188,7 @@
             const r = (t.risk_dollars && t.risk_dollars > 0) ? (t.dollar_pl / t.risk_dollars) : null;
             const rDisp = r == null ? '—' : ((r >= 0 ? '+' : '') + r.toFixed(2) + 'R');
             const result = t.dollar_pl >= 0 ? 'Win' : 'Loss';
+            const idCell = `<td class="mono" style="font-weight:600;color:var(--navy)">${escapeHTML(t.trade_num || '—')}</td>`;
             const plCell = `
                 <td class="num" style="color:${t.dollar_pl>=0?'var(--pass)':'var(--fail)'};font-weight:500">
                     ${t.dollar_pl >= 0 ? '+' : '−'}$${Math.abs(t.dollar_pl||0).toFixed(0)}
@@ -194,6 +197,7 @@
             if (optionsMode) {
                 return `
                   <tr>
+                    ${idCell}
                     <td>${formatDateTime(t.entry_time)}</td>
                     <td>${escapeHTML(t.ticker || '—')}</td>
                     <td>${escapeHTML(t.option_type || '—')}</td>
@@ -209,6 +213,7 @@
             const side = dir.startsWith('s') || dir === 'short' ? 'Short' : 'Long';
             return `
               <tr>
+                ${idCell}
                 <td>${formatDateTime(t.entry_time)}</td>
                 <td>${side}</td>
                 <td class="num">${formatPrice(t.entry_price)}</td>
