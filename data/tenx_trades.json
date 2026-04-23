@@ -1010,5 +1010,27 @@
     "ppt": 50,
     "source": "discord",
     "upload_batch": "discord-1776976331999"
+  },
+  {
+    "week_key": "2026-04-20",
+    "trade_num": "F48",
+    "entry_time": "2026-04-23 15:30:00",
+    "exit_time": "",
+    "direction": "Sell",
+    "entry_price": 7151,
+    "exit_price": 0,
+    "stop_price": 7153,
+    "contracts": 1,
+    "points_pl": -2,
+    "dollar_pl": -100,
+    "risk_points": 2,
+    "risk_dollars": 100,
+    "reward_risk": 0,
+    "is_win": false,
+    "trade_date": "4/23/2026",
+    "product": "ES",
+    "ppt": 50,
+    "source": "discord",
+    "upload_batch": "manual-backfill-f48"
   }
 ]
