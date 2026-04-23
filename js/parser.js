@@ -491,7 +491,7 @@ function parseDiscordTradeText(text) {
                 direction: entry ? entry.direction : 'Unknown',
                 entryPrice,
                 stopPrice,
-                trailingProfit: '—',
+                trailingProfit: entry && entry.trailingProfit != null ? entry.trailingProfit : '—',
                 pointsPL: pts,
                 riskPoints: riskPts,
                 dollarPL,
@@ -508,6 +508,23 @@ function parseDiscordTradeText(text) {
 
         // Is this an "exit" marker? (just sets a flag, result line follows)
         if (/^exit$/i.test(body)) continue;
+
+        // Stop-limit update: "sl 7153" / "sl7153" / "stp 7153" / "stop 7153"
+        // Trailing profit update: "tp 7100" / "tp7100"
+        // Both adjust the pending trade in place; the final result line consumes them.
+        const adjustMatch = body.match(/^(sl|stp|stop|tp|trail|trailing)\s*(\d+\.?\d*)$/i);
+        if (adjustMatch) {
+            const kind = adjustMatch[1].toLowerCase();
+            const price = parseFloat(adjustMatch[2]);
+            const entry = pending[tradeNum];
+            if (!entry) continue;  // adjustment without a known entry — ignore
+            if (kind === 'tp' || kind === 'trail' || kind === 'trailing') {
+                entry.trailingProfit = price;
+            } else {
+                entry.stopPrice = price;   // sl / stp / stop all mean stop-loss
+            }
+            continue;
+        }
 
         // Is this an entry line? e.g. "s 6837.5", "sell 7153 stp 7156", "b 6992", "buy 6855"
         const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)\s*(?:stp\s+(\d+\.?\d*))?$/i);
