@@ -1010,5 +1010,27 @@
     "ppt": 50,
     "source": "discord",
     "upload_batch": "discord-1776976551198"
+  },
+  {
+    "week_key": "2026-04-20",
+    "trade_num": "F50",
+    "entry_time": "2026-04-23 16:45:00",
+    "exit_time": "",
+    "direction": "Buy",
+    "entry_price": 7162,
+    "exit_price": 0,
+    "stop_price": 7159,
+    "contracts": 1,
+    "points_pl": -3,
+    "dollar_pl": -150,
+    "risk_points": 3,
+    "risk_dollars": 150,
+    "reward_risk": 0,
+    "is_win": false,
+    "trade_date": "4/23/2026",
+    "product": "ES",
+    "ppt": 50,
+    "source": "discord",
+    "upload_batch": "manual-backfill-f50"
   }
 ]
