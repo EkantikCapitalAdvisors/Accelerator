@@ -988,5 +988,27 @@
     "ppt": 50,
     "source": "discord",
     "upload_batch": "manual-backfill-f46"
+  },
+  {
+    "week_key": "",
+    "trade_num": "F47",
+    "entry_time": "",
+    "exit_time": "",
+    "direction": "Sell",
+    "entry_price": 7154,
+    "exit_price": 0,
+    "stop_price": 7156,
+    "contracts": 1,
+    "points_pl": -2,
+    "dollar_pl": -100,
+    "risk_points": 2,
+    "risk_dollars": 100,
+    "reward_risk": 0,
+    "is_win": false,
+    "trade_date": "",
+    "product": "ES",
+    "ppt": 50,
+    "source": "discord",
+    "upload_batch": "discord-1776976331999"
   }
 ]
