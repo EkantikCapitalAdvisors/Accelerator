@@ -135,17 +135,36 @@
         updateStrategyHint();
 
         // Commit options trades directly (snake_case from parser), bypassing
-        // DB.saveTrades' futures-specific mapper.
+        // DB.saveTrades' futures-specific mapper. Uses the same read-merge-write
+        // retry loop: each attempt re-reads to avoid clobbering concurrent commits.
         async function commitOptionsTrades(tableName, newTrades, batchId) {
-            const existing = await DB._read(tableName);
             const keyOf = r => `${r.trade_num || ''}|${r.entry_time || ''}|${r.dollar_pl || 0}`;
-            const have = new Set(existing.map(keyOf));
-            const deduped = newTrades
-                .filter(t => !have.has(keyOf(t)))
-                .map(t => Object.assign({}, t, { upload_batch: batchId }));
-            const merged = [...existing, ...deduped];
-            await DB._write(tableName, merged, `Options: +${deduped.length} trades [${batchId}]`);
-            return deduped.length;
+            const isShaConflict = (e) =>
+                e.status === 409 || e.status === 422 ||
+                (e.message && /does not match|sha|conflict/i.test(e.message));
+
+            for (let i = 0; i < 4; i++) {
+                const existing = await DB._read(tableName);
+                const have = new Set(existing.map(keyOf));
+                const deduped = newTrades
+                    .filter(t => !have.has(keyOf(t)))
+                    .map(t => Object.assign({}, t, { upload_batch: batchId }));
+                if (deduped.length === 0) return 0;
+
+                try {
+                    await DB._write(tableName, [...existing, ...deduped],
+                        `Options: +${deduped.length} trades [${batchId}]`);
+                    return deduped.length;
+                } catch (e) {
+                    if (isShaConflict(e) && i < 3) {
+                        console.warn(`[admin] options commit retry ${i + 1}/4:`, e.message);
+                        await new Promise(r => setTimeout(r, 250 * (i + 1)));
+                        continue;
+                    }
+                    throw e;
+                }
+            }
+            return 0;
         }
 
         $('discord-upload').addEventListener('click', async () => {

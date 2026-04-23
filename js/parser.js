@@ -65,14 +65,22 @@ const DB = {
             return true;
         };
 
-        try {
-            return await attempt();
-        } catch (e) {
-            if (e.status === 409) {
-                console.warn('[GitHubDB] Stale SHA (409) — retrying with fresh SHA…');
+        const isShaConflict = (e) =>
+            e.status === 409 ||
+            e.status === 422 ||
+            (e.message && /does not match|sha|conflict/i.test(e.message));
+
+        for (let i = 0; i < 4; i++) {
+            try {
                 return await attempt();
+            } catch (e) {
+                if (isShaConflict(e) && i < 3) {
+                    console.warn(`[GitHubDB] SHA conflict on attempt ${i + 1}/4 — retrying…`, e.message);
+                    await new Promise(r => setTimeout(r, 200 * (i + 1)));
+                    continue;
+                }
+                throw e;
             }
-            throw e;
         }
     },
 
@@ -83,45 +91,65 @@ const DB = {
     },
 
     async saveTrades(tableName, trades, batchId) {
-        const existing = await DB._read(tableName);
         const norm = v => Math.round(parseFloat(v) * 10000) / 10000;
-
-        // tenx_trades uses same format as ecfs_trades (Tradovate CSV round-trips)
         const makeKey = (r) => r.trade_num
             ? r.trade_num
             : `${r.entry_time}|${r.exit_time}|${r.direction}|${norm(r.dollar_pl)}`;
         const makeTradeKey = (t) => t.tradeNum
             ? t.tradeNum
             : `${t.entryTime}|${t.exitTime}|${t.direction}|${norm(t.dollarPL)}`;
-        const keys = new Set(existing.map(makeKey));
-        const newRows = trades
-            .filter(t => !keys.has(makeTradeKey(t)))
-            .map(t => ({
-                week_key:     getWeekKey(t.date),
-                trade_num:    t.tradeNum    || '',
-                entry_time:   t.entryTime   || t.datetime || '',
-                exit_time:    t.exitTime    || '',
-                direction:    t.direction,
-                entry_price:  t.entryPrice,
-                exit_price:   t.exitPrice   || 0,
-                stop_price:   t.stopPrice   || 0,
-                contracts:    t.contracts   || 1,
-                points_pl:    t.pointsPL,
-                dollar_pl:    t.dollarPL,
-                risk_points:  t.riskPoints  || 0,
-                risk_dollars: t.riskDollars || 0,
-                reward_risk:  t.rewardRisk  || 0,
-                is_win:       t.isWin,
-                trade_date:   t.date,
-                product:      t.product     || 'MES',
-                ppt:          t.ppt         || 5,
-                source:       t.source      || 'tradovate',
-                upload_batch: batchId
-            }));
-        const merged = [...existing, ...newRows];
 
-        await DB._write(tableName, merged,
-            `Update ${tableName}: +${trades.length} trades [${batchId}]`);
+        // Re-read-merge-write: each attempt fetches the latest committed state,
+        // dedups against it, and writes. If the write fails with a SHA mismatch,
+        // the caller retries and we start over from a fresh read — so concurrent
+        // commits are never silently overwritten.
+        const isShaConflict = (e) =>
+            e.status === 409 ||
+            e.status === 422 ||
+            (e.message && /does not match|sha|conflict/i.test(e.message));
+
+        for (let i = 0; i < 4; i++) {
+            const existing = await DB._read(tableName);
+            const keys = new Set(existing.map(makeKey));
+            const newRows = trades
+                .filter(t => !keys.has(makeTradeKey(t)))
+                .map(t => ({
+                    week_key:     getWeekKey(t.date),
+                    trade_num:    t.tradeNum    || '',
+                    entry_time:   t.entryTime   || t.datetime || '',
+                    exit_time:    t.exitTime    || '',
+                    direction:    t.direction,
+                    entry_price:  t.entryPrice,
+                    exit_price:   t.exitPrice   || 0,
+                    stop_price:   t.stopPrice   || 0,
+                    contracts:    t.contracts   || 1,
+                    points_pl:    t.pointsPL,
+                    dollar_pl:    t.dollarPL,
+                    risk_points:  t.riskPoints  || 0,
+                    risk_dollars: t.riskDollars || 0,
+                    reward_risk:  t.rewardRisk  || 0,
+                    is_win:       t.isWin,
+                    trade_date:   t.date,
+                    product:      t.product     || 'MES',
+                    ppt:          t.ppt         || 5,
+                    source:       t.source      || 'tradovate',
+                    upload_batch: batchId
+                }));
+            if (newRows.length === 0) return; // all dupes
+
+            try {
+                await DB._write(tableName, [...existing, ...newRows],
+                    `Update ${tableName}: +${newRows.length} trades [${batchId}]`);
+                return;
+            } catch (e) {
+                if (isShaConflict(e) && i < 3) {
+                    console.warn(`[GitHubDB] saveTrades retry ${i + 1}/4 after conflict:`, e.message);
+                    await new Promise(r => setTimeout(r, 250 * (i + 1)));
+                    continue;
+                }
+                throw e;
+            }
+        }
     },
 
     async saveAllWeeklySnapshots(method, snapshots) {
