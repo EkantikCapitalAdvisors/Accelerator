@@ -44,7 +44,12 @@ const DB = {
 
         const attempt = async () => {
             let sha = null;
-            const infoRes = await fetch(`${apiUrl}?ref=${DB.BRANCH}`, { headers });
+            // Cache-bust the SHA fetch — GitHub's contents API sends
+            // Cache-Control: private, max-age=60, which means the browser
+            // would otherwise hand us a stale SHA on back-to-back commits
+            // made within a minute of each other.
+            const shaUrl = `${apiUrl}?ref=${DB.BRANCH}&_=${Date.now()}`;
+            const infoRes = await fetch(shaUrl, { headers, cache: 'no-store' });
             if (infoRes.ok) {
                 sha = (await infoRes.json()).sha;
             } else if (infoRes.status !== 404) {
