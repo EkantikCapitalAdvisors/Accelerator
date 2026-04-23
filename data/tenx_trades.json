@@ -922,5 +922,27 @@
     "ppt": 50,
     "source": "discord",
     "upload_batch": "discord-1776795315224"
+  },
+  {
+    "week_key": "",
+    "trade_num": "F43",
+    "entry_time": "",
+    "exit_time": "",
+    "direction": "Sell",
+    "entry_price": 7147,
+    "exit_price": 0,
+    "stop_price": 0,
+    "contracts": 1,
+    "points_pl": 6,
+    "dollar_pl": 300,
+    "risk_points": 6,
+    "risk_dollars": 300,
+    "reward_risk": 0,
+    "is_win": true,
+    "trade_date": "",
+    "product": "ES",
+    "ppt": 50,
+    "source": "discord",
+    "upload_batch": "discord-1776975385344"
   }
 ]
