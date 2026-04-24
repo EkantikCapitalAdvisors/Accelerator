@@ -237,6 +237,76 @@
         targetEl.innerHTML = msg;
     }
 
+    // ─── Hub-and-spoke overview graphic ───
+    // Single-sentence summaries that answer "what does this test validate?" in layman terms.
+    // Kept separate from the richer glossary so they can function as a visual TOC.
+    const ONE_LINERS = {
+        1: 'Rules out pure luck as the explanation.',
+        2: 'Profitable even in the worst plausible replay.',
+        3: 'Winners dwarf losers by a comfortable margin.',
+        4: 'The edge survives without its three biggest wins.',
+        5: 'Every dollar of risk returns meaningful profit.',
+        6: 'Enough cushion above breakeven to survive a regime shift.',
+        7: 'Losing streaks short enough to keep discipline intact.',
+        8: 'Wins in almost every reshuffle of its own trades.'
+    };
+
+    // Angular positions for 8 satellites starting at top, going clockwise.
+    // Values are {x%, y%} with container-relative percentages (center at 50,50).
+    const SPOKE_POS = [
+        { x: 50,    y: 12    },   // 0°   — top
+        { x: 76.87, y: 23.13 },   // 45°  — top-right
+        { x: 88,    y: 50    },   // 90°  — right
+        { x: 76.87, y: 76.87 },   // 135° — bottom-right
+        { x: 50,    y: 88    },   // 180° — bottom
+        { x: 23.13, y: 76.87 },   // 225° — bottom-left
+        { x: 12,    y: 50    },   // 270° — left
+        { x: 23.13, y: 23.13 }    // 315° — top-left
+    ];
+
+    function renderEdgeHub(targetEl) {
+        if (!targetEl) return;
+        const lines = SPOKE_POS.map(p =>
+            `<line x1="50" y1="50" x2="${p.x}" y2="${p.y}" stroke="rgba(200,169,81,0.32)" stroke-width="0.25"/>`
+        ).join('');
+        const satellites = TEST_DEFS.map((def, i) => {
+            const p = SPOKE_POS[i];
+            return `
+              <a class="edge-hub__sat" href="#glossary-t${def.id}"
+                 style="top:${p.y}%; left:${p.x}%;"
+                 data-goto="t${def.id}">
+                <span class="edge-hub__sat-num">${String(def.id).padStart(2, '0')}</span>
+                <span class="edge-hub__sat-name">${def.name.replace(/\s+\(.*\)\s*$/, '')}</span>
+                <span class="edge-hub__sat-desc">${ONE_LINERS[def.id]}</span>
+              </a>`;
+        }).join('');
+
+        targetEl.innerHTML = `
+          <figure class="edge-hub" aria-label="Eight attributes of a sustainable trading edge">
+            <svg class="edge-hub__svg" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+              ${lines}
+            </svg>
+            <div class="edge-hub__center">
+              <span class="edge-hub__center-eyebrow">The Eight Attributes of</span>
+              <span class="edge-hub__center-title">A Sustainable Edge</span>
+            </div>
+            ${satellites}
+          </figure>`;
+
+        // Clicking a satellite scroll-snaps to its glossary card and opens it.
+        targetEl.querySelectorAll('[data-goto]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const id = a.getAttribute('data-goto');
+                const el = document.getElementById('glossary-' + id);
+                if (el) {
+                    e.preventDefault();
+                    if (el.tagName === 'DETAILS') el.open = true;
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    }
+
     root.Ekantik = root.Ekantik || {};
-    root.Ekantik.BatteryUI = { renderTable, renderGlossary, renderStatusBanner, TEST_DEFS };
+    root.Ekantik.BatteryUI = { renderTable, renderGlossary, renderStatusBanner, renderEdgeHub, TEST_DEFS };
 })(typeof window !== 'undefined' ? window : globalThis);

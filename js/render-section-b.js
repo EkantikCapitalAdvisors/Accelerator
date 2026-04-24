@@ -108,6 +108,7 @@
             root.Ekantik.BatteryUI.renderTable(table, state.battery);
             root.Ekantik.BatteryUI.renderGlossary(glossary, state.battery);
             root.Ekantik.BatteryUI.renderStatusBanner(banner, state.battery);
+            root.Ekantik.BatteryUI.renderEdgeHub($('battery-edge-hub'));
             renderFailureNote(state.battery);
         }
         if (ts) ts.textContent = fmtTime(state.computedAt);
