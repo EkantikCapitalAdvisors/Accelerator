@@ -401,6 +401,122 @@ a:hover { color: var(--gold); }
     border: 1px solid var(--divider);
 }
 
+/* ─── Layman question (italic, gold-bordered) ─── */
+.glossary__question {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--navy);
+    margin: 0 0 var(--s-2);
+    padding: 4px 0 4px var(--s-2);
+    border-left: 2px solid var(--gold);
+}
+.glossary__lead {
+    color: var(--navy);
+    font-size: 15px;
+    margin: 0 0 var(--s-2);
+}
+
+/* ─── Pass / Fail example boxes ─── */
+.glossary__examples {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-2);
+    margin: var(--s-2) 0;
+}
+.glossary__example {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-left-width: 3px;
+    padding: var(--s-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.glossary__example--pass { border-left-color: var(--pass); }
+.glossary__example--fail { border-left-color: var(--fail); }
+.glossary__example-tag {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.glossary__example--pass .glossary__example-tag { color: var(--pass); }
+.glossary__example--fail .glossary__example-tag { color: var(--fail); }
+.glossary__example strong { color: var(--navy); font-weight: 600; }
+
+/* ─── Threshold strip ─── */
+.glossary__threshold {
+    margin: var(--s-2) 0;
+    padding: 10px var(--s-2);
+    background: var(--cream-2);
+    border-radius: var(--radius-sm);
+    display: flex;
+    gap: var(--s-2);
+    align-items: baseline;
+    flex-wrap: wrap;
+    font-size: 13px;
+}
+.glossary__threshold-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+}
+.glossary__threshold-val {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--navy);
+}
+.glossary__threshold-note {
+    color: var(--muted);
+    font-style: italic;
+    flex: 1 1 240px;
+}
+
+/* ─── "How it's computed" nested details (technical) ─── */
+.glossary__detail-nested {
+    margin: var(--s-2) 0;
+    font-size: 13px;
+}
+.glossary__detail-nested > summary {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    list-style: none;
+}
+.glossary__detail-nested > summary::-webkit-details-marker { display: none; }
+.glossary__detail-nested > summary::before { content: '▸ '; color: var(--gold); }
+.glossary__detail-nested[open] > summary::before { content: '▾ '; }
+.glossary__detail-nested > p { margin: 6px 0; color: var(--muted); }
+
+/* ─── Why quote (closing italic pull) ─── */
+.glossary__why {
+    margin: var(--s-3) 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--muted);
+    border-top: 1px solid var(--divider);
+    padding-top: var(--s-2);
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .glossary__examples { grid-template-columns: 1fr; }
+}
+
 /* ─── Ladder (Section A) ─── */
 .ladder {
     width: 100%;
