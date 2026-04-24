@@ -71,19 +71,26 @@
         if (n < MIN_SAMPLE) {
             return { ok: false, reason: `Need ${MIN_SAMPLE} trades (have ${n}).`, n };
         }
-        const sorted = [...rawTrades].sort((a, b) => {
-            const ta = parseTS(a.entry_time || a.entryTime);
-            const tb = parseTS(b.entry_time || b.entryTime);
-            if (!ta || !tb) return 0;
-            return ta - tb;
-        });
-        const cumPL = sorted.reduce((s, t) => s + (t.dollar_pl || t.dollarPL || 0), 0);
+        // Keep only trades with parseable timestamps so first/last of the sort are always valid.
+        // P&L from trades with missing timestamps still counts toward cumPL — we just don't
+        // use their timestamps to define the calendar window.
+        const withTS = rawTrades
+            .map(t => ({ t, ts: parseTS(t.entry_time || t.entryTime) }))
+            .filter(x => x.ts != null);
+        if (withTS.length < MIN_SAMPLE) {
+            return { ok: false, reason: `Need ${MIN_SAMPLE} dated trades (have ${withTS.length}).`, n };
+        }
+        withTS.sort((a, b) => a.ts - b.ts);
+
+        // Total P&L uses every trade (timestamped or not).
+        const cumPL = rawTrades.reduce((s, t) => s + (t.dollar_pl || t.dollarPL || 0), 0);
         const start = 10000;
         const end = start + cumPL;
         const ret = cumPL / start;
-        const first = parseTS(sorted[0].entry_time || sorted[0].entryTime);
-        const last  = parseTS(sorted[sorted.length - 1].exit_time || sorted[sorted.length - 1].entry_time);
-        if (!first || !last || last <= first) return { ok: false, reason: 'Timing data unavailable.', n };
+        const first = withTS[0].ts;
+        const lastRow = withTS[withTS.length - 1].t;
+        const last = parseTS(lastRow.exit_time || lastRow.entry_time || lastRow.entryTime) || withTS[withTS.length - 1].ts;
+        if (!first || !last || last <= first) return { ok: false, reason: 'Not enough calendar time.', n };
         const monthsElapsed = (last - first) / (1000 * 60 * 60 * 24 * 30.4375);
         if (monthsElapsed < 0.1 || ret <= -1) return { ok: false, reason: 'Not enough calendar time.', n };
         const rate = ret <= 0
