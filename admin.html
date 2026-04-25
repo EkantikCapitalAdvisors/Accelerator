@@ -185,7 +185,19 @@
             try {
                 if (strategy === 'options') {
                     const trades = parseDiscordOptionsText(text);
-                    if (trades.length === 0) { $('discord-result').textContent = 'No options trades detected.'; $('discord-result').style.color = 'var(--fail)'; return; }
+                    if (trades.length === 0) {
+                        const pending = trades.pending || [];
+                        if (pending.length > 0) {
+                            $('discord-result').innerHTML =
+                                `Detected entry for <strong>${pending.join(', ')}</strong> but no close line. ` +
+                                `Add a final line like <code>ID ${pending[0].replace(/[^0-9]/g, '')}: +220</code> or ` +
+                                `<code>ID ${pending[0].replace(/[^0-9]/g, '')}: -100</code> (sign before the number).`;
+                        } else {
+                            $('discord-result').textContent = 'No options trades detected. Paste should start with `ID: <number>` and end with `ID <number>: +/-<dollars>`.';
+                        }
+                        $('discord-result').style.color = 'var(--fail)';
+                        return;
+                    }
                     $('discord-result').textContent = `Parsed ${trades.length} options trades. Committing…`;
                     $('discord-result').style.color = 'var(--muted)';
                     const batchId = 'opt-' + Date.now();

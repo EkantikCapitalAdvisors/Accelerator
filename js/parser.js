@@ -639,8 +639,9 @@ function parseDiscordOptionsText(text) {
             continue;
         }
 
-        // 3. Result line: "ID 11: +800" (space between ID and number, no leading colon after ID)
-        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*\$?\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*$/i);
+        // 3. Result line: "ID 11: +800" / "ID 11: +$800" / "ID 11: +220$" / "ID 11: -100$"
+        // Dollar sign tolerated on either side of the number, optional sign defaults to +.
+        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*\$?\s*$/i);
         if (resultMatch) {
             const id = resultMatch[1];
             const sign = resultMatch[2] === '-' ? -1 : 1;
@@ -723,7 +724,12 @@ function parseDiscordOptionsText(text) {
     }
 
     // Flush any started-but-unfinished entries into pending (no result yet).
-    // We do NOT emit half-trades; callers get only closed fills.
+    // We DO NOT emit half-trades — callers get only closed fills — but we
+    // attach the pending count + ID list as properties so the admin UI can
+    // tell the user "you have entries but no close line."
+    if (current && current._id) pending[current._id] = current;
+    const pendingIds = Object.keys(pending).map(id => 'O' + id);
+    completed.pending = pendingIds;
 
     return completed;
 }
