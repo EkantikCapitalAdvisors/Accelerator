@@ -154,8 +154,27 @@
                 e.status === 409 || e.status === 422 ||
                 (e.message && /does not match|sha|conflict/i.test(e.message));
 
+            // Read via the Contents API (strong consistency) instead of raw.github
+            // (which has ~5-minute CDN cache and was making back-to-back commits
+            // overwrite each other because each saw a stale 'existing' array).
+            async function readContentsFresh(table) {
+                const token = localStorage.getItem('gh-token') || '';
+                const apiUrl = `https://api.github.com/repos/${DB.OWNER}/${DB.REPO}/contents/data/${table}.json?ref=${DB.BRANCH}&_=${Date.now()}`;
+                const res = await fetch(apiUrl, {
+                    headers: token ? { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+                                   : { Accept: 'application/vnd.github.v3+json' },
+                    cache: 'no-store'
+                });
+                if (res.status === 404) return [];
+                if (!res.ok) throw new Error(`Contents fetch failed: ${res.status}`);
+                const json = await res.json();
+                const text = decodeURIComponent(escape(atob(json.content.replace(/\n/g, ''))));
+                const data = JSON.parse(text);
+                return Array.isArray(data) ? data : [];
+            }
+
             for (let i = 0; i < 4; i++) {
-                const existing = await DB._read(tableName);
+                const existing = await readContentsFresh(tableName);
                 const have = new Set(existing.map(keyOf));
                 const deduped = newTrades
                     .filter(t => !have.has(keyOf(t)))

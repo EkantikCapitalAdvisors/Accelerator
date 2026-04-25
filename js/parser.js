@@ -23,8 +23,28 @@ const DB = {
     _token() { return localStorage.getItem('gh-token') || ''; },
 
     async _read(filename) {
-        const url = `https://raw.githubusercontent.com/${DB.OWNER}/${DB.REPO}/${DB.BRANCH}/data/${filename}.json?cb=${Date.now()}`;
-        const res = await fetch(url);
+        // Prefer the Contents API for writes-then-reads (strong consistency).
+        // raw.githubusercontent.com has a ~5-min CDN cache that ignores ?cb=
+        // params under load, which lets back-to-back commits overwrite each
+        // other when each one merges against a stale read. Falls back to raw
+        // only if the Contents API is unavailable (offline / no token / 5xx).
+        const token = DB._token();
+        const apiUrl = `https://api.github.com/repos/${DB.OWNER}/${DB.REPO}/contents/data/${filename}.json?ref=${DB.BRANCH}&_=${Date.now()}`;
+        try {
+            const headers = { Accept: 'application/vnd.github.v3+json' };
+            if (token) headers.Authorization = `token ${token}`;
+            const res = await fetch(apiUrl, { headers, cache: 'no-store' });
+            if (res.status === 404) return [];
+            if (res.ok) {
+                const json = await res.json();
+                const text = decodeURIComponent(escape(atob(json.content.replace(/\n/g, ''))));
+                const data = JSON.parse(text);
+                return Array.isArray(data) ? data : [];
+            }
+        } catch (e) { /* fall through to raw */ }
+
+        const rawUrl = `https://raw.githubusercontent.com/${DB.OWNER}/${DB.REPO}/${DB.BRANCH}/data/${filename}.json?cb=${Date.now()}`;
+        const res = await fetch(rawUrl, { cache: 'no-store' });
         if (res.status === 404) return [];
         if (!res.ok) throw new Error(`Read ${filename}: HTTP ${res.status}`);
         const data = await res.json();
