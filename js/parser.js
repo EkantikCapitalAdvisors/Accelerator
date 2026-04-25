@@ -568,6 +568,92 @@ function parseDiscordTradeText(text) {
 }
 
 // =====================================================
+// DISCORD HTML EXPORT → flat text
+// =====================================================
+// DiscordChatExporter (and similar tools) emit chat history as HTML where
+// each message is an <li>. Each li has a `.time` span and a content <p>.
+// Converting that to the same text format my plain-text Discord parser
+// already understands lets both code paths share a single parser.
+//
+//   <li>
+//     <p class="timeInfo">
+//       <span class="chatName">user</span>
+//       <span class="time">Tue Apr 21 2026 13:06:01 GMT-0500 (...)</span>
+//     </p>
+//     <p>... message content (multi-line) ...</p>
+//   </li>
+//
+// Output line shape (one per message): "M/D/YYYY h:mm AM/PM\n<content>".
+// Pure regex — works in browsers and Node alike, no DOMParser needed.
+
+function htmlToDiscordText(html) {
+    if (typeof html !== 'string' || html.length === 0) return '';
+    const liRegex = /<li\b[^>]*>([\s\S]*?)<\/li>/gi;
+    const out = [];
+    let lim;
+    while ((lim = liRegex.exec(html)) !== null) {
+        const li = lim[1];
+        const timeMatch = li.match(/<span\s+class\s*=\s*["']time["'][^>]*>([\s\S]*?)<\/span>/i);
+        const tsRaw = timeMatch ? timeMatch[1].trim() : '';
+
+        // Pull every <p>; the timeInfo <p> is index 0, content is index 1+.
+        const pRegex = /<p\b[^>]*>([\s\S]*?)<\/p>/gi;
+        const ps = [];
+        let pm;
+        while ((pm = pRegex.exec(li)) !== null) ps.push(pm[1]);
+        if (ps.length < 2) continue;
+
+        const contentHtml = ps.slice(1).join('\n');
+        const content = contentHtml
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]+>/g, '')        // strip tags
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .trim();
+        if (!content) continue;
+
+        if (tsRaw) {
+            // Strip the trailing TZ name in parentheses; new Date() handles the rest.
+            const cleaned = tsRaw.replace(/\s*\(.*\)\s*$/, '');
+            const d = new Date(cleaned);
+            if (!isNaN(d.getTime())) {
+                const mo = d.getMonth() + 1;
+                const day = d.getDate();
+                const y = d.getFullYear();
+                let h = d.getHours();
+                const min = String(d.getMinutes()).padStart(2, '0');
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                if (h === 0) h = 12;
+                else if (h > 12) h -= 12;
+                out.push(`${mo}/${day}/${y} ${h}:${min} ${ampm}`);
+            }
+        }
+        out.push(content);
+    }
+    return out.join('\n');
+}
+
+// Convenience wrappers that route HTML through the existing text parsers.
+function parseDiscordOptionsHTML(html) {
+    return parseDiscordOptionsText(htmlToDiscordText(html));
+}
+function parseDiscordTradeHTML(html) {
+    return parseDiscordTradeText(htmlToDiscordText(html));
+}
+
+// Cheap content sniffer — used by admin/upload flows to decide between
+// the HTML and plain-text parsers without forcing the operator to pick.
+function looksLikeDiscordHTML(text) {
+    if (typeof text !== 'string' || text.length === 0) return false;
+    return /<li\b[\s\S]*?class\s*=\s*["']time["']/i.test(text)
+        || /chatContent/i.test(text);
+}
+
+// =====================================================
 // DISCORD OPTIONS ALERT PARSER
 // =====================================================
 // Parses multi-line Discord options alerts in the Ekantik format:
@@ -606,6 +692,9 @@ function parseDiscordOptionsText(text) {
             riskDollars = Math.abs(entry - stop) * OPTIONS_CONTRACT_MULTIPLIER;
         } else if (t._default_points != null) {
             riskDollars = Math.abs(t._default_points) * OPTIONS_CONTRACT_MULTIPLIER;
+        } else if (t._all_in && entry > 0) {
+            // "Default: all in" — risk is the full premium paid.
+            riskDollars = entry * OPTIONS_CONTRACT_MULTIPLIER;
         } else {
             riskDollars = 0;
         }
@@ -731,8 +820,12 @@ function parseDiscordOptionsText(text) {
                 break;
             }
             case 'default': {
-                const m = val.match(/(-?\d+\.?\d*)\s*(?:points?|pts?)?/i);
-                if (m) current._default_points = parseFloat(m[1]);
+                if (/all\s*in/i.test(val)) {
+                    current._all_in = true;
+                } else {
+                    const m = val.match(/(-?\d+\.?\d*)\s*(?:points?|pts?)?/i);
+                    if (m) current._default_points = parseFloat(m[1]);
+                }
                 break;
             }
             case 'notes':
