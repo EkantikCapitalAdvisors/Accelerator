@@ -213,24 +213,24 @@
     "upload_batch": "opt-1776795273414"
   },
   {
-    "datetime": "2026-04-23 9:02 AM",
-    "entry_time": "2026-04-23 9:02 AM",
+    "datetime": "2026-04-23 11:11 AM",
+    "entry_time": "2026-04-23 11:11 AM",
     "exit_time": "",
-    "trade_num": "O16",
+    "trade_num": "O17",
     "ticker": "SPX",
     "option_type": "PUT",
-    "strike": 7090,
+    "strike": 7110,
     "expiry": "ODTE",
     "direction": "Buy",
-    "entry_price": 5,
-    "stop_price": 3,
+    "entry_price": 3,
+    "stop_price": 1,
     "notes": "",
-    "dollar_pl": -200,
+    "dollar_pl": -60,
     "risk_dollars": 200,
     "is_win": false,
     "outcome": "Loss",
     "trade_date": "4/23/2026",
     "source": "discord",
-    "upload_batch": "opt-1777138991190"
+    "upload_batch": "opt-1777139100220"
   }
 ]
