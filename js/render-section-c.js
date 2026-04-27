@@ -188,7 +188,11 @@
             const r = (t.risk_dollars && t.risk_dollars > 0) ? (t.dollar_pl / t.risk_dollars) : null;
             const rDisp = r == null ? '—' : ((r >= 0 ? '+' : '') + r.toFixed(2) + 'R');
             const result = t.dollar_pl >= 0 ? 'Win' : 'Loss';
-            const idCell = `<td class="mono" style="font-weight:600;color:var(--navy)">${escapeHTML(t.trade_num || '—')}</td>`;
+            const sizeMark = t.position_size === 'half'    ? ' <span title="Half position" style="color:var(--gold);font-weight:500">½</span>'
+                           : t.position_size === 'third'   ? ' <span title="Third position" style="color:var(--gold);font-weight:500">⅓</span>'
+                           : t.position_size === 'quarter' ? ' <span title="Quarter position" style="color:var(--gold);font-weight:500">¼</span>'
+                           : '';
+            const idCell = `<td class="mono" style="font-weight:600;color:var(--navy)">${escapeHTML(t.trade_num || '—')}${sizeMark}</td>`;
             const plCell = `
                 <td class="num" style="color:${t.dollar_pl>=0?'var(--pass)':'var(--fail)'};font-weight:500">
                     ${t.dollar_pl >= 0 ? '+' : '−'}$${Math.abs(t.dollar_pl||0).toFixed(0)}

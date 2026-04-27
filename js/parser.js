@@ -157,6 +157,7 @@ const DB = {
                     trade_date:   t.date,
                     product:      t.product     || 'MES',
                     ppt:          t.ppt         || 5,
+                    position_size: t.positionSize || 'full',
                     source:       t.source      || 'tradovate',
                     upload_batch: batchId
                 }));
@@ -498,16 +499,25 @@ function parseDiscordTradeText(text) {
         const resultMatch = body.match(/^([+-])\s*(\d+\.?\d*)$/) || body.match(/^(\d+\.?\d*)$/);
         if (resultMatch) {
             // Handle both "sign number" (2 groups) and bare "number" (1 group) matches
-            const pts = resultMatch[2] !== undefined
+            const rawPts = resultMatch[2] !== undefined
                 ? parseFloat(resultMatch[1] + resultMatch[2])   // e.g. ["+", "3"] → +3
                 : parseFloat(resultMatch[1]);                    // e.g. ["3"] → 3
             const entry = pending[tradeNum];
             const entryPrice = entry ? entry.entryPrice : 0;
             const stopPrice = entry ? entry.stopPrice : 0;
-            const riskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(pts);
+            // Position size: full = 1 (default), half = 0.5, third = 1/3, quarter = 0.25.
+            // Scaling is applied to BOTH points and risk so dollar P&L and dollar risk
+            // both reflect the actual partial-position outcome.
+            const sizeFraction = entry && entry.sizeFraction ? entry.sizeFraction : 1;
+            const positionSize = entry && entry.positionSize ? entry.positionSize : 'full';
+            const round2 = v => Math.round(v * 100) / 100;
             const ppt = 50; // ES contract ($50/pt) — Discord trades are ES
-            const dollarPL = pts * ppt;
-            const riskDollars = riskPts * ppt;
+            const rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
+            // Compute dollars from RAW (unrounded) values so 1/3 → $83.33, not $83.50.
+            const pts        = round2(rawPts * sizeFraction);
+            const riskPts    = round2(rawRiskPts * sizeFraction);
+            const dollarPL   = round2(rawPts * sizeFraction * ppt);
+            const riskDollars = round2(rawRiskPts * sizeFraction * ppt);
 
             completed.push({
                 tradeNum,
@@ -525,6 +535,7 @@ function parseDiscordTradeText(text) {
                 outcome: pts > 0 ? 'Win' : 'Loss',
                 product: 'ES',
                 ppt: 50,
+                positionSize,
                 source: 'discord'
             });
             delete pending[tradeNum];
@@ -551,15 +562,31 @@ function parseDiscordTradeText(text) {
             continue;
         }
 
-        // Is this an entry line? e.g. "s 6837.5", "sell 7153 stp 7156", "b 6992", "buy 6855"
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)\s*(?:stp\s+(\d+\.?\d*))?$/i);
+        // Is this an entry line? Optional stop and optional position size.
+        //   "s 6837.5"
+        //   "sell 7153 stp 7156"
+        //   "b 6992 half"
+        //   "s 7141 stp 7146 third"
+        //   "buy 6855 quarter"
+        // Default position is 'full' when no size keyword is present.
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
         if (entryMatch) {
             const dirRaw = entryMatch[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
             const entryPrice = parseFloat(entryMatch[2]);
             const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
+            const sizeRaw = (entryMatch[4] || 'full').toLowerCase();
+            let sizeFraction = 1;
+            let positionSize = 'full';
+            if (sizeRaw === 'half')                  { sizeFraction = 0.5;     positionSize = 'half'; }
+            else if (sizeRaw.startsWith('third'))    { sizeFraction = 1 / 3;   positionSize = 'third'; }
+            else if (sizeRaw === 'quarter' || sizeRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
 
-            pending[tradeNum] = { direction, entryPrice, stopPrice, datetime: currentDatetime, date: currentDate };
+            pending[tradeNum] = {
+                direction, entryPrice, stopPrice,
+                datetime: currentDatetime, date: currentDate,
+                sizeFraction, positionSize
+            };
             continue;
         }
     }
