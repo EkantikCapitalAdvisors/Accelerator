@@ -201,6 +201,14 @@ a:hover { color: var(--gold); }
 }
 .callout__body { margin: 0; color: var(--ink); }
 
+.callout--small {
+    padding: 10px var(--s-2);
+    border-left-width: 3px;
+    margin: var(--s-2) 0 0;
+    line-height: 1.5;
+}
+.callout--small .callout__title { margin-bottom: 4px; }
+
 /* ─── Filter pills (trade log day-range) ─── */
 .filter-bar {
     display: flex;
