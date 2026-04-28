@@ -188,10 +188,19 @@
             const r = (t.risk_dollars && t.risk_dollars > 0) ? (t.dollar_pl / t.risk_dollars) : null;
             const rDisp = r == null ? '—' : ((r >= 0 ? '+' : '') + r.toFixed(2) + 'R');
             const result = t.dollar_pl >= 0 ? 'Win' : 'Loss';
-            const sizeMark = t.position_size === 'half'    ? ' <span title="Half position" style="color:var(--gold);font-weight:500">½</span>'
-                           : t.position_size === 'third'   ? ' <span title="Third position" style="color:var(--gold);font-weight:500">⅓</span>'
-                           : t.position_size === 'quarter' ? ' <span title="Quarter position" style="color:var(--gold);font-weight:500">¼</span>'
-                           : '';
+            const sizeLabel = (() => {
+                const ps = t.position_size;
+                if (!ps || ps === 'full') return '';
+                if (ps === 'half')    return { glyph: '½', title: 'Half position' };
+                if (ps === 'third')   return { glyph: '⅓', title: 'Third position' };
+                if (ps === 'quarter') return { glyph: '¼', title: 'Quarter position' };
+                // MES count form (e.g., "5 MES") — show the count compactly.
+                if (t.mes_count) return { glyph: `${t.mes_count}M`, title: `${t.mes_count} MES contracts (≡ ${(t.mes_count / 10).toFixed(2)} ES)` };
+                return { glyph: ps, title: ps };
+            })();
+            const sizeMark = sizeLabel
+                ? ` <span title="${escapeHTML(sizeLabel.title)}" style="color:var(--gold);font-weight:500;font-size:0.9em">${escapeHTML(sizeLabel.glyph)}</span>`
+                : '';
             const idCell = `<td class="mono" style="font-weight:600;color:var(--navy)">${escapeHTML(t.trade_num || '—')}${sizeMark}</td>`;
             const plCell = `
                 <td class="num" style="color:${t.dollar_pl>=0?'var(--pass)':'var(--fail)'};font-weight:500">

@@ -158,6 +158,7 @@ const DB = {
                     product:      t.product     || 'MES',
                     ppt:          t.ppt         || 5,
                     position_size: t.positionSize || 'full',
+                    mes_count:    t.mesCount    || null,
                     source:       t.source      || 'tradovate',
                     upload_batch: batchId
                 }));
@@ -510,6 +511,7 @@ function parseDiscordTradeText(text) {
             // both reflect the actual partial-position outcome.
             const sizeFraction = entry && entry.sizeFraction ? entry.sizeFraction : 1;
             const positionSize = entry && entry.positionSize ? entry.positionSize : 'full';
+            const mesCount     = entry && entry.mesCount     != null ? entry.mesCount : null;
             const round2 = v => Math.round(v * 100) / 100;
             const ppt = 50; // ES contract ($50/pt) — Discord trades are ES
             const rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
@@ -536,6 +538,7 @@ function parseDiscordTradeText(text) {
                 product: 'ES',
                 ppt: 50,
                 positionSize,
+                mesCount,
                 source: 'discord'
             });
             delete pending[tradeNum];
@@ -563,29 +566,40 @@ function parseDiscordTradeText(text) {
         }
 
         // Is this an entry line? Optional stop and optional position size.
-        //   "s 6837.5"
-        //   "sell 7153 stp 7156"
-        //   "b 6992 half"
-        //   "s 7141 stp 7146 third"
-        //   "buy 6855 quarter"
-        // Default position is 'full' when no size keyword is present.
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
+        //   "s 6837.5"                 — full position (default)
+        //   "sell 7153 stp 7156"       — full with stop
+        //   "s 7141 5mes"              — 5 MES contracts ≡ 0.5 ES
+        //   "s 7141 stp 7146 2mes"     — 2 MES ≡ 0.2 ES (one-fifth)
+        //   "b 6855 10 mes"            — full ES equivalent (10 MES)
+        //   "b 6992 half"              — legacy keyword (still accepted)
+        //
+        // MES count → ES-equivalent: mes_count / 10. Stored points and dollars
+        // are normalized to ES so the whole dataset stays homogeneous.
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
         if (entryMatch) {
             const dirRaw = entryMatch[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
             const entryPrice = parseFloat(entryMatch[2]);
             const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
-            const sizeRaw = (entryMatch[4] || 'full').toLowerCase();
+            const mesCountRaw = entryMatch[4];
+            const sizeKeyRaw = (entryMatch[5] || '').toLowerCase();
+
             let sizeFraction = 1;
             let positionSize = 'full';
-            if (sizeRaw === 'half')                  { sizeFraction = 0.5;     positionSize = 'half'; }
-            else if (sizeRaw.startsWith('third'))    { sizeFraction = 1 / 3;   positionSize = 'third'; }
-            else if (sizeRaw === 'quarter' || sizeRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
+            let mesCount = null;
+
+            if (mesCountRaw) {
+                mesCount = parseInt(mesCountRaw, 10);
+                sizeFraction = mesCount / 10;
+                positionSize = `${mesCount} MES`;
+            } else if (sizeKeyRaw === 'half')                       { sizeFraction = 0.5;   positionSize = 'half'; }
+            else if (sizeKeyRaw.startsWith('third'))                 { sizeFraction = 1 / 3; positionSize = 'third'; }
+            else if (sizeKeyRaw === 'quarter' || sizeKeyRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
 
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
                 datetime: currentDatetime, date: currentDate,
-                sizeFraction, positionSize
+                sizeFraction, positionSize, mesCount
             };
             continue;
         }
