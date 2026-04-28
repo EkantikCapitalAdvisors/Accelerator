@@ -513,7 +513,9 @@ function parseDiscordTradeText(text) {
             const positionSize = entry && entry.positionSize ? entry.positionSize : 'full';
             const mesCount     = entry && entry.mesCount     != null ? entry.mesCount : null;
             const round2 = v => Math.round(v * 100) / 100;
-            const ppt = 50; // ES contract ($50/pt) — Discord trades are ES
+            const ppt = 50; // ES contract ($50/pt). MES trades scale via sizeFraction
+                            // (mes_count / 10) so points and dollars are stored in
+                            // ES-equivalent terms; the whole dataset stays homogeneous.
             const rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
             // Compute dollars from RAW (unrounded) values so 1/3 → $83.33, not $83.50.
             const pts        = round2(rawPts * sizeFraction);

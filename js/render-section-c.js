@@ -104,7 +104,9 @@
             } else {
                 const side = (dir.toLowerCase().startsWith('s') || dir.toLowerCase() === 'short') ? 'Short' : 'Long';
                 const pts = t.points_pl != null ? t.points_pl.toFixed(1) : '—';
-                header = `${escapeHTML(t.trade_num || 'F—')} &middot; ES`;
+                // Show actual contract mix: 'ES', 'MES', or 'ES · 5M' when MES count present.
+                const contractLabel = t.mes_count ? `ES &middot; ${t.mes_count}M` : (t.product || 'ES');
+                header = `${escapeHTML(t.trade_num || 'F—')} &middot; ${contractLabel}`;
                 body = `${side} @ ${formatPrice(t.entry_price)}${t.stop_price ? ` &nbsp;·&nbsp; stop ${formatPrice(t.stop_price)}` : ''} &nbsp;·&nbsp; <strong style="color:${pl>=0?'var(--pass)':'var(--fail)'}">${sign}${Math.abs(pts)} pts / ${sign}$${Math.abs(pl).toFixed(0)}</strong>`;
             }
             return `
