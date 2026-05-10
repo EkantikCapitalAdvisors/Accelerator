@@ -269,31 +269,9 @@
         });
     }
 
-    // ─── Formspree handler ───
-    function wireInterestForm() {
-        const form = $('interest-form');
-        const confirm = $('interest-confirm');
-        if (!form) return;
-        form.addEventListener('submit', async (e) => {
-            const action = form.getAttribute('action');
-            // If endpoint is still a placeholder, prevent default and show a warning in place.
-            if (!action || action.includes('__FORMSPREE_ID__')) {
-                e.preventDefault();
-                if (confirm) {
-                    confirm.textContent = 'Form endpoint not configured yet. Set the Formspree ID before launch.';
-                    confirm.style.color = 'var(--fail)';
-                    confirm.classList.remove('hide');
-                }
-                return;
-            }
-            // Default submission is fine; show optimistic confirmation.
-            if (confirm) {
-                confirm.textContent = "Got it. We'll reach out when rails open.";
-                confirm.style.color = 'var(--pass)';
-                confirm.classList.remove('hide');
-            }
-        });
-    }
+    // The legacy "Notify me when autotrading opens" form was retired in the
+    // Cashflow repositioning. The canonical indication-of-interest form now
+    // lives in Module C (js/render-modules.js + #indication-form in index.html).
 
     function init() {
         root.Ekantik.Data.onChange(state => {
@@ -301,7 +279,6 @@
             renderTradeLog(state);
         });
         wireCSVDownload();
-        wireInterestForm();
         const s = root.Ekantik.Data.get();
         if (s.trades) { renderDiscordCard(s); renderTradeLog(s); }
     }

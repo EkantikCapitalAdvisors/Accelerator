@@ -8,10 +8,11 @@
     // Allow the host page to override the data source (e.g., options.html sets
     // window.EKANTIK_CONFIG = { dataSource: 'data/options_trades.json', ... })
     const CONFIG = root.EKANTIK_CONFIG || {};
-    const TRADES_URL  = CONFIG.dataSource || 'data/tenx_trades.json';
-    const ARCHIVE_URL = CONFIG.archiveIndex || 'data/archive/index.json';
-    const SPY_URL     = CONFIG.spyData || 'data/spy_monthly.json';
-    const SESSION_KEY = CONFIG.sessionKey || 'eka-10x-live';
+    const TRADES_URL   = CONFIG.dataSource || 'data/tenx_trades.json';
+    const ARCHIVE_URL  = CONFIG.archiveIndex || 'data/archive/index.json';
+    const SPY_URL      = CONFIG.spyData || 'data/spy_monthly.json';
+    const CAPACITY_URL = CONFIG.capacityData || 'data/capacity.json';
+    const SESSION_KEY  = CONFIG.sessionKey || 'eka-cashflow-live';
 
     const state = {
         trades: null,
@@ -19,6 +20,7 @@
         summary: null,       // Battery.summaryStats(trades)
         archiveIndex: null,
         spyMonthly: null,    // { prices: [{month, close}, ...] }
+        capacity: null,      // { founding_tier_size, founding_tier_indicated, indication_count, last_updated }
         computedAt: null,
         source: null         // 'default' | 'user-upload'
     };
@@ -61,14 +63,16 @@
 
         // Always fetch fresh trades in the background (or on explicit bust)
         try {
-            const [trades, archiveIndex, spyMonthly] = await Promise.all([
+            const [trades, archiveIndex, spyMonthly, capacity] = await Promise.all([
                 fetchJSON(TRADES_URL, bust),
                 fetchJSON(ARCHIVE_URL, bust).catch(() => ({ archives: [] })),
-                fetchJSON(SPY_URL, bust).catch(() => null)
+                fetchJSON(SPY_URL, bust).catch(() => null),
+                fetchJSON(CAPACITY_URL, bust).catch(() => null)
             ]);
             computeFromTrades(trades);
             state.archiveIndex = archiveIndex;
             state.spyMonthly = spyMonthly;
+            state.capacity = capacity;
             state.source = 'default';
             try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ trades })); } catch (e) { /* quota */ }
             notify();
@@ -79,6 +83,7 @@
                 state.battery = root.Ekantik.Battery.runTests([]);
                 state.summary = root.Ekantik.Battery.summaryStats([]);
                 state.archiveIndex = { archives: [] };
+                state.capacity = null;
                 state.source = 'default';
                 notify();
             }

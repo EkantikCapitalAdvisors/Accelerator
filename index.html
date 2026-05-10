@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekantik Capital — One Structural Edge. Verified Eight Ways. Live.</title>
-    <meta name="description" content="A live, transparent demonstration of a documented structural edge in ES / MES futures. 8-test sustainability battery re-run against public fills.">
+    <title>Cashflow · Ekantik Capital</title>
+    <meta name="description" content="Capped, edge-validated cash-generation strategy. Quarterly or annual distributions. Founding allocations now being indicated.">
     <meta name="theme-color" content="#1B2A4A">
+    <link rel="canonical" href="https://cashflow.ekantikcapital.com/">
+    <meta property="og:title" content="Cashflow · Ekantik Capital">
+    <meta property="og:description" content="Capped, edge-validated cash-generation strategy. Quarterly or annual distributions. Founding allocations now being indicated.">
+    <meta property="og:url" content="https://cashflow.ekantikcapital.com/">
+    <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,7 +21,7 @@
 </head>
 <body>
 
-    <!-- ═══ REGION 1 — NAV + TRUST STRIP (spec §3) ═══ -->
+    <!-- ═══ REGION 1 — NAV + TRUST STRIP ═══ -->
     <header class="nav" role="banner">
         <div class="nav__inner">
             <a class="nav__brand" href="https://cashflow.ekantikcapital.com/">
@@ -25,7 +30,7 @@
             <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
-                <li><a class="nav__link nav__link--active" href="/" aria-current="page">Live Proof</a></li>
+                <li><a class="nav__link nav__link--active" href="/" aria-current="page">Cashflow</a></li>
                 <li><a class="nav__link" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Discord</a></li>
             </ul>
         </div>
@@ -46,14 +51,18 @@
         </div>
     </div>
 
-    <!-- ═══ REGION 2 — HERO (spec §4) ═══ -->
+    <!-- ═══ MODULE C — Slim context bar (spec §5.2.1) ═══ -->
+    <div class="capacity-bar" role="note">
+        Strategy capacity: hard-capped at <strong>$5M AUM</strong> / <strong>500 ES contract equivalents</strong>. Soft launch — gathering founding-allocation interest.
+    </div>
+
+    <!-- ═══ REGION 2 — HERO ═══ -->
     <section class="hero" aria-labelledby="hero-h1">
         <div class="hero__inner">
-            <span class="eyebrow">Ekantik Capital Advisors · Live Proof</span>
+            <span class="eyebrow">Ekantik Capital Advisors · Soft launch</span>
             <h1 class="hero__h1" id="hero-h1">
-                <span>One Structural Edge.</span>
-                <span>Verified Eight Ways.</span>
-                <span style="color: var(--gold)">Live.</span>
+                <span>Cash, by design.</span>
+                <span style="color: var(--gold)">Capped, by structure.</span>
             </h1>
 
             <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
@@ -81,25 +90,304 @@
             <p class="muted mono" style="font-size:12px;margin-top:12px" id="hero-sample-size">Loading…</p>
 
             <p class="hero__subline">
-                A 5% allocation. 3.3 doublings.<br>
-                The math that reshapes a portfolio.
+                A $10,000 working base. Distributions every quarter or once a year.<br>
+                Capacity hard-capped at $5M. Founding allocations now being indicated.
             </p>
 
             <div class="hero__ctas">
-                <a class="btn btn--primary" href="#section-b">See the Evidence →</a>
-                <a class="btn btn--secondary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
+                <a class="btn btn--primary" href="#module-a">Run the numbers →</a>
+                <a class="btn btn--secondary" href="#module-c-panel">Indicate founding interest →</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══ REGION 3 — SECTION A: Edge Power (spec §5) ═══ -->
-    <section class="section section--white" id="section-a" aria-labelledby="a-h2">
+    <!-- ═══ MODULE A — Quarterly Income Mode (spec §3) ═══ -->
+    <section class="section section--white" id="module-a" aria-labelledby="mod-a-h2">
         <div class="section__inner">
-            <span class="eyebrow">Objective 1 — Prove the edge exists</span>
+            <span class="eyebrow">Mode A · Quarterly Income</span>
+            <article class="mod">
+                <header class="mod__header">
+                    <h2 class="mod__title" id="mod-a-h2">The Quarterly Income Mode</h2>
+                    <p class="mod__subhead">Working capital stays flat. Profits ship every quarter.</p>
+                </header>
+
+                <div class="mod__sliders">
+                    <div class="slider-field">
+                        <label for="mod-a-capital">Working capital · <span class="slider-value" id="mod-a-capital-val">$10,000</span></label>
+                        <input id="mod-a-capital" type="range" min="5000" max="1000000" step="1000" value="10000">
+                    </div>
+                    <div class="slider-field">
+                        <label for="mod-a-rate">Annualized rate · <span class="slider-value" id="mod-a-rate-val">100%</span></label>
+                        <input id="mod-a-rate" type="range" min="20" max="200" step="5" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label>Distribution frequency</label>
+                        <div class="mod__radio-group" role="radiogroup" aria-label="Distribution frequency">
+                            <label><input type="radio" name="mod-a-freq" value="monthly"><span>Monthly</span></label>
+                            <label><input type="radio" name="mod-a-freq" value="quarterly" checked><span>Quarterly</span></label>
+                            <label><input type="radio" name="mod-a-freq" value="semi-annual"><span>Semi-Annual</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mod__outputs" aria-label="Module A outputs">
+                    <div class="mod__col">
+                        <p class="mod__col-eyebrow">At Target Rate</p>
+                        <p class="mod__col-title">Designed to produce</p>
+                        <p class="mod__col-context">100% annualized — the strategy's design parameter.</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label" id="mod-a-per-label">Per-quarter check</span>
+                            <span class="mod__metric-val" id="mod-a-target-period">—</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Annual income</span>
+                            <span class="mod__metric-val" id="mod-a-target-annual">—</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">5-year cash total</span>
+                            <span class="mod__metric-val" id="mod-a-target-5y">—</span>
+                        </div>
+                    </div>
+                    <div class="mod__col">
+                        <p class="mod__col-eyebrow">At Live Rate</p>
+                        <p class="mod__col-title">Currently producing</p>
+                        <p class="mod__col-context" id="mod-a-live-header">Loading…</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Per-period check</span>
+                            <span class="mod__metric-val" id="mod-a-live-period">—</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Annual income</span>
+                            <span class="mod__metric-val" id="mod-a-live-annual">—</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">5-year cash total</span>
+                            <span class="mod__metric-val" id="mod-a-live-5y">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
+                    <em>Live rate is the geometric mean from Discord-published trades, annualized. Target rate is the strategy's design parameter. Both are shown for transparency; distributions are not guaranteed.</em>
+                </p>
+
+                <div class="mod__caveat">
+                    Working capital stays at the base level by design. Strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents — a constraint set by execution mechanics, not ambition. Profits exit the strategy each quarter and ship to the investor. The base remains; the cap is preserved; the cycle repeats.
+                </div>
+            </article>
+
+            <p class="mod-connector">
+                Quarterly cash, or year-end distribution? Mode A keeps the base flat and ships profits every quarter. Mode B lets position size ratchet up at 50% milestones <em>within</em> the year, then distributes the full annual profit at year-end. Both modes obey the cap. Both reset to base on a defined cadence. They differ only in distribution rhythm.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ MODULE B — Scale-Then-Distribute Mode (spec §4) ═══ -->
+    <section class="section section--cream" id="module-b" aria-labelledby="mod-b-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Mode B · Scale-Then-Distribute</span>
+            <article class="mod">
+                <header class="mod__header">
+                    <h2 class="mod__title" id="mod-b-h2">The Scale-Then-Distribute Mode</h2>
+                    <p class="mod__subhead">Each 50% gain unlocks a larger position. Distribution settles at year-end.</p>
+                </header>
+
+                <div class="mod__sliders">
+                    <div class="slider-field">
+                        <label for="mod-b-capital">Working capital · <span class="slider-value" id="mod-b-capital-val">$10,000</span></label>
+                        <input id="mod-b-capital" type="range" min="5000" max="1000000" step="1000" value="10000">
+                    </div>
+                    <div class="slider-field">
+                        <label for="mod-b-rate">Annualized rate · <span class="slider-value" id="mod-b-rate-val">100%</span></label>
+                        <input id="mod-b-rate" type="range" min="20" max="200" step="5" value="100">
+                    </div>
+                    <div class="slider-field">
+                        <label for="mod-b-threshold">Scaling threshold · <span class="slider-value" id="mod-b-threshold-val">50%</span></label>
+                        <input id="mod-b-threshold" type="range" min="25" max="100" step="5" value="50">
+                    </div>
+                    <div class="slider-field">
+                        <label for="mod-b-horizon">Horizon · <span class="slider-value" id="mod-b-horizon-val">1 yr</span></label>
+                        <input id="mod-b-horizon" type="range" min="1" max="5" step="1" value="1">
+                    </div>
+                </div>
+
+                <div class="mod-b__timelines">
+                    <div class="mod-b__timeline-block">
+                        <h4>At Target Rate · 100% annualized</h4>
+                        <div id="mod-b-timeline-target"></div>
+                    </div>
+                    <div class="mod-b__timeline-block">
+                        <h4>At Live Rate</h4>
+                        <p class="muted" style="font-size:11px;margin:-4px 0 var(--s-2);font-family:var(--font-mono)" id="mod-b-live-header">Loading…</p>
+                        <div id="mod-b-timeline-live"></div>
+                    </div>
+                </div>
+
+                <div class="mod__outputs" aria-label="Module B scoreboard">
+                    <div class="mod__col">
+                        <p class="mod__col-eyebrow">At Target Rate</p>
+                        <p class="mod__col-title">Designed cadence</p>
+                        <p class="mod__col-context">100% annualized — the strategy's design parameter.</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Scale events / year</span>
+                            <span class="mod__metric-val" id="mod-b-target-events">—</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Year-end distribution</span>
+                            <span class="mod__metric-val" id="mod-b-target-yearend">—</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Cumulative cash · horizon</span>
+                            <span class="mod__metric-val" id="mod-b-target-cumulative">—</span>
+                        </div>
+                    </div>
+                    <div class="mod__col">
+                        <p class="mod__col-eyebrow">At Live Rate</p>
+                        <p class="mod__col-title">Current cadence</p>
+                        <p class="mod__col-context">From the live sample below.</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Scale events / year</span>
+                            <span class="mod__metric-val" id="mod-b-live-events">—</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Year-end distribution</span>
+                            <span class="mod__metric-val" id="mod-b-live-yearend">—</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Cumulative cash · horizon</span>
+                            <span class="mod__metric-val" id="mod-b-live-cumulative">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
+                    <em>Live rate computed from N Discord-published trades, annualized. Sample updates weekly.</em>
+                </p>
+
+                <div class="mod__caveat">
+                    Position size ratchets up at each 50% milestone within the year. At year-end, full profit is distributed and the working base resets. The reset is structural: strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents, and uncapped compounding would breach the ceiling within a few cycles. Each year begins fresh at the base allocation.
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ═══ MODULE C — Capacity & Allocation Status, full panel (spec §5.2.2) ═══ -->
+    <section class="section section--white" id="module-c-panel" aria-labelledby="mod-c-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Founding cohort</span>
+            <div class="mod-c-panel">
+                <h2 class="mod-c-panel__heading" id="mod-c-h2">Founding Allocation Window</h2>
+
+                <div class="mod-c-statement">
+                    <p>Strategy capacity is bounded at $5M AUM, equivalent to roughly 500 ES contracts at peak deployment. The ceiling is set by execution mechanics — slippage, fill quality, and exit liquidity at the relevant size — not by ambition or regulation.</p>
+                    <p>Of that capacity, 20% — $1M, or 100 founding slots — is reserved as the founding cohort tier and is the only tier currently open for indication. The remaining 80% will open as a general allocation after the founding tier closes.</p>
+                    <p>This page is a soft launch. It exists to gather qualified interest from investors who want a structurally capped, edge-validated income strategy before allocations close. No transaction is being offered.</p>
+                </div>
+
+                <!-- Capacity counter (two-band bar, spec §5.4.1) -->
+                <div class="cap-counter" role="region" aria-label="Capacity counter">
+                    <div class="cap-counter__band">
+                        <div class="cap-counter__band-head">
+                            <span class="cap-counter__band-label">Strategy capacity</span>
+                            <span class="cap-counter__band-amount">$5,000,000 · hard cap</span>
+                        </div>
+                        <div class="cap-counter__bar cap-counter__bar--total" aria-hidden="true"></div>
+                        <div class="cap-counter__band-note">Immutable ceiling. Set by execution mechanics, not aspiration.</div>
+                    </div>
+                    <div class="cap-counter__band">
+                        <div class="cap-counter__band-head">
+                            <span class="cap-counter__band-label">Founding tier (20%)</span>
+                            <span class="cap-counter__band-amount">$1,000,000</span>
+                        </div>
+                        <div class="cap-counter__bar cap-counter__bar--tier">
+                            <div class="cap-counter__bar-fill" id="mod-c-tier-fill" style="width:0%"></div>
+                        </div>
+                        <div class="cap-counter__band-note" id="mod-c-tier-label">$0 of $1M indicated · 0 indications</div>
+                    </div>
+                    <p class="cap-counter__updated" id="mod-c-counter-updated">Loading…</p>
+                </div>
+
+                <!-- Indication-of-Interest form (spec §5.6) -->
+                <form class="indication-form" id="indication-form"
+                      action="https://formspree.io/f/__FORMSPREE_CASHFLOW__"
+                      method="POST"
+                      novalidate>
+                    <h3 class="indication-form__heading" id="ind-section-heading">Indicate Founding Interest</h3>
+                    <p class="indication-form__subhead">
+                        Non-binding. Tells us your intended allocation when licensing and due diligence complete. Submitters receive Discord access to the live trade alert journal.
+                    </p>
+
+                    <div class="indication-form__grid">
+                        <div class="ind-field">
+                            <label for="ind-first">First name *</label>
+                            <input type="text" id="ind-first" name="first_name" maxlength="50" required autocomplete="given-name">
+                        </div>
+                        <div class="ind-field">
+                            <label for="ind-last">Last name *</label>
+                            <input type="text" id="ind-last" name="last_name" maxlength="50" required autocomplete="family-name">
+                        </div>
+                        <div class="ind-field">
+                            <label for="ind-email">Email *</label>
+                            <input type="email" id="ind-email" name="email" required autocomplete="email">
+                        </div>
+                        <div class="ind-field">
+                            <label for="ind-phone">Phone <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+                            <input type="tel" id="ind-phone" name="phone" autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="ind-amount-block">
+                        <label for="ind-amount">Intended booking amount *</label>
+                        <input type="range" id="ind-amount" name="booking_amount" min="10000" max="500000" step="10000" value="50000">
+                        <span class="ind-amount-val" id="ind-amount-val"><strong>$50,000</strong>  ·  5 of 100 founding slots  ·  5% of founding tier</span>
+                    </div>
+
+                    <div class="ind-mode-block">
+                        <label>Preferred mode <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+                        <div class="ind-mode-options" role="radiogroup">
+                            <label><input type="radio" name="ind-mode" value="quarterly-income"><span>Mode A · Quarterly Income</span></label>
+                            <label><input type="radio" name="ind-mode" value="annual-distribution"><span>Mode B · Annual Distribution</span></label>
+                            <label><input type="radio" name="ind-mode" value="no-preference" checked><span>No preference</span></label>
+                        </div>
+                    </div>
+
+                    <label class="ind-ack">
+                        <input type="checkbox" id="ind-ack-binding" required>
+                        <span class="ind-ack-text"><em>I understand this is a non-binding indication of interest. No subscription, transaction, or contractual commitment is being created. The intended booking amount may be revised or withdrawn at any time prior to formal launch.</em></span>
+                    </label>
+
+                    <label class="ind-ack">
+                        <input type="checkbox" id="ind-ack-accred" required>
+                        <span class="ind-ack-text"><em>I confirm I am an accredited investor under applicable securities regulations, a qualifying family office, or am inquiring on behalf of one.</em>
+                            <a href="https://www.sec.gov/education/capitalraising/building-blocks/accredited-investor" target="_blank" rel="noopener" style="font-size:11px;text-decoration:underline">SEC definition →</a>
+                        </span>
+                    </label>
+
+                    <div class="ind-submit-row">
+                        <button type="submit" class="btn btn--primary" id="ind-submit" disabled>Submit Indication of Interest</button>
+                        <p id="ind-error" class="ind-error hide" role="alert"></p>
+                    </div>
+
+                    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px">
+                </form>
+
+                <div class="ind-thanks hide" id="ind-thanks" role="status">
+                    <h3>Indication received.</h3>
+                    <p>Your interest is logged. A confirmation email with Discord access to the live trade alert journal has been sent to the email you provided.</p>
+                    <p>We'll be in touch as licensing and due diligence complete — typically within 60 to 90 days. Until then, the live performance numbers on this page update weekly, and the Discord journal updates with every executed trade.</p>
+                    <p>If the email doesn't arrive within a few minutes, check your spam folder or contact <a href="mailto:info@ekantikcapital.com">info@ekantikcapital.com</a>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 3 — SECTION A: Edge Power (slimmed) ═══ -->
+    <section class="section section--cream" id="section-a" aria-labelledby="a-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Edge · The math behind the modes</span>
             <h2 id="a-h2">The Edge.</h2>
             <p class="subhead">Measured across the full backtest. Re-measured live as trades close.</p>
 
-            <!-- A.2 Edge stated plainly -->
             <div class="edge-triplet">
                 <div class="stat-card stat-card--lg stat-card--dark">
                     <p class="stat-card__label">Win Rate</p>
@@ -122,9 +410,8 @@
                 The strategy is a mechanical system for ES / MES futures with a documented edge across the full backtest: a 67.5% win rate, a 2.07 profit factor, and top-decile risk-adjusted returns. The live sample, visible above and in the public trade log below, is the same edge being expressed in real markets. The 8-Test Sustainability Battery in the next section is how we know the edge is not a lucky sample.
             </p>
 
-            <!-- A.2b Live equity curve — compounding, rendered -->
-            <h3 class="mt-4">Equity Curve — $10,000 start</h3>
-            <p class="muted" style="font-size:13px">The curve prints as each fill closes. Every dollar shown is sourced from a public Discord alert.</p>
+            <h3 class="mt-4">Sample Equity Arc — $10,000 base</h3>
+            <p class="muted" style="font-size:13px">Within-sample illustration. The arc prints as each fill closes. Capital resets to base annually under the strategy's distribution mechanics — see Modes A and B above.</p>
             <div class="mini-chart">
                 <canvas id="section-a-equity"></canvas>
             </div>
@@ -143,92 +430,11 @@
                 </div>
             </div>
 
-            <!-- A.3 Doubling Ladder -->
-            <h3 class="mt-4">Doubling Ladder — target vs. live</h3>
-            <p class="muted" style="font-size:13px">Live rate (geometric mean from Discord fills; shown provisionally under 25 trades, firms up once the sample crosses 25): <strong class="mono" id="ladder-live-rate">—</strong></p>
-            <table class="ladder">
-                <thead>
-                    <tr>
-                        <th>Progression</th>
-                        <th style="text-align:right">Doublings</th>
-                        <th style="text-align:right">At 2.5%/mo (target)</th>
-                        <th style="text-align:right">At live rate</th>
-                    </tr>
-                </thead>
-                <tbody id="ladder-body"></tbody>
-            </table>
-            <p class="callout__body muted" style="font-size:13px"><em>The target rate is what the strategy was designed around. The live rate is what the sample is producing now. Both are shown because radical transparency requires both.</em></p>
-
-            <!-- A.3b Monthly P&L bars -->
             <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
-            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month.</p>
+            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month. Independent monthly cash signal — not cumulative wealth.</p>
             <div class="mini-chart mini-chart--bars">
                 <canvas id="section-a-monthly"></canvas>
             </div>
-
-            <!-- A.4 95/5 Portfolio Reshaper -->
-            <h3 class="mt-4">The 5% Allocation Portfolio Reshaper</h3>
-            <p class="muted" style="font-size:13px">Editable illustration. Move the sliders — the math updates.</p>
-
-            <div class="portfolio-reshaper">
-                <div class="portfolio-reshaper__slider-grid">
-                    <div class="slider-field">
-                        <label for="reshaper-start">Starting portfolio · <span class="slider-value" id="reshaper-start-val">$100,000</span></label>
-                        <input id="reshaper-start" type="range" min="50" max="500" step="25" value="100">
-                    </div>
-                    <div class="slider-field">
-                        <label for="reshaper-market-cagr">Market CAGR · <span class="slider-value" id="reshaper-market-cagr-val">10%</span></label>
-                        <input id="reshaper-market-cagr" type="range" min="0" max="15" step="1" value="10">
-                    </div>
-                    <div class="slider-field">
-                        <label for="reshaper-spec-cagr">Speculative CAGR · <span class="slider-value" id="reshaper-spec-cagr-val">100%</span></label>
-                        <input id="reshaper-spec-cagr" type="range" min="0" max="150" step="5" value="100">
-                    </div>
-                    <div class="slider-field">
-                        <label for="reshaper-horizon">Horizon (years) · <span class="slider-value" id="reshaper-horizon-val">10 yrs</span></label>
-                        <input id="reshaper-horizon" type="range" min="1" max="20" step="1" value="10">
-                    </div>
-                    <div class="slider-field">
-                        <label for="reshaper-alloc">Speculative allocation · <span class="slider-value" id="reshaper-alloc-val">5%</span></label>
-                        <input id="reshaper-alloc" type="range" min="1" max="20" step="1" value="5">
-                    </div>
-                </div>
-
-                <div class="edge-triplet">
-                    <div class="stat-card">
-                        <p class="stat-card__label">Year-N Total</p>
-                        <p class="stat-card__value" id="reshaper-total">—</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="stat-card__label">Market Sleeve</p>
-                        <p class="stat-card__value" id="reshaper-market">—</p>
-                        <p class="stat-card__caption"><span id="reshaper-market-share">—</span> of final value</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="stat-card__label">Speculative Sleeve</p>
-                        <p class="stat-card__value" id="reshaper-spec">—</p>
-                        <p class="stat-card__caption"><span id="reshaper-spec-share">—</span> of final value</p>
-                    </div>
-                </div>
-
-                <div class="portfolio-reshaper__bar" aria-hidden="true">
-                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--market" id="reshaper-bar-market"></div>
-                    <div class="portfolio-reshaper__seg portfolio-reshaper__seg--spec"   id="reshaper-bar-spec"></div>
-                </div>
-                <div class="portfolio-reshaper__labels">
-                    <span>Market sleeve</span>
-                    <span>Speculative sleeve</span>
-                </div>
-            </div>
-
-            <div class="callout">
-                <p class="callout__body italic">
-                    A 5% allocation compounding at 100% CAGR becomes 95% of total portfolio value by Year 10. The other 95% barely matters. That is why proving this engine works is worth the effort.
-                </p>
-            </div>
-            <p class="muted" style="font-size:13px">
-                If the speculative sleeve goes to zero, the portfolio loses 5%. If it compounds, it dominates. The asymmetry is the architecture.
-            </p>
 
             <p class="lede mt-4" style="color: var(--muted)">
                 The math above is only as real as the edge that drives it. The next section is how we prove — statistically and publicly — that the edge is not a lucky sample.
@@ -236,18 +442,17 @@
         </div>
     </section>
 
-    <!-- ═══ REGION 4 — SECTION B: Sustainability (spec §6) ═══ -->
-    <section class="section section--cream" id="section-b" aria-labelledby="b-h2">
+    <!-- ═══ REGION 4 — SECTION B: Sustainability (8-test battery, unchanged) ═══ -->
+    <section class="section section--white" id="section-b" aria-labelledby="b-h2">
         <div class="section__inner">
-            <span class="eyebrow">Objective 2 — Prove it will continue</span>
-            <h2 id="b-h2">Sustainability — Verified Eight Ways.</h2>
+            <span class="eyebrow">Sustainability — Verified Eight Ways</span>
+            <h2 id="b-h2">Edge sustainability — eight independent tests.</h2>
             <p class="subhead">
                 Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn't.
             </p>
 
             <p class="mono" style="font-size:13px" id="battery-status-banner">Loading…</p>
 
-            <!-- Controls bar (spec §6.4) -->
             <div class="controls-bar" role="toolbar" aria-label="Battery controls">
                 <div class="controls-bar__group">
                     <span>Last recalculated: <strong id="battery-last-recalc">—</strong></span>
@@ -265,13 +470,10 @@
                 <span class="mono">Click "Reset to Ekantik sample" to return.</span>
             </div>
 
-            <!-- B.2 8-Test Battery table -->
             <div id="battery-table" aria-live="polite">Loading battery…</div>
 
-            <!-- Failure interpretation note (bucket A/B/C) — hidden when all 8 pass -->
             <div id="battery-failure-note" aria-live="polite"></div>
 
-            <!-- B.5 Data upload panel -->
             <details class="upload-panel">
                 <summary class="upload-panel__summary">Run the battery on your own data</summary>
                 <div class="upload-panel__body">
@@ -294,17 +496,14 @@
                 </div>
             </details>
 
-            <!-- B.2b The Eight Attributes hub — visual TOC of what each test validates -->
             <div id="battery-edge-hub"></div>
 
-            <!-- B.3 Interactive glossary (fine print — deep-dive on each test) -->
             <div class="glossary">
                 <h3 class="glossary__title">Full Glossary — Understanding the 8 Tests</h3>
                 <p class="muted" style="font-size:13px; margin-top:-8px">Click any attribute above, or expand a card below, for the deep dive — analogy, pass/fail examples, threshold rationale, and the math behind the number.</p>
                 <div id="battery-glossary">Loading glossary…</div>
             </div>
 
-            <!-- B.6 Version history -->
             <details class="version-history">
                 <summary class="version-history__summary">Battery history — every past run, archived</summary>
                 <table class="data-table mt-2">
@@ -322,7 +521,6 @@
                 </table>
             </details>
 
-            <!-- B.8 Transparency link -->
             <a class="transparency-link" href="https://github.com/EkantikCapitalAdvisors" target="_blank" rel="noopener">View the battery source code →</a>
 
             <p class="lede mt-4" style="color: var(--muted)">
@@ -331,16 +529,15 @@
         </div>
     </section>
 
-    <!-- ═══ REGION 5 — SECTION C: Validation (spec §7) ═══ -->
-    <section class="section section--white" id="section-c" aria-labelledby="c-h2">
+    <!-- ═══ REGION 5 — SECTION C: Validation (Discord card + trade log only) ═══ -->
+    <section class="section section--cream" id="section-c" aria-labelledby="c-h2">
         <div class="section__inner">
-            <span class="eyebrow">Objective 3 — Let the audience validate it themselves</span>
-            <h2 id="c-h2">Validation. Your eyes, not our word.</h2>
+            <span class="eyebrow">Validation — your eyes, not our word</span>
+            <h2 id="c-h2">Every fill, in public.</h2>
             <p class="subhead">
                 Every fill is posted the moment it closes. Every metric on this page is computed from those fills. You can watch it happen.
             </p>
 
-            <!-- C.2 Today -->
             <div class="validation-row">
                 <div class="card">
                     <div class="card__header">
@@ -351,7 +548,7 @@
                     <div class="mt-3">
                         <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
                     </div>
-                    <p class="muted italic mt-2" style="font-size:12px">Every alert, timestamped, public. Free to join.</p>
+                    <p class="muted italic mt-2" style="font-size:12px">Submitters of the indication form receive Discord access automatically. The feed is also open to qualified observers via direct invite.</p>
                     <div class="callout callout--small mt-3" role="note">
                         <p class="callout__title" style="font-size:13px">Discord posts run ~60 seconds behind the actual fill.</p>
                         <p class="callout__body" style="font-size:13px">The operator types each alert in by hand <em>after</em> the order is entered at the broker, so by the time you read &ldquo;Short @ 7141&rdquo; on Discord the entry was already taken. The feed exists so you can verify every fill against real markets and study how the strategy reasons about entries, exits, sizing, and stops &mdash; <strong>it is a window into the mechanism, not a signal to follow</strong>. Don&rsquo;t try to mirror entries off the timestamps.</p>
@@ -391,61 +588,15 @@
                 </div>
             </div>
 
-            <!-- C.3 Tomorrow: Roadmap -->
-            <h3 class="mt-4">Tomorrow — Autotrading + Managed Futures</h3>
-            <p class="muted">Honest roadmap. No dates promised. Status changes only when rails are real.</p>
-            <div class="roadmap">
-                <div class="roadmap__track">
-                    <h3>Autotrading <span class="roadmap__status roadmap__status--progress">In progress</span></h3>
-                    <p class="muted" style="font-size:13px">Discord fills → broker webhook → copy-trade execution on participant accounts.</p>
-                    <ul>
-                        <li>Parse Discord alerts to signed orders</li>
-                        <li>Integrate with Topstep / Tradovate webhook API</li>
-                        <li>Latency validation against posted fills</li>
-                        <li>Participant opt-in UI (non-binding waitlist)</li>
-                    </ul>
-                </div>
-                <div class="roadmap__track">
-                    <h3>Managed Futures <span class="roadmap__status roadmap__status--compliance">Pending compliance</span></h3>
-                    <p class="muted" style="font-size:13px">CTA registration, fund structure, and gating only after the 100-trade consistency proof completes.</p>
-                    <ul>
-                        <li>CTA registration with the NFA</li>
-                        <li>Fund structure (pooled vs. separately-managed)</li>
-                        <li>Securities attorney documentation review</li>
-                        <li>Accredited-investor verification rails</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Interest capture (Formspree) -->
-            <form class="interest-form" id="interest-form"
-                  action="https://formspree.io/f/__FORMSPREE_ID__"
-                  method="POST"
-                  novalidate>
-                <label for="interest-email" style="font-weight:600;color:var(--navy)">
-                    Want to be notified when autotrading or the managed product opens?
-                </label>
-                <p class="muted" style="font-size:13px">
-                    Leave your email. We'll contact you when rails are ready. No waitlist is binding, no capital is being solicited.
-                </p>
-                <div class="interest-form__row">
-                    <input type="email" name="email" id="interest-email" placeholder="you@example.com" required>
-                    <button type="submit" class="btn btn--primary">Notify me</button>
-                </div>
-                <input type="text" name="_gotcha" class="interest-form__honeypot" tabindex="-1" autocomplete="off">
-                <p id="interest-confirm" class="hide mt-2 mono" style="font-size:13px"></p>
-            </form>
-
-            <!-- C.4 Final CTA block -->
             <div class="cta-row">
-                <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
-                <a class="btn btn--secondary" href="#section-b">Re-run the battery →</a>
+                <a class="btn btn--primary" href="#module-c-panel">Indicate founding interest →</a>
+                <a class="btn btn--secondary" href="#module-a">Re-run the modes →</a>
                 <a class="btn btn--tertiary" href="https://doubles.ekantikcapital.com">Read the doctrine</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══ REGION 6 — FOOTER (spec §10.5) ═══ -->
+    <!-- ═══ REGION 6 — FOOTER ═══ -->
     <footer class="footer" role="contentinfo">
         <div class="footer__inner">
             <div class="footer__architecture">
@@ -454,19 +605,18 @@
                     <a href="https://doubles.ekantikcapital.com">The Doubling Engine →</a>
                 </div>
                 <div>
-                    <p class="eyebrow">Live Proof</p>
-                    <a href="/">10x.ekantikcapital.com →</a>
+                    <p class="eyebrow">Cashflow</p>
+                    <a href="/">cashflow.ekantikcapital.com →</a>
                 </div>
                 <div>
-                    <p class="eyebrow">Research</p>
-                    <a href="https://cashflow.ekantikcapital.com/">cashflow.ekantikcapital.com →</a>
+                    <p class="eyebrow">Discord</p>
+                    <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Live trade alert journal →</a>
                 </div>
             </div>
 
             <div class="footer__disclosure">
-                <p>This page is an educational transparency demonstration. Ekantik Capital Advisors LLC is running a public 100-trade consistency proof in live ES / MES futures markets via Tradovate. All fills are real. All metrics are sourced from trades posted publicly in the Ekantik Discord.</p>
-                <p>Nothing on this page constitutes investment advice, a solicitation of managed money, or an offer of any investment product. Past performance does not guarantee future results. Trading futures involves substantial risk of loss and is not suitable for all investors.</p>
-                <p>The operator's capital is at risk. This is personal risk capital, deployed to produce a public execution record. It is not pooled, managed, or shared capital.</p>
+                <p>Illustrative. Past performance is not indicative of future results. Distribution amounts depend on realized strategy returns, which vary. Not an offer of securities. Founding-interest expressions are non-binding and do not constitute subscription, investment, or contractual commitment.</p>
+                <p>Ekantik Capital Advisors LLC is operating a public soft launch — gathering qualified founding-allocation interest while licensing and due diligence complete. All trade fills shown on this page are sourced from trades posted publicly in the Ekantik Discord. The operator's capital is at risk; this is personal risk capital deployed to produce a public execution record. It is not pooled, managed, or shared capital.</p>
                 <p>© 2026 Ekantik Capital Advisors LLC.</p>
             </div>
         </div>
@@ -483,6 +633,7 @@
     <script src="js/render-section-a.js"></script>
     <script src="js/render-section-b.js"></script>
     <script src="js/render-section-c.js"></script>
+    <script src="js/render-modules.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

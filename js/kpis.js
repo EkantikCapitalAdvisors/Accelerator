@@ -79,6 +79,81 @@
         return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
     }
 
+    // ─── Live monthly rate (geometric mean from Discord-published trades) ───
+    // Single source of truth consumed by Section A (Doubling Ladder, retired) and
+    // by Modules A and B on the Cashflow page. Returns { ok, rate, annualized, n,
+    // provisional, reason? }. `rate` is monthly. Sample-size policy: ≥3 trades to
+    // compute, <25 = provisional.
+    const LIVE_MIN_SAMPLE = 3;
+    const LIVE_PROVISIONAL_CUTOFF = 25;
+
+    function _parseTime(str) {
+        const m = (str || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
+        if (!m) return { h: 0, min: 0, s: 0 };
+        let h = parseInt(m[1]); const min = parseInt(m[2]); const s = m[3] ? parseInt(m[3]) : 0;
+        const ap = (m[4] || '').toUpperCase();
+        if (ap === 'PM' && h < 12) h += 12;
+        if (ap === 'AM' && h === 12) h = 0;
+        return { h, min, s };
+    }
+    function _parseTS(raw) {
+        if (!raw) return null;
+        let m = raw.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](.+))?$/);
+        if (m) {
+            const yr = +m[1], mo = +m[2], day = +m[3];
+            const { h, min, s } = _parseTime(m[4]);
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(.+))?$/);
+        if (m) {
+            const mo = +m[1], day = +m[2], yr = +m[3];
+            const { h, min, s } = _parseTime(m[4]);
+            const d = new Date(yr, mo - 1, day, h, min, s);
+            return isNaN(d.getTime()) ? null : d;
+        }
+        const d = new Date(raw);
+        return isNaN(d.getTime()) ? null : d;
+    }
+
+    function liveMonthlyRate(rawTrades) {
+        const n = Array.isArray(rawTrades) ? rawTrades.length : 0;
+        if (n < LIVE_MIN_SAMPLE) return { ok: false, n, reason: `Need ${LIVE_MIN_SAMPLE} trades (have ${n}).` };
+        const withTS = rawTrades
+            .map(t => ({ t, ts: _parseTS(t.entry_time || t.entryTime) }))
+            .filter(x => x.ts != null);
+        if (withTS.length < LIVE_MIN_SAMPLE) return { ok: false, n, reason: `Need ${LIVE_MIN_SAMPLE} dated trades (have ${withTS.length}).` };
+        withTS.sort((a, b) => a.ts - b.ts);
+
+        const cumPL = rawTrades.reduce((s, t) => s + (t.dollar_pl || t.dollarPL || 0), 0);
+        const start = 10000;
+        const ret = cumPL / start;
+        const first = withTS[0].ts;
+        const lastRow = withTS[withTS.length - 1].t;
+        const last = _parseTS(lastRow.exit_time || lastRow.entry_time || lastRow.entryTime) || withTS[withTS.length - 1].ts;
+        if (!first || !last || last <= first) return { ok: false, n, reason: 'Not enough calendar time.' };
+        const monthsElapsed = (last - first) / (1000 * 60 * 60 * 24 * 30.4375);
+        if (monthsElapsed < 0.1 || ret <= -1) return { ok: false, n, reason: 'Not enough calendar time.' };
+        const rate = ret <= 0
+            ? -(Math.pow(1 - Math.abs(ret), 1 / monthsElapsed) - 1)
+            : Math.pow(1 + ret, 1 / monthsElapsed) - 1;
+        const annualized = Math.pow(1 + rate, 12) - 1;
+        return {
+            ok: true,
+            rate,
+            annualized,
+            n,
+            monthsElapsed,
+            provisional: n < LIVE_PROVISIONAL_CUTOFF
+        };
+    }
+
     root.Ekantik = root.Ekantik || {};
-    root.Ekantik.KPIs = { adherenceSummary, lastFillTimestamp, fmtRelativeTime, fmtClockTime };
+    root.Ekantik.KPIs = {
+        adherenceSummary,
+        lastFillTimestamp,
+        fmtRelativeTime,
+        fmtClockTime,
+        liveMonthlyRate
+    };
 })(typeof window !== 'undefined' ? window : globalThis);
