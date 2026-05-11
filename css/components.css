@@ -1611,6 +1611,34 @@ a:hover { color: var(--gold); }
 }
 .ind-thanks p:last-child { margin-bottom: 0; }
 
+/* Discord access block inside the thank-you state — prominent, gold-accented */
+.ind-thanks__discord {
+    margin: var(--s-3) 0;
+    padding: var(--s-3);
+    background: var(--navy);
+    color: rgba(255,255,255,0.92);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--gold);
+}
+.ind-thanks__discord-eyebrow {
+    font-family: var(--font-sans) !important;
+    font-style: normal !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold) !important;
+    margin: 0 0 var(--s-1) !important;
+}
+.ind-thanks__discord p {
+    color: rgba(255,255,255,0.92) !important;
+    font-style: normal !important;
+    font-family: var(--font-sans) !important;
+}
+.ind-thanks__discord .btn--primary {
+    margin-top: 4px;
+}
+
 @media (max-width: 640px) {
     .mod { padding: var(--s-3); }
     .mod-c-panel { padding: var(--s-3); }

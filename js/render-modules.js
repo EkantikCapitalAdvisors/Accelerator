@@ -305,8 +305,8 @@
         const ctaWrap = $('indication-cta-wrap');
         if (!fillEl || !labelEl) return;
 
-        const cap = state.capacity || { founding_tier_size: 1000000, founding_tier_indicated: 0, indication_count: 0, last_updated: '—' };
-        const tierSize = cap.founding_tier_size || 1000000;
+        const cap = state.capacity || { founding_tier_size: 500000, founding_tier_indicated: 0, indication_count: 0, last_updated: '—' };
+        const tierSize = cap.founding_tier_size || 500000;
         const indicated = cap.founding_tier_indicated || 0;
         const count = cap.indication_count || 0;
         const ratio = Math.min(1, indicated / tierSize);
@@ -321,7 +321,7 @@
             const formHeading = $('ind-section-heading');
             if (formHeading) formHeading.textContent = 'Join the General Allocation Waitlist';
         } else {
-            labelEl.innerHTML = `<strong>${fmt$0(indicated)}</strong> of $1M indicated · <strong>${count}</strong> indication${count === 1 ? '' : 's'}`;
+            labelEl.innerHTML = `<strong>${fmt$0(indicated)}</strong> of $500K indicated · <strong>${count}</strong> indication${count === 1 ? '' : 's'}`;
         }
         if (updEl) updEl.textContent = `Updated ${cap.last_updated || '—'}. Indications are non-binding.`;
     }
@@ -350,8 +350,8 @@
         function updateAmountLabel() {
             const amt = parseFloat(amtEl.value);
             const slots = Math.floor(amt / 10000);
-            const tierPct = (amt / 1000000) * 100;
-            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  ·  ${slots} of 100 founding slot${slots === 1 ? '' : 's'}  ·  ${tierPct.toFixed(0)}% of founding tier`;
+            const tierPct = (amt / 500000) * 100;
+            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  ·  ${slots} of 50 founding slot${slots === 1 ? '' : 's'}  ·  ${tierPct.toFixed(0)}% of founding tier`;
         }
 
         function validateEmail(v) {
@@ -393,7 +393,7 @@
             payload.append('booking_amount', String(amt));
             payload.append('preferred_mode', modeRadio ? modeRadio.value : 'no-preference');
             payload.append('slots',           String(Math.floor(amt / 10000)));
-            payload.append('founding_tier_pct', (amt / 1000000).toFixed(4));
+            payload.append('founding_tier_pct', (amt / 500000).toFixed(4));
             payload.append('timestamp',       new Date().toISOString());
             payload.append('source',          'income-landing-v1.6');
 

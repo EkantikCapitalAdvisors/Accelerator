@@ -31,7 +31,7 @@
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
                 <li><a class="nav__link nav__link--active" href="/" aria-current="page">Income</a></li>
-                <li><a class="nav__link" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Discord</a></li>
+                <li><a class="nav__link" href="#module-c-panel">Founding interest</a></li>
             </ul>
         </div>
     </header>
@@ -269,7 +269,7 @@
 
                 <div class="mod-c-statement">
                     <p>Strategy capacity is bounded at $5M AUM, equivalent to roughly 500 ES contracts at peak deployment. The ceiling is set by execution mechanics — slippage, fill quality, and exit liquidity at the relevant size — not by ambition or regulation.</p>
-                    <p>Of that capacity, 20% — $1M, or 100 founding slots — is reserved as the founding cohort tier and is the only tier currently open for indication. The remaining 80% will open as a general allocation after the founding tier closes.</p>
+                    <p>Of that capacity, 10% — $500,000, or 50 founding slots — is reserved as the founding cohort tier and is the only tier currently open for indication. The remaining 90% will open as a general allocation after the founding tier closes.</p>
                     <p>This page is a soft launch. It exists to gather qualified interest from investors who want a structurally capped, edge-validated income strategy before allocations close. No transaction is being offered.</p>
                 </div>
 
@@ -285,13 +285,13 @@
                     </div>
                     <div class="cap-counter__band">
                         <div class="cap-counter__band-head">
-                            <span class="cap-counter__band-label">Founding tier (20%)</span>
-                            <span class="cap-counter__band-amount">$1,000,000</span>
+                            <span class="cap-counter__band-label">Founding tier (10%)</span>
+                            <span class="cap-counter__band-amount">$500,000</span>
                         </div>
                         <div class="cap-counter__bar cap-counter__bar--tier">
                             <div class="cap-counter__bar-fill" id="mod-c-tier-fill" style="width:0%"></div>
                         </div>
-                        <div class="cap-counter__band-note" id="mod-c-tier-label">$0 of $1M indicated · 0 indications</div>
+                        <div class="cap-counter__band-note" id="mod-c-tier-label">$0 of $500K indicated · 0 indications</div>
                     </div>
                     <p class="cap-counter__updated" id="mod-c-counter-updated">Loading…</p>
                 </div>
@@ -328,7 +328,7 @@
                     <div class="ind-amount-block">
                         <label for="ind-amount">Intended booking amount *</label>
                         <input type="range" id="ind-amount" name="booking_amount" min="10000" max="500000" step="10000" value="50000">
-                        <span class="ind-amount-val" id="ind-amount-val"><strong>$50,000</strong>  ·  5 of 100 founding slots  ·  5% of founding tier</span>
+                        <span class="ind-amount-val" id="ind-amount-val"><strong>$50,000</strong>  ·  5 of 50 founding slots  ·  10% of founding tier</span>
                     </div>
 
                     <div class="ind-mode-block">
@@ -362,9 +362,18 @@
 
                 <div class="ind-thanks hide" id="ind-thanks" role="status">
                     <h3>Indication received.</h3>
-                    <p>Your interest is logged. A confirmation email with Discord access to the live trade alert journal has been sent to the email you provided.</p>
+                    <p>Your interest is logged. A confirmation email has been sent to the address you provided.</p>
+
+                    <div class="ind-thanks__discord">
+                        <p class="ind-thanks__discord-eyebrow">Discord journal · access granted</p>
+                        <p style="font-style:normal;font-family:var(--font-sans);font-size:14px;margin-bottom:var(--s-2)">
+                            You now have access to the live trade alert journal — the Discord channel where every executed trade is posted in real time. This is the source data behind the live metrics on this page.
+                        </p>
+                        <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Open Discord journal →</a>
+                    </div>
+
                     <p>We'll be in touch as licensing and due diligence complete — typically within 60 to 90 days. Until then, the live performance numbers on this page update weekly, and the Discord journal updates with every executed trade.</p>
-                    <p>If the email doesn't arrive within a few minutes, check your spam folder or contact <a href="mailto:info@ekantikcapital.com">info@ekantikcapital.com</a>.</p>
+                    <p>If the confirmation email doesn't arrive within a few minutes, check your spam folder or contact <a href="mailto:info@ekantikcapital.com">info@ekantikcapital.com</a>.</p>
                 </div>
             </div>
         </div>
@@ -534,10 +543,7 @@
                         <span class="mono muted" style="font-size:11px">Last 5 fills</span>
                     </div>
                     <div id="discord-feed" class="discord-feed">Loading…</div>
-                    <div class="mt-3">
-                        <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Join Discord →</a>
-                    </div>
-                    <p class="muted italic mt-2" style="font-size:12px">Submitters of the indication form receive Discord access automatically. The feed is also open to qualified observers via direct invite.</p>
+                    <p class="muted italic mt-3" style="font-size:12px">Live mirror of the last 5 fills from the Discord trade journal. <strong>Direct journal access is included with submission of the founding interest form above</strong> — every executed trade posts there in real time.</p>
                     <div class="callout callout--small mt-3" role="note">
                         <p class="callout__title" style="font-size:13px">Discord posts run ~60 seconds behind the actual fill.</p>
                         <p class="callout__body" style="font-size:13px">The operator types each alert in by hand <em>after</em> the order is entered at the broker, so by the time you read &ldquo;Short @ 7141&rdquo; on Discord the entry was already taken. The feed exists so you can verify every fill against real markets and study how the strategy reasons about entries, exits, sizing, and stops &mdash; <strong>it is a window into the mechanism, not a signal to follow</strong>. Don&rsquo;t try to mirror entries off the timestamps.</p>
@@ -598,8 +604,8 @@
                     <a href="/">income.ekantikcapital.com →</a>
                 </div>
                 <div>
-                    <p class="eyebrow">Discord</p>
-                    <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Live trade alert journal →</a>
+                    <p class="eyebrow">Founding cohort</p>
+                    <a href="#module-c-panel">Indicate interest →</a>
                 </div>
             </div>
 
