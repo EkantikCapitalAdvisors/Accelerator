@@ -150,6 +150,23 @@
                     </div>
                 </div>
 
+                <!-- Month-by-month distribution table -->
+                <div class="mod-table-wrap mt-3">
+                    <h4 class="mod-table-title">Month-by-month — Year 1</h4>
+                    <table class="mod-table" id="mod-a-table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Status</th>
+                                <th class="num">Monthly cash produced</th>
+                                <th class="num">Distribution</th>
+                                <th class="num">Cumulative paid</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mod-a-table-body"></tbody>
+                    </table>
+                </div>
+
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
                     <em>Target rate is the strategy's design parameter for sustained income at scale. Math assumes 10 active trading months per year — the strategy stands down for two months annually (typically low-liquidity / holiday windows). Realized performance to date is shown in The Edge section below and in the live trade log. Distributions are not guaranteed.</em>
                 </p>
@@ -185,21 +202,14 @@
                         <input id="mod-b-rate" type="range" min="2" max="20" step="1" value="10">
                     </div>
                     <div class="slider-field">
-                        <label for="mod-b-threshold">Scaling threshold · <span class="slider-value" id="mod-b-threshold-val">10%</span></label>
-                        <input id="mod-b-threshold" type="range" min="5" max="50" step="5" value="10">
-                    </div>
-                    <div class="slider-field">
                         <label for="mod-b-horizon">Horizon · <span class="slider-value" id="mod-b-horizon-val">1 yr</span></label>
                         <input id="mod-b-horizon" type="range" min="1" max="5" step="1" value="1">
                     </div>
                 </div>
 
-                <div class="mod-b__timelines mod-b__timelines--single">
-                    <div class="mod-b__timeline-block">
-                        <h4 id="mod-b-target-h4">At Target Rate · 10% per month</h4>
-                        <div id="mod-b-timeline-target"></div>
-                    </div>
-                </div>
+                <p class="muted" style="font-size:12px;margin:-8px 0 var(--s-2);font-family:var(--font-mono)">
+                    <strong style="color:var(--gold)">Scale-up trigger:</strong> position doubles once cumulative profit hits <strong>$5,000</strong> (built-in, not adjustable — derived from execution mechanics).
+                </p>
 
                 <div class="mod__outputs mod__outputs--single" aria-label="Module B scoreboard">
                     <div class="mod__col">
@@ -207,7 +217,7 @@
                         <p class="mod__col-title">Designed cadence</p>
                         <p class="mod__col-context" id="mod-b-target-header">10% per month — the strategy's income target.</p>
                         <div class="mod__metric">
-                            <span class="mod__metric-label">Scale events / year</span>
+                            <span class="mod__metric-label">Scale-up triggered</span>
                             <span class="mod__metric-val" id="mod-b-target-events">—</span>
                         </div>
                         <div class="mod__metric mod__metric--big">
@@ -219,6 +229,24 @@
                             <span class="mod__metric-val" id="mod-b-target-cumulative">—</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Month-by-month distribution table -->
+                <div class="mod-table-wrap mt-3">
+                    <h4 class="mod-table-title">Month-by-month — Year 1</h4>
+                    <table class="mod-table" id="mod-b-table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Status</th>
+                                <th class="num">Capital (end)</th>
+                                <th class="num">Monthly gain</th>
+                                <th class="num">Cumulative profit</th>
+                                <th class="num">Distribution</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mod-b-table-body"></tbody>
+                    </table>
                 </div>
 
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">

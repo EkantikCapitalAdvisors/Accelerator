@@ -1180,6 +1180,109 @@ a:hover { color: var(--gold); }
     font-weight: 600;
 }
 
+/* ─── Monthly distribution tables (Modules A and B) ─── */
+.mod-table-wrap {
+    margin-top: var(--s-3);
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.mod-table-title {
+    margin: 0;
+    padding: 12px var(--s-3);
+    background: var(--cream-2);
+    border-bottom: 1px solid var(--divider);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+}
+.mod-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    background: var(--white);
+}
+.mod-table thead th {
+    background: var(--white);
+    color: var(--muted);
+    padding: 10px var(--s-2);
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--divider);
+}
+.mod-table tbody td {
+    padding: 10px var(--s-2);
+    border-top: 1px solid var(--divider);
+    vertical-align: middle;
+    color: var(--ink);
+}
+.mod-table td.num, .mod-table th.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.mod-table tbody tr:hover td { background: rgba(200, 169, 81, 0.04); }
+.mod-table__row--dist td { background: rgba(200, 169, 81, 0.07); }
+.mod-table__row--dist:hover td { background: rgba(200, 169, 81, 0.12); }
+.mod-table__row--total td {
+    background: var(--cream-2);
+    border-top: 2px solid var(--gold);
+    font-size: 13px;
+    padding: 12px var(--s-2);
+}
+.mod-table__row--total:hover td { background: var(--cream-2); }
+
+.mod-table__pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.mod-table__pill--active { background: rgba(47, 180, 100, 0.14); color: var(--pass); }
+.mod-table__pill--down   { background: var(--cream-2); color: var(--muted); }
+
+.mod-table__gain {
+    font-family: var(--font-mono);
+    color: var(--pass);
+    font-weight: 500;
+}
+.mod-table__dist {
+    font-family: var(--font-mono);
+    color: var(--navy);
+    font-weight: 600;
+}
+.mod-table__scale-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    vertical-align: 1px;
+}
+
+@media (max-width: 640px) {
+    .mod-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .mod-table { min-width: 540px; }
+    .mod-table thead th, .mod-table tbody td { padding: 8px 10px; font-size: 12px; }
+}
+
 @media (max-width: 760px) {
     .mod__outputs { grid-template-columns: 1fr; }
     .mod__col + .mod__col { border-left: none; border-top: 1px solid var(--divider); }

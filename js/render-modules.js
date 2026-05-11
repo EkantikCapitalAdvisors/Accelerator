@@ -14,12 +14,15 @@
     function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
     // ─────────────────────────────────────────────────────
-    // Strategy assumptions
-    // ACTIVE_MONTHS_PER_YEAR — the strategy trades 10 months and stands down
-    // for 2 (low-liquidity / holiday windows). Both modules use this; both
-    // modules surface it in the caveat copy so the assumption is visible.
+    // Strategy assumptions (single source of truth)
+    //   ACTIVE_MONTHS_PER_YEAR — strategy trades 10 months, stands down for 2
+    //   SCALE_TRIGGER_DOLLARS  — position doubles once cumulative profit hits
+    //                             this dollar threshold (built-in, derived from
+    //                             execution mechanics; not user-adjustable)
     // ─────────────────────────────────────────────────────
     const ACTIVE_MONTHS_PER_YEAR = 10;
+    const SCALE_TRIGGER_DOLLARS  = 5000;
+    const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     // ─────────────────────────────────────────────────────
     // Module A — Quarterly Income engine
@@ -31,52 +34,96 @@
     //                     (averages over 12 calendar months — distributions
     //                      are smooth across the cycle, even though only 10
     //                      months are active.)
+    // Returns a `monthly` breakdown for the year-1 table.
     // ─────────────────────────────────────────────────────
     const FREQ_PERIODS = { monthly: 12, quarterly: 4, 'semi-annual': 2 };
     const FREQ_LABEL   = { monthly: 'Monthly', quarterly: 'Quarterly', 'semi-annual': 'Semi-Annual' };
     const FREQ_PER     = { monthly: 'month',   quarterly: 'quarter',   'semi-annual': 'half-year' };
 
     function moduleAMath({ capital, monthlyRate, frequency }) {
-        const periodsPerYear = FREQ_PERIODS[frequency] || 4;
-        const annualIncome   = capital * monthlyRate * ACTIVE_MONTHS_PER_YEAR;
-        const perPeriodCheck = annualIncome / periodsPerYear;
-        const fiveYearTotal  = annualIncome * 5;
-        return { periodsPerYear, perPeriodCheck, annualIncome, fiveYearTotal };
+        const periodsPerYear  = FREQ_PERIODS[frequency] || 4;
+        const monthsPerPeriod = 12 / periodsPerYear;
+        const annualIncome    = capital * monthlyRate * ACTIVE_MONTHS_PER_YEAR;
+        const perPeriodCheck  = annualIncome / periodsPerYear;
+        const fiveYearTotal   = annualIncome * 5;
+
+        // Month-by-month breakdown for the table.
+        // Distributions land on each period boundary; amount = perPeriodCheck
+        // (smoothed across the cycle, including stand-down months).
+        const monthly = [];
+        let cumPaid = 0;
+        for (let m = 1; m <= 12; m++) {
+            const isActive = m <= ACTIVE_MONTHS_PER_YEAR;
+            const produced = isActive ? capital * monthlyRate : 0;
+            const isPeriodEnd = (m % monthsPerPeriod === 0);
+            const distribution = isPeriodEnd ? perPeriodCheck : 0;
+            cumPaid += distribution;
+            monthly.push({ month: m, isActive, produced, distribution, cumPaid });
+        }
+
+        return { periodsPerYear, monthsPerPeriod, perPeriodCheck, annualIncome, fiveYearTotal, monthly };
     }
 
     // ─────────────────────────────────────────────────────
     // Module B — Scale-Then-Distribute engine
     // Input is MONTHLY rate directly. Within each year, capital compounds for
     // ACTIVE_MONTHS_PER_YEAR months at monthlyRate. The other 2 months the
-    // strategy is closed — capital sits flat. At each `threshold` × N crossing
-    // during active months, log a scale event. At year-end: distribute
-    // (capital - base), reset capital to base for the next year.
+    // strategy is closed — capital sits flat. The position doubles once during
+    // the year — at the first month where cumulative profit (cap - base) hits
+    // SCALE_TRIGGER_DOLLARS. At year-end: distribute (cap - base), reset capital
+    // to base for the next year.
+    // Returns a year-1 `monthly` breakdown for the table.
     // ─────────────────────────────────────────────────────
-    function moduleBSimulate({ capital: base, monthlyRate, threshold, years }) {
+    function moduleBSimulate({ capital: base, monthlyRate, years }) {
         const yearTimelines = [];
+        let scaledMonth = null;
         for (let yr = 0; yr < years; yr++) {
             let cap = base;
-            let prevTier = 0;
-            const events = [];
-            for (let m = 1; m <= ACTIVE_MONTHS_PER_YEAR; m++) {
-                cap *= (1 + monthlyRate);
-                const growth = (cap - base) / base;
-                const tier = Math.floor(growth / threshold);
-                if (tier > prevTier) {
-                    events.push({ month: m, multiple: 1 + threshold * tier, capital: cap });
-                    prevTier = tier;
+            let scaledAt = null;
+            let annualProfit = 0;
+            const monthly = [];
+            for (let m = 1; m <= 12; m++) {
+                const isActive = m <= ACTIVE_MONTHS_PER_YEAR;
+                const startCap = cap;
+                if (isActive) cap = cap * (1 + monthlyRate);
+                const gain = cap - startCap;
+                const profit = cap - base;
+                const scaledThisMonth = (scaledAt == null && isActive && profit >= SCALE_TRIGGER_DOLLARS);
+                if (scaledThisMonth) scaledAt = m;
+                const isYearEnd = (m === ACTIVE_MONTHS_PER_YEAR);
+                const distribution = isYearEnd ? (cap - base) : 0;
+                // Capture the pre-distribution end-of-month capital for the table.
+                const displayCap = cap;
+                if (isYearEnd) {
+                    // Distribute profit, reset capital to base for the stand-down months
+                    annualProfit = cap - base;
+                    cap = base;
                 }
+                monthly.push({
+                    month: m,
+                    isActive,
+                    startCap,
+                    endCap: displayCap,
+                    gain,
+                    profit,
+                    scaledThisMonth,
+                    distribution
+                });
             }
-            const distribution = cap - base;
-            yearTimelines.push({ year: yr + 1, events, yearEndCapital: cap, distribution });
-            // Capital resets to base at the top of the next iteration.
+            yearTimelines.push({
+                year: yr + 1,
+                monthly,
+                yearEndCapital: base, // after distribution + reset
+                distribution: annualProfit,
+                scaledAt
+            });
+            if (yr === 0) scaledMonth = scaledAt;
         }
         const totalDistribution = yearTimelines.reduce((s, y) => s + y.distribution, 0);
-        const perYearEvents = yearTimelines.map(y => y.events.length);
         return {
             yearTimelines,
             totalDistribution,
-            scaleEventsPerYear: perYearEvents[0] || 0,
+            scaledMonth,
             yearEndDistribution: yearTimelines[0]?.distribution || 0,
             monthlyRate,
             activeMonths: ACTIVE_MONTHS_PER_YEAR
@@ -114,6 +161,8 @@
             if (subhead) {
                 subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
             }
+
+            renderModuleATable(tgt.monthly);
         };
 
         // Wire once
@@ -134,61 +183,115 @@
     function renderModuleB(/* state */) {
         const capEl = $('mod-b-capital');
         const rateEl = $('mod-b-rate');
-        const thrEl = $('mod-b-threshold');
         const horEl = $('mod-b-horizon');
-        if (!capEl || !rateEl || !thrEl || !horEl) return;
+        if (!capEl || !rateEl || !horEl) return;
 
         const recompute = () => {
             const capital = parseFloat(capEl.value);
             const monthlyRate = parseFloat(rateEl.value) / 100;
-            const threshold = parseFloat(thrEl.value) / 100;
             const years = parseInt(horEl.value, 10);
 
             $('mod-b-capital-val').textContent   = fmt$0(capital);
             $('mod-b-rate-val').textContent      = (monthlyRate * 100).toFixed(0) + '%/mo';
-            $('mod-b-threshold-val').textContent = (threshold * 100).toFixed(0) + '%';
             $('mod-b-horizon-val').textContent   = years + (years === 1 ? ' yr' : ' yrs');
 
-            const tgt = moduleBSimulate({ capital, monthlyRate, threshold, years });
-            renderModuleBTimeline($('mod-b-timeline-target'), tgt, capital);
+            const tgt = moduleBSimulate({ capital, monthlyRate, years });
 
-            $('mod-b-target-events').textContent     = String(tgt.scaleEventsPerYear);
+            const scaleLabel = tgt.scaledMonth != null
+                ? `Yes · month ${tgt.scaledMonth}`
+                : 'No (profit < $5K)';
+            $('mod-b-target-events').textContent     = scaleLabel;
             $('mod-b-target-yearend').textContent    = fmt$0(tgt.yearEndDistribution);
             $('mod-b-target-cumulative').textContent = fmt$0(tgt.totalDistribution);
 
-            const h4 = $('mod-b-target-h4');
-            if (h4) h4.textContent = `At Target Rate · ${(monthlyRate * 100).toFixed(0)}% per month`;
             const subhead = $('mod-b-target-header');
             if (subhead) subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
+
+            // Render year-1 month-by-month table.
+            renderModuleBTable(tgt.yearTimelines[0]?.monthly || []);
         };
 
         if (!capEl._wired) {
-            [capEl, rateEl, thrEl, horEl].forEach(el => el.addEventListener('input', recompute));
+            [capEl, rateEl, horEl].forEach(el => el.addEventListener('input', recompute));
             capEl._wired = true;
         }
         recompute();
     }
 
-    function renderModuleBTimeline(container, sim, base) {
-        if (!container) return;
-        const maxCapital = Math.max(base, ...sim.yearTimelines.map(y => y.yearEndCapital));
-        const rows = sim.yearTimelines.map(y => {
-            const fillPct = Math.min(100, (y.yearEndCapital / maxCapital) * 100);
-            const eventCount = y.events.length;
-            const eventNote = eventCount > 0
-                ? ` · ${eventCount} scale event${eventCount === 1 ? '' : 's'}`
-                : '';
+    // ─────────────────────────────────────────────────────
+    // Monthly tables — month-by-month breakdown
+    // ─────────────────────────────────────────────────────
+    function renderModuleATable(monthly) {
+        const tbody = $('mod-a-table-body');
+        if (!tbody) return;
+        const rows = monthly.map(r => {
+            const status = r.isActive
+                ? '<span class="mod-table__pill mod-table__pill--active">Active</span>'
+                : '<span class="mod-table__pill mod-table__pill--down">Stand-down</span>';
+            const dist = r.distribution > 0
+                ? `<strong class="mod-table__dist">${fmt$0(r.distribution)}</strong>`
+                : '<span class="muted">—</span>';
             return `
-              <div class="mod-b-row">
-                <div class="mod-b-row__label">Year ${y.year}</div>
-                <div class="mod-b-row__track" title="Year-end capital ${fmt$0(y.yearEndCapital)}${eventNote}">
-                  <div class="mod-b-row__fill" style="width:${fillPct.toFixed(2)}%"></div>
-                  <span class="mod-b-marker mod-b-marker--start">base ${fmt$0(base)}</span>
-                  <span class="mod-b-marker mod-b-marker--end">→ ${fmt$0(y.distribution)} distributed</span>
-                </div>
-              </div>`;
+              <tr${r.distribution > 0 ? ' class="mod-table__row--dist"' : ''}>
+                <td class="mono">${MONTH_NAMES[r.month - 1]}</td>
+                <td>${status}</td>
+                <td class="num">${r.produced > 0 ? fmt$0(r.produced) : '<span class="muted">—</span>'}</td>
+                <td class="num">${dist}</td>
+                <td class="num mono">${fmt$0(r.cumPaid)}</td>
+              </tr>`;
         }).join('');
-        container.innerHTML = rows;
+        // Totals row
+        const totalProduced = monthly.reduce((s, r) => s + r.produced, 0);
+        const totalPaid     = monthly.reduce((s, r) => s + r.distribution, 0);
+        tbody.innerHTML = rows + `
+          <tr class="mod-table__row--total">
+            <td class="mono"><strong>Year 1</strong></td>
+            <td><span class="muted">${ACTIVE_MONTHS_PER_YEAR} active · 2 stand-down</span></td>
+            <td class="num"><strong>${fmt$0(totalProduced)}</strong></td>
+            <td class="num"><strong>${fmt$0(totalPaid)}</strong></td>
+            <td class="num mono"><strong>${fmt$0(totalPaid)}</strong></td>
+          </tr>`;
+    }
+
+    function renderModuleBTable(monthly) {
+        const tbody = $('mod-b-table-body');
+        if (!tbody) return;
+        const rows = monthly.map(r => {
+            const status = r.isActive
+                ? '<span class="mod-table__pill mod-table__pill--active">Active</span>'
+                : '<span class="mod-table__pill mod-table__pill--down">Stand-down</span>';
+            const gainCell = r.isActive
+                ? `<span class="mod-table__gain">+${fmt$0(r.gain)}</span>`
+                : '<span class="muted">—</span>';
+            const dist = r.distribution > 0
+                ? `<strong class="mod-table__dist">${fmt$0(r.distribution)}</strong>`
+                : '<span class="muted">—</span>';
+            const scaleTag = r.scaledThisMonth
+                ? ' <span class="mod-table__scale-tag" title="Cumulative profit crossed $5,000 — position doubles">↑ scale</span>'
+                : '';
+            const rowClass = r.distribution > 0 ? ' class="mod-table__row--dist"' : '';
+            return `
+              <tr${rowClass}>
+                <td class="mono">${MONTH_NAMES[r.month - 1]}</td>
+                <td>${status}</td>
+                <td class="num mono">${fmt$0(r.endCap)}</td>
+                <td class="num">${gainCell}${scaleTag}</td>
+                <td class="num mono">${r.profit > 0 ? fmt$0(r.profit) : '<span class="muted">—</span>'}</td>
+                <td class="num">${dist}</td>
+              </tr>`;
+        }).join('');
+        // Peak capital at the moment of distribution (month 10), distribution amount = profit
+        const peakCap = monthly[ACTIVE_MONTHS_PER_YEAR - 1]?.endCap || 0;
+        const peakProfit = monthly[ACTIVE_MONTHS_PER_YEAR - 1]?.profit || 0;
+        tbody.innerHTML = rows + `
+          <tr class="mod-table__row--total">
+            <td class="mono"><strong>Year 1</strong></td>
+            <td><span class="muted">${ACTIVE_MONTHS_PER_YEAR} active · 2 stand-down</span></td>
+            <td class="num mono"><strong>${fmt$0(peakCap)}</strong> <span class="muted" style="font-size:11px">(peak)</span></td>
+            <td class="num"><strong>+${fmt$0(peakProfit)}</strong></td>
+            <td class="num mono"><strong>${fmt$0(peakProfit)}</strong></td>
+            <td class="num"><strong>${fmt$0(peakProfit)}</strong></td>
+          </tr>`;
     }
 
     // ─────────────────────────────────────────────────────
