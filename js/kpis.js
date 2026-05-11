@@ -6,50 +6,9 @@
 (function (root) {
     'use strict';
 
-    // Converts snake_case records → camelCase shape that computeSetupQuality expects.
-    function toCamel(t) {
-        return {
-            tradeNum:    t.trade_num || t.tradeNum || '',
-            datetime:    t.entry_time || t.datetime || '',
-            entryTime:   t.entry_time || t.entryTime || '',
-            exitTime:    t.exit_time  || t.exitTime  || '',
-            direction:   t.direction,
-            entryPrice:  t.entry_price  || t.entryPrice  || 0,
-            exitPrice:   t.exit_price   || t.exitPrice   || 0,
-            stopPrice:   t.stop_price   || t.stopPrice   || 0,
-            contracts:   t.contracts    || 1,
-            pointsPL:    t.points_pl    || t.pointsPL    || 0,
-            dollarPL:    t.dollar_pl    != null ? t.dollar_pl    : (t.dollarPL    || 0),
-            riskPoints:  t.risk_points  || t.riskPoints  || 0,
-            riskDollars: t.risk_dollars || t.riskDollars || 0,
-            isWin:       t.is_win != null ? t.is_win : !!t.isWin,
-            date:        t.trade_date || t.date || '',
-            product:     t.product  || 'ES',
-            ppt:         t.ppt      || 50
-        };
-    }
-
-    function adherenceSummary(rawTrades) {
-        if (!Array.isArray(rawTrades) || rawTrades.length === 0) {
-            return { pct: null, valid: 0, total: 0, display: '—' };
-        }
-        if (typeof root.computeSetupQuality !== 'function') {
-            // parser.js not loaded — fail gracefully
-            return { pct: null, valid: 0, total: 0, display: '—' };
-        }
-
-        const trades = rawTrades.map(toCamel);
-        const result = root.computeSetupQuality(trades);
-        if (!result || result.setupQualityPct == null) {
-            return { pct: null, valid: 0, total: 0, display: 'Tracking' };
-        }
-        return {
-            pct: result.setupQualityPct,
-            valid: result.validCount,
-            total: result.totalCount,
-            display: `${Math.round(result.setupQualityPct)}%`
-        };
-    }
+    // Adherence (R1–R4) was retired from the public trust strip in the Income
+    // repositioning — see js/dashboard.js and methodology.html for where the
+    // full R1–R4 engine still lives.
 
     function lastFillTimestamp(rawTrades) {
         if (!Array.isArray(rawTrades) || rawTrades.length === 0) return null;
@@ -150,7 +109,6 @@
 
     root.Ekantik = root.Ekantik || {};
     root.Ekantik.KPIs = {
-        adherenceSummary,
         lastFillTimestamp,
         fmtRelativeTime,
         fmtClockTime,

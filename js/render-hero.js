@@ -56,10 +56,6 @@
         const lfEl = $('trust-last-fill');
         if (lfEl) lfEl.textContent = lastFill ? KPIs.fmtRelativeTime(lastFill) : '—';
 
-        const adh = KPIs.adherenceSummary(trades);
-        const adhEl = $('trust-adherence');
-        if (adhEl) adhEl.textContent = adh.display;
-
         const updEl = $('trust-updated');
         if (updEl) updEl.textContent = state.computedAt ? KPIs.fmtClockTime(state.computedAt) : '—';
     }
