@@ -14,33 +14,43 @@
     function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
     // ─────────────────────────────────────────────────────
+    // Strategy assumptions
+    // ACTIVE_MONTHS_PER_YEAR — the strategy trades 10 months and stands down
+    // for 2 (low-liquidity / holiday windows). Both modules use this; both
+    // modules surface it in the caveat copy so the assumption is visible.
+    // ─────────────────────────────────────────────────────
+    const ACTIVE_MONTHS_PER_YEAR = 10;
+
+    // ─────────────────────────────────────────────────────
     // Module A — Quarterly Income engine
     // Input is MONTHLY rate (the strategy's natural cadence). Profits strip
     // each period; base capital is constant; SIMPLE accumulation (cash exits
     // at each period boundary, no within-period compounding).
-    //   monthsPerPeriod = 12 / periodsPerYear  ({1, 3, 6} for Monthly/Q/SA)
-    //   perPeriodCheck  = capital × monthlyRate × monthsPerPeriod
-    //   annualIncome    = capital × monthlyRate × 12
+    //   annualIncome    = capital × monthlyRate × ACTIVE_MONTHS_PER_YEAR
+    //   perPeriodCheck  = annualIncome / periodsPerYear
+    //                     (averages over 12 calendar months — distributions
+    //                      are smooth across the cycle, even though only 10
+    //                      months are active.)
     // ─────────────────────────────────────────────────────
     const FREQ_PERIODS = { monthly: 12, quarterly: 4, 'semi-annual': 2 };
     const FREQ_LABEL   = { monthly: 'Monthly', quarterly: 'Quarterly', 'semi-annual': 'Semi-Annual' };
     const FREQ_PER     = { monthly: 'month',   quarterly: 'quarter',   'semi-annual': 'half-year' };
 
     function moduleAMath({ capital, monthlyRate, frequency }) {
-        const periodsPerYear  = FREQ_PERIODS[frequency] || 4;
-        const monthsPerPeriod = 12 / periodsPerYear;
-        const perPeriodCheck  = capital * monthlyRate * monthsPerPeriod;
-        const annualIncome    = capital * monthlyRate * 12;
-        const fiveYearTotal   = annualIncome * 5;
-        return { periodsPerYear, monthsPerPeriod, perPeriodCheck, annualIncome, fiveYearTotal };
+        const periodsPerYear = FREQ_PERIODS[frequency] || 4;
+        const annualIncome   = capital * monthlyRate * ACTIVE_MONTHS_PER_YEAR;
+        const perPeriodCheck = annualIncome / periodsPerYear;
+        const fiveYearTotal  = annualIncome * 5;
+        return { periodsPerYear, perPeriodCheck, annualIncome, fiveYearTotal };
     }
 
     // ─────────────────────────────────────────────────────
     // Module B — Scale-Then-Distribute engine
-    // Input is MONTHLY rate directly (no annualized→monthly conversion).
-    // Within a year: capital compounds at monthlyRate each month. At each
-    // `threshold` × N crossing, log a scale event.
-    // At year-end: distribute (capital - base), reset capital to base.
+    // Input is MONTHLY rate directly. Within each year, capital compounds for
+    // ACTIVE_MONTHS_PER_YEAR months at monthlyRate. The other 2 months the
+    // strategy is closed — capital sits flat. At each `threshold` × N crossing
+    // during active months, log a scale event. At year-end: distribute
+    // (capital - base), reset capital to base for the next year.
     // ─────────────────────────────────────────────────────
     function moduleBSimulate({ capital: base, monthlyRate, threshold, years }) {
         const yearTimelines = [];
@@ -48,7 +58,7 @@
             let cap = base;
             let prevTier = 0;
             const events = [];
-            for (let m = 1; m <= 12; m++) {
+            for (let m = 1; m <= ACTIVE_MONTHS_PER_YEAR; m++) {
                 cap *= (1 + monthlyRate);
                 const growth = (cap - base) / base;
                 const tier = Math.floor(growth / threshold);
@@ -59,7 +69,7 @@
             }
             const distribution = cap - base;
             yearTimelines.push({ year: yr + 1, events, yearEndCapital: cap, distribution });
-            // Capital resets to base at the top of the next iteration (structural — see §1.1, §4.6).
+            // Capital resets to base at the top of the next iteration.
         }
         const totalDistribution = yearTimelines.reduce((s, y) => s + y.distribution, 0);
         const perYearEvents = yearTimelines.map(y => y.events.length);
@@ -68,7 +78,8 @@
             totalDistribution,
             scaleEventsPerYear: perYearEvents[0] || 0,
             yearEndDistribution: yearTimelines[0]?.distribution || 0,
-            monthlyRate
+            monthlyRate,
+            activeMonths: ACTIVE_MONTHS_PER_YEAR
         };
     }
 
