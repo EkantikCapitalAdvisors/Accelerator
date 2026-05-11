@@ -12,7 +12,7 @@
     const ARCHIVE_URL  = CONFIG.archiveIndex || 'data/archive/index.json';
     const SPY_URL      = CONFIG.spyData || 'data/spy_monthly.json';
     const CAPACITY_URL = CONFIG.capacityData || 'data/capacity.json';
-    const SESSION_KEY  = CONFIG.sessionKey || 'eka-cashflow-live';
+    const SESSION_KEY  = CONFIG.sessionKey || 'eka-income-live';
 
     const state = {
         trades: null,

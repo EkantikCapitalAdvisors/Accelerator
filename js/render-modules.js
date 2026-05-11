@@ -1,5 +1,5 @@
 // =====================================================
-// Cashflow Modules — A (Quarterly Income), B (Scale-Then-Distribute),
+// Income Modules — A (Quarterly Income), B (Scale-Then-Distribute),
 // and C (Capacity & Allocation Status + Indication-of-Interest form).
 // Spec: 10x-cash-generator-spec.md v1.6.
 // =====================================================
@@ -325,7 +325,7 @@
             if (!validate()) return;
 
             const action = form.getAttribute('action');
-            const placeholder = !action || action.includes('__FORMSPREE_CASHFLOW__');
+            const placeholder = !action || action.includes('__FORMSPREE_INCOME__');
 
             const amt = parseFloat(amtEl.value);
             const modeRadio = document.querySelector('input[name="ind-mode"]:checked');
@@ -339,7 +339,7 @@
             payload.append('slots',           String(Math.floor(amt / 10000)));
             payload.append('founding_tier_pct', (amt / 1000000).toFixed(4));
             payload.append('timestamp',       new Date().toISOString());
-            payload.append('source',          'cashflow-landing-v1.6');
+            payload.append('source',          'income-landing-v1.6');
 
             // Disable submit during request
             submit.disabled = true;

@@ -81,7 +81,7 @@
 
     // ─── Live monthly rate (geometric mean from Discord-published trades) ───
     // Single source of truth consumed by Section A (Doubling Ladder, retired) and
-    // by Modules A and B on the Cashflow page. Returns { ok, rate, annualized, n,
+    // by Modules A and B on the Income page. Returns { ok, rate, annualized, n,
     // provisional, reason? }. `rate` is monthly. Sample-size policy: ≥3 trades to
     // compute, <25 = provisional.
     const LIVE_MIN_SAMPLE = 3;
