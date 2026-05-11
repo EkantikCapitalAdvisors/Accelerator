@@ -15,31 +15,34 @@
 
     // ─────────────────────────────────────────────────────
     // Module A — Quarterly Income engine
-    // periods_per_year = { Monthly: 12, Quarterly: 4, Semi-Annual: 2 }
-    // Profits strip each period; base capital is constant; SIMPLE division (no
-    // within-year compounding) because cash exits at each period boundary.
+    // Input is MONTHLY rate (the strategy's natural cadence). Profits strip
+    // each period; base capital is constant; SIMPLE accumulation (cash exits
+    // at each period boundary, no within-period compounding).
+    //   monthsPerPeriod = 12 / periodsPerYear  ({1, 3, 6} for Monthly/Q/SA)
+    //   perPeriodCheck  = capital × monthlyRate × monthsPerPeriod
+    //   annualIncome    = capital × monthlyRate × 12
     // ─────────────────────────────────────────────────────
     const FREQ_PERIODS = { monthly: 12, quarterly: 4, 'semi-annual': 2 };
     const FREQ_LABEL   = { monthly: 'Monthly', quarterly: 'Quarterly', 'semi-annual': 'Semi-Annual' };
     const FREQ_PER     = { monthly: 'month',   quarterly: 'quarter',   'semi-annual': 'half-year' };
 
-    function moduleAMath({ capital, annualizedRate, frequency }) {
-        const periodsPerYear = FREQ_PERIODS[frequency] || 4;
-        const perPeriodRate  = annualizedRate / periodsPerYear;
-        const perPeriodCheck = capital * perPeriodRate;
-        const annualIncome   = perPeriodCheck * periodsPerYear;
-        const fiveYearTotal  = annualIncome * 5;
-        return { periodsPerYear, perPeriodRate, perPeriodCheck, annualIncome, fiveYearTotal };
+    function moduleAMath({ capital, monthlyRate, frequency }) {
+        const periodsPerYear  = FREQ_PERIODS[frequency] || 4;
+        const monthsPerPeriod = 12 / periodsPerYear;
+        const perPeriodCheck  = capital * monthlyRate * monthsPerPeriod;
+        const annualIncome    = capital * monthlyRate * 12;
+        const fiveYearTotal   = annualIncome * 5;
+        return { periodsPerYear, monthsPerPeriod, perPeriodCheck, annualIncome, fiveYearTotal };
     }
 
     // ─────────────────────────────────────────────────────
     // Module B — Scale-Then-Distribute engine
-    // Within a year: capital compounds at the monthly rate derived from the
-    // annualized input. At each `threshold` × N crossing, log a scale event.
+    // Input is MONTHLY rate directly (no annualized→monthly conversion).
+    // Within a year: capital compounds at monthlyRate each month. At each
+    // `threshold` × N crossing, log a scale event.
     // At year-end: distribute (capital - base), reset capital to base.
     // ─────────────────────────────────────────────────────
-    function moduleBSimulate({ capital: base, annualizedRate, threshold, years }) {
-        const monthlyRate = Math.pow(1 + annualizedRate, 1/12) - 1;
+    function moduleBSimulate({ capital: base, monthlyRate, threshold, years }) {
         const yearTimelines = [];
         for (let yr = 0; yr < years; yr++) {
             let cap = base;
@@ -79,13 +82,13 @@
 
         const recompute = () => {
             const capital = parseFloat(capEl.value);
-            const rateAnnual = parseFloat(rateEl.value) / 100;
+            const monthlyRate = parseFloat(rateEl.value) / 100;
             const freqRadio = document.querySelector('input[name="mod-a-freq"]:checked');
             const frequency = freqRadio ? freqRadio.value : 'quarterly';
 
-            const tgt = moduleAMath({ capital, annualizedRate: rateAnnual, frequency });
+            const tgt = moduleAMath({ capital, monthlyRate, frequency });
             $('mod-a-capital-val').textContent = fmt$0(capital);
-            $('mod-a-rate-val').textContent    = (rateAnnual * 100).toFixed(0) + '%';
+            $('mod-a-rate-val').textContent    = (monthlyRate * 100).toFixed(0) + '%/mo';
 
             $('mod-a-target-period').textContent = fmt$0(tgt.perPeriodCheck);
             $('mod-a-target-annual').textContent = fmt$0(tgt.annualIncome);
@@ -95,10 +98,10 @@
             const perLabelEl = $('mod-a-per-label');
             if (perLabelEl) perLabelEl.textContent = `Per-${perWord} check`;
 
-            // Subhead reflects current slider value (so "Adjust slider to explore" is honest).
+            // Subhead reflects current slider value.
             const subhead = $('mod-a-target-header');
             if (subhead) {
-                subhead.textContent = `${(rateAnnual * 100).toFixed(0)}% annualized — the strategy's income target.`;
+                subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
             }
         };
 
@@ -126,16 +129,16 @@
 
         const recompute = () => {
             const capital = parseFloat(capEl.value);
-            const rateAnnual = parseFloat(rateEl.value) / 100;
+            const monthlyRate = parseFloat(rateEl.value) / 100;
             const threshold = parseFloat(thrEl.value) / 100;
             const years = parseInt(horEl.value, 10);
 
             $('mod-b-capital-val').textContent   = fmt$0(capital);
-            $('mod-b-rate-val').textContent      = (rateAnnual * 100).toFixed(0) + '%';
+            $('mod-b-rate-val').textContent      = (monthlyRate * 100).toFixed(0) + '%/mo';
             $('mod-b-threshold-val').textContent = (threshold * 100).toFixed(0) + '%';
             $('mod-b-horizon-val').textContent   = years + (years === 1 ? ' yr' : ' yrs');
 
-            const tgt = moduleBSimulate({ capital, annualizedRate: rateAnnual, threshold, years });
+            const tgt = moduleBSimulate({ capital, monthlyRate, threshold, years });
             renderModuleBTimeline($('mod-b-timeline-target'), tgt, capital);
 
             $('mod-b-target-events').textContent     = String(tgt.scaleEventsPerYear);
@@ -143,9 +146,9 @@
             $('mod-b-target-cumulative').textContent = fmt$0(tgt.totalDistribution);
 
             const h4 = $('mod-b-target-h4');
-            if (h4) h4.textContent = `At Target Rate · ${(rateAnnual * 100).toFixed(0)}% annualized`;
+            if (h4) h4.textContent = `At Target Rate · ${(monthlyRate * 100).toFixed(0)}% per month`;
             const subhead = $('mod-b-target-header');
-            if (subhead) subhead.textContent = `${(rateAnnual * 100).toFixed(0)}% annualized — the strategy's income target.`;
+            if (subhead) subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
         };
 
         if (!capEl._wired) {
