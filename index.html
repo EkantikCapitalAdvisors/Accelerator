@@ -200,13 +200,23 @@
                         <input id="mod-b-rate" type="range" min="2" max="20" step="1" value="10">
                     </div>
                     <div class="slider-field">
+                        <label>Scale-ups per year <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(max 4)</span></label>
+                        <div class="mod__radio-group" role="radiogroup" aria-label="Scale-ups per year">
+                            <label><input type="radio" name="mod-b-scaleups" value="0"><span>0</span></label>
+                            <label><input type="radio" name="mod-b-scaleups" value="1" checked><span>1</span></label>
+                            <label><input type="radio" name="mod-b-scaleups" value="2"><span>2</span></label>
+                            <label><input type="radio" name="mod-b-scaleups" value="3"><span>3</span></label>
+                            <label><input type="radio" name="mod-b-scaleups" value="4"><span>4</span></label>
+                        </div>
+                    </div>
+                    <div class="slider-field">
                         <label for="mod-b-horizon">Horizon · <span class="slider-value" id="mod-b-horizon-val">1 yr</span></label>
                         <input id="mod-b-horizon" type="range" min="1" max="5" step="1" value="1">
                     </div>
                 </div>
 
                 <p class="muted" style="font-size:12px;margin:-8px 0 var(--s-2);font-family:var(--font-mono)">
-                    <strong style="color:var(--gold)">Scale-up trigger:</strong> position doubles once cumulative profit hits <strong>$5,000</strong> (built-in, not adjustable — derived from execution mechanics).
+                    <strong style="color:var(--gold)">Scale-up mechanic:</strong> each scale-up triggers when cumulative profit reaches the next <strong>$5,000</strong> milestone and <strong>doubles position size</strong> (and therefore doubles future monthly profits). Pick how many you'd like to apply this year — up to 4.
                 </p>
 
                 <div class="mod__outputs mod__outputs--single" aria-label="Module B scoreboard">
@@ -215,7 +225,7 @@
                         <p class="mod__col-title">Designed cadence</p>
                         <p class="mod__col-context" id="mod-b-target-header">10% per month — the strategy's income target.</p>
                         <div class="mod__metric">
-                            <span class="mod__metric-label">Scale-up triggered</span>
+                            <span class="mod__metric-label">Scale-ups applied</span>
                             <span class="mod__metric-val" id="mod-b-target-events">—</span>
                         </div>
                         <div class="mod__metric mod__metric--big">
@@ -237,6 +247,7 @@
                             <tr>
                                 <th>Month</th>
                                 <th>Status</th>
+                                <th class="num">Position</th>
                                 <th class="num">Capital (end)</th>
                                 <th class="num">Monthly gain</th>
                                 <th class="num">Cumulative profit</th>

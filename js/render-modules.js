@@ -66,46 +66,54 @@
 
     // ─────────────────────────────────────────────────────
     // Module B — Scale-Then-Distribute engine
-    // Input is MONTHLY rate directly. Within each year, capital compounds for
-    // ACTIVE_MONTHS_PER_YEAR months at monthlyRate. The other 2 months the
-    // strategy is closed — capital sits flat. The position doubles once during
-    // the year — at the first month where cumulative profit (cap - base) hits
-    // SCALE_TRIGGER_DOLLARS. At year-end: distribute (cap - base), reset capital
-    // to base for the next year.
-    // Returns a year-1 `monthly` breakdown for the table.
+    // LINEAR-PER-POSITION model (not geometric):
+    //   monthly_gain = base × monthlyRate × positionMultiplier
+    // Each scale-up DOUBLES the position multiplier (1x → 2x → 4x → 8x → 16x).
+    // A scale-up triggers when cumulative profit crosses the next $5K milestone,
+    // BOUNDED by the user-chosen `maxScaleUps` (0 to 4).
+    // At month ACTIVE_MONTHS_PER_YEAR (10): distribute (cap - base), reset to base.
     // ─────────────────────────────────────────────────────
-    function moduleBSimulate({ capital: base, monthlyRate, years }) {
+    function moduleBSimulate({ capital: base, monthlyRate, maxScaleUps, years }) {
         const yearTimelines = [];
-        let scaledMonth = null;
         for (let yr = 0; yr < years; yr++) {
             let cap = base;
-            let scaledAt = null;
-            let annualProfit = 0;
+            let positionMultiplier = 1;
+            let scaleUpsApplied = 0;
+            const scaleEvents = []; // { month, newMultiplier }
             const monthly = [];
+            let annualProfit = 0;
             for (let m = 1; m <= 12; m++) {
                 const isActive = m <= ACTIVE_MONTHS_PER_YEAR;
-                const startCap = cap;
-                if (isActive) cap = cap * (1 + monthlyRate);
-                const gain = cap - startCap;
+                const positionAtStart = positionMultiplier;
+                const gain = isActive ? (base * monthlyRate * positionAtStart) : 0;
+                cap = cap + gain;
                 const profit = cap - base;
-                const scaledThisMonth = (scaledAt == null && isActive && profit >= SCALE_TRIGGER_DOLLARS);
-                if (scaledThisMonth) scaledAt = m;
+
+                // Trigger scale-ups at every $5K cumulative profit milestone, up to maxScaleUps.
+                let scaledThisMonth = false;
+                while (scaleUpsApplied < maxScaleUps && profit >= (scaleUpsApplied + 1) * SCALE_TRIGGER_DOLLARS) {
+                    positionMultiplier *= 2;
+                    scaleUpsApplied++;
+                    scaledThisMonth = true;
+                    scaleEvents.push({ month: m, newMultiplier: positionMultiplier });
+                }
+
                 const isYearEnd = (m === ACTIVE_MONTHS_PER_YEAR);
-                const distribution = isYearEnd ? (cap - base) : 0;
-                // Capture the pre-distribution end-of-month capital for the table.
+                const distribution = isYearEnd ? profit : 0;
                 const displayCap = cap;
                 if (isYearEnd) {
-                    // Distribute profit, reset capital to base for the stand-down months
-                    annualProfit = cap - base;
-                    cap = base;
+                    annualProfit = profit;
+                    cap = base; // reset for stand-down months
                 }
+
                 monthly.push({
                     month: m,
                     isActive,
-                    startCap,
+                    positionAtStart,
+                    positionAtEnd: positionMultiplier,
                     endCap: displayCap,
                     gain,
-                    profit,
+                    profit,             // cum profit at end of month (0 in stand-down — cap was reset)
                     scaledThisMonth,
                     distribution
                 });
@@ -113,18 +121,22 @@
             yearTimelines.push({
                 year: yr + 1,
                 monthly,
-                yearEndCapital: base, // after distribution + reset
+                yearEndCapital: base,
                 distribution: annualProfit,
-                scaledAt
+                scaleUpsApplied,
+                scaleEvents,
+                finalMultiplier: positionMultiplier
             });
-            if (yr === 0) scaledMonth = scaledAt;
         }
         const totalDistribution = yearTimelines.reduce((s, y) => s + y.distribution, 0);
+        const y1 = yearTimelines[0] || {};
         return {
             yearTimelines,
             totalDistribution,
-            scaledMonth,
-            yearEndDistribution: yearTimelines[0]?.distribution || 0,
+            yearEndDistribution: y1.distribution || 0,
+            scaleUpsApplied: y1.scaleUpsApplied || 0,
+            finalMultiplier: y1.finalMultiplier || 1,
+            scaleEvents: y1.scaleEvents || [],
             monthlyRate,
             activeMonths: ACTIVE_MONTHS_PER_YEAR
         };
@@ -190,29 +202,34 @@
             const capital = parseFloat(capEl.value);
             const monthlyRate = parseFloat(rateEl.value) / 100;
             const years = parseInt(horEl.value, 10);
+            const scaleRadio = document.querySelector('input[name="mod-b-scaleups"]:checked');
+            const maxScaleUps = scaleRadio ? parseInt(scaleRadio.value, 10) : 1;
 
-            $('mod-b-capital-val').textContent   = fmt$0(capital);
-            $('mod-b-rate-val').textContent      = (monthlyRate * 100).toFixed(0) + '%/mo';
-            $('mod-b-horizon-val').textContent   = years + (years === 1 ? ' yr' : ' yrs');
+            $('mod-b-capital-val').textContent = fmt$0(capital);
+            $('mod-b-rate-val').textContent    = (monthlyRate * 100).toFixed(0) + '%/mo';
+            $('mod-b-horizon-val').textContent = years + (years === 1 ? ' yr' : ' yrs');
 
-            const tgt = moduleBSimulate({ capital, monthlyRate, years });
+            const tgt = moduleBSimulate({ capital, monthlyRate, maxScaleUps, years });
 
-            const scaleLabel = tgt.scaledMonth != null
-                ? `Yes · month ${tgt.scaledMonth}`
-                : 'No (profit < $5K)';
+            // Build the "1x → 2x → 4x" trace for the scoreboard
+            const multiTrace = ['1x'];
+            tgt.scaleEvents.forEach(ev => multiTrace.push(`${ev.newMultiplier}x`));
+            const scaleLabel = tgt.scaleUpsApplied === 0
+                ? '0 (position stays 1x)'
+                : `${tgt.scaleUpsApplied} (${multiTrace.join(' → ')})`;
             $('mod-b-target-events').textContent     = scaleLabel;
             $('mod-b-target-yearend').textContent    = fmt$0(tgt.yearEndDistribution);
             $('mod-b-target-cumulative').textContent = fmt$0(tgt.totalDistribution);
 
             const subhead = $('mod-b-target-header');
-            if (subhead) subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
+            if (subhead) subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month · up to ${maxScaleUps} scale-up${maxScaleUps === 1 ? '' : 's'} — the strategy's income target.`;
 
-            // Render year-1 month-by-month table.
             renderModuleBTable(tgt.yearTimelines[0]?.monthly || []);
         };
 
         if (!capEl._wired) {
             [capEl, rateEl, horEl].forEach(el => el.addEventListener('input', recompute));
+            document.querySelectorAll('input[name="mod-b-scaleups"]').forEach(r => r.addEventListener('change', recompute));
             capEl._wired = true;
         }
         recompute();
@@ -260,33 +277,37 @@
             const status = r.isActive
                 ? '<span class="mod-table__pill mod-table__pill--active">Active</span>'
                 : '<span class="mod-table__pill mod-table__pill--down">Stand-down</span>';
+            // Position column: e.g. "2x" (during the month), or "1x ↑ 2x" if a scale-up triggered at end-of-month.
+            const posCell = r.scaledThisMonth
+                ? `<span class="mod-table__pos">${r.positionAtStart}x</span> <span class="mod-table__scale-tag" title="Cumulative profit hit the next $5,000 milestone — position doubles for next month">↑ ${r.positionAtEnd}x</span>`
+                : `<span class="mod-table__pos">${r.positionAtStart}x</span>`;
             const gainCell = r.isActive
                 ? `<span class="mod-table__gain">+${fmt$0(r.gain)}</span>`
                 : '<span class="muted">—</span>';
             const dist = r.distribution > 0
                 ? `<strong class="mod-table__dist">${fmt$0(r.distribution)}</strong>`
                 : '<span class="muted">—</span>';
-            const scaleTag = r.scaledThisMonth
-                ? ' <span class="mod-table__scale-tag" title="Cumulative profit crossed $5,000 — position doubles">↑ scale</span>'
-                : '';
             const rowClass = r.distribution > 0 ? ' class="mod-table__row--dist"' : '';
             return `
               <tr${rowClass}>
                 <td class="mono">${MONTH_NAMES[r.month - 1]}</td>
                 <td>${status}</td>
+                <td class="num">${posCell}</td>
                 <td class="num mono">${fmt$0(r.endCap)}</td>
-                <td class="num">${gainCell}${scaleTag}</td>
+                <td class="num">${gainCell}</td>
                 <td class="num mono">${r.profit > 0 ? fmt$0(r.profit) : '<span class="muted">—</span>'}</td>
                 <td class="num">${dist}</td>
               </tr>`;
         }).join('');
-        // Peak capital at the moment of distribution (month 10), distribution amount = profit
+        // Peak capital + profit at month 10 (just before distribution + reset)
         const peakCap = monthly[ACTIVE_MONTHS_PER_YEAR - 1]?.endCap || 0;
         const peakProfit = monthly[ACTIVE_MONTHS_PER_YEAR - 1]?.profit || 0;
+        const finalMult = monthly[ACTIVE_MONTHS_PER_YEAR - 1]?.positionAtEnd || 1;
         tbody.innerHTML = rows + `
           <tr class="mod-table__row--total">
             <td class="mono"><strong>Year 1</strong></td>
             <td><span class="muted">${ACTIVE_MONTHS_PER_YEAR} active · 2 stand-down</span></td>
+            <td class="num"><strong>${finalMult}x</strong> <span class="muted" style="font-size:11px">(year-end)</span></td>
             <td class="num mono"><strong>${fmt$0(peakCap)}</strong> <span class="muted" style="font-size:11px">(peak)</span></td>
             <td class="num"><strong>+${fmt$0(peakProfit)}</strong></td>
             <td class="num mono"><strong>${fmt$0(peakProfit)}</strong></td>

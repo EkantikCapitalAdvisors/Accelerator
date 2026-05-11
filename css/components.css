@@ -1264,17 +1264,21 @@ a:hover { color: var(--gold); }
 }
 .mod-table__scale-tag {
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 4px;
     padding: 1px 6px;
     background: var(--gold);
     color: var(--navy);
     border-radius: var(--radius-pill);
-    font-family: var(--font-sans);
-    font-size: 9px;
+    font-family: var(--font-mono);
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0.04em;
     vertical-align: 1px;
+}
+.mod-table__pos {
+    font-family: var(--font-mono);
+    color: var(--navy);
+    font-weight: 600;
 }
 
 @media (max-width: 640px) {
