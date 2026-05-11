@@ -1018,7 +1018,7 @@ a:hover { color: var(--gold); }
 }
 .mod__radio-group label:hover { border-color: var(--navy); }
 
-/* ─── Two-column output (target | live) ─── */
+/* ─── Output panel (single-column target-only) ─── */
 .mod__outputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1028,6 +1028,7 @@ a:hover { color: var(--gold); }
     border-radius: var(--radius-md);
     overflow: hidden;
 }
+.mod__outputs--single { grid-template-columns: 1fr; }
 .mod__col {
     padding: var(--s-3);
     background: var(--white);
@@ -1109,6 +1110,7 @@ a:hover { color: var(--gold); }
     gap: var(--s-2);
     margin: var(--s-3) 0;
 }
+.mod-b__timelines--single { grid-template-columns: 1fr; }
 .mod-b__timeline-block {
     background: var(--white);
     border: 1px solid var(--divider);
@@ -1145,7 +1147,7 @@ a:hover { color: var(--gold); }
     background: var(--cream-2);
     border-radius: var(--radius-sm);
     border: 1px solid var(--divider);
-    overflow: visible;
+    overflow: hidden;
 }
 .mod-b-row__fill {
     position: absolute;
@@ -1156,37 +1158,25 @@ a:hover { color: var(--gold); }
 .mod-b-marker {
     position: absolute;
     top: 50%;
-    transform: translate(-50%, -50%);
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--navy);
-    background: var(--white);
-    border: 1px solid var(--divider);
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: var(--radius-pill);
     white-space: nowrap;
-    pointer-events: auto;
+    pointer-events: none;
     z-index: 1;
 }
-.mod-b-marker--scale {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--navy);
-    font-weight: 600;
-}
-.mod-b-marker--scale em { font-style: normal; }
 .mod-b-marker--start {
-    background: var(--cream-2);
+    left: 8px;
+    transform: translateY(-50%);
     color: var(--muted);
-    transform: translate(0, -50%);
-    left: 4px !important;
-    font-size: 9px;
+    font-size: 10px;
 }
 .mod-b-marker--end {
-    background: var(--navy);
-    color: var(--white);
-    border-color: var(--navy);
-    transform: translate(-100%, -50%);
+    right: 8px;
+    transform: translateY(-50%);
+    color: var(--navy);
     font-weight: 600;
 }
 

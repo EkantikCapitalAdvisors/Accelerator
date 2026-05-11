@@ -70,41 +70,12 @@
     }
 
     // ─────────────────────────────────────────────────────
-    // Live-rate adapter — pulls from Ekantik.KPIs.liveMonthlyRate.
-    // Returns a normalized object the modules render against.
+    // Module A — Render (target rate only; live evidence lives elsewhere)
     // ─────────────────────────────────────────────────────
-    function getLiveRate(state) {
-        const result = root.Ekantik.KPIs.liveMonthlyRate(state.trades || []);
-        if (!result.ok) return { ok: false, n: result.n || 0, reason: result.reason };
-        return {
-            ok: true,
-            monthly: result.rate,
-            annualized: result.annualized,
-            n: result.n,
-            provisional: result.provisional
-        };
-    }
-
-    function fmtLiveHeader(live) {
-        if (!live.ok) return `<span class="muted">Live rate unavailable — ${escapeHTML(live.reason || 'sample too small')}.</span>`;
-        const monthlyDisp    = (live.monthly * 100).toFixed(2) + '%/mo';
-        const annualizedDisp = '~' + Math.round(live.annualized * 100) + '% annualized';
-        const sampleDisp     = `N=${live.n}`;
-        const prov = live.provisional ? ' <span class="muted">(provisional · firms up at N=25)</span>' : '';
-        return `<strong class="mono">${monthlyDisp}</strong> · ${annualizedDisp} · ${sampleDisp}${prov}`;
-    }
-
-    // ─────────────────────────────────────────────────────
-    // Module A — Render
-    // ─────────────────────────────────────────────────────
-    function renderModuleA(state) {
+    function renderModuleA(/* state */) {
         const capEl  = $('mod-a-capital');
         const rateEl = $('mod-a-rate');
         if (!capEl || !rateEl) return;
-
-        const live = getLiveRate(state);
-        const liveHeader = $('mod-a-live-header');
-        if (liveHeader) liveHeader.innerHTML = fmtLiveHeader(live);
 
         const recompute = () => {
             const capital = parseFloat(capEl.value);
@@ -120,26 +91,14 @@
             $('mod-a-target-annual').textContent = fmt$0(tgt.annualIncome);
             $('mod-a-target-5y').textContent     = fmt$0(tgt.fiveYearTotal);
 
-            const periodLabel = FREQ_LABEL[frequency];
             const perWord = FREQ_PER[frequency];
             const perLabelEl = $('mod-a-per-label');
             if (perLabelEl) perLabelEl.textContent = `Per-${perWord} check`;
 
-            // Live column
-            if (live.ok) {
-                const liveCalc = moduleAMath({ capital, annualizedRate: live.annualized, frequency });
-                $('mod-a-live-period').textContent = fmt$0(liveCalc.perPeriodCheck);
-                $('mod-a-live-annual').textContent = fmt$0(liveCalc.annualIncome);
-                $('mod-a-live-5y').textContent     = fmt$0(liveCalc.fiveYearTotal);
-                if (live.provisional) {
-                    ['mod-a-live-period','mod-a-live-annual','mod-a-live-5y'].forEach(id => {
-                        const el = $(id); if (el) el.classList.add('mod-out--provisional');
-                    });
-                }
-            } else {
-                ['mod-a-live-period','mod-a-live-annual','mod-a-live-5y'].forEach(id => {
-                    const el = $(id); if (el) el.textContent = '—';
-                });
+            // Subhead reflects current slider value (so "Adjust slider to explore" is honest).
+            const subhead = $('mod-a-target-header');
+            if (subhead) {
+                subhead.textContent = `${(rateAnnual * 100).toFixed(0)}% annualized — the strategy's income target.`;
             }
         };
 
@@ -153,21 +112,17 @@
     }
 
     // ─────────────────────────────────────────────────────
-    // Module B — Render
-    // Timeline visualization: one row per year, month axis 0–12, scale-event
-    // markers at the month they cross the threshold, year-end distribution
-    // marker at right.
+    // Module B — Render (target rate only; clean timeline)
+    // Timeline now shows just base → year-end-capital fill with the year-end
+    // distribution as the right-edge label. Scale-event count is shown in the
+    // scoreboard, not as cluttered per-event labels on the bar.
     // ─────────────────────────────────────────────────────
-    function renderModuleB(state) {
+    function renderModuleB(/* state */) {
         const capEl = $('mod-b-capital');
         const rateEl = $('mod-b-rate');
         const thrEl = $('mod-b-threshold');
         const horEl = $('mod-b-horizon');
         if (!capEl || !rateEl || !thrEl || !horEl) return;
-
-        const live = getLiveRate(state);
-        const liveHeader = $('mod-b-live-header');
-        if (liveHeader) liveHeader.innerHTML = fmtLiveHeader(live);
 
         const recompute = () => {
             const capital = parseFloat(capEl.value);
@@ -187,24 +142,10 @@
             $('mod-b-target-yearend').textContent    = fmt$0(tgt.yearEndDistribution);
             $('mod-b-target-cumulative').textContent = fmt$0(tgt.totalDistribution);
 
-            if (live.ok) {
-                const liveSim = moduleBSimulate({ capital, annualizedRate: live.annualized, threshold, years });
-                renderModuleBTimeline($('mod-b-timeline-live'), liveSim, capital);
-                $('mod-b-live-events').textContent     = String(liveSim.scaleEventsPerYear);
-                $('mod-b-live-yearend').textContent    = fmt$0(liveSim.yearEndDistribution);
-                $('mod-b-live-cumulative').textContent = fmt$0(liveSim.totalDistribution);
-                if (live.provisional) {
-                    ['mod-b-live-events','mod-b-live-yearend','mod-b-live-cumulative'].forEach(id => {
-                        const el = $(id); if (el) el.classList.add('mod-out--provisional');
-                    });
-                }
-            } else {
-                const liveTl = $('mod-b-timeline-live');
-                if (liveTl) liveTl.innerHTML = '<p class="muted italic" style="font-size:13px;padding:12px">Live rate unavailable.</p>';
-                ['mod-b-live-events','mod-b-live-yearend','mod-b-live-cumulative'].forEach(id => {
-                    const el = $(id); if (el) el.textContent = '—';
-                });
-            }
+            const h4 = $('mod-b-target-h4');
+            if (h4) h4.textContent = `At Target Rate · ${(rateAnnual * 100).toFixed(0)}% annualized`;
+            const subhead = $('mod-b-target-header');
+            if (subhead) subhead.textContent = `${(rateAnnual * 100).toFixed(0)}% annualized — the strategy's income target.`;
         };
 
         if (!capEl._wired) {
@@ -216,22 +157,20 @@
 
     function renderModuleBTimeline(container, sim, base) {
         if (!container) return;
-        // Capture the largest year-end capital so each year's bar is scaled consistently.
         const maxCapital = Math.max(base, ...sim.yearTimelines.map(y => y.yearEndCapital));
         const rows = sim.yearTimelines.map(y => {
-            const events = y.events.map(ev => {
-                const pct = (ev.month / 12) * 100;
-                return `<span class="mod-b-marker mod-b-marker--scale" style="left:${pct.toFixed(2)}%" title="Month ${ev.month}: ${ev.multiple.toFixed(1)}× · ${fmt$0(ev.capital)}"><em>${ev.multiple.toFixed(1)}×</em></span>`;
-            }).join('');
             const fillPct = Math.min(100, (y.yearEndCapital / maxCapital) * 100);
+            const eventCount = y.events.length;
+            const eventNote = eventCount > 0
+                ? ` · ${eventCount} scale event${eventCount === 1 ? '' : 's'}`
+                : '';
             return `
               <div class="mod-b-row">
                 <div class="mod-b-row__label">Year ${y.year}</div>
-                <div class="mod-b-row__track">
+                <div class="mod-b-row__track" title="Year-end capital ${fmt$0(y.yearEndCapital)}${eventNote}">
                   <div class="mod-b-row__fill" style="width:${fillPct.toFixed(2)}%"></div>
-                  <span class="mod-b-marker mod-b-marker--start" style="left:0%" title="Base ${fmt$0(base)}">base</span>
-                  ${events}
-                  <span class="mod-b-marker mod-b-marker--end" style="left:100%" title="Year-end distribution ${fmt$0(y.distribution)}">→ ${fmt$0(y.distribution)}</span>
+                  <span class="mod-b-marker mod-b-marker--start">base ${fmt$0(base)}</span>
+                  <span class="mod-b-marker mod-b-marker--end">→ ${fmt$0(y.distribution)} distributed</span>
                 </div>
               </div>`;
         }).join('');
@@ -376,22 +315,20 @@
 
     // ─────────────────────────────────────────────────────
     // Init
+    // Modules A and B don't depend on live data anymore — they render the
+    // target-rate scenario from slider inputs. Only Module C (capacity counter)
+    // subscribes to state. Form wiring is also one-shot.
     // ─────────────────────────────────────────────────────
     function init() {
         if (!root.Ekantik || !root.Ekantik.Data) return;
-        root.Ekantik.Data.onChange(state => {
-            renderModuleA(state);
-            renderModuleB(state);
-            renderCapacityCounter(state);
-        });
+        // Module A and B: render once on init (they're slider-driven from here on)
+        renderModuleA();
+        renderModuleB();
+        // Module C and form: state-dependent + one-shot wiring
+        root.Ekantik.Data.onChange(state => { renderCapacityCounter(state); });
         renderForm();
-        // First render if data already present
         const s = root.Ekantik.Data.get();
-        if (s && s.trades) {
-            renderModuleA(s);
-            renderModuleB(s);
-            renderCapacityCounter(s);
-        }
+        if (s) renderCapacityCounter(s);
     }
 
     root.Ekantik = root.Ekantik || {};

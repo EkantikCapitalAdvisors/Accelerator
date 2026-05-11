@@ -117,8 +117,8 @@
                         <input id="mod-a-capital" type="range" min="5000" max="1000000" step="1000" value="10000">
                     </div>
                     <div class="slider-field">
-                        <label for="mod-a-rate">Annualized rate · <span class="slider-value" id="mod-a-rate-val">100%</span></label>
-                        <input id="mod-a-rate" type="range" min="20" max="200" step="5" value="100">
+                        <label for="mod-a-rate">Annualized rate · <span class="slider-value" id="mod-a-rate-val">10%</span></label>
+                        <input id="mod-a-rate" type="range" min="2" max="50" step="1" value="10">
                     </div>
                     <div class="slider-field">
                         <label>Distribution frequency</label>
@@ -130,11 +130,11 @@
                     </div>
                 </div>
 
-                <div class="mod__outputs" aria-label="Module A outputs">
+                <div class="mod__outputs mod__outputs--single" aria-label="Module A outputs">
                     <div class="mod__col">
                         <p class="mod__col-eyebrow">At Target Rate</p>
                         <p class="mod__col-title">Designed to produce</p>
-                        <p class="mod__col-context">100% annualized — the strategy's design parameter.</p>
+                        <p class="mod__col-context" id="mod-a-target-header">10% annualized — the strategy's income target.</p>
                         <div class="mod__metric">
                             <span class="mod__metric-label" id="mod-a-per-label">Per-quarter check</span>
                             <span class="mod__metric-val" id="mod-a-target-period">—</span>
@@ -148,27 +148,10 @@
                             <span class="mod__metric-val" id="mod-a-target-5y">—</span>
                         </div>
                     </div>
-                    <div class="mod__col">
-                        <p class="mod__col-eyebrow">At Live Rate</p>
-                        <p class="mod__col-title">Currently producing</p>
-                        <p class="mod__col-context" id="mod-a-live-header">Loading…</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Per-period check</span>
-                            <span class="mod__metric-val" id="mod-a-live-period">—</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Annual income</span>
-                            <span class="mod__metric-val" id="mod-a-live-annual">—</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">5-year cash total</span>
-                            <span class="mod__metric-val" id="mod-a-live-5y">—</span>
-                        </div>
-                    </div>
                 </div>
 
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Live rate is the geometric mean from Discord-published trades, annualized. Target rate is the strategy's design parameter. Both are shown for transparency; distributions are not guaranteed.</em>
+                    <em>Target rate is the strategy's design parameter for sustained income at scale. Realized performance to date is shown in The Edge section below and in the live trade log. Distributions are not guaranteed.</em>
                 </p>
 
                 <div class="mod__caveat">
@@ -177,7 +160,7 @@
             </article>
 
             <p class="mod-connector">
-                Quarterly cash, or year-end distribution? Mode A keeps the base flat and ships profits every quarter. Mode B lets position size ratchet up at 50% milestones <em>within</em> the year, then distributes the full annual profit at year-end. Both modes obey the cap. Both reset to base on a defined cadence. They differ only in distribution rhythm.
+                Quarterly cash, or year-end distribution? Mode A keeps the base flat and ships profits every quarter. Mode B lets position size ratchet up at each scaling milestone <em>within</em> the year, then distributes the full annual profit at year-end. Both modes obey the cap. Both reset to base on a defined cadence. They differ only in distribution rhythm.
             </p>
         </div>
     </section>
@@ -189,7 +172,7 @@
             <article class="mod">
                 <header class="mod__header">
                     <h2 class="mod__title" id="mod-b-h2">The Scale-Then-Distribute Mode</h2>
-                    <p class="mod__subhead">Each 50% gain unlocks a larger position. Distribution settles at year-end.</p>
+                    <p class="mod__subhead">Each scaling milestone unlocks a larger position. Distribution settles at year-end.</p>
                 </header>
 
                 <div class="mod__sliders">
@@ -198,12 +181,12 @@
                         <input id="mod-b-capital" type="range" min="5000" max="1000000" step="1000" value="10000">
                     </div>
                     <div class="slider-field">
-                        <label for="mod-b-rate">Annualized rate · <span class="slider-value" id="mod-b-rate-val">100%</span></label>
-                        <input id="mod-b-rate" type="range" min="20" max="200" step="5" value="100">
+                        <label for="mod-b-rate">Annualized rate · <span class="slider-value" id="mod-b-rate-val">10%</span></label>
+                        <input id="mod-b-rate" type="range" min="2" max="50" step="1" value="10">
                     </div>
                     <div class="slider-field">
-                        <label for="mod-b-threshold">Scaling threshold · <span class="slider-value" id="mod-b-threshold-val">50%</span></label>
-                        <input id="mod-b-threshold" type="range" min="25" max="100" step="5" value="50">
+                        <label for="mod-b-threshold">Scaling threshold · <span class="slider-value" id="mod-b-threshold-val">10%</span></label>
+                        <input id="mod-b-threshold" type="range" min="5" max="50" step="5" value="10">
                     </div>
                     <div class="slider-field">
                         <label for="mod-b-horizon">Horizon · <span class="slider-value" id="mod-b-horizon-val">1 yr</span></label>
@@ -211,23 +194,18 @@
                     </div>
                 </div>
 
-                <div class="mod-b__timelines">
+                <div class="mod-b__timelines mod-b__timelines--single">
                     <div class="mod-b__timeline-block">
-                        <h4>At Target Rate · 100% annualized</h4>
+                        <h4 id="mod-b-target-h4">At Target Rate · 10% annualized</h4>
                         <div id="mod-b-timeline-target"></div>
-                    </div>
-                    <div class="mod-b__timeline-block">
-                        <h4>At Live Rate</h4>
-                        <p class="muted" style="font-size:11px;margin:-4px 0 var(--s-2);font-family:var(--font-mono)" id="mod-b-live-header">Loading…</p>
-                        <div id="mod-b-timeline-live"></div>
                     </div>
                 </div>
 
-                <div class="mod__outputs" aria-label="Module B scoreboard">
+                <div class="mod__outputs mod__outputs--single" aria-label="Module B scoreboard">
                     <div class="mod__col">
                         <p class="mod__col-eyebrow">At Target Rate</p>
                         <p class="mod__col-title">Designed cadence</p>
-                        <p class="mod__col-context">100% annualized — the strategy's design parameter.</p>
+                        <p class="mod__col-context" id="mod-b-target-header">10% annualized — the strategy's income target.</p>
                         <div class="mod__metric">
                             <span class="mod__metric-label">Scale events / year</span>
                             <span class="mod__metric-val" id="mod-b-target-events">—</span>
@@ -241,31 +219,14 @@
                             <span class="mod__metric-val" id="mod-b-target-cumulative">—</span>
                         </div>
                     </div>
-                    <div class="mod__col">
-                        <p class="mod__col-eyebrow">At Live Rate</p>
-                        <p class="mod__col-title">Current cadence</p>
-                        <p class="mod__col-context">From the live sample below.</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Scale events / year</span>
-                            <span class="mod__metric-val" id="mod-b-live-events">—</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Year-end distribution</span>
-                            <span class="mod__metric-val" id="mod-b-live-yearend">—</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Cumulative cash · horizon</span>
-                            <span class="mod__metric-val" id="mod-b-live-cumulative">—</span>
-                        </div>
-                    </div>
                 </div>
 
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Live rate computed from N Discord-published trades, annualized. Sample updates weekly.</em>
+                    <em>Target rate is the strategy's design parameter for sustained income at scale. Realized performance to date is shown in The Edge section below. Distributions are not guaranteed.</em>
                 </p>
 
                 <div class="mod__caveat">
-                    Position size ratchets up at each 50% milestone within the year. At year-end, full profit is distributed and the working base resets. The reset is structural: strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents, and uncapped compounding would breach the ceiling within a few cycles. Each year begins fresh at the base allocation.
+                    Position size ratchets up at each milestone within the year. At year-end, full profit is distributed and the working base resets. The reset is structural: strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents, and uncapped compounding would breach the ceiling within a few cycles. Each year begins fresh at the base allocation.
                 </div>
             </article>
         </div>
