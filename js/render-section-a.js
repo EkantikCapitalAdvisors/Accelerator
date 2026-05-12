@@ -1,7 +1,7 @@
 // =====================================================
 // Section A — The Edge.
 // Renders edge triplet (WR / PF / R-Exp), inline equity curve, and monthly P&L bars.
-// Doubling Ladder and 5% Reshaper were removed in the Income repositioning
+// Doubling Ladder and 5% Reshaper were removed in the Accelerator repositioning
 // (they sold uncapped compounding, which directly contradicts the capacity cap).
 // =====================================================
 (function (root) {

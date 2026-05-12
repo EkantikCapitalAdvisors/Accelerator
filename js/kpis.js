@@ -6,9 +6,9 @@
 (function (root) {
     'use strict';
 
-    // Adherence (R1–R4) was retired from the public trust strip in the Income
-    // repositioning — see js/dashboard.js and methodology.html for where the
-    // full R1–R4 engine still lives.
+    // Adherence (R1–R4) was retired from the public trust strip in the
+    // Accelerator repositioning — see js/dashboard.js and methodology.html
+    // for where the full R1–R4 engine still lives.
 
     function lastFillTimestamp(rawTrades) {
         if (!Array.isArray(rawTrades) || rawTrades.length === 0) return null;
@@ -40,7 +40,7 @@
 
     // ─── Live monthly rate (geometric mean from Discord-published trades) ───
     // Single source of truth consumed by Section A (Doubling Ladder, retired) and
-    // by Modules A and B on the Income page. Returns { ok, rate, annualized, n,
+    // by Modules A and B on the Accelerator page. Returns { ok, rate, annualized, n,
     // provisional, reason? }. `rate` is monthly. Sample-size policy: ≥3 trades to
     // compute, <25 = provisional.
     const LIVE_MIN_SAMPLE = 3;

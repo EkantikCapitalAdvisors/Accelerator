@@ -1,5 +1,5 @@
 // =====================================================
-// Income Modules — A (Quarterly Income), B (Scale-Then-Distribute),
+// Accelerator Modules — A (Quarterly Income), B (Scale-Then-Distribute),
 // and C (Capacity & Allocation Status + Indication-of-Interest form).
 // Spec: 10x-cash-generator-spec.md v1.6.
 // =====================================================
@@ -402,7 +402,7 @@
             if (!validate()) return;
 
             const action = form.getAttribute('action');
-            const placeholder = !action || action.includes('__FORMSPREE_INCOME__');
+            const placeholder = !action || action.includes('__FORMSPREE_ACCELERATOR__');
 
             const amt = parseFloat(amtEl.value);
             const modeRadio = document.querySelector('input[name="ind-mode"]:checked');
@@ -416,7 +416,7 @@
             payload.append('slots',           String(Math.floor(amt / 10000)));
             payload.append('founding_tier_pct', (amt / 500000).toFixed(4));
             payload.append('timestamp',       new Date().toISOString());
-            payload.append('source',          'income-landing-v1.6');
+            payload.append('source',          'accelerator-landing-v1.6');
 
             // Disable submit during request
             submit.disabled = true;

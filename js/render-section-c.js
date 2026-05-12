@@ -270,7 +270,7 @@
     }
 
     // The legacy "Notify me when autotrading opens" form was retired in the
-    // Income repositioning. The canonical indication-of-interest form now
+    // Accelerator repositioning. The canonical indication-of-interest form now
     // lives in Module C (js/render-modules.js + #indication-form in index.html).
 
     function init() {
