@@ -1282,8 +1282,8 @@ function renderGrowthComparison(containerId, suffix) {
     const spyReturnPct = ((finalSpy - startBalance) / startBalance * 100);
     const fmtBal = (v) => `$${v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 
-    setH(`growth-spy-${suffix}`, `$10K → ${fmtBal(finalSpy)} <span style="color:#9ca3af;font-size:9px;">(+${spyReturnPct.toFixed(1)}%)</span>`);
-    setH(`growth-tenx-${suffix}`, `$10K → ${fmtBal(finalBalance)} <span style="${returnPct >= 0 ? 'color:#34d399' : 'color:#f87171'};font-size:9px;">(${returnPct >= 0 ? '+' : ''}${returnPct.toFixed(1)}%)</span>`);
+    setH(`growth-spy-${suffix}`, `$20K → ${fmtBal(finalSpy)} <span style="color:#9ca3af;font-size:9px;">(+${spyReturnPct.toFixed(1)}%)</span>`);
+    setH(`growth-tenx-${suffix}`, `$20K → ${fmtBal(finalBalance)} <span style="${returnPct >= 0 ? 'color:#34d399' : 'color:#f87171'};font-size:9px;">(${returnPct >= 0 ? '+' : ''}${returnPct.toFixed(1)}%)</span>`);
 
     const ratioEl = document.getElementById(`growth-ratio-${suffix}`);
     if (ratioEl) {
@@ -1295,7 +1295,7 @@ function renderGrowthComparison(containerId, suffix) {
     const mc = monteCarloMaxDD('tenx');
     if (mc) setH(`growth-dd-tenx-${suffix}`, `<i class="fas fa-dice mr-0.5"></i>Est. Max DD: <strong>${mc.ddPct.toFixed(1)}%</strong> <span style="color:#6b7280;font-size:8px;">(Monte Carlo 95th %ile · ${mc.simulations.toLocaleString()} sims · ${mc.sampleSize} trades)</span>`);
 
-    setH(`growth-subtitle-${suffix}`, `Actual realized P&L on <strong style="color:#34d399;">$10,000</strong> account · <strong style="color:#34d399;">${trades.length} trades</strong> · ${fmtDate(sorted[0].exitTime || sorted[0].datetime)} to ${fmtDate(sorted[sorted.length - 1].exitTime || sorted[sorted.length - 1].datetime)}`);
+    setH(`growth-subtitle-${suffix}`, `Actual realized P&L on <strong style="color:#34d399;">$20,000</strong> account · <strong style="color:#34d399;">${trades.length} trades</strong> · ${fmtDate(sorted[0].exitTime || sorted[0].datetime)} to ${fmtDate(sorted[sorted.length - 1].exitTime || sorted[sorted.length - 1].datetime)}`);
 
     const allVals = [...equityValues, ...spyValues];
     const pad = (Math.max(...allVals) - Math.min(...allVals)) * 0.1 || startBalance * 0.05;
@@ -1323,7 +1323,7 @@ function renderGrowthComparison(containerId, suffix) {
             { name: 'Ekantik Accelerator (actual)', type: 'line', data: equityValues, smooth: false, symbol: 'circle', symbolSize: 5,
               lineStyle: { color: '#34d399', width: 2.5 }, itemStyle: { color: '#34d399' },
               areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(52, 211, 153, 0.15)' }, { offset: 1, color: 'rgba(52, 211, 153, 0.01)' }]) },
-              markLine: { silent: true, data: [{ yAxis: startBalance }], lineStyle: { color: '#374151', type: 'dashed', width: 1 }, label: { formatter: '$10K', color: '#6b7280', fontSize: 9, position: 'start' }, symbol: 'none' } }
+              markLine: { silent: true, data: [{ yAxis: startBalance }], lineStyle: { color: '#374151', type: 'dashed', width: 1 }, label: { formatter: '$20K', color: '#6b7280', fontSize: 9, position: 'start' }, symbol: 'none' } }
         ]
     });
     window.addEventListener('resize', () => chart.resize());

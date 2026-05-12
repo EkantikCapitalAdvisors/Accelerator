@@ -278,7 +278,7 @@
 
                 <div class="mod-c-statement">
                     <p>Strategy capacity is bounded at $5M AUM, equivalent to roughly 500 ES contracts at peak deployment. The ceiling is set by execution mechanics — slippage, fill quality, and exit liquidity at the relevant size — not by ambition or regulation.</p>
-                    <p>Of that capacity, 10% — $500,000, or 50 founding slots — is reserved as the founding cohort tier and is the only tier currently open for indication. The remaining 90% will open as a general allocation after the founding tier closes.</p>
+                    <p>Of that capacity, 10% — $500,000, or 25 founding slots ($20,000 each — one ES contract per slot) — is reserved as the founding cohort tier and is the only tier currently open for indication. The remaining 90% will open as a general allocation after the founding tier closes.</p>
                     <p>This page is a soft launch. It exists to gather qualified interest from investors who want a structurally capped, edge-validated income strategy before allocations close. No transaction is being offered.</p>
                 </div>
 
@@ -336,8 +336,8 @@
 
                     <div class="ind-amount-block">
                         <label for="ind-amount">Intended booking amount *</label>
-                        <input type="range" id="ind-amount" name="booking_amount" min="10000" max="500000" step="10000" value="50000">
-                        <span class="ind-amount-val" id="ind-amount-val"><strong>$50,000</strong>  ·  5 of 50 founding slots  ·  10% of founding tier</span>
+                        <input type="range" id="ind-amount" name="booking_amount" min="20000" max="500000" step="20000" value="40000">
+                        <span class="ind-amount-val" id="ind-amount-val"><strong>$40,000</strong>  ·  2 of 25 founding slots  ·  8% of founding tier</span>
                     </div>
 
                     <div class="ind-mode-block">
@@ -417,7 +417,7 @@
                 The strategy is a mechanical system for ES / MES futures with a documented edge across the full backtest: a 67.5% win rate, a 2.07 profit factor, and top-decile risk-adjusted returns. The live sample, visible above and in the public trade log below, is the same edge being expressed in real markets. The 8-Test Sustainability Battery in the next section is how we know the edge is not a lucky sample.
             </p>
 
-            <h3 class="mt-4">Sample Equity Arc — $10,000 base</h3>
+            <h3 class="mt-4">Sample Equity Arc — $20,000 base · 1 ES contract</h3>
             <p class="muted" style="font-size:13px">Within-sample illustration. The arc prints as each fill closes. Capital resets to base annually under the strategy's distribution mechanics — see Modes A and B above.</p>
             <div class="mini-chart">
                 <canvas id="section-a-equity"></canvas>

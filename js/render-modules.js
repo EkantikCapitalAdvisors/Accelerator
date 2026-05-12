@@ -370,9 +370,9 @@
 
         function updateAmountLabel() {
             const amt = parseFloat(amtEl.value);
-            const slots = Math.floor(amt / 10000);
+            const slots = Math.floor(amt / 20000);
             const tierPct = (amt / 500000) * 100;
-            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  ·  ${slots} of 50 founding slot${slots === 1 ? '' : 's'}  ·  ${tierPct.toFixed(0)}% of founding tier`;
+            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  ·  ${slots} of 25 founding slot${slots === 1 ? '' : 's'}  ·  ${tierPct.toFixed(0)}% of founding tier`;
         }
 
         function validateEmail(v) {
@@ -413,7 +413,7 @@
             payload.append('phone',      (phone.value || '').trim());
             payload.append('booking_amount', String(amt));
             payload.append('preferred_mode', modeRadio ? modeRadio.value : 'no-preference');
-            payload.append('slots',           String(Math.floor(amt / 10000)));
+            payload.append('slots',           String(Math.floor(amt / 20000)));
             payload.append('founding_tier_pct', (amt / 500000).toFixed(4));
             payload.append('timestamp',       new Date().toISOString());
             payload.append('source',          'accelerator-landing-v1.6');

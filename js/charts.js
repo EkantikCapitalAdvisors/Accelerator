@@ -6,7 +6,7 @@
     'use strict';
 
     const instances = {};
-    const STARTING_BALANCE = 10000;
+    const STARTING_BALANCE = 20000;
 
     function parseTime(str) {
         const m = (str || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);

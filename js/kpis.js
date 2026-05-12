@@ -85,7 +85,7 @@
         withTS.sort((a, b) => a.ts - b.ts);
 
         const cumPL = rawTrades.reduce((s, t) => s + (t.dollar_pl || t.dollarPL || 0), 0);
-        const start = 10000;
+        const start = 20000;
         const ret = cumPL / start;
         const first = withTS[0].ts;
         const lastRow = withTS[withTS.length - 1].t;

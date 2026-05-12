@@ -28,8 +28,8 @@
         if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
 
         const netPL = trades.reduce((s, t) => s + (t.dollar_pl || 0), 0);
-        const retPct = (netPL / 10000) * 100;
-        const end = 10000 + netPL;
+        const retPct = (netPL / 20000) * 100;
+        const end = 20000 + netPL;
 
         const netEl = $('section-a-net');
         const retEl = $('section-a-return');

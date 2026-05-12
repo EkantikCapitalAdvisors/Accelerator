@@ -3,9 +3,9 @@
 // Ekantik Accelerator Dashboard
 // =====================================================
 
-const TENX_RISK = 500;               // $500 per day (5% of $10k)
+const TENX_RISK = 500;               // $500 per day (2.5% of $20k)
 const TENX_PPT = 5;                  // $5 per point (MES default)
-const TENX_STARTING_BALANCE = 10000; // $10,000 starting portfolio
+const TENX_STARTING_BALANCE = 20000; // $20,000 starting portfolio · 1 ES contract
 
 // PPT lookup for mixed instruments
 const PPT_BY_PRODUCT = { ES: 50, MES: 5 };
