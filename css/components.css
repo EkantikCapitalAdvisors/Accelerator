@@ -2024,6 +2024,10 @@ a:hover { color: var(--gold); }
     gap: var(--s-3);
     margin: var(--s-6) 0 var(--s-4);
 }
+.edge-live--four { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1080px) {
+    .edge-live--four { grid-template-columns: repeat(2, 1fr); }
+}
 .edge-live__card {
     background: var(--white);
     border: 1px solid var(--divider);
