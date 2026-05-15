@@ -301,7 +301,7 @@
     function summaryStats(rawTrades) {
         const trades = normalize(rawTrades);
         const n = trades.length;
-        if (n === 0) return { n: 0, winRate: null, profitFactor: null, rExpectancy: null, evPerTrade: null };
+        if (n === 0) return { n: 0, winRate: null, profitFactor: null, rExpectancy: null, evPerTrade: null, avgRiskDollar: null };
 
         const pls = trades.map(t => t.dollarPL);
         const wins = pls.filter(x => x > 0);
@@ -314,8 +314,9 @@
 
         const withRisk = trades.filter(t => t.riskDollars > 0);
         const rExpectancy = withRisk.length ? mean(withRisk.map(t => t.dollarPL / t.riskDollars)) : null;
+        const avgRiskDollar = withRisk.length ? mean(withRisk.map(t => t.riskDollars)) : null;
 
-        return { n, winRate, profitFactor, evPerTrade, rExpectancy };
+        return { n, winRate, profitFactor, evPerTrade, rExpectancy, avgRiskDollar };
     }
 
     // ───────── UMD export ─────────
