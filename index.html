@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
@@ -31,7 +31,7 @@
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
                 <li><a class="nav__link nav__link--active" href="/" aria-current="page">Accelerator</a></li>
-                <li><a class="nav__link" href="#module-c-panel">Founding interest</a></li>
+                <li><a class="nav__link" href="#allocation">Founding interest</a></li>
             </ul>
         </div>
     </header>
@@ -54,14 +54,19 @@
         Strategy capacity: hard-capped at <strong>$5M AUM</strong> / <strong>500 ES contract equivalents</strong>. Soft launch — gathering founding-allocation interest.
     </div>
 
-    <!-- ═══ REGION 2 — HERO ═══ -->
-    <section class="hero" aria-labelledby="hero-h1">
+    <!-- ═══ SECTION 01 — HERO · The Judgment Reframe (Dev Spec §3.1) ═══ -->
+    <section class="hero hero--reframe" id="hero" aria-labelledby="hero-h1">
+        <a id="module-a-hero-alias" aria-hidden="true"></a>
         <div class="hero__inner">
-            <span class="eyebrow">Ekantik Capital Advisors · Soft launch</span>
+            <span class="eyebrow eyebrow--rule">Ekantik Capital Advisors · Founding Allocation Window · Q2 2026</span>
             <h1 class="hero__h1" id="hero-h1">
-                <span>Cash, by design.</span>
-                <span style="color: var(--gold)">Capped, by structure.</span>
+                <span class="hero__h1-main">You are not buying ES futures.</span>
+                <span class="hero__h1-italic">You are renting a human&rsquo;s judgment.</span>
             </h1>
+
+            <p class="hero__lead">
+                Mechanical. Pre-committed. Operating inside a defense architecture engineered over more than a decade. The operator&rsquo;s personal capital is on every fill — not the operator&rsquo;s confidence. Verifiable below.
+            </p>
 
             <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
                 <div class="stat-card">
@@ -85,16 +90,110 @@
                     <p class="stat-card__caption">Dollars earned per trade, on average.</p>
                 </div>
             </div>
-            <p class="muted mono" style="font-size:12px;margin-top:12px" id="hero-sample-size">Loading…</p>
-
-            <p class="hero__subline">
-                A $20,000 working base. Distributions every quarter or once a year.<br>
-                Capacity hard-capped at $5M. Founding allocations now being indicated.
-            </p>
+            <p class="hero__sample-caption" id="hero-sample-size">Live, from Discord fills. Pre-asymptotic at this sample. Past performance does not indicate future results.</p>
 
             <div class="hero__ctas">
-                <a class="btn btn--primary" href="#module-a">Run the numbers →</a>
-                <a class="btn btn--secondary" href="#module-c-panel">Indicate founding interest →</a>
+                <a class="btn btn--primary" href="#allocation">Indicate founding interest →</a>
+                <a class="btn-text" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">First, watch the journal →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 02 — THE OPERATOR (Dev Spec §3.2) ═══ -->
+    <section class="section section--white operator" id="operator" aria-labelledby="operator-h2">
+        <div class="section__inner section__inner--wide">
+            <div class="operator__grid">
+                <div class="operator__portrait">
+                    <div class="portrait-frame" role="img" aria-label="Hiren Desai, Founder & CIO, Ekantik Capital Advisors. Portrait pending.">
+                        <span class="portrait-frame__placeholder">HD</span>
+                    </div>
+                </div>
+                <div class="operator__content">
+                    <h2 class="operator__title" id="operator-h2">The operator.</h2>
+                    <blockquote class="pullquote">
+                        <p>&ldquo;The best metaphor for the last decade is building aircraft autopilot software. You document failure modes before passengers board.&rdquo;</p>
+                    </blockquote>
+                    <p class="operator__attribution">Hiren Desai &nbsp;·&nbsp; Founder &amp; CIO &nbsp;·&nbsp; Ekantik Capital Advisors</p>
+
+                    <div class="credentials-grid">
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">01</span>
+                            <h3 class="credentials-grid__heading">Cybersecurity origin</h3>
+                            <p class="credentials-grid__body">Resilient systems are built by studying what breaks them. Not by hoping they work.</p>
+                        </div>
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">02</span>
+                            <h3 class="credentials-grid__heading">Decade of practice</h3>
+                            <p class="credentials-grid__body">Stress-testing regimes. Mapping failure modes. Refining controls until behavior is predictable across the envelope.</p>
+                        </div>
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">03</span>
+                            <h3 class="credentials-grid__heading">Operator capital deployed</h3>
+                            <p class="credentials-grid__body">Personal risk capital on every fill in the public Discord log. Not pooled. Not managed. Not shared.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 03 — DEFENSE ARCHITECTURE (Dev Spec §3.3) ═══ -->
+    <section class="section section--ivory defense" id="defense" aria-labelledby="defense-h2">
+        <div class="section__inner section__inner--wide">
+            <header class="section-head section-head--centered">
+                <h2 class="section-head__title" id="defense-h2">Defense, engineered before offense.</h2>
+                <p class="section-head__lead">No edge works in every regime. The buffer does.</p>
+            </header>
+
+            <div class="defense__layers">
+                <article class="defense-card defense-card--light">
+                    <span class="defense-card__num">01</span>
+                    <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; The Capital Buffer</h3>
+                    <p class="defense-card__lead">The Positive Expectancy Pyramid. One founding slot, structurally mapped:</p>
+                    <ul class="defense-card__list">
+                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $20,000 &nbsp;—&nbsp; the regime-absorption layer</li>
+                        <li><strong>Compounding buffer</strong> &nbsp;·&nbsp; 2× &nbsp;·&nbsp; $6,000</li>
+                        <li><strong>Positive expectancy</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $3,000</li>
+                    </ul>
+                    <p class="defense-card__footer">The base is not extra cushion. It is what absorbs what regime detection misses.</p>
+                </article>
+
+                <article class="defense-card defense-card--light">
+                    <span class="defense-card__num">02</span>
+                    <h3 class="defense-card__title">Layer 02 &nbsp;·&nbsp; The Sit-Out Architecture</h3>
+                    <p class="defense-card__lead">Pre-committed rules. No exceptions. No renegotiation.</p>
+                    <ul class="defense-card__list">
+                        <li><strong>Daily</strong> &nbsp;·&nbsp; 1 max loss &nbsp;→&nbsp; stand down. Resume next session.</li>
+                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss &nbsp;→&nbsp; stand down for the remainder of the week.</li>
+                        <li><strong>Edge recovery</strong> &nbsp;·&nbsp; 2 consecutive losing weeks &nbsp;→&nbsp; virtual account, full month.</li>
+                    </ul>
+                    <p class="defense-card__footer">The rule about the rules: the operator under loss is a different cognitive agent than the operator who set them. Under stress, the designer is gone. Only the rule remains.</p>
+                </article>
+
+                <article class="defense-card defense-card--dark">
+                    <span class="defense-card__num">03</span>
+                    <h3 class="defense-card__title">Layer 03 &nbsp;·&nbsp; The Falsifiability Gate</h3>
+                    <p class="defense-card__sub">How we&rsquo;ve made it impossible to lie to ourselves.</p>
+                    <p class="defense-card__lead">Every credible system pre-defines the conditions under which it admits the edge is gone. Most trading operations do not. This one does.</p>
+                    <dl class="defense-card__deflist">
+                        <div class="defense-card__defrow">
+                            <dt>Trigger &nbsp;·&nbsp; Statistical death</dt>
+                            <dd>Rolling 100-trade realized expectancy drops below +0.30R. Sample size designed so normal variance cannot trip it on a real edge.</dd>
+                        </div>
+                        <div class="defense-card__defrow">
+                            <dt>Action &nbsp;·&nbsp; Immediate stand-down</dt>
+                            <dd>Entries to zero size. Open positions closed at next defined exit. Strategy moves to research-only.</dd>
+                        </div>
+                        <div class="defense-card__defrow">
+                            <dt>Re-deploy gate &nbsp;·&nbsp; Earned re-entry only</dt>
+                            <dd>Fresh OOS test ≥ +0.475R over 50 trades &nbsp;·&nbsp; written re-derivation &nbsp;·&nbsp; 48-hour cool-off. All three required.</dd>
+                        </div>
+                    </dl>
+                    <p class="defense-card__footer">Modification protocol: 48-hour cool-off before any rule change &nbsp;·&nbsp; written justification &nbsp;·&nbsp; witness signature required to lock.</p>
+                    <p class="defense-card__cta">
+                        <a class="link-gold" href="assets/ekantik-falsifiability-protocol-v1.pdf" download>Download the locked protocol (PDF) →</a>
+                    </p>
+                </article>
             </div>
         </div>
     </section>
@@ -270,7 +369,8 @@
     </section>
 
     <!-- ═══ MODULE C — Capacity & Allocation Status, full panel (spec §5.2.2) ═══ -->
-    <section class="section section--white" id="module-c-panel" aria-labelledby="mod-c-h2">
+    <section class="section section--white" id="allocation" aria-labelledby="mod-c-h2">
+        <a id="module-c-panel" aria-hidden="true"></a>
         <div class="section__inner">
             <span class="eyebrow">Founding cohort</span>
             <div class="mod-c-panel">

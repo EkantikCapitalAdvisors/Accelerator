@@ -4,24 +4,28 @@
    ===================================================== */
 
 :root {
-    /* ─── Palette ─── */
-    --navy:    #1B2A4A;
-    --navy-ink:#0F1A30;          /* darker navy for overlays, nav */
-    --gold:    #C8A951;
-    --gold-warm:#D9B963;
-    --cream:   #F7F4EC;
-    --cream-2: #EFEBE0;
-    --ink:     #1A1A1A;
-    --muted:   #6B6B6B;
-    --divider: #E5E0D0;
-    --pass:    #2E7D32;
-    --fail:    #C62828;
-    --live:    #2FB464;          /* pulsing live indicator */
-    --white:   #FFFFFF;
+    /* ─── Palette (Dev Spec §1.1) ─── */
+    --navy:      #1B2A4A;        /* Deep Navy — dominant brand */
+    --navy-dark: #0F1A33;        /* high-contrast banners only */
+    --navy-ink:  #0F1A30;        /* legacy alias */
+    --gold:      #C8A951;        /* Warm Gold — emphasis only, never body */
+    --gold-warm: #D9B963;
+    --gold-pale: #F0E8CF;        /* soft callout / Path Two emphasis tint */
+    --ivory:     #FAF8F5;        /* Soft Ivory — primary canvas */
+    --cream:     #FAF8F5;        /* legacy alias → spec ivory */
+    --cream-2:   #EFEBE0;
+    --slate:     #64748B;        /* Slate Gray — supporting text */
+    --ink:       #1A1A1A;
+    --muted:     #6B6B6B;
+    --divider:   rgba(27,42,74,0.12);   /* spec card border */
+    --pass:      #2D5016;        /* Forest Green — positive months */
+    --fail:      #DC2626;        /* Signal Red — negative months */
+    --live:      #2FB464;
+    --white:     #FFFFFF;
 
-    /* ─── Typography ─── */
-    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
-    --font-sans:  'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* ─── Typography (Dev Spec §1.2) ─── */
+    --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-sans:  'DM Sans', Calibri, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono:  'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
     /* ─── Spacing (8px base) ─── */
@@ -33,9 +37,10 @@
     --s-8: 64px;
     --s-12: 96px;
 
-    /* ─── Layout ─── */
+    /* ─── Layout (Dev Spec §1.4) ─── */
     --max-content: 720px;
-    --max-wide:    1040px;
+    --max-wide:    1080px;       /* hero & narrative max */
+    --max-grid:    1280px;       /* multi-column sections */
 
     /* ─── Elevation & motion ─── */
     --shadow-sm: 0 1px 2px rgba(27, 42, 74, 0.06), 0 1px 3px rgba(27, 42, 74, 0.08);

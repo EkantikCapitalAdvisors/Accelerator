@@ -111,7 +111,7 @@ body {
 /* ─── Hero ─── */
 .hero {
     padding: var(--s-12) var(--s-2);
-    background: var(--cream);
+    background: var(--ivory);
     border-top: 1px solid var(--divider);
     border-bottom: 1px solid var(--divider);
     text-align: left;
