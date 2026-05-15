@@ -1650,3 +1650,319 @@ a:hover { color: var(--gold); }
     .ind-submit-row { flex-direction: column; align-items: stretch; }
     .ind-submit-row #ind-submit { width: 100%; justify-content: center; }
 }
+
+/* =====================================================
+   DEV SPEC v1.0 — Sprint 1 additions
+   Section 01 hero rewrite · Section 02 Operator · Section 03 Defense
+   ===================================================== */
+
+/* ─── Hero — Judgment Reframe (§3.1) ─── */
+.hero--reframe { background: var(--ivory); text-align: left; }
+.hero--reframe .hero__inner { max-width: 1080px; }
+.hero--reframe .eyebrow--rule {
+    display: inline-block;
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--gold);
+    width: auto;
+    max-width: max-content;
+    margin-bottom: var(--s-4);
+}
+.hero--reframe .hero__h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    margin: 0 0 var(--s-4);
+}
+.hero--reframe .hero__h1-main {
+    display: block;
+    font-size: clamp(44px, 7vw, 80px);
+    color: var(--navy);
+    font-weight: 600;
+}
+.hero--reframe .hero__h1-italic {
+    display: block;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(32px, 5vw, 56px);
+    color: var(--gold);
+    margin-top: var(--s-2);
+}
+.hero--reframe .hero__lead {
+    font-family: var(--font-sans);
+    font-size: 20px;
+    line-height: 1.6;
+    color: rgba(27,42,74,0.8);
+    max-width: 640px;
+    margin: var(--s-4) 0 var(--s-6);
+    font-weight: 400;
+}
+.hero--reframe .hero__sample-caption {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--slate);
+    margin: var(--s-2) 0 var(--s-4);
+    max-width: 880px;
+}
+.hero--reframe .hero__ctas { gap: var(--s-3); align-items: center; }
+
+/* Text-link CTA (used in hero secondary) */
+.btn-text {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding: 4px 0;
+    transition: border-color 0.15s ease;
+}
+.btn-text:hover { border-bottom-color: var(--navy); }
+
+/* Gold-underline link variant (used in dark Layer 03 card) */
+.link-gold {
+    color: var(--gold);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+.link-gold:hover { color: var(--gold-warm); border-bottom-color: var(--gold-warm); }
+
+/* ─── Section utility — ivory background, centered head ─── */
+.section--ivory { background: var(--ivory); }
+.section-head { margin-bottom: var(--s-8); }
+.section-head--centered { text-align: center; max-width: 880px; margin-left: auto; margin-right: auto; }
+.section-head__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--navy);
+    font-size: clamp(36px, 4.5vw, 52px);
+    line-height: 1.1;
+    margin: 0 0 var(--s-3);
+}
+.section-head__lead {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 26px);
+    color: rgba(27,42,74,0.8);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ─── Section 02 · Operator (§3.2) ─── */
+.operator .section__inner--wide { max-width: 1080px; }
+.operator__grid {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    gap: var(--s-8);
+    align-items: start;
+}
+.operator__portrait { display: flex; justify-content: center; }
+.portrait-frame {
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ivory);
+    font-family: var(--font-serif);
+    font-size: 120px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0.96;
+}
+.portrait-frame__placeholder { user-select: none; }
+.operator__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--navy);
+    font-size: clamp(36px, 4.5vw, 52px);
+    line-height: 1.1;
+    margin: 0 0 var(--s-4);
+}
+.pullquote {
+    margin: 0 0 var(--s-3);
+    padding: 0 0 0 var(--s-3);
+    border-left: 3px solid var(--gold);
+}
+.pullquote p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold);
+    font-size: clamp(26px, 3vw, 36px);
+    line-height: 1.25;
+    margin: 0;
+}
+.operator__attribution {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(27,42,74,0.7);
+    margin: 0 0 var(--s-6);
+}
+.credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+}
+.credentials-grid__col { }
+.credentials-grid__num {
+    display: block;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--gold);
+    margin-bottom: var(--s-2);
+}
+.credentials-grid__heading {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin: 0 0 var(--s-1);
+}
+.credentials-grid__body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--navy);
+    margin: 0;
+}
+
+/* ─── Section 03 · Defense Architecture (§3.3) ─── */
+.defense .section__inner--wide { max-width: 1280px; }
+.defense__layers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+}
+.defense-card {
+    position: relative;
+    padding: var(--s-4);
+    border-radius: 4px;
+}
+.defense-card--light {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    color: var(--navy);
+}
+.defense-card--dark {
+    grid-column: 1 / -1;
+    background: var(--navy);
+    color: var(--ivory);
+    padding: var(--s-6);
+    box-shadow: 0 8px 24px rgba(15,26,51,0.18);
+}
+.defense-card__num {
+    position: absolute;
+    top: var(--s-3);
+    right: var(--s-4);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--gold);
+    opacity: 0.9;
+}
+.defense-card--dark .defense-card__num { opacity: 1; }
+.defense-card__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    color: inherit;
+    margin: 0 0 var(--s-2);
+    max-width: calc(100% - 100px);
+}
+.defense-card--dark .defense-card__title { color: var(--ivory); font-size: 32px; }
+.defense-card__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: 20px;
+    margin: 0 0 var(--s-3);
+}
+.defense-card__lead {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0 0 var(--s-3);
+}
+.defense-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s-3);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.7;
+}
+.defense-card__list li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(27,42,74,0.08);
+}
+.defense-card--dark .defense-card__list li { border-bottom-color: rgba(250,248,245,0.12); }
+.defense-card__list li:last-child { border-bottom: none; }
+.defense-card__footer {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: inherit;
+    opacity: 0.85;
+    margin: var(--s-3) 0 0;
+    font-style: italic;
+}
+.defense-card__deflist { margin: 0 0 var(--s-3); }
+.defense-card__defrow {
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid rgba(250,248,245,0.12);
+}
+.defense-card__defrow:last-child { border-bottom: none; }
+.defense-card__defrow dt {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 4px;
+}
+.defense-card__defrow dd {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ivory);
+}
+.defense-card__cta { margin: var(--s-3) 0 0; }
+
+/* ─── Responsive (Dev Spec §1.4: mobile reduce ~30%) ─── */
+@media (max-width: 880px) {
+    .operator__grid { grid-template-columns: 1fr; gap: var(--s-4); }
+    .operator__portrait { order: -1; }
+    .portrait-frame { max-width: 320px; }
+    .credentials-grid { grid-template-columns: 1fr; gap: var(--s-4); }
+    .defense__layers { grid-template-columns: 1fr; }
+    .defense-card--dark { grid-column: auto; padding: var(--s-4); }
+    .defense-card--dark .defense-card__title { font-size: 26px; }
+    .defense-card__num { font-size: 56px; top: var(--s-2); right: var(--s-3); }
+    .hero--reframe .hero__ctas { flex-direction: column; align-items: stretch; }
+    .hero--reframe .hero__ctas .btn-text { text-align: center; }
+}

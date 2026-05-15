@@ -26,13 +26,14 @@
 
     function renderHero(state) {
         const s = state.summary || {};
+        const DISCLOSURE = 'Pre-asymptotic at this sample. Past performance does not indicate future results.';
         if (!s.n) {
             // No data yet — show em-dashes
             ['hero-stat-1', 'hero-stat-2', 'hero-stat-3', 'hero-stat-4'].forEach(id => {
                 const el = $(id); if (el) el.textContent = '—';
             });
             const sample = $('hero-sample-size');
-            if (sample) sample.textContent = 'Awaiting first fills.';
+            if (sample) sample.textContent = 'Live, from Discord fills · awaiting first fills. ' + DISCLOSURE;
             return;
         }
         // Stat 1: Win rate
@@ -45,7 +46,7 @@
         $('hero-stat-4') && ($('hero-stat-4').textContent = fmtEV(s.evPerTrade));
 
         const sample = $('hero-sample-size');
-        if (sample) sample.textContent = `Sample: ${s.n} closed trades.`;
+        if (sample) sample.textContent = `Live, from Discord fills · ${s.n} closed trades. ` + DISCLOSURE;
     }
 
     function renderTrustStrip(state) {
