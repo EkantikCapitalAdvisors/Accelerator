@@ -36,14 +36,21 @@
             if (sample) sample.textContent = 'Live, from Discord fills · awaiting first fills. ' + DISCLOSURE;
             return;
         }
-        // Stat 1: Win rate
+        // Mirror the Edge section exactly — same 4 cards, same captions.
         $('hero-stat-1') && ($('hero-stat-1').textContent = fmtPct(s.winRate));
-        // Stat 2: Profit factor
+        $('hero-stat-1-cap') && ($('hero-stat-1-cap').textContent = `Live · ${s.n} closed trades`);
+
         $('hero-stat-2') && ($('hero-stat-2').textContent = fmtPF(s.profitFactor));
-        // Stat 3: Avg risk per trade — the missing 1R = $X anchor
-        $('hero-stat-3') && ($('hero-stat-3').textContent = fmtEV(s.avgRiskDollar));
-        // Stat 4: EV / trade
-        $('hero-stat-4') && ($('hero-stat-4').textContent = fmtEV(s.evPerTrade));
+
+        $('hero-stat-3') && ($('hero-stat-3').textContent = fmtR(s.rExpectancy));
+        if ($('hero-stat-3-cap') && s.evPerTrade != null) {
+            $('hero-stat-3-cap').textContent = `$${s.evPerTrade.toFixed(0)} per trade · live realized`;
+        }
+
+        $('hero-stat-4') && ($('hero-stat-4').textContent = fmtEV(s.avgRiskDollar));
+        if ($('hero-stat-4-cap') && s.avgRiskDollar != null) {
+            $('hero-stat-4-cap').textContent = `1R ≈ $${Math.round(s.avgRiskDollar).toLocaleString()} · live realized`;
+        }
 
         const sample = $('hero-sample-size');
         if (sample) sample.textContent = `Live, from Discord fills · ${s.n} closed trades. ` + DISCLOSURE;

@@ -301,7 +301,7 @@
     function summaryStats(rawTrades) {
         const trades = normalize(rawTrades);
         const n = trades.length;
-        if (n === 0) return { n: 0, winRate: null, profitFactor: null, rExpectancy: null, evPerTrade: null, avgRiskDollar: null };
+        if (n === 0) return { n: 0, winRate: null, profitFactor: null, rExpectancy: null, evPerTrade: null, avgRiskDollar: null, avgRwin: null, avgRloss: null, winLossR: null };
 
         const pls = trades.map(t => t.dollarPL);
         const wins = pls.filter(x => x > 0);
@@ -316,7 +316,17 @@
         const rExpectancy = withRisk.length ? mean(withRisk.map(t => t.dollarPL / t.riskDollars)) : null;
         const avgRiskDollar = withRisk.length ? mean(withRisk.map(t => t.riskDollars)) : null;
 
-        return { n, winRate, profitFactor, evPerTrade, rExpectancy, avgRiskDollar };
+        // Per-trade R-multiples, split by outcome — surfaces why R-expectancy
+        // can rise even as win rate falls (wins getting bigger in R-terms).
+        const Rwins   = withRisk.filter(t => t.dollarPL > 0).map(t => t.dollarPL / t.riskDollars);
+        const Rlosses = withRisk.filter(t => t.dollarPL < 0).map(t => t.dollarPL / t.riskDollars);
+        const avgRwin  = Rwins.length   ? mean(Rwins)   : null;
+        const avgRloss = Rlosses.length ? mean(Rlosses) : null;       // negative
+        const winLossR = (avgRwin != null && avgRloss != null && avgRloss !== 0)
+            ? Math.abs(avgRwin / avgRloss)
+            : null;
+
+        return { n, winRate, profitFactor, evPerTrade, rExpectancy, avgRiskDollar, avgRwin, avgRloss, winLossR };
     }
 
     // ───────── UMD export ─────────

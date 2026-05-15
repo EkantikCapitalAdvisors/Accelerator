@@ -29,6 +29,31 @@
         if ($('edge-avgrisk-cap') && s.avgRiskDollar != null) {
             $('edge-avgrisk-cap').textContent = `1R ≈ $${Math.round(s.avgRiskDollar).toLocaleString()} · live realized`;
         }
+
+        // R-multiple asymmetry strip
+        const fmtRsigned = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R';
+        if ($('r-asym-win'))  $('r-asym-win').textContent  = fmtRsigned(s.avgRwin);
+        if ($('r-asym-loss')) $('r-asym-loss').textContent = fmtRsigned(s.avgRloss);
+        if ($('r-asym-ratio')) {
+            $('r-asym-ratio').textContent = (s.winLossR != null && isFinite(s.winLossR))
+                ? s.winLossR.toFixed(2) + ' : 1'
+                : '—';
+        }
+        if ($('r-asym-win-sub')  && s.avgRwin  != null && s.avgRiskDollar != null) {
+            $('r-asym-win-sub').textContent  = `≈ $${Math.round(s.avgRwin  * s.avgRiskDollar).toLocaleString()} per winning trade`;
+        }
+        if ($('r-asym-loss-sub') && s.avgRloss != null && s.avgRiskDollar != null) {
+            $('r-asym-loss-sub').textContent = `≈ $${Math.round(s.avgRloss * s.avgRiskDollar).toLocaleString()} per losing trade`;
+        }
+
+        // Dynamic narrative — compare live WR / R-expectancy to within-sample baseline.
+        const BT_WR = 0.675;
+        const lede = $('r-asym-lede');
+        if (lede && s.winRate != null && s.rExpectancy != null && s.winLossR != null) {
+            const wrDelta = (s.winRate - BT_WR) * 100;
+            const dir = wrDelta < -1 ? 'compressed' : (wrDelta > 1 ? 'expanded' : 'tracked');
+            lede.innerHTML = `Win rate has <strong>${dir} ${Math.abs(wrDelta).toFixed(1)} pts</strong> versus the 67.5% within-sample baseline. Yet R-expectancy is <strong>${fmtRsigned(s.rExpectancy)}</strong> per trade &mdash; because the average winner outpaces the average loser by <strong>${s.winLossR.toFixed(2)}:1</strong> in R-units. Win rate and R-multiple move independently.`;
+        }
     }
 
     function renderEquityAndMonthly(state) {

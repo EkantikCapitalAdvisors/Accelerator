@@ -72,22 +72,22 @@
                 <div class="stat-card">
                     <p class="stat-card__label">Win Rate</p>
                     <p class="stat-card__value" id="hero-stat-1">—</p>
-                    <p class="stat-card__caption">Live, updated from Discord fills.</p>
+                    <p class="stat-card__caption" id="hero-stat-1-cap">Live · closed trades</p>
                 </div>
                 <div class="stat-card">
                     <p class="stat-card__label">Profit Factor</p>
                     <p class="stat-card__value" id="hero-stat-2">—</p>
-                    <p class="stat-card__caption">Gross wins ÷ gross losses.</p>
+                    <p class="stat-card__caption">Gross wins ÷ gross losses</p>
                 </div>
                 <div class="stat-card">
-                    <p class="stat-card__label">Avg risk / trade</p>
+                    <p class="stat-card__label">EV per trade</p>
                     <p class="stat-card__value" id="hero-stat-3">—</p>
-                    <p class="stat-card__caption">What 1R equals in dollars.</p>
+                    <p class="stat-card__caption" id="hero-stat-3-cap">Per unit of risk · live realized</p>
                 </div>
                 <div class="stat-card">
-                    <p class="stat-card__label">EV / Trade</p>
+                    <p class="stat-card__label">Avg risk per trade</p>
                     <p class="stat-card__value" id="hero-stat-4">—</p>
-                    <p class="stat-card__caption">Dollars earned per trade, on average.</p>
+                    <p class="stat-card__caption" id="hero-stat-4-cap">What 1R equals in dollars · live realized</p>
                 </div>
             </div>
             <p class="hero__sample-caption" id="hero-sample-size">Live, from Discord fills. Pre-asymptotic at this sample. Past performance does not indicate future results.</p>
@@ -231,9 +231,32 @@
                 </div>
             </div>
 
+            <!-- R-multiple asymmetry — why R-expectancy holds even when win rate compresses -->
+            <div class="r-asym" aria-labelledby="r-asym-h">
+                <p class="r-asym__eyebrow" id="r-asym-h">R-multiple distribution &nbsp;·&nbsp; the asymmetry</p>
+                <div class="r-asym__grid">
+                    <div class="r-asym__cell r-asym__cell--win">
+                        <span class="r-asym__cell-label">Avg win</span>
+                        <span class="r-asym__cell-val" id="r-asym-win">—</span>
+                        <span class="r-asym__cell-sub" id="r-asym-win-sub">in R-units</span>
+                    </div>
+                    <div class="r-asym__cell r-asym__cell--loss">
+                        <span class="r-asym__cell-label">Avg loss</span>
+                        <span class="r-asym__cell-val" id="r-asym-loss">—</span>
+                        <span class="r-asym__cell-sub" id="r-asym-loss-sub">in R-units</span>
+                    </div>
+                    <div class="r-asym__cell r-asym__cell--ratio">
+                        <span class="r-asym__cell-label">Win : Loss ratio</span>
+                        <span class="r-asym__cell-val" id="r-asym-ratio">—</span>
+                        <span class="r-asym__cell-sub">A winning trade outperforms a losing trade by this multiple, in R.</span>
+                    </div>
+                </div>
+                <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
+            </div>
+
             <aside class="backtest-panel" aria-labelledby="backtest-panel-h">
                 <p class="backtest-panel__eyebrow" id="backtest-panel-h">Within-sample backtest reference</p>
-                <p class="backtest-panel__body">Full-sample backtest: <strong>67.5% win rate</strong> &nbsp;·&nbsp; <strong>2.07 profit factor</strong> &nbsp;·&nbsp; top-decile risk-adjusted returns. The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.</p>
+                <p class="backtest-panel__body">Full-sample backtest: <strong>67.5% win rate</strong> &nbsp;&middot;&nbsp; <strong>2.07 profit factor</strong> &nbsp;&middot;&nbsp; top-decile risk-adjusted returns. The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.</p>
             </aside>
 
             <h3 class="mt-4">Sample Equity Arc — $20,000 base · 1 ES contract</h3>

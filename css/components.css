@@ -2441,3 +2441,76 @@ a:hover { color: var(--gold); }
     letter-spacing: 0.04em;
     text-transform: uppercase;
 }
+
+/* ─── R-multiple asymmetry strip (Edge section) ─── */
+.r-asym {
+    margin: var(--s-4) 0 var(--s-6);
+    padding: var(--s-3) var(--s-4);
+    background: var(--ivory);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+}
+.r-asym__eyebrow {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin: 0 0 var(--s-3);
+}
+.r-asym__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: var(--s-3);
+    align-items: stretch;
+    margin-bottom: var(--s-3);
+}
+.r-asym__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--s-2) var(--s-3);
+    background: var(--white);
+    border-left: 3px solid var(--divider);
+    border-radius: 0 4px 4px 0;
+}
+.r-asym__cell--win   { border-left-color: var(--pass); }
+.r-asym__cell--loss  { border-left-color: var(--fail); }
+.r-asym__cell--ratio { border-left-color: var(--gold); }
+.r-asym__cell-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+}
+.r-asym__cell-val {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.1;
+    color: var(--navy);
+}
+.r-asym__cell--win   .r-asym__cell-val { color: var(--pass); }
+.r-asym__cell--loss  .r-asym__cell-val { color: var(--fail); }
+.r-asym__cell--ratio .r-asym__cell-val { color: var(--gold); }
+.r-asym__cell-sub {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.45;
+}
+.r-asym__lede {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--navy);
+    margin: 0;
+}
+.r-asym__lede strong { color: var(--gold); font-weight: 700; }
+@media (max-width: 760px) {
+    .r-asym__grid { grid-template-columns: 1fr; }
+}
