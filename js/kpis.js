@@ -12,13 +12,20 @@
 
     function lastFillTimestamp(rawTrades) {
         if (!Array.isArray(rawTrades) || rawTrades.length === 0) return null;
+        // _parseTS (defined below) is hoisted and handles all three formats the
+        // Discord parser produces: ISO date with 24h time, ISO date with AM/PM
+        // time, and US-slash date with AM/PM time. The old naive new Date()
+        // approach only worked for the first format and silently skipped the
+        // rest — leaving the trust strip pinned on the most-recent 24h-formatted
+        // trade rather than the actual latest fill.
         let maxMs = 0;
         for (const t of rawTrades) {
             const raw = t.exit_time || t.entry_time || t.exitTime || t.entryTime || '';
             if (!raw) continue;
-            const d = new Date(raw.replace(' ', 'T'));
+            const d = _parseTS(raw);
+            if (!d) continue;
             const ms = d.getTime();
-            if (!isNaN(ms) && ms > maxMs) maxMs = ms;
+            if (ms > maxMs) maxMs = ms;
         }
         return maxMs === 0 ? null : new Date(maxMs);
     }
