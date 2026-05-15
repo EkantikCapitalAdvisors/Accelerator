@@ -550,20 +550,65 @@ function parseDiscordTradeText(text) {
         // Is this an "exit" marker? (just sets a flag, result line follows)
         if (/^exit$/i.test(body)) continue;
 
-        // Stop-limit update: "sl 7153" / "sl7153" / "stp 7153" / "stop 7153"
-        // Trailing profit update: "tp 7100" / "tp7100"
-        // Both adjust the pending trade in place; the final result line consumes them.
+        // Take-profit / stop-loss CLOSE line: "tp 7291" / "tp7291" / "sl 7300" / "sl7300"
+        // Operator convention: tp<price> means the trailing-profit hit at <price>
+        // and the trade closed there; sl<price> means the stop-loss hit at <price>.
+        // Either way, the trade is closed — compute points P&L from entry vs. exit
+        // direction-aware (short profits when exit < entry; long profits when
+        // exit > entry).
         const adjustMatch = body.match(/^(sl|stp|stop|tp|trail|trailing)\s*(\d+\.?\d*)$/i);
         if (adjustMatch) {
             const kind = adjustMatch[1].toLowerCase();
             const price = parseFloat(adjustMatch[2]);
             const entry = pending[tradeNum];
-            if (!entry) continue;  // adjustment without a known entry — ignore
+            if (!entry) continue;  // close marker without a known entry — ignore
+
+            // Annotate the pending trade with the trigger price for record-keeping.
             if (kind === 'tp' || kind === 'trail' || kind === 'trailing') {
                 entry.trailingProfit = price;
             } else {
-                entry.stopPrice = price;   // sl / stp / stop all mean stop-loss
+                entry.stopPrice = price;
             }
+
+            // Compute the exit as a close: direction-aware points P&L.
+            const entryPrice = entry.entryPrice;
+            const direction = entry.direction;
+            const rawPts = direction === 'Sell' ? (entryPrice - price) : (price - entryPrice);
+            const sizeFraction = entry.sizeFraction || 1;
+            const positionSize = entry.positionSize || 'full';
+            const mesCount = entry.mesCount != null ? entry.mesCount : null;
+            const stopPrice = entry.stopPrice;
+            const round2 = v => Math.round(v * 100) / 100;
+            const ppt = 50;  // ES contract; MES sized via sizeFraction (mes_count/10)
+            const rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
+            const pts          = round2(rawPts * sizeFraction);
+            const riskPts      = round2(rawRiskPts * sizeFraction);
+            const dollarPL     = round2(rawPts * sizeFraction * ppt);
+            const riskDollars  = round2(rawRiskPts * sizeFraction * ppt);
+
+            completed.push({
+                tradeNum,
+                datetime: entry.datetime,
+                date: entry.date,
+                direction,
+                entryPrice,
+                exitPrice:   price,
+                exitTime:    currentDatetime,
+                stopPrice,
+                trailingProfit: entry.trailingProfit != null ? entry.trailingProfit : '—',
+                pointsPL: pts,
+                riskPoints: riskPts,
+                dollarPL,
+                riskDollars,
+                isWin: pts > 0,
+                outcome: pts > 0 ? 'Win' : 'Loss',
+                product: 'ES',
+                ppt: 50,
+                positionSize,
+                mesCount,
+                source: 'discord'
+            });
+            delete pending[tradeNum];
             continue;
         }
 
