@@ -40,8 +40,8 @@
         $('hero-stat-1') && ($('hero-stat-1').textContent = fmtPct(s.winRate));
         // Stat 2: Profit factor
         $('hero-stat-2') && ($('hero-stat-2').textContent = fmtPF(s.profitFactor));
-        // Stat 3: R-Expectancy
-        $('hero-stat-3') && ($('hero-stat-3').textContent = fmtR(s.rExpectancy));
+        // Stat 3: Avg risk per trade — the missing 1R = $X anchor
+        $('hero-stat-3') && ($('hero-stat-3').textContent = fmtEV(s.avgRiskDollar));
         // Stat 4: EV / trade
         $('hero-stat-4') && ($('hero-stat-4').textContent = fmtEV(s.evPerTrade));
 
