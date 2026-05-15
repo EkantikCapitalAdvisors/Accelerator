@@ -1342,5 +1342,29 @@
     "mes_count": 5,
     "source": "discord",
     "upload_batch": "discord-1778851611111"
+  },
+  {
+    "week_key": "",
+    "trade_num": "F61",
+    "entry_time": "",
+    "exit_time": "",
+    "direction": "Sell",
+    "entry_price": 7463,
+    "exit_price": 0,
+    "stop_price": 0,
+    "contracts": 1,
+    "points_pl": 16,
+    "dollar_pl": 800,
+    "risk_points": 16,
+    "risk_dollars": 800,
+    "reward_risk": 0,
+    "is_win": true,
+    "trade_date": "",
+    "product": "ES",
+    "ppt": 50,
+    "position_size": "full",
+    "mes_count": null,
+    "source": "discord",
+    "upload_batch": "discord-1778861160761"
   }
 ]
