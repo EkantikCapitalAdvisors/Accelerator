@@ -12,11 +12,15 @@
     function renderEdgeTriplet(state) {
         const s = state.summary;
         if (!s || !s.n) return;
-        $('edge-wr')   && ($('edge-wr').textContent = (s.winRate * 100).toFixed(1) + '%');
-        $('edge-pf')   && ($('edge-pf').textContent = s.profitFactor === Infinity ? '∞' : s.profitFactor.toFixed(2));
-        $('edge-rexp') && ($('edge-rexp').textContent = (s.rExpectancy != null)
+        $('edge-wr')     && ($('edge-wr').textContent = (s.winRate * 100).toFixed(1) + '%');
+        $('edge-pf')     && ($('edge-pf').textContent = s.profitFactor === Infinity ? '∞' : s.profitFactor.toFixed(2));
+        $('edge-rexp')   && ($('edge-rexp').textContent = (s.rExpectancy != null)
             ? ((s.rExpectancy >= 0 ? '+' : '') + s.rExpectancy.toFixed(2) + 'R')
             : '—');
+        $('edge-wr-cap') && ($('edge-wr-cap').textContent = `Live · ${s.n} closed trades`);
+        if ($('edge-rexp-cap') && s.evPerTrade != null) {
+            $('edge-rexp-cap').textContent = `$${s.evPerTrade.toFixed(0)} per trade · live realized`;
+        }
     }
 
     function renderEquityAndMonthly(state) {

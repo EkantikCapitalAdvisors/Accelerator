@@ -1966,3 +1966,413 @@ a:hover { color: var(--gold); }
     .hero--reframe .hero__ctas { flex-direction: column; align-items: stretch; }
     .hero--reframe .hero__ctas .btn-text { text-align: center; }
 }
+
+/* =====================================================
+   DEV SPEC v1.0 — Sprints 2-4 additions
+   ===================================================== */
+
+/* ─── Allocation form intro (§3.10) ─── */
+.mod-c-panel__lead {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 26px);
+    color: rgba(27,42,74,0.85);
+    line-height: 1.4;
+    max-width: 720px;
+    margin: 0 0 var(--s-4);
+}
+.ind-submit-note {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--slate);
+    text-align: center;
+    margin: var(--s-2) 0 0;
+    max-width: 720px;
+}
+.ind-thanks__gauntlet {
+    margin-top: var(--s-3);
+    font-family: var(--font-sans);
+    font-size: 16px;
+}
+.ind-thanks__gauntlet a {
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    text-decoration: none;
+}
+
+/* XL submit button (Cross the line.) */
+.btn--xl {
+    padding: 20px 48px;
+    font-size: 18px;
+    min-height: 60px;
+}
+
+/* ─── Battery callout (§3.8) ─── */
+.battery-callout {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--gold);
+    margin: var(--s-3) 0;
+}
+
+/* ─── Edge restructure (§3.4) ─── */
+.edge-live {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+    margin: var(--s-6) 0 var(--s-4);
+}
+.edge-live__card {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: var(--s-4);
+    text-align: left;
+}
+.edge-live__label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin: 0 0 var(--s-2);
+}
+.edge-live__value {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 1;
+    color: var(--gold);
+    margin: 0 0 var(--s-2);
+}
+.edge-live__caption {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--slate);
+    margin: 0;
+}
+.backtest-panel {
+    margin: var(--s-6) 0 0;
+    padding: var(--s-3);
+    background: var(--ivory);
+    border: 1px solid var(--slate);
+    border-radius: 4px;
+}
+.backtest-panel__eyebrow {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+    margin: 0 0 var(--s-1);
+}
+.backtest-panel__body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--navy);
+    margin: 0;
+}
+.edge-disclaimer {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--slate);
+    margin: var(--s-4) 0 0;
+    line-height: 1.5;
+}
+
+/* ─── Section 05 · Three Paths (§3.5) ─── */
+.paths .section__inner--wide { max-width: 1280px; }
+.paths__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+    align-items: stretch;
+}
+.path-card {
+    position: relative;
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: var(--s-4);
+    display: flex;
+    flex-direction: column;
+}
+.path-card--emphasized {
+    background: var(--gold-pale);
+    border-color: rgba(200,169,81,0.6);
+}
+.path-card__flag {
+    position: absolute;
+    top: var(--s-2);
+    right: var(--s-3);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    background: var(--white);
+    padding: 4px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--gold);
+}
+.path-card__num {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--gold);
+    margin-bottom: var(--s-2);
+}
+.path-card__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 36px;
+    color: var(--navy);
+    line-height: 1.1;
+    margin: 0 0 var(--s-2);
+}
+.path-card__tag {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+    margin: 0 0 var(--s-3);
+}
+.path-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s-3);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--navy);
+}
+.path-card__list li {
+    padding: var(--s-1) 0;
+    padding-left: var(--s-2);
+    position: relative;
+}
+.path-card__list li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+}
+.path-card__lede {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--navy);
+    margin: 0 0 var(--s-3);
+    padding: var(--s-2);
+    background: rgba(255,255,255,0.6);
+    border-left: 2px solid var(--gold);
+}
+.path-card__meta {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--slate);
+    margin: 0 0 var(--s-3);
+    line-height: 1.6;
+}
+.path-card__meta strong { color: var(--navy); }
+.path-card__cta {
+    margin-top: auto;
+    padding-top: var(--s-2);
+}
+.path-card__cta .btn { width: 100%; justify-content: center; }
+.paths__disclaimer {
+    margin-top: var(--s-4);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.55;
+    max-width: 880px;
+}
+
+/* ─── Section 06 · Qualifying Gauntlet (§3.6) ─── */
+.gauntlet .section__inner--wide { max-width: 1280px; }
+.section-head__title--med { font-size: clamp(32px, 4vw, 48px); }
+.gauntlet__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+}
+.gate-card {
+    background: var(--ivory);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: var(--s-4);
+}
+.gate-card.is-passed { border-color: var(--pass); }
+.gate-card.is-failed { border-color: var(--fail); opacity: 0.85; }
+.gate-card__eyebrow {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: var(--s-1);
+}
+.gate-card__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 36px;
+    color: var(--navy);
+    line-height: 1.1;
+    margin: 0 0 var(--s-1);
+}
+.gate-card__sub {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--navy);
+    margin: 0 0 var(--s-3);
+}
+.gate-card__deflist { margin: 0 0 var(--s-3); }
+.gate-card__defrow {
+    padding: var(--s-1) 0;
+    border-bottom: 1px solid rgba(27,42,74,0.08);
+    display: flex;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+}
+.gate-card__defrow:last-child { border-bottom: none; }
+.gate-card__defrow dt {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+    flex: 0 0 130px;
+}
+.gate-card__defrow dd {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--navy);
+    flex: 1;
+    min-width: 0;
+}
+.gate-card__status {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--divider);
+}
+.gate-card__status-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+    margin: 0 0 var(--s-1);
+}
+.gate-card__bar {
+    height: 8px;
+    background: rgba(27,42,74,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--s-1) 0;
+}
+.gate-card__bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.6s ease;
+}
+.gate-card__status-text {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--navy);
+    margin: var(--s-1) 0 0;
+}
+.gate-card__status-text strong { color: var(--navy); }
+.gate-card__counter {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--gold);
+    margin: var(--s-1) 0;
+}
+.gate-card__counter-sub {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--slate);
+    text-transform: none;
+    letter-spacing: 0;
+}
+.gauntlet__footnote {
+    margin: var(--s-4) auto;
+    max-width: 880px;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.55;
+}
+
+/* Capital activation banner (§4.6) */
+.activation-banner {
+    background: var(--navy-dark);
+    color: var(--ivory);
+    padding: var(--s-6) var(--s-3);
+    text-align: center;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-2);
+}
+.activation-banner__rule {
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+}
+.activation-banner__text {
+    font-family: var(--font-sans);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--ivory);
+    margin: 0;
+    line-height: 1.4;
+}
+.activation-banner__text strong { color: var(--gold); font-weight: 700; }
+.activation-banner__updated {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: rgba(250,248,245,0.55);
+    margin: 0;
+}
+
+/* ─── Modes-intro section (smaller vertical padding) ─── */
+.modes-intro { padding-bottom: 0; border-bottom: none; }
+.modes-intro .section-head { margin-bottom: 0; }
+
+/* ─── Footer canonical line (§3.11) ─── */
+.footer__canon {
+    color: var(--gold) !important;
+    font-family: var(--font-sans);
+    font-size: 14px !important;
+    margin-bottom: var(--s-3) !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 880px) {
+    .edge-live { grid-template-columns: 1fr; gap: var(--s-2); }
+    .paths__grid { grid-template-columns: 1fr; gap: var(--s-3); }
+    .gauntlet__grid { grid-template-columns: 1fr; }
+    .gate-card__defrow dt { flex: 0 0 100%; }
+    .activation-banner__text { font-size: 18px; }
+}
