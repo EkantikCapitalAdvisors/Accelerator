@@ -1,17 +1,20 @@
 {
-  "updatedAt": "2026-05-15T14:00:00Z",
+  "_comment": "Gauntlet status feed (Dev Spec §5.3). Founder updates manually (Pattern A per §5.4). Set state to 'in_progress' once Tradeify challenge starts and once first mirror participant is live; bump 'value' on Gate 01 as P&L accrues; bump 'participants' on Gate 02 as mirror sign-ups occur. Update 'updatedAt' on every edit.",
+  "updatedAt": "2026-05-15T18:00:00Z",
   "gate01": {
     "label": "Tradeify $100K Lightning challenge",
-    "state": "in_progress",
+    "state": "pending",
     "value": 0,
     "target": 6000,
-    "percent": 0
+    "percent": 0,
+    "note": "Begins after early-stability threshold."
   },
   "gate02": {
     "label": "Path Two live mirror",
-    "state": "in_progress",
+    "state": "pending",
     "participants": 0,
-    "bandStatus": "within_band"
+    "bandStatus": "within_band",
+    "note": "Begins after early-stability threshold."
   },
   "activation": {
     "state": "pending",

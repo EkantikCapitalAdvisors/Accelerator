@@ -2426,3 +2426,14 @@ a:hover { color: var(--gold); }
     .onboard-step { grid-template-columns: 1fr; gap: var(--s-1); }
     .onboard-step__num { font-size: 48px; }
 }
+
+/* Doc reference under Layer 03 download link */
+.defense-card__docref {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: rgba(250,248,245,0.45);
+    margin-top: var(--s-1);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}

@@ -33,29 +33,38 @@
     function render(data) {
         if (!data) return;
 
-        // Gate 01
+        // Gate 01 — Tradeify challenge
         const g1 = data.gate01 || {};
         const target = Number(g1.target) || 6000;
         const value  = Number(g1.value) || 0;
         const pct    = g1.percent != null ? Number(g1.percent) : Math.max(0, Math.min(100, (value / target) * 100));
         const fill   = $('gate-01-fill');
         if (fill) {
-            fill.style.width = pct.toFixed(1) + '%';
+            fill.style.width = (g1.state === 'pending' ? 0 : pct).toFixed(1) + '%';
             const bar = fill.parentElement;
-            if (bar && bar.setAttribute) bar.setAttribute('aria-valuenow', pct.toFixed(0));
+            if (bar && bar.setAttribute) bar.setAttribute('aria-valuenow', (g1.state === 'pending' ? 0 : pct).toFixed(0));
         }
         const v1 = $('gate-01-value');
-        if (v1) v1.textContent = `${fmtUSD(value)} of ${fmtUSD(target)} (${pct.toFixed(0)}%)`;
+        if (v1) {
+            if (g1.state === 'pending') v1.textContent = `Awaiting start · target ${fmtUSD(target)}`;
+            else if (g1.state === 'passed') v1.textContent = `Passed · ${fmtUSD(value)} of ${fmtUSD(target)}`;
+            else v1.textContent = `${fmtUSD(value)} of ${fmtUSD(target)} (${pct.toFixed(0)}%)`;
+        }
         const s1 = $('gate-01-state');
-        if (s1) s1.textContent = stateLabel(g1.state);
+        if (s1) s1.textContent = stateLabel(g1.state) + (g1.note && g1.state === 'pending' ? ' · ' + g1.note : '');
         applyStateClass($('gate-01'), g1.state);
 
-        // Gate 02
+        // Gate 02 — Mirror participants
         const g2 = data.gate02 || {};
         const v2 = $('gate-02-value');
         if (v2) v2.textContent = (g2.participants != null) ? g2.participants : '—';
         const s2 = $('gate-02-state');
-        if (s2) s2.textContent = stateLabel(g2.state) + (g2.bandStatus === 'within_band' ? ' · within band' : '');
+        if (s2) {
+            let txt = stateLabel(g2.state);
+            if (g2.state === 'in_progress' && g2.bandStatus === 'within_band') txt += ' · within band';
+            if (g2.state === 'pending' && g2.note) txt += ' · ' + g2.note;
+            s2.textContent = txt;
+        }
         applyStateClass($('gate-02'), g2.state);
 
         // Updated stamp
