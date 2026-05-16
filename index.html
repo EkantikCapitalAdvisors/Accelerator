@@ -237,7 +237,37 @@
                 </div>
             </div>
 
-            <!-- R-multiple asymmetry — why R-expectancy holds even when win rate compresses -->
+            <!-- Annualized trajectory — extrapolated from live cadence -->
+            <aside class="annual-proj" aria-labelledby="annual-proj-h">
+                <p class="annual-proj__eyebrow" id="annual-proj-h">Annualized trajectory &nbsp;·&nbsp; extrapolated from live cadence</p>
+                <div class="annual-proj__grid">
+                    <div class="annual-proj__cell">
+                        <span class="annual-proj__label">Trades on pace</span>
+                        <span class="annual-proj__value" id="annual-trades">—</span>
+                        <span class="annual-proj__sub" id="annual-trades-sub">per year at current cadence</span>
+                    </div>
+                    <div class="annual-proj__cell">
+                        <span class="annual-proj__label">Annualized R-multiple</span>
+                        <span class="annual-proj__value" id="annual-r">—</span>
+                        <span class="annual-proj__sub" id="annual-r-sub">extrapolated from live expectancy</span>
+                    </div>
+                    <div class="annual-proj__cell">
+                        <span class="annual-proj__label">Annualized P&amp;L</span>
+                        <span class="annual-proj__value" id="annual-pl">—</span>
+                        <span class="annual-proj__sub" id="annual-pl-sub">on $20,000 base, fixed risk assumption</span>
+                    </div>
+                </div>
+                <p class="annual-proj__headline" id="annual-proj-headline">Computing live trajectory&hellip;</p>
+                <details class="annual-proj__caveats">
+                    <summary>Honest caveats &mdash; what this projection assumes, and what it doesn&rsquo;t</summary>
+                    <ul>
+                        <li id="annual-caveat-sample">Sample is still inside the statistical-confirmation zone &mdash; sample-size tests in the 8-Test Sustainability Battery (below) may not clear yet at this n. Treat the annualized figure as a <em>trajectory</em>, not a confirmed annual expectancy.</li>
+                        <li>Linear extrapolation assumes the edge expresses uniformly across the remaining calendar window. Regime drift, behavioral residuals (post-loss impulsivity windows, afternoon ES exposure), and seasonality are not priced in.</li>
+                        <li>Risk scaling: the dollar projection assumes risk stays fixed at the current per-trade average. If risk scales with the equity curve (compounding), the dollar number is materially higher. If it stays fixed, the linear projection holds.</li>
+                        <li id="annual-caveat-pf">Profit-factor confidence interval at this sample size is meaningful &mdash; the true PF could plausibly sit anywhere from <strong>~1.4 to ~2.1</strong>. The 8-Test Sustainability Battery quantifies that interval directly.</li>
+                    </ul>
+                </details>
+            </aside>
             <div class="r-asym" aria-labelledby="r-asym-h">
                 <p class="r-asym__eyebrow" id="r-asym-h">R-multiple distribution &nbsp;·&nbsp; the asymmetry</p>
                 <div class="r-asym__grid">
