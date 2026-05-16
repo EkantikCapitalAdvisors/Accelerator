@@ -46,13 +46,13 @@
             $('r-asym-loss-sub').textContent = `≈ $${Math.round(s.avgRloss * s.avgRiskDollar).toLocaleString()} per losing trade`;
         }
 
-        // Dynamic narrative — compare live WR / R-expectancy to within-sample baseline.
-        const BT_WR = 0.675;
+        // Dynamic narrative — present asymmetry as a structural fact. No
+        // fictional backtest baseline (there is no backtest; live fills are
+        // the entire sample). The R-ratio is the load-bearing number.
         const lede = $('r-asym-lede');
-        if (lede && s.winRate != null && s.rExpectancy != null && s.winLossR != null) {
-            const wrDelta = (s.winRate - BT_WR) * 100;
-            const dir = wrDelta < -1 ? 'compressed' : (wrDelta > 1 ? 'expanded' : 'tracked');
-            lede.innerHTML = `Win rate has <strong>${dir} ${Math.abs(wrDelta).toFixed(1)} pts</strong> versus the 67.5% within-sample baseline. Yet R-expectancy is <strong>${fmtRsigned(s.rExpectancy)}</strong> per trade &mdash; because the average winner outpaces the average loser by <strong>${s.winLossR.toFixed(2)}:1</strong> in R-units. Win rate and R-multiple move independently.`;
+        if (lede && s.winLossR != null && s.rExpectancy != null && s.winRate != null) {
+            const wrPct = (s.winRate * 100).toFixed(1);
+            lede.innerHTML = `The average winner outpaces the average loser by <strong>${s.winLossR.toFixed(2)}:1</strong> in R-units. That ratio &mdash; not the win rate alone &mdash; is what drives R-expectancy. At a ${wrPct}% win rate, the strategy is currently producing <strong>${fmtRsigned(s.rExpectancy)}</strong> per trade because losses are being cut at a smaller R than wins are being held. Win rate and R-multiple are independent dials; the page shows both because both matter.`;
         }
     }
 
@@ -76,30 +76,6 @@
         if (balEl) balEl.textContent = '$' + end.toLocaleString(undefined, { maximumFractionDigits: 0 });
     }
 
-    async function loadBacktest() {
-        const body = document.getElementById('backtest-body');
-        const lock = document.getElementById('backtest-lock');
-        if (!body) return;
-        try {
-            const res = await fetch('data/backtest.json', { cache: 'no-store' });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const b = await res.json();
-            const wr = (Number(b.winRate) * 100).toFixed(1);
-            const pf = Number(b.profitFactor).toFixed(2);
-            const nStr = b.sampleSize ? Number(b.sampleSize).toLocaleString() + ' qualified backtest trades · ' : '';
-            const note = b.qualitativeNote ? ' &nbsp;·&nbsp; ' + b.qualitativeNote : '';
-            body.innerHTML = `Full-sample backtest: <strong>${wr}% win rate</strong> &nbsp;·&nbsp; <strong>${pf} profit factor</strong>${note}. ${nStr}The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.`;
-            if (lock && b.lockedDate) {
-                const d = new Date(b.lockedDate);
-                const stamp = isNaN(d) ? b.lockedDate : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
-                lock.textContent = `· locked ${stamp}${b.version ? ' (' + b.version + ')' : ''}`;
-            }
-        } catch (err) {
-            // Soft-fail; existing HTML defaults remain.
-            console && console.warn && console.warn('[backtest] load failed:', err);
-        }
-    }
-
     function init() {
         root.Ekantik.Data.onChange(state => {
             renderEdgeTriplet(state);
@@ -107,7 +83,6 @@
         });
         const s = root.Ekantik.Data.get();
         if (s.summary) { renderEdgeTriplet(s); renderEquityAndMonthly(s); }
-        loadBacktest();
     }
 
     root.Ekantik = root.Ekantik || {};

@@ -205,7 +205,7 @@
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
                 <h2 class="section-head__title" id="a-h2">Now we earn the right to talk about returns.</h2>
-                <p class="section-head__lead">Live, from the operator&rsquo;s own capital. Re-measured as each fill closes.</p>
+                <p class="section-head__lead">Live, from the operator&rsquo;s own capital. Re-measured as each fill closes. No backtest behind it &mdash; the fills are the data.</p>
             </header>
 
             <div class="edge-live edge-live--four">
@@ -254,17 +254,14 @@
                 <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
             </div>
 
-            <aside class="backtest-panel" aria-labelledby="backtest-panel-h">
-                <p class="backtest-panel__eyebrow" id="backtest-panel-h">
-                    Within-sample backtest reference
-                    <span class="backtest-panel__lock" id="backtest-lock">· locked baseline</span>
-                </p>
-                <p class="backtest-panel__body" id="backtest-body">Full-sample backtest: <strong>67.5% win rate</strong> &nbsp;&middot;&nbsp; <strong>2.07 profit factor</strong> &nbsp;&middot;&nbsp; top-decile risk-adjusted returns. The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.</p>
-                <p class="backtest-panel__caveat"><em>The backtest reference is a fixed baseline by design. It does not move with each new live fill &mdash; that&rsquo;s what makes it a meaningful comparison.</em></p>
+            <aside class="record-panel" aria-labelledby="record-panel-h">
+                <p class="record-panel__eyebrow" id="record-panel-h">The complete record</p>
+                <p class="record-panel__body">There is no separate backtest. The public Discord fills are the entire sample. The operator&rsquo;s personal capital was deployed, every trade was posted before exit, and every metric on this page is computed from that record &mdash; nothing is reconstructed, nothing is selected, nothing is unwound.</p>
+                <p class="record-panel__body">The <a href="#battery" class="link-inline">8-Test Sustainability Battery</a> below is how we evaluate whether a sample of this size carries statistical weight. The <a href="#fills" class="link-inline">public trade log</a> further down is every fill, downloadable as CSV, verifiable against the live market.</p>
             </aside>
 
             <h3 class="mt-4">Sample Equity Arc — $20,000 base · 1 ES contract</h3>
-            <p class="muted" style="font-size:13px">Within-sample illustration. The arc prints as each fill closes. Capital resets to base annually under the strategy's distribution mechanics — see Modes A and B above.</p>
+            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital. The arc prints as each Discord fill closes. Capital resets to base annually under the strategy&rsquo;s distribution mechanics &mdash; see Modes A and B below.</p>
             <div class="mini-chart">
                 <canvas id="section-a-equity"></canvas>
             </div>

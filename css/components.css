@@ -2059,28 +2059,34 @@ a:hover { color: var(--gold); }
     color: var(--slate);
     margin: 0;
 }
-.backtest-panel {
+.record-panel {
     margin: var(--s-6) 0 0;
-    padding: var(--s-3);
+    padding: var(--s-3) var(--s-4);
     background: var(--ivory);
-    border: 1px solid var(--slate);
-    border-radius: 4px;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
 }
-.backtest-panel__eyebrow {
+.record-panel__eyebrow {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--slate);
-    margin: 0 0 var(--s-1);
+    color: var(--gold);
+    margin: 0 0 var(--s-2);
 }
-.backtest-panel__body {
+.record-panel__body {
     font-family: var(--font-sans);
     font-size: 15px;
-    line-height: 1.65;
+    line-height: 1.7;
     color: var(--navy);
-    margin: 0;
+    margin: 0 0 var(--s-2);
+}
+.record-panel__body:last-child { margin-bottom: 0; }
+.record-panel__body .link-inline {
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    text-decoration: none;
 }
 .edge-disclaimer {
     font-family: var(--font-sans);
@@ -2515,25 +2521,7 @@ a:hover { color: var(--gold); }
     .r-asym__grid { grid-template-columns: 1fr; }
 }
 
-/* ─── Backtest panel: locked baseline framing ─── */
-.backtest-panel__lock {
-    display: inline;
-    margin-left: var(--s-1);
-    font-family: var(--font-sans);
-    font-size: 11px;
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0.04em;
-    color: var(--slate);
-    font-style: italic;
-}
-.backtest-panel__caveat {
-    margin: var(--s-2) 0 0;
-    font-family: var(--font-sans);
-    font-size: 12px;
-    color: var(--slate);
-    line-height: 1.5;
-}
+/* (Backtest panel removed — no backtest exists; live fills are the entire sample.) */
 
 /* ─── Early-stability threshold tracker (Gauntlet) ─── */
 .threshold-tracker {
