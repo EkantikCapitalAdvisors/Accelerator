@@ -360,19 +360,25 @@
         const lName  = $('ind-last');
         const email  = $('ind-email');
         const phone  = $('ind-phone');
-        const amtEl  = $('ind-amount');
-        const amtVal = $('ind-amount-val');
+        const amtEl     = $('ind-amount');
+        const amtVal    = $('ind-amount-val');
+        const familyCap = $('ind-family-capital');
         const ackBind   = $('ind-ack-binding');
+        const ackManaged = $('ind-ack-managed');
         const ackAccred = $('ind-ack-accred');
-        const submit = $('ind-submit');
-        const errorEl = $('ind-error');
-        const thanks  = $('ind-thanks');
+        const submit    = $('ind-submit');
+        const errorEl   = $('ind-error');
+        const thanks    = $('ind-thanks');
+
+        // 15 managed-account seats, $100K minimum per Rebuild Spec §4.13.
+        const SEAT_MIN = 100000;
+        const SEATS    = 15;
 
         function updateAmountLabel() {
             const amt = parseFloat(amtEl.value);
-            const slots = Math.floor(amt / 20000);
-            const tierPct = (amt / 500000) * 100;
-            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  ·  ${slots} of 25 founding slot${slots === 1 ? '' : 's'}  ·  ${tierPct.toFixed(0)}% of founding tier`;
+            const seatShare = Math.max(1, Math.round(amt / SEAT_MIN));
+            const capPct = (seatShare / SEATS) * 100;
+            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  &middot;  ${seatShare} of ${SEATS} managed-account seat${seatShare === 1 ? '' : 's'} &middot; ${capPct.toFixed(0)}% of capacity`;
         }
 
         function validateEmail(v) {
@@ -380,19 +386,23 @@
         }
 
         function validate() {
+            const amt = parseFloat(amtEl.value);
             const ok =
                 (fName.value || '').trim().length > 0 &&
                 (lName.value || '').trim().length > 0 &&
                 validateEmail((email.value || '').trim()) &&
-                ackBind.checked && ackAccred.checked;
+                amt >= SEAT_MIN &&
+                familyCap && familyCap.value &&
+                ackBind.checked && ackManaged && ackManaged.checked && ackAccred.checked;
             submit.disabled = !ok;
             return ok;
         }
 
-        amtEl.addEventListener('input', updateAmountLabel);
-        [fName, lName, email, phone, ackBind, ackAccred].forEach(el =>
+        amtEl.addEventListener('input', () => { updateAmountLabel(); validate(); });
+        [fName, lName, email, phone, ackBind, ackManaged, ackAccred].forEach(el =>
             el && el.addEventListener('input', validate));
-        [ackBind, ackAccred].forEach(el => el && el.addEventListener('change', validate));
+        [ackBind, ackManaged, ackAccred].forEach(el => el && el.addEventListener('change', validate));
+        familyCap && familyCap.addEventListener('change', validate);
 
         updateAmountLabel();
         validate();
@@ -413,8 +423,9 @@
             payload.append('phone',      (phone.value || '').trim());
             payload.append('booking_amount', String(amt));
             payload.append('preferred_mode', modeRadio ? modeRadio.value : 'no-preference');
-            payload.append('slots',           String(Math.floor(amt / 20000)));
-            payload.append('founding_tier_pct', (amt / 500000).toFixed(4));
+            payload.append('family_capital', familyCap ? familyCap.value : '');
+            payload.append('seat_share',     String(Math.max(1, Math.round(amt / SEAT_MIN))));
+            payload.append('capacity_pct',   ((Math.max(1, Math.round(amt / SEAT_MIN)) / SEATS)).toFixed(4));
             payload.append('timestamp',       new Date().toISOString());
             payload.append('source',          'accelerator-landing-v1.6');
 

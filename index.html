@@ -49,63 +49,234 @@
         </div>
     </div>
 
-    <!-- ═══ MODULE C — Slim context bar (spec §5.2.1) ═══ -->
-    <div class="capacity-bar" role="note">
-        Strategy capacity: hard-capped at <strong>$5M AUM</strong> / <strong>500 ES contract equivalents</strong>. Soft launch — gathering founding-allocation interest.
-    </div>
-
-    <!-- ═══ SECTION 01 — HERO · The Judgment Reframe (Dev Spec §3.1) ═══ -->
-    <section class="hero hero--reframe" id="hero" aria-labelledby="hero-h1">
-        <a id="module-a-hero-alias" aria-hidden="true"></a>
-        <div class="hero__inner">
-            <span class="eyebrow eyebrow--rule">Ekantik Capital Advisors · Founding Allocation Window · Q2 2026</span>
-            <h1 class="hero__h1" id="hero-h1">
-                <span class="hero__h1-main">You are not buying ES futures.</span>
-                <span class="hero__h1-italic">You are renting a human&rsquo;s judgment.</span>
-            </h1>
-
-            <!-- HERO COPY: monthly $ and % are computed live from the Discord trade feed.
-                 Formula: MONTHLY_DOLLARS = sum(P&L) / months_elapsed
-                          MONTHLY_PERCENT = MONTHLY_DOLLARS / 20000 × 100
-                 Falls back to '—' if insufficient sample / calendar time.
-                 See Hero Copy Spec v1.0 §5 Option A (fully dynamic). -->
-            <p class="hero__lead hero__lead--primary">
-                <strong>Right now, on a $20,000 base, this strategy is generating about $<span id="hero-monthly-dollars">—</span> per month at the live cadence &mdash; roughly <span id="hero-monthly-pct">—</span>% monthly.</strong> Worst case in a losing week is capped at $1,000 by pre-committed rules that cannot be renegotiated under stress. Every trade is timestamped to the broker, posted publicly, and downloadable below.
+    <!-- ═══ SECTION §1.1 — HERO (Rebuild Spec §4.1) ═══ -->
+    <header class="hero hero--casino" id="hero" aria-labelledby="hero-h1">
+        <div class="hero__inner-rb">
+            <div class="hero-status">
+                <span><span class="dot"></span> Live &middot; Founding Allocation Window Q2 2026</span>
+                <span>Capacity hard-capped at 15 managed accounts &middot; Soft launch</span>
+            </div>
+            <div class="hero-eyebrow">Ekantik Capital Advisors &middot; Founding Allocation</div>
+            <h1 id="hero-h1">A larger edge.<br>The same discipline.<br>A ceiling of <em>fifteen</em>.</h1>
+            <p class="hero-lead">
+                The casinos figured this out a hundred years ago &mdash; a small edge, executed without exception, compounds against the population. We have a larger edge, the same discipline, and a capacity hard-capped at fifteen managed-account relationships. One operator. Personal capital on every fill.
             </p>
-            <p class="hero__lead hero__lead--secondary"><em>Mechanical. Pre-committed. Operating inside a defense architecture engineered over more than a decade &mdash; and the operator&rsquo;s personal capital is on every fill. The four tiles below are the live edge metrics that produce the result above.</em></p>
+            <p class="hero-sub">
+                Mechanical execution. Pre-committed defense architecture. The operator&rsquo;s own capital on every fill &mdash; not the operator&rsquo;s confidence. Verifiable below.
+            </p>
+            <div class="cta-row">
+                <a href="#allocation" class="btn btn-gold">Indicate founding interest <span class="arr">&rarr;</span></a>
+                <a href="#edges" class="btn btn-ghost">See where edges exist <span class="arr">&darr;</span></a>
+            </div>
+        </div>
+    </header>
 
-            <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
-                <div class="stat-card">
-                    <p class="stat-card__label">Win Rate</p>
-                    <p class="stat-card__value" id="hero-stat-1">—</p>
-                    <p class="stat-card__caption" id="hero-stat-1-cap">Live · closed trades</p>
+    <!-- ═══ SECTION §1.2 — WHERE EDGES EXIST (Rebuild Spec §4.2) — NEW ═══ -->
+    <section class="block edges-section" id="edges">
+        <div class="container section-inner">
+            <div class="eyebrow">First Principles</div>
+            <h2 class="h-section">Where edges exist.<br>And <em>where they don&rsquo;t.</em></h2>
+            <p class="lede">
+                Every venue that handles capital &mdash; casinos, prop firms, broker platforms, mutual funds, advisory shops &mdash; operates on the same underlying mechanic. One side of every transaction has an edge. The other side doesn&rsquo;t. Over enough trials, the math wins. There is no exception to this.
+            </p>
+
+            <!-- Component A: EV Formula -->
+            <div class="component-label">Component A &middot; The Math, Live</div>
+            <h3 class="component-h">How the edge is calculated. Every fill. Every recalculation.</h3>
+            <p class="component-sub">
+                From the operator&rsquo;s ES futures account. Computed live from closed fills. Recalculated each time a fill closes. No backtest values. No simulation. The numbers below populate from the live trade journal.
+            </p>
+
+            <div class="ev-panel">
+                <div class="ev-panel-label">Expected Value Formula &middot; ES Futures &middot; All-Time</div>
+
+                <div class="ev-equation">
+                    <div class="ev-var var-win">
+                        <div class="ev-var-label">Win Rate</div>
+                        <div class="ev-var-primary" data-bind="win_rate_pct">&mdash;.&mdash;%</div>
+                        <div class="ev-var-secondary"><span data-bind="wins">&mdash;</span> W / <span data-bind="losses">&mdash;</span> L</div>
+                    </div>
+                    <div class="ev-op">&times;</div>
+                    <div class="ev-var var-win">
+                        <div class="ev-var-label">Avg Win</div>
+                        <div class="ev-var-primary" data-bind="avg_win_pts">+&mdash; pts</div>
+                        <div class="ev-var-secondary">$<span data-bind="avg_win_usd">&mdash;</span> per contract</div>
+                    </div>
+                    <div class="ev-op">&minus;</div>
+                    <div class="ev-var var-loss">
+                        <div class="ev-var-label">Loss Rate &times; Avg Loss</div>
+                        <div class="ev-var-primary" data-bind="avg_loss_pts">&minus;&mdash; pts</div>
+                        <div class="ev-var-secondary">$<span data-bind="avg_loss_usd">&mdash;</span> per contract</div>
+                    </div>
+                    <div class="ev-op">=</div>
+                    <div class="ev-var var-edge">
+                        <div class="ev-var-label">Edge per Trade</div>
+                        <div class="ev-var-primary" data-bind="edge_R">+&mdash;.&mdash;R</div>
+                        <div class="ev-var-secondary">$<span data-bind="edge_usd">&mdash;</span> per trade</div>
+                        <div class="ev-var-tertiary">at <span data-bind="daily_risk_pct">&mdash;</span>% daily risk</div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <p class="stat-card__label">Profit Factor</p>
-                    <p class="stat-card__value" id="hero-stat-2">—</p>
-                    <p class="stat-card__caption">Gross wins ÷ gross losses</p>
+
+                <div class="ev-workings">
+                    <span class="line">EV = (Win% &times; Avg Win pts) &minus; (Loss% &times; Avg Loss pts)</span>
+                    <span class="line">EV = (<span data-bind="win_rate_short">&mdash;</span>% &times; +<span data-bind="avg_win_pts_short">&mdash;</span> pts) &minus; (<span data-bind="loss_rate_short">&mdash;</span>% &times; <span data-bind="avg_loss_pts_short">&mdash;</span> pts)</span>
+                    <span class="line">EV = +<span data-bind="weighted_win">&mdash;</span> pts &minus; <span data-bind="weighted_loss">&mdash;</span> pts</span>
+                    <span class="line final">EV = +<span data-bind="edge_pts">&mdash;</span> pts per trade &nbsp;&equiv;&nbsp; +<span data-bind="edge_R_short">&mdash;</span>R &nbsp;&equiv;&nbsp; $<span data-bind="edge_usd_short">&mdash;</span> per trade</span>
                 </div>
-                <div class="stat-card">
-                    <p class="stat-card__label">EV per trade</p>
-                    <p class="stat-card__value" id="hero-stat-3">—</p>
-                    <p class="stat-card__caption" id="hero-stat-3-cap">Per unit of risk · live realized</p>
+
+                <div class="ev-readout">
+                    A win rate of <strong><span data-bind="win_rate_pct">&mdash;</span></strong> on an asymmetric trade structure produces a realized edge of <strong>+<span data-bind="edge_R">&mdash;</span></strong> per trade. Risk per contract is held constant at <strong><span data-bind="daily_risk_pct">&mdash;</span>%</strong> of working capital. Variance loses to math at sample sizes where the central limit theorem dominates.
                 </div>
-                <div class="stat-card">
-                    <p class="stat-card__label">Avg risk per trade</p>
-                    <p class="stat-card__value" id="hero-stat-4">—</p>
-                    <p class="stat-card__caption" id="hero-stat-4-cap">What 1R equals in dollars · live realized</p>
+
+                <div class="ev-context-grid">
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Sample Window</div>
+                        <div class="ev-context-value"><span data-bind="trade_count">&mdash;</span> trades</div>
+                    </div>
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Risk Budget</div>
+                        <div class="ev-context-value">$<span data-bind="risk_budget">&mdash;</span><span class="small">/day</span></div>
+                    </div>
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Win / Loss Ratio</div>
+                        <div class="ev-context-value" data-bind="wl_ratio">&mdash;</div>
+                    </div>
                 </div>
             </div>
-            <p class="hero__sample-caption" id="hero-sample-size">Live, from Discord fills. Pre-asymptotic at this sample. Past performance does not indicate future results.</p>
 
-            <div class="hero__ctas">
-                <a class="btn btn--primary" href="#allocation">Indicate founding interest →</a>
-                <a class="btn-text" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">First, watch the journal →</a>
+            <p class="ev-disclaimer">
+                Live, from the operator&rsquo;s ES futures account. Sample is pre-asymptotic at this size. Past performance is not indicative of future results.
+            </p>
+
+            <!-- Component B: Edge Landscape Table -->
+            <div class="component-block-divider"></div>
+
+            <div class="component-label">Component B &middot; The Edge Landscape</div>
+            <h3 class="component-h">Every documented edge in capital markets. And where ours sits.</h3>
+            <p class="component-sub">
+                Six rows. Five reference points. One operator. Each row represents a category of capital deployment with documented edge characteristics. The Ekantik row is where our ES futures operator sits inside this universe.
+            </p>
+
+            <div class="edge-table-frame">
+                <div class="edge-table-head">
+                    <div class="edge-table-title-block">
+                        <div class="label">Edge Landscape</div>
+                        <div class="h">Capital deployment by category</div>
+                    </div>
+                    <div class="edge-table-meta">
+                        <span class="live-dot"></span> Ekantik row: extrapolated from live ES fills &middot; as of <span data-bind="last_update">&mdash;</span>
+                    </div>
+                </div>
+
+                <table class="landscape">
+                    <thead>
+                        <tr>
+                            <th>Strategy</th>
+                            <th>Edge / Occurrence</th>
+                            <th>Frequency / Mo</th>
+                            <th>Annual R <span class="unsized-tag">(unsized)</span></th>
+                            <th>
+                                &frac12; Kelly Allocation
+                                <span class="kelly-help">?
+                                    <span class="tooltip"><strong>Kelly Criterion</strong><br>The mathematically optimal position size for a given edge. Half-Kelly halves variance while retaining most of the geometric growth.</span>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-strategy">Casino &middot; American Roulette<span class="qualifier">House operator</span></td>
+                            <td class="cell-pos">+5.26%</td>
+                            <td class="cell-neutral">&ge; 2,400</td>
+                            <td class="cell-neutral">&asymp; 1,500 R</td>
+                            <td class="cell-dim">1.4%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-strategy">Trend-Following CTAs<span class="qualifier">Systematic managed futures</span></td>
+                            <td class="cell-pos">+0.5&ndash;1%</td>
+                            <td class="cell-neutral">10 &ndash; 30</td>
+                            <td class="cell-neutral">&asymp; 56 R</td>
+                            <td class="cell-dim">2.5&ndash;7.5%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-strategy">Stat-Arb Pairs / Baskets<span class="qualifier">Quantitative mean-reversion</span></td>
+                            <td class="cell-pos">+0.5&ndash;2%</td>
+                            <td class="cell-neutral">200 &ndash; 500</td>
+                            <td class="cell-neutral">&asymp; 42 R</td>
+                            <td class="cell-dim">1.5&ndash;4%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-strategy">High-Frequency Market-Making<span class="qualifier">Spread capture &middot; sub-second</span></td>
+                            <td class="cell-pos">+0.017%</td>
+                            <td class="cell-neutral">&asymp; 100,000+</td>
+                            <td class="cell-neutral">&asymp; 26 R</td>
+                            <td class="cell-dim">&asymp; 0.005%</td>
+                        </tr>
+                        <tr class="ekantik-row">
+                            <td class="row-strategy">Ekantik &middot; ES Futures<span class="qualifier">All-time &middot; live operator account</span></td>
+                            <td class="cell-pos">+<span data-bind="edge_R">&mdash;</span>R</td>
+                            <td class="cell-neutral">&asymp; <span data-bind="trades_per_mo">&mdash;</span></td>
+                            <td class="cell-neutral">&asymp; <span data-bind="annual_R">&mdash;</span> R</td>
+                            <td class="cell-neutral"><span data-bind="half_kelly">&mdash;</span>%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-strategy">Retail Day-Trader &middot; median<span class="qualifier">ESMA / FINRA aggregated</span></td>
+                            <td class="cell-neg">negative</td>
+                            <td class="cell-neutral">500 +</td>
+                            <td class="cell-neg">&minus; 30 R</td>
+                            <td class="cell-dim">0%<br><span class="ann">negative edge</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="table-clarifier">
+                Annual R is shown <em>unsized</em> &mdash; i.e., before applying the Kelly position-size recommendation in the rightmost column. The relevant metric for capital deployment is Annual R &times; Kelly Allocation, which is where structural edge actually expresses itself.
+            </p>
+
+            <!-- Bridge quote -->
+            <div class="bridge">
+                <p>
+                    Casinos don&rsquo;t beat customers with bigger edges than ours. They beat customers with smaller edges, executed <em>without exception</em>, across enough trials that variance loses to math. We&rsquo;ve borrowed the discipline. <em>We did not borrow the edge size.</em> And we&rsquo;ve capped how many people get to sit on our side of the table.
+                </p>
+            </div>
+
+            <!-- Component C: Two Operating Modes -->
+            <div class="modes-section">
+                <div class="component-label">Component C &middot; The Math, Two Ways</div>
+                <h3 class="component-h">Two operating modes. The same edge.</h3>
+                <p class="component-sub">
+                    The same edge can be expressed in two distinct modes &mdash; depending on whether stake size is fixed or scales with equity. Our architecture runs both, simultaneously, at different layers of the system.
+                </p>
+
+                <div class="modes-grid">
+                    <div class="mode-card">
+                        <span class="mode-tag">Linear &middot; Casino mode</span>
+                        <h4 class="mode-name">Fixed stake.<br>Edge &times; volume.</h4>
+                        <div class="mode-formula">Return = edge &times; stake &times; trials</div>
+                        <p>The casino&rsquo;s bet size doesn&rsquo;t change with the bankroll. A small edge on a fixed bet, repeated enough times, produces a predictable house take. The math <em>accumulates</em> rather than compounds. Our per-trade discipline runs on this principle &mdash; fixed risk per contract, no rule modification under stress, no exception across the rolling window.</p>
+                    </div>
+                    <div class="mode-card">
+                        <span class="mode-tag">Geometric &middot; Kelly mode</span>
+                        <h4 class="mode-name">Fractional stake.<br>The base compounds.</h4>
+                        <div class="mode-formula">Capital_n = Capital_0 &times; exp[n &times; G]</div>
+                        <p>When stake scales with equity, the base itself compounds. The same edge produces exponential growth instead of linear accumulation. Our scaling distribution mode (Mode B) runs on this principle &mdash; defined milestones trigger position-size doublings, the base grows, the curve bends.</p>
+                    </div>
+                </div>
+
+                <p class="modes-close">
+                    Most operations sit on one mode or the other. We run both &mdash; <em>linear at the trade level, geometric at the structural level.</em> The Pyramid (next section) is how a real edge survives long enough to express either.
+                </p>
+            </div>
+
+            <div class="sourcing">
+                <p><strong>Sources.</strong> Casino house-edge figures: standard gaming regulatory disclosures; vary by table rules and machine class. Trend-following CTA performance characteristics: SocGen CTA Index, BarclayHedge CTA reports. Stat-arb edge characteristics: academic literature on equity pairs trading and statistical arbitrage. HFT market-making spread economics: SEC Tick Size Pilot data and academic market microstructure literature. Retail trader loss rates: ESMA aggregated broker disclosures, FINRA consumer alerts.</p>
+                <p><strong>The Ekantik row</strong> is computed live from closed fills on the operator&rsquo;s ES futures account, published in the public Discord trade journal, and recalculated each time a fill closes. Sample is pre-asymptotic at the current trade count. Past performance is not indicative of future results.</p>
             </div>
         </div>
     </section>
 
-    <!-- ═══ SECTION 02 — THE OPERATOR (Dev Spec §3.2) ═══ -->
+    <!-- ═══ SECTION §2.1 — THE OPERATOR (Dev Spec §3.2 · Rebuild §4.3 light reframe) ═══ -->
     <section class="section section--white operator" id="operator" aria-labelledby="operator-h2">
         <div class="section__inner section__inner--wide">
             <div class="operator__grid">
@@ -138,18 +309,25 @@
                             <p class="credentials-grid__body">Personal risk capital on every fill in the public Discord log. Not pooled. Not managed. Not shared.</p>
                         </div>
                     </div>
+                    <p class="operator__close">The edge described above is the output of that decade. The ceiling of fifteen is how it gets shared.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ SECTION 03 — DEFENSE ARCHITECTURE (Dev Spec §3.3) ═══ -->
+    <!-- ═══ SECTION §2.2 — DEFENSE (Rebuild §4.4 reframe · Pyramid cards UNCHANGED) ═══ -->
     <section class="section section--ivory defense" id="defense" aria-labelledby="defense-h2">
         <div class="section__inner section__inner--wide">
-            <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="defense-h2">Defense, engineered before offense.</h2>
-                <p class="section-head__lead">No edge works in every regime. The buffer does.</p>
-            </header>
+            <div class="epigraph">
+                <p class="quote">&ldquo;Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.&rdquo;</p>
+                <div class="attr">&mdash; Warren Buffett</div>
+            </div>
+
+            <div class="section-eyebrow">The Architecture</div>
+            <h2 class="defense-h" id="defense-h2">How the edge survives long enough to express itself.</h2>
+            <p class="defense-open">
+                Every edge has variance. Without a buffer engineered around it, even a real edge gets ruined by a single bad regime. The Pyramid, the Sit-Out rules, and the Falsifiability Gate exist to protect <strong>the edge</strong> &mdash; not to protect the operator&rsquo;s confidence. The Buffett rule isn&rsquo;t an aphorism here. It&rsquo;s the engineering specification the entire defense layer is built to satisfy.
+            </p>
 
             <div class="defense__layers">
                 <article class="defense-card defense-card--light">
@@ -205,13 +383,67 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 04 — THE EDGE (Dev Spec §3.4) ═══ -->
+    <!-- ═══ SECTION §2.2.1 — AUTHORITY PANEL (Rebuild §4.5) — NEW ═══ -->
+    <section class="block authority-section">
+        <div class="container-narrow">
+            <div class="section-eyebrow center">In good company</div>
+            <h3 class="authority-h">The same architecture. At different scales.</h3>
+            <p class="authority-sub">Never-lose foundation plus compounding-growth engine &mdash; built by every durable capital machine of the modern era.</p>
+
+            <div class="authority-grid">
+                <div class="auth-card">
+                    <h4>Berkshire Hathaway</h4>
+                    <div class="auth-scale">$1T+ Market Cap &middot; 50+ Year Compounder</div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Insurance float as low-cost capital base. Strict underwriting discipline. Conservative leverage. Survival before scale.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>~20% CAGR compounded across five decades by redeploying float into high-ROIC operating businesses.</p>
+                    </div>
+                </div>
+
+                <div class="auth-card">
+                    <h4>BlackRock</h4>
+                    <div class="auth-scale">$10T+ AUM &middot; Largest Asset Manager Globally</div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Diversified product suite. Fee-based revenue model that avoids principal risk. Aladdin technology platform as cycle hedge.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>Scale produces network effects. ETF business compounds with low marginal cost. Technology licensing extends optionality.</p>
+                    </div>
+                </div>
+
+                <div class="auth-card">
+                    <h4>Apple</h4>
+                    <div class="auth-scale">$3T+ Market Cap &middot; Largest Capital Returner Ever</div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Massive cash reserves prevent financial distress. Vertically integrated supply chain limits disruption exposure.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>Ecosystem lock-in creates recurring revenue. Services business compounds at 2&times; hardware growth. Buybacks de-risk the base.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="auth-close">
+                We are not inventing this. We are <em class="gold">applying it at the scale of fifteen accounts</em> &mdash; to a documented, falsifiable trading edge with personal capital on every fill.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION §2.3 — THE EDGE, LIVE (Dev Spec §3.4 · Rebuild §4.6 light reframe) ═══ -->
     <section class="section section--white" id="edge" aria-labelledby="a-h2">
         <a id="section-a" aria-hidden="true"></a>
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="a-h2">Now we earn the right to talk about returns.</h2>
-                <p class="section-head__lead">Live, from the operator&rsquo;s own capital. Re-measured as each fill closes. No backtest behind it &mdash; the fills are the data.</p>
+                <h2 class="section-head__title" id="a-h2">The edge, live.</h2>
+                <p class="section-head__lead">Every metric on this page is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. No simulations on this panel. No backtest figures. Live, or nothing.</p>
             </header>
 
             <div class="edge-live edge-live--four">
@@ -326,7 +558,21 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 05 — THE THREE PATHS (Dev Spec §3.5) ═══ -->
+    <!-- ═══ SECTION §1.3 — WHY FIFTEEN (Rebuild §4.7) — NEW ═══ -->
+    <section class="block why-fifteen">
+        <div class="container-tight">
+            <div class="why-fifteen-panel">
+                <div class="fifteen-mark">XV</div>
+                <div class="section-eyebrow center">The Cap</div>
+                <h2 class="why-fifteen-h">Why <em>fifteen</em>, specifically.</h2>
+                <p class="why-fifteen-body">
+                    Fifteen is the ceiling beneath which a money manager can operate inside specific regulatory exemptions without registrations that would otherwise apply. <strong>Family relationships aggregate to a single seat.</strong> Above fifteen, the structure becomes a different business &mdash; different oversight, different overhead, different attention. We chose to operate beneath the ceiling, by design. The number is structural, not promotional. When the fifteenth seat is taken, it&rsquo;s taken. The next person in becomes a candidate for whatever comes after &mdash; not a sixteenth seat.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION §2.4 — THREE PATHS (Dev Spec §3.5 · Rebuild §4.8 partial replace) ═══ -->
     <section class="section section--ivory paths" id="paths" aria-labelledby="paths-h2">
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
@@ -353,7 +599,7 @@
                     <span class="path-card__flag">Recommended</span>
                     <span class="path-card__num">02</span>
                     <h3 class="path-card__title">Mirror.</h3>
-                    <p class="path-card__tag">Real fills on your own broker account.</p>
+                    <p class="path-card__tag">Real fills on your own broker account. Verify the edge with your own capital, on a third-party platform, with no Ekantik involvement.</p>
                     <ul class="path-card__list">
                         <li>Open a Tradeify Lightning Funded $100K account &nbsp;·&nbsp; $450 one-time</li>
                         <li>Connect via Duplikium copy-trading bridge &nbsp;·&nbsp; ~$15/month</li>
@@ -366,19 +612,37 @@
                     <p class="path-card__cta"><a class="btn btn--primary" href="mirror.html">Mirror the edge →</a></p>
                 </article>
 
-                <article class="path-card">
-                    <span class="path-card__num">03</span>
-                    <h3 class="path-card__title">Allocate.</h3>
-                    <p class="path-card__tag">Founding allocation. $20,000 per slot.</p>
-                    <ul class="path-card__list">
-                        <li>One ES contract per slot &nbsp;·&nbsp; 25 slots &nbsp;·&nbsp; $500K founding tier</li>
-                        <li>Activates only after the operator passes both qualifying gates</li>
-                        <li>Choose Mode A (quarterly income) or Mode B (annual distribution)</li>
-                        <li>Indication is non-binding until licensing closes</li>
+                <div class="path path-allocate" id="allocate">
+                    <span class="path-num">03</span>
+                    <span class="allocate-tag">Recommended for qualified founders</span>
+                    <h3 class="allocate-h">Allocate &middot; <em>Managed Account</em></h3>
+                    <p class="allocate-sub">Fifteen seats total. Direct management. Operator skin in every fill.</p>
+
+                    <ul class="allocate-bullets">
+                        <li>One of fifteen managed-account relationships. Hard-capped by regulatory structure, not by marketing.</li>
+                        <li>Family relationships aggregate to a single seat.</li>
+                        <li>Activates only after onboarding, KYC, and execution of subscription documents complete.</li>
+                        <li>Choose Mode A (quarterly income) or Mode B (annual distribution with intra-year scaling).</li>
+                        <li>Indication is non-binding until subscription documents are executed.</li>
                     </ul>
-                    <p class="path-card__meta">Cost: <strong>$20,000</strong> working base &nbsp;·&nbsp; Commitment: <strong>founding cohort</strong> &nbsp;·&nbsp; Capital protection: <strong>layered defense architecture</strong></p>
-                    <p class="path-card__cta"><a class="link-gold" href="#allocation">Indicate interest →</a></p>
-                </article>
+
+                    <div class="allocate-stats">
+                        <div>
+                            <div class="allocate-stat-label">Minimum</div>
+                            <div class="allocate-stat-value">$100,000</div>
+                        </div>
+                        <div>
+                            <div class="allocate-stat-label">Seats</div>
+                            <div class="allocate-stat-value">15 total</div>
+                        </div>
+                        <div>
+                            <div class="allocate-stat-label">Activation</div>
+                            <div class="allocate-stat-value">Post-onboarding</div>
+                        </div>
+                    </div>
+
+                    <a href="#allocation" class="btn btn-gold">Indicate interest <span class="arr">&rarr;</span></a>
+                </div>
             </div>
 
             <p class="paths__disclaimer"><em>Copy trading via third-party bridges (Duplikium) to third-party prop firms (Tradeify) is a technical relationship between participant and broker. Ekantik does not manage or hold follower capital. All third-party fees, payout policies, and account terms apply. Payouts are conditional on strategy performance reaching defined targets.</em></p>
@@ -462,7 +726,7 @@
 
             <div class="activation-banner" role="note">
                 <div class="activation-banner__rule" aria-hidden="true"></div>
-                <p class="activation-banner__text">Both gates pass &nbsp;→&nbsp; <strong>$20,000 founding allocation activates.</strong></p>
+                <p class="activation-banner__text">Both gates pass &nbsp;&rarr;&nbsp; <strong>managed-account onboarding activates for indicated founding seats.</strong></p>
                 <div class="activation-banner__rule" aria-hidden="true"></div>
                 <p class="activation-banner__updated">Updated: <span id="gauntlet-updated">—</span></p>
             </div>
@@ -475,7 +739,7 @@
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
                 <h2 class="section-head__title" id="modes-h2">Two distribution modes. One architecture.</h2>
-                <p class="section-head__lead">Both obey the $5M cap. Both reset to base on a defined cadence. They differ only in distribution rhythm.</p>
+                <p class="section-head__lead">Two distribution modes. Each managed-account seat picks one. Both obey the regulatory and capacity constraints described above. They differ only in distribution rhythm &mdash; quarterly income, or annual settlement after intra-year scaling.</p>
             </header>
         </div>
     </section>
@@ -656,7 +920,7 @@
             <span class="eyebrow">Sustainability — Verified Eight Ways</span>
             <h2 id="b-h2">Edge sustainability. Verified eight ways.</h2>
             <p class="subhead">
-                Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn&rsquo;t.
+                Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn&rsquo;t. The edge claim in the comparison map above is only credible if the battery says it is. Run it on our data. Run it on yours.
             </p>
 
             <p class="battery-callout"><em>Or run it on your own trade data. Your file never leaves your device.</em></p>
@@ -810,31 +1074,31 @@
             <span class="eyebrow">Founding cohort</span>
             <div class="mod-c-panel">
                 <h2 class="mod-c-panel__heading" id="mod-c-h2">Indicate founding interest.</h2>
-                <p class="mod-c-panel__lead">25 founding slots. $20,000 each. One ES contract per slot. Reserved as 10% of the $5M strategy cap. The remaining 90% opens at market rate after the cohort closes.</p>
+                <p class="mod-c-panel__lead">Fifteen managed-account seats. $100,000 minimum. Family relationships aggregate to a single seat. Activates only upon onboarding, KYC, and execution of subscription documents.</p>
 
                 <div class="mod-c-statement">
-                    <p>Strategy capacity is bounded at $5M AUM, equivalent to roughly 500 ES contracts at peak deployment. The ceiling is set by execution mechanics — slippage, fill quality, and exit liquidity at the relevant size — not by ambition or regulation.</p>
+                    <p>Strategy capacity is bounded at fifteen managed-account relationships. The ceiling is set by regulatory structure &mdash; specifically, the exemption thresholds that allow operation without registrations otherwise applicable &mdash; not by ambition or marketing.</p>
                 </div>
 
-                <!-- Capacity counter (two-band bar, spec §5.4.1) -->
+                <!-- Capacity counter — 15 managed-account seats -->
                 <div class="cap-counter" role="region" aria-label="Capacity counter">
                     <div class="cap-counter__band">
                         <div class="cap-counter__band-head">
-                            <span class="cap-counter__band-label">Strategy capacity</span>
-                            <span class="cap-counter__band-amount">$5,000,000 · hard cap</span>
+                            <span class="cap-counter__band-label">Managed-account seats</span>
+                            <span class="cap-counter__band-amount">15 hard cap</span>
                         </div>
                         <div class="cap-counter__bar cap-counter__bar--total" aria-hidden="true"></div>
-                        <div class="cap-counter__band-note">Immutable ceiling. Set by execution mechanics, not aspiration.</div>
+                        <div class="cap-counter__band-note">Ceiling set by regulatory structure. Family relationships aggregate to one seat per family unit.</div>
                     </div>
                     <div class="cap-counter__band">
                         <div class="cap-counter__band-head">
-                            <span class="cap-counter__band-label">Founding tier (10%)</span>
-                            <span class="cap-counter__band-amount">$500,000</span>
+                            <span class="cap-counter__band-label">Indicated to date</span>
+                            <span class="cap-counter__band-amount" id="mod-c-tier-amount"><span id="mod-c-tier-count">0</span> of 15</span>
                         </div>
                         <div class="cap-counter__bar cap-counter__bar--tier">
                             <div class="cap-counter__bar-fill" id="mod-c-tier-fill" style="width:0%"></div>
                         </div>
-                        <div class="cap-counter__band-note" id="mod-c-tier-label">$0 of $500K indicated · 0 indications</div>
+                        <div class="cap-counter__band-note" id="mod-c-tier-label">0 indications received</div>
                     </div>
                     <p class="cap-counter__updated" id="mod-c-counter-updated">Loading…</p>
                 </div>
@@ -844,9 +1108,9 @@
                       action="https://formspree.io/f/__FORMSPREE_ACCELERATOR__"
                       method="POST"
                       novalidate>
-                    <h3 class="indication-form__heading" id="ind-section-heading">Indicate Founding Interest</h3>
+                    <h3 class="indication-form__heading" id="ind-section-heading">Indicate Managed-Account Interest</h3>
                     <p class="indication-form__subhead">
-                        Non-binding. Tells us your intended allocation when licensing and due diligence complete. Submitters receive Discord access to the live trade alert journal.
+                        Non-binding. Tells us your intended allocation for one of fifteen managed-account seats. Activates only upon completion of onboarding, KYC, and execution of subscription documents. Submitters receive Discord access to the live trade alert journal.
                     </p>
 
                     <div class="indication-form__grid">
@@ -869,16 +1133,28 @@
                     </div>
 
                     <div class="ind-amount-block">
-                        <label for="ind-amount">Intended booking amount *</label>
-                        <input type="range" id="ind-amount" name="booking_amount" min="20000" max="500000" step="20000" value="40000">
-                        <span class="ind-amount-val" id="ind-amount-val"><strong>$40,000</strong>  ·  2 of 25 founding slots  ·  8% of founding tier</span>
+                        <label for="ind-amount">Intended booking amount * <span class="ind-amount-min">(min $100,000)</span></label>
+                        <input type="range" id="ind-amount" name="booking_amount" min="100000" max="2000000" step="25000" value="100000">
+                        <span class="ind-amount-val" id="ind-amount-val"><strong>$100,000</strong>  &middot;  <span id="ind-amount-seat-share">1</span> of 15 managed-account seats &middot; <span id="ind-amount-cap-pct">7%</span> of capacity</span>
+                    </div>
+
+                    <div class="ind-field">
+                        <label for="ind-family-capital">Approximate family-aggregated investable capital *</label>
+                        <select id="ind-family-capital" name="family_capital" required class="form-select">
+                            <option value="" disabled selected>Select range</option>
+                            <option value="100-500">$100K &ndash; $500K</option>
+                            <option value="500-1000">$500K &ndash; $1M</option>
+                            <option value="1000-3000">$1M &ndash; $3M</option>
+                            <option value="3000-10000">$3M &ndash; $10M</option>
+                            <option value="10000+">$10M+</option>
+                        </select>
                     </div>
 
                     <div class="ind-mode-block">
                         <label>Preferred mode <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
                         <div class="ind-mode-options" role="radiogroup">
-                            <label><input type="radio" name="ind-mode" value="quarterly-income"><span>Mode A · Quarterly Income</span></label>
-                            <label><input type="radio" name="ind-mode" value="annual-distribution"><span>Mode B · Annual Distribution</span></label>
+                            <label><input type="radio" name="ind-mode" value="quarterly-income"><span>Mode A &middot; Quarterly Income</span></label>
+                            <label><input type="radio" name="ind-mode" value="annual-distribution"><span>Mode B &middot; Annual Distribution</span></label>
                             <label><input type="radio" name="ind-mode" value="no-preference" checked><span>No preference</span></label>
                         </div>
                     </div>
@@ -889,9 +1165,14 @@
                     </label>
 
                     <label class="ind-ack">
+                        <input type="checkbox" id="ind-ack-managed" required>
+                        <span class="ind-ack-text"><em>I understand that managed-account relationships activate only upon completion of onboarding, KYC, and execution of subscription documents.</em></span>
+                    </label>
+
+                    <label class="ind-ack">
                         <input type="checkbox" id="ind-ack-accred" required>
                         <span class="ind-ack-text"><em>I confirm I am an accredited investor under applicable securities regulations, a qualifying family office, or am inquiring on behalf of one.</em>
-                            <a href="https://www.sec.gov/education/capitalraising/building-blocks/accredited-investor" target="_blank" rel="noopener" style="font-size:11px;text-decoration:underline">SEC definition →</a>
+                            <a href="https://www.sec.gov/education/capitalraising/building-blocks/accredited-investor" target="_blank" rel="noopener" style="font-size:11px;text-decoration:underline">SEC definition &rarr;</a>
                         </span>
                     </label>
 
@@ -907,7 +1188,7 @@
                 <div class="ind-thanks hide" id="ind-thanks" role="status">
                     <h3>Indication received.</h3>
                     <p>Your interest is logged. A confirmation email has been sent to the address you provided.</p>
-                    <p class="ind-thanks__gauntlet"><a href="#gauntlet">Watch the gauntlet in real time.</a> Your allocation activates only after both gates close.</p>
+                    <p class="ind-thanks__gauntlet">Your interest is logged. A confirmation email has been sent to the address you provided. <a href="#gauntlet">Watch the gauntlet in real time.</a> Your managed-account onboarding initiates only after both gates close.</p>
 
                     <div class="ind-thanks__discord">
                         <p class="ind-thanks__discord-eyebrow">Discord journal · access granted</p>
@@ -964,6 +1245,7 @@
     <script src="js/render-section-b.js"></script>
     <script src="js/render-section-c.js"></script>
     <script src="js/render-modules.js"></script>
+    <script src="js/render-edges.js"></script>
     <script src="js/render-gauntlet.js"></script>
     <script src="js/app.js"></script>
 </body>
