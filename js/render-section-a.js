@@ -76,6 +76,30 @@
         if (balEl) balEl.textContent = '$' + end.toLocaleString(undefined, { maximumFractionDigits: 0 });
     }
 
+    async function loadBacktest() {
+        const body = document.getElementById('backtest-body');
+        const lock = document.getElementById('backtest-lock');
+        if (!body) return;
+        try {
+            const res = await fetch('data/backtest.json', { cache: 'no-store' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const b = await res.json();
+            const wr = (Number(b.winRate) * 100).toFixed(1);
+            const pf = Number(b.profitFactor).toFixed(2);
+            const nStr = b.sampleSize ? Number(b.sampleSize).toLocaleString() + ' qualified backtest trades · ' : '';
+            const note = b.qualitativeNote ? ' &nbsp;·&nbsp; ' + b.qualitativeNote : '';
+            body.innerHTML = `Full-sample backtest: <strong>${wr}% win rate</strong> &nbsp;·&nbsp; <strong>${pf} profit factor</strong>${note}. ${nStr}The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.`;
+            if (lock && b.lockedDate) {
+                const d = new Date(b.lockedDate);
+                const stamp = isNaN(d) ? b.lockedDate : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+                lock.textContent = `· locked ${stamp}${b.version ? ' (' + b.version + ')' : ''}`;
+            }
+        } catch (err) {
+            // Soft-fail; existing HTML defaults remain.
+            console && console.warn && console.warn('[backtest] load failed:', err);
+        }
+    }
+
     function init() {
         root.Ekantik.Data.onChange(state => {
             renderEdgeTriplet(state);
@@ -83,6 +107,7 @@
         });
         const s = root.Ekantik.Data.get();
         if (s.summary) { renderEdgeTriplet(s); renderEquityAndMonthly(s); }
+        loadBacktest();
     }
 
     root.Ekantik = root.Ekantik || {};

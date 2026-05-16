@@ -255,8 +255,12 @@
             </div>
 
             <aside class="backtest-panel" aria-labelledby="backtest-panel-h">
-                <p class="backtest-panel__eyebrow" id="backtest-panel-h">Within-sample backtest reference</p>
-                <p class="backtest-panel__body">Full-sample backtest: <strong>67.5% win rate</strong> &nbsp;&middot;&nbsp; <strong>2.07 profit factor</strong> &nbsp;&middot;&nbsp; top-decile risk-adjusted returns. The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.</p>
+                <p class="backtest-panel__eyebrow" id="backtest-panel-h">
+                    Within-sample backtest reference
+                    <span class="backtest-panel__lock" id="backtest-lock">· locked baseline</span>
+                </p>
+                <p class="backtest-panel__body" id="backtest-body">Full-sample backtest: <strong>67.5% win rate</strong> &nbsp;&middot;&nbsp; <strong>2.07 profit factor</strong> &nbsp;&middot;&nbsp; top-decile risk-adjusted returns. The live sample above is the same edge being expressed in real markets. The 8-Test Sustainability Battery (below) is how we know it is not a lucky sample.</p>
+                <p class="backtest-panel__caveat"><em>The backtest reference is a fixed baseline by design. It does not move with each new live fill &mdash; that&rsquo;s what makes it a meaningful comparison.</em></p>
             </aside>
 
             <h3 class="mt-4">Sample Equity Arc — $20,000 base · 1 ES contract</h3>
@@ -392,7 +396,36 @@
                 </article>
             </div>
 
-            <p class="gauntlet__footnote"><em>Both gates begin after an early-stability threshold. Either can pass first; both must pass before allocation activates. Either fails → full allocation deferred · no founding capital is at risk during the gauntlet itself.</em></p>
+            <!-- Early-stability threshold tracker -->
+            <div class="threshold-tracker" aria-labelledby="threshold-h">
+                <p class="threshold-tracker__eyebrow" id="threshold-h">Early-stability threshold &nbsp;·&nbsp; when the gauntlet opens</p>
+                <p class="threshold-tracker__body">
+                    Both gates activate once the live trade sample crosses <strong>100 closed qualified trades</strong> with rolling-100 realized expectancy <strong>≥ +$50 per trade</strong> &mdash; the same bar set by <a href="#defense" class="link-inline">Article III §1 of the Falsifiability Protocol</a> as the re-deployment threshold. Anchoring gauntlet activation to the same statistical bar as edge re-deployment is intentional: the operator must demonstrate the same magnitude of edge demanded after a hypothetical stand-down before any founding capital can be put at risk.
+                </p>
+                <div class="threshold-tracker__bars">
+                    <div class="threshold-tracker__bar">
+                        <div class="threshold-tracker__bar-head">
+                            <span class="threshold-tracker__bar-label">Sample size</span>
+                            <span class="threshold-tracker__bar-val"><strong id="thresh-sample-val">—</strong> of <strong>100</strong> qualified trades</span>
+                        </div>
+                        <div class="threshold-tracker__bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="threshold-h">
+                            <div class="threshold-tracker__bar-fill" id="thresh-sample-fill" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="threshold-tracker__bar">
+                        <div class="threshold-tracker__bar-head">
+                            <span class="threshold-tracker__bar-label">Realized expectancy</span>
+                            <span class="threshold-tracker__bar-val"><strong id="thresh-ev-val">—</strong> of <strong>+$50</strong> per trade target</span>
+                        </div>
+                        <div class="threshold-tracker__bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="threshold-h">
+                            <div class="threshold-tracker__bar-fill" id="thresh-ev-fill" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="threshold-tracker__status" id="thresh-status">Computing live status…</p>
+            </div>
+
+            <p class="gauntlet__footnote"><em>Either gate can pass first; both must pass before allocation activates. Either fails &rarr; full allocation deferred &middot; no founding capital is at risk during the gauntlet itself.</em></p>
 
             <div class="activation-banner" role="note">
                 <div class="activation-banner__rule" aria-hidden="true"></div>

@@ -1,0 +1,9 @@
+{
+  "_comment": "Within-sample backtest reference. Locked baseline for live-vs-backtest comparison. Re-run quarterly; old versions archived. Founder edits when a new backtest is run — increment 'version' and update 'lockedDate'.",
+  "version": "v1.0",
+  "lockedDate": "2026-05-15",
+  "winRate": 0.675,
+  "profitFactor": 2.07,
+  "sampleSize": 1247,
+  "qualitativeNote": "top-decile risk-adjusted returns"
+}

@@ -7,14 +7,14 @@
     "value": 0,
     "target": 6000,
     "percent": 0,
-    "note": "Begins after early-stability threshold."
+    "note": "Activates once early-stability threshold is met (see below)"
   },
   "gate02": {
     "label": "Path Two live mirror",
     "state": "pending",
     "participants": 0,
     "bandStatus": "within_band",
-    "note": "Begins after early-stability threshold."
+    "note": "Activates once early-stability threshold is met (see below)"
   },
   "activation": {
     "state": "pending",
