@@ -24,9 +24,33 @@
         return '$' + v.toFixed(0);
     }
 
+    // ─── Hero lede: monthly $ and % computed from cumulative P&L over
+    //     calendar months elapsed. Per Hero Copy Spec v1.0 §5 Option A. ───
+    function renderLede(state) {
+        const trades = state.trades || [];
+        const dEl = $('hero-monthly-dollars');
+        const pEl = $('hero-monthly-pct');
+        if (!dEl && !pEl) return;
+
+        const KPIs = root.Ekantik && root.Ekantik.KPIs;
+        const probe = KPIs && KPIs.liveMonthlyRate ? KPIs.liveMonthlyRate(trades) : null;
+        if (!probe || !probe.ok || !probe.monthsElapsed) {
+            if (dEl) dEl.textContent = '—';
+            if (pEl) pEl.textContent = '—';
+            return;
+        }
+        const cumPL = trades.reduce((acc, t) => acc + (t.dollar_pl || t.dollarPL || 0), 0);
+        const monthlyDollars = cumPL / probe.monthsElapsed;
+        const monthlyPct = (monthlyDollars / 20000) * 100;
+
+        if (dEl) dEl.textContent = Math.round(monthlyDollars).toLocaleString();
+        if (pEl) pEl.textContent = monthlyPct.toFixed(1);
+    }
+
     function renderHero(state) {
         const s = state.summary || {};
         const DISCLOSURE = 'Pre-asymptotic at this sample. Past performance does not indicate future results.';
+        renderLede(state);
         if (!s.n) {
             // No data yet — show em-dashes
             ['hero-stat-1', 'hero-stat-2', 'hero-stat-3', 'hero-stat-4'].forEach(id => {

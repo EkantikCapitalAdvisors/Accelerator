@@ -1694,9 +1694,17 @@ a:hover { color: var(--gold); }
     line-height: 1.6;
     color: rgba(27,42,74,0.8);
     max-width: 640px;
-    margin: var(--s-4) 0 var(--s-6);
+    margin: var(--s-4) 0 var(--s-3);
     font-weight: 400;
 }
+.hero--reframe .hero__lead--primary { color: var(--navy); margin-bottom: var(--s-2); }
+.hero--reframe .hero__lead--primary strong { color: var(--navy); font-weight: 700; }
+.hero--reframe .hero__lead--secondary {
+    font-size: 17px;
+    color: rgba(27,42,74,0.65);
+    margin-bottom: var(--s-6);
+}
+.hero--reframe .hero__lead--secondary em { font-style: italic; }
 .hero--reframe .hero__sample-caption {
     font-family: var(--font-sans);
     font-style: italic;

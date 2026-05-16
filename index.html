@@ -64,9 +64,15 @@
                 <span class="hero__h1-italic">You are renting a human&rsquo;s judgment.</span>
             </h1>
 
-            <p class="hero__lead">
-                Mechanical. Pre-committed. Operating inside a defense architecture engineered over more than a decade. The operator&rsquo;s personal capital is on every fill — not the operator&rsquo;s confidence. Verifiable below.
+            <!-- HERO COPY: monthly $ and % are computed live from the Discord trade feed.
+                 Formula: MONTHLY_DOLLARS = sum(P&L) / months_elapsed
+                          MONTHLY_PERCENT = MONTHLY_DOLLARS / 20000 × 100
+                 Falls back to '—' if insufficient sample / calendar time.
+                 See Hero Copy Spec v1.0 §5 Option A (fully dynamic). -->
+            <p class="hero__lead hero__lead--primary">
+                <strong>Right now, on a $20,000 base, this strategy is generating about $<span id="hero-monthly-dollars">—</span> per month at the live cadence &mdash; roughly <span id="hero-monthly-pct">—</span>% monthly.</strong> Worst case in a losing week is capped at $1,000 by pre-committed rules that cannot be renegotiated under stress. Every trade is timestamped to the broker, posted publicly, and downloadable below.
             </p>
+            <p class="hero__lead hero__lead--secondary"><em>Mechanical. Pre-committed. Operating inside a defense architecture engineered over more than a decade &mdash; and the operator&rsquo;s personal capital is on every fill. The four tiles below are the live edge metrics that produce the result above.</em></p>
 
             <div class="stat-quartet" aria-label="Headline metrics, live from Discord fills">
                 <div class="stat-card">
