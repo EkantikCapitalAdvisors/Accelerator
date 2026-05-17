@@ -92,6 +92,10 @@
         bind('edge_pts',        fmtSignedPts(edgePts));
         bind('edge_R',          edgeR != null ? edgeR.toFixed(2) : '—');
         bind('edge_R_short',    edgeR != null ? edgeR.toFixed(2) : '—');
+        // edge_pct = edge expressed as % of capital-at-risk per occurrence,
+        // matches the unit of every reference row in the Edge Landscape table
+        // (Casino +5.26%, CTAs +0.5–1%, etc.). R-expectancy × 100.
+        bind('edge_pct',        edgeR != null ? (edgeR * 100).toFixed(2) : '—');
         bind('edge_usd',        edgeUSD != null ? fmtUSD(edgeUSD) : '—');
         bind('edge_usd_short',  edgeUSD != null ? fmtUSD(edgeUSD) : '—');
         bind('daily_risk_pct',  String(DAILY_RISK_PCT));
