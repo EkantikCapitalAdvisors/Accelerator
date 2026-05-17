@@ -3665,3 +3665,15 @@ section.block.light { padding: 96px 0 112px; }
     background-repeat: no-repeat;
 }
 .form-select:focus { outline: none; border-color: var(--gold); }
+
+/* Allocate card sub-label under each stat value */
+.allocate-stat-sub {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: rgba(250,248,245,0.55);
+    font-style: italic;
+    margin-top: 4px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: none;
+}

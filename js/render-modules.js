@@ -370,15 +370,22 @@
         const errorEl   = $('ind-error');
         const thanks    = $('ind-thanks');
 
-        // 15 managed-account seats, $100K minimum per Rebuild Spec §4.13.
-        const SEAT_MIN = 100000;
-        const SEATS    = 15;
+        // 15 managed-account seats. Start at $20K working capital;
+        // $100K is the per-seat scaling target as the edge holds.
+        const SEAT_MIN    = 20000;     // hard floor — enforced at slider + validate()
+        const SEAT_TARGET = 100000;    // scaling target per seat
+        const SEATS       = 15;
 
         function updateAmountLabel() {
             const amt = parseFloat(amtEl.value);
-            const seatShare = Math.max(1, Math.round(amt / SEAT_MIN));
+            // Seats consumed = amt / target (rounded up, min 1). The target — not the floor —
+            // is the unit that defines a "full seat" of the cap.
+            const seatShare = Math.max(1, Math.ceil(amt / SEAT_TARGET));
             const capPct = (seatShare / SEATS) * 100;
-            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  &middot;  ${seatShare} of ${SEATS} managed-account seat${seatShare === 1 ? '' : 's'} &middot; ${capPct.toFixed(0)}% of capacity`;
+            const scaleNote = amt < SEAT_TARGET
+                ? ` &middot; starting commitment &middot; scales toward $${(SEAT_TARGET).toLocaleString()}`
+                : '';
+            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  &middot;  ${seatShare} of ${SEATS} managed-account seat${seatShare === 1 ? '' : 's'} &middot; ${capPct.toFixed(0)}% of capacity${scaleNote}`;
         }
 
         function validateEmail(v) {
