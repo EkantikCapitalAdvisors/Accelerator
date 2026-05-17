@@ -48,6 +48,8 @@
 
         // Annualized trajectory — linear extrapolation from live cadence.
         renderAnnualProjection(state);
+        // Risk headroom — current sizing vs ½-Kelly supported ceiling.
+        renderRiskHeadroom(state);
 
         // Dynamic narrative — present asymmetry as a structural fact. No
         // fictional backtest baseline (there is no backtest; live fills are
@@ -137,6 +139,83 @@
 
     // Reusable formatter (R-asymmetry block also imports this name).
     function fmtRsigned(v) { return v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R'; }
+
+    // ─── Risk Headroom — current sizing vs ½-Kelly supported ceiling. ───
+    // Shows the gap between what we currently risk per trade and what the
+    // edge mathematically supports. The "8.6× headroom" framing makes the
+    // conservative-by-design posture visible without sacrificing precision.
+    const BASE_CAPITAL = 20000;   // $20K starting working capital per spec
+
+    function halfKelly(p, b) {
+        if (p == null || b == null || !isFinite(b) || b <= 0) return null;
+        const q = 1 - p;
+        return Math.max(0, ((p - q / b) / 2));
+    }
+
+    function renderRiskHeadroom(state) {
+        if (!document.getElementById('rh-h')) return;
+        const s = state.summary || {};
+        if (s.avgRiskDollar == null || s.winLossR == null || s.winRate == null || s.rExpectancy == null || s.evPerTrade == null) return;
+
+        const kelly = halfKelly(s.winRate, s.winLossR);
+        if (kelly == null || kelly <= 0) return;
+
+        const currentPct = (s.avgRiskDollar / BASE_CAPITAL) * 100;
+        const kellyPct   = kelly * 100;
+        if (currentPct >= kellyPct) {
+            // Strategy already at-or-above Kelly. Surface that fact rather than
+            // misleadingly imply headroom.
+            const close = $('rh-close');
+            if (close) {
+                close.innerHTML = `<strong>Sizing is at or above ½-Kelly.</strong> Headroom has been claimed; the strategy is operating at the math&rsquo;s theoretical maximum. Any further size increase reduces, not increases, geometric expectancy.`;
+            }
+            return;
+        }
+
+        // Bars are drawn on a shared 0%–kellyPct axis.
+        const currentFillPct = (currentPct / kellyPct) * 100;
+        const headroomLeftPct = currentFillPct;
+        const headroomWidthPct = 100 - currentFillPct;
+
+        const currentFill = $('rh-current-fill');
+        if (currentFill) currentFill.style.width = currentFillPct.toFixed(1) + '%';
+        const headroomEl = $('rh-current-headroom');
+        if (headroomEl) {
+            headroomEl.style.left  = headroomLeftPct.toFixed(1) + '%';
+            headroomEl.style.width = headroomWidthPct.toFixed(1) + '%';
+        }
+
+        const currentVal = $('rh-current-val');
+        if (currentVal) {
+            currentVal.innerHTML = `<strong>${currentPct.toFixed(2)}%</strong> &middot; ~$${Math.round(s.avgRiskDollar).toLocaleString()} per trade`;
+        }
+
+        const kellyRisk = kelly * BASE_CAPITAL;
+        const kellyVal = $('rh-kelly-val');
+        if (kellyVal) {
+            kellyVal.innerHTML = `<strong>${kellyPct.toFixed(1)}%</strong> &middot; ~$${Math.round(kellyRisk).toLocaleString()} per trade`;
+        }
+        const axisEnd = $('rh-axis-end');
+        if (axisEnd) axisEnd.textContent = `${kellyPct.toFixed(1)}% (½-Kelly ceiling)`;
+
+        // Today vs Kelly cells — same R-multiple, different dollar magnitude.
+        const fmtR = v => fmtRsigned(v);
+        const cmpNow = $('rh-cmp-now');
+        if (cmpNow) {
+            cmpNow.innerHTML = `<span class="rh-r">${fmtR(s.rExpectancy)}</span> &times; <span class="rh-risk">$${Math.round(s.avgRiskDollar).toLocaleString()}</span> = <strong>$${Math.round(s.evPerTrade).toLocaleString()}</strong>/trade`;
+        }
+        const cmpKelly = $('rh-cmp-kelly');
+        if (cmpKelly) {
+            const kellyEV = s.rExpectancy * kellyRisk;
+            cmpKelly.innerHTML = `<span class="rh-r">${fmtR(s.rExpectancy)}</span> &times; <span class="rh-risk">$${Math.round(kellyRisk).toLocaleString()}</span> = <strong>$${Math.round(kellyEV).toLocaleString()}</strong>/trade`;
+        }
+
+        const multiple = kellyPct / currentPct;
+        const close = $('rh-close');
+        if (close) {
+            close.innerHTML = `The math supports <strong>~${multiple.toFixed(1)}&times;</strong> more position sizing per trade than the strategy currently deploys. The headroom is intentional &mdash; adverse variance never tests the operator&rsquo;s psychology, and the same edge mechanics scale cleanly as the base grows from $20K toward the $100K per-seat target.`;
+        }
+    }
 
     function renderEquityAndMonthly(state) {
         const trades = state.trades || [];
