@@ -94,9 +94,70 @@
         }
     }
 
+    // ─── Early-stability threshold tracker ───
+    // Bound to the live trade summary. Threshold = 100 qualified trades AND
+    // rolling-100 realized expectancy ≥ +$50/trade. Mirrors Article III §1
+    // of the locked Falsifiability Protocol.
+    const THRESH_SAMPLE = 100;
+    const THRESH_EV     = 50;
+
+    function rollingExpectancy(trades, window) {
+        if (!Array.isArray(trades) || trades.length === 0) return null;
+        const sample = trades.length >= window ? trades.slice(-window) : trades;
+        const sum = sample.reduce((acc, t) => acc + (t.dollar_pl || t.dollarPL || 0), 0);
+        return sum / sample.length;
+    }
+
+    function fmtEV(v) {
+        if (v == null || !isFinite(v)) return '—';
+        return (v >= 0 ? '+$' : '-$') + Math.abs(Math.round(v));
+    }
+
+    function renderThreshold(state) {
+        const trades = (state && state.trades) || [];
+        const n = trades.length;
+        const ev = rollingExpectancy(trades, THRESH_SAMPLE);
+
+        const samplePct = Math.max(0, Math.min(100, (n / THRESH_SAMPLE) * 100));
+        const evPct     = ev == null ? 0 : Math.max(0, Math.min(100, (ev / THRESH_EV) * 100));
+
+        const sf = $('thresh-sample-fill'); if (sf) sf.style.width = samplePct.toFixed(1) + '%';
+        const ef = $('thresh-ev-fill');     if (ef) ef.style.width = evPct.toFixed(1) + '%';
+
+        const sv = $('thresh-sample-val'); if (sv) sv.textContent = String(n);
+        const ev_el = $('thresh-ev-val');  if (ev_el) ev_el.textContent = fmtEV(ev) + ' per trade';
+
+        // a11y
+        const sBar = sf && sf.parentElement; if (sBar) sBar.setAttribute('aria-valuenow', samplePct.toFixed(0));
+        const eBar = ef && ef.parentElement; if (eBar) eBar.setAttribute('aria-valuenow', evPct.toFixed(0));
+
+        const st = $('thresh-status');
+        if (st) {
+            const sampleOK = n >= THRESH_SAMPLE;
+            const evOK     = ev != null && ev >= THRESH_EV;
+            if (sampleOK && evOK) {
+                st.innerHTML = '<strong>Threshold met.</strong> Gauntlet is eligible to open. The operator will activate Gate 01 (Tradeify challenge) and post the start date to the Discord journal.';
+                st.className = 'threshold-tracker__status is-met';
+            } else {
+                const need = [];
+                if (!sampleOK) need.push(`${THRESH_SAMPLE - n} more closed qualified trades`);
+                if (!evOK)     need.push(`rolling expectancy ≥ +$${THRESH_EV}/trade (currently ${fmtEV(ev)})`);
+                st.innerHTML = `<strong>Threshold pending.</strong> Needs ${need.join(' &nbsp;·&nbsp; ')}.`;
+                st.className = 'threshold-tracker__status';
+            }
+        }
+    }
+
     function init() {
         if (!$('gauntlet')) return;
         load();
+
+        // Subscribe to the live trade feed for the threshold tracker.
+        if (root.Ekantik && root.Ekantik.Data) {
+            root.Ekantik.Data.onChange(renderThreshold);
+            const cur = root.Ekantik.Data.get();
+            if (cur) renderThreshold(cur);
+        }
     }
 
     root.Ekantik = root.Ekantik || {};

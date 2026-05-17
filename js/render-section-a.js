@@ -29,7 +29,114 @@
         if ($('edge-avgrisk-cap') && s.avgRiskDollar != null) {
             $('edge-avgrisk-cap').textContent = `1R ≈ $${Math.round(s.avgRiskDollar).toLocaleString()} · live realized`;
         }
+
+        // R-multiple asymmetry strip
+        const fmtRsigned = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R';
+        if ($('r-asym-win'))  $('r-asym-win').textContent  = fmtRsigned(s.avgRwin);
+        if ($('r-asym-loss')) $('r-asym-loss').textContent = fmtRsigned(s.avgRloss);
+        if ($('r-asym-ratio')) {
+            $('r-asym-ratio').textContent = (s.winLossR != null && isFinite(s.winLossR))
+                ? s.winLossR.toFixed(2) + ' : 1'
+                : '—';
+        }
+        if ($('r-asym-win-sub')  && s.avgRwin  != null && s.avgRiskDollar != null) {
+            $('r-asym-win-sub').textContent  = `≈ $${Math.round(s.avgRwin  * s.avgRiskDollar).toLocaleString()} per winning trade`;
+        }
+        if ($('r-asym-loss-sub') && s.avgRloss != null && s.avgRiskDollar != null) {
+            $('r-asym-loss-sub').textContent = `≈ $${Math.round(s.avgRloss * s.avgRiskDollar).toLocaleString()} per losing trade`;
+        }
+
+        // Annualized trajectory — linear extrapolation from live cadence.
+        renderAnnualProjection(state);
+
+        // Dynamic narrative — present asymmetry as a structural fact. No
+        // fictional backtest baseline (there is no backtest; live fills are
+        // the entire sample). The R-ratio is the load-bearing number.
+        const lede = $('r-asym-lede');
+        if (lede && s.winLossR != null && s.rExpectancy != null && s.winRate != null) {
+            const wrPct = (s.winRate * 100).toFixed(1);
+            lede.innerHTML = `The average winner outpaces the average loser by <strong>${s.winLossR.toFixed(2)}:1</strong> in R-units. That ratio &mdash; not the win rate alone &mdash; is what drives R-expectancy. At a ${wrPct}% win rate, the strategy is currently producing <strong>${fmtRsigned(s.rExpectancy)}</strong> per trade because losses are being cut at a smaller R than wins are being held. Win rate and R-multiple are independent dials; the page shows both because both matter.`;
+        }
     }
+
+    // Threshold above which we drop 'pending statistical confirmation'.
+    // Mirrors the early-stability bar surfaced in the Gauntlet section.
+    const CONFIRMATION_TRADE_THRESHOLD = 100;
+
+    function parseTradeTime(t) {
+        const raw = t.entry_time || t.entryTime || t.exit_time || t.exitTime;
+        if (!raw) return null;
+        // Tolerate the same formats KPIs._parseTS handles
+        let m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+        if (m) return new Date(+m[1], +m[2] - 1, +m[3], +(m[4]||0), +(m[5]||0), +(m[6]||0));
+        m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+        if (m) return new Date(+m[3], +m[1] - 1, +m[2]);
+        const d = new Date(raw);
+        return isNaN(d.getTime()) ? null : d;
+    }
+
+    function renderAnnualProjection(state) {
+        const trades  = state.trades || [];
+        const s       = state.summary || {};
+        const tradesEl = $('annual-trades');
+        const rEl      = $('annual-r');
+        const plEl     = $('annual-pl');
+        const headline = $('annual-proj-headline');
+        const trSub    = $('annual-trades-sub');
+        const rSub     = $('annual-r-sub');
+        const plSub    = $('annual-pl-sub');
+        if (!tradesEl && !headline) return;
+
+        const n = trades.length;
+        const times = trades.map(parseTradeTime).filter(Boolean).sort((a,b) => a - b);
+        if (n < 3 || times.length < 2) {
+            [tradesEl, rEl, plEl].forEach(el => el && (el.textContent = '—'));
+            if (headline) headline.textContent = 'Need a longer live sample before extrapolation is meaningful.';
+            return;
+        }
+
+        const daysElapsed = (times[times.length - 1] - times[0]) / (1000 * 60 * 60 * 24);
+        if (daysElapsed < 7) {
+            [tradesEl, rEl, plEl].forEach(el => el && (el.textContent = '—'));
+            if (headline) headline.textContent = 'Need at least one week of calendar time before extrapolating annual cadence.';
+            return;
+        }
+
+        const tradesPerYear = (n / daysElapsed) * 365;
+        const annualR  = (s.rExpectancy != null) ? tradesPerYear * s.rExpectancy : null;
+        const annualPL = (s.evPerTrade  != null) ? tradesPerYear * s.evPerTrade  : null;
+        const annualPctOnBase = annualPL != null ? (annualPL / 20000) * 100 : null;
+
+        if (tradesEl) tradesEl.textContent = '~' + Math.round(tradesPerYear);
+        if (rEl)      rEl.textContent      = annualR  != null ? '~' + (annualR >= 0 ? '+' : '') + annualR.toFixed(0) + 'R' : '—';
+        if (plEl)     plEl.textContent     = annualPL != null ? (annualPL >= 0 ? '+$' : '-$') + Math.abs(Math.round(annualPL)).toLocaleString() : '—';
+
+        if (trSub) trSub.textContent = `${n} closed trades over ${Math.round(daysElapsed)} days → annualized`;
+        if (rSub && s.rExpectancy != null && annualR != null) {
+            rSub.textContent = `${(s.rExpectancy >= 0 ? '+' : '')}${s.rExpectancy.toFixed(2)}R/trade × ~${Math.round(tradesPerYear)} trades`;
+        }
+        if (plSub && s.evPerTrade != null && annualPctOnBase != null) {
+            plSub.textContent = `$${s.evPerTrade.toFixed(0)}/trade × ~${Math.round(tradesPerYear)} trades · ${annualPctOnBase.toFixed(0)}% on $20K base, fixed risk`;
+        }
+
+        // Headline — defensible single-line read.
+        if (headline) {
+            const rTxt = annualR != null
+                ? `~${(annualR >= 0 ? '+' : '')}${annualR.toFixed(0)}R annualized`
+                : '';
+            const plTxt = annualPL != null
+                ? `≈ $${Math.round(annualPL).toLocaleString()} on a fixed $20K base`
+                : '';
+            const tail = n >= CONFIRMATION_TRADE_THRESHOLD
+                ? 'Sample has crossed the early-stability threshold; trajectory is statistically supported.'
+                : `Pending statistical confirmation at the ~${CONFIRMATION_TRADE_THRESHOLD}-trade and 8-test thresholds.`;
+            const rExpTxt = s.rExpectancy != null ? `tracking ${fmtRsigned(s.rExpectancy)}/trade` : 'in progress';
+            headline.innerHTML = `<strong>Live edge through ${n} trades is ${rExpTxt}, ${rTxt} at current cadence${plTxt ? ' ' + plTxt : ''}.</strong> ${tail}`;
+        }
+    }
+
+    // Reusable formatter (R-asymmetry block also imports this name).
+    function fmtRsigned(v) { return v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R'; }
 
     function renderEquityAndMonthly(state) {
         const trades = state.trades || [];
