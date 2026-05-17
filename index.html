@@ -171,15 +171,16 @@
                 <table class="landscape">
                     <thead>
                         <tr>
-                            <th>Strategy</th>
-                            <th>Edge / Occurrence</th>
-                            <th>Frequency / Mo</th>
-                            <th class="th-sorted">Annual R <span class="unsized-tag">(unsized) &middot; ranked &darr;</span></th>
+                            <th>Strategy<span class="th-denom">category of capital deployment</span></th>
+                            <th>Edge / Occurrence<span class="th-denom">% of capital-at-risk per trade</span></th>
+                            <th>Frequency / Mo<span class="th-denom">trades per month</span></th>
+                            <th class="th-sorted">Annual R <span class="unsized-tag">(unsized) &middot; ranked &darr;</span><span class="th-denom">edge &times; frequency &times; 12, in R-units</span></th>
                             <th>
                                 &frac12; Kelly Allocation
                                 <span class="kelly-help">?
-                                    <span class="tooltip"><strong>Kelly Criterion</strong><br>The mathematically optimal position size for a given edge. Half-Kelly halves variance while retaining most of the geometric growth.</span>
+                                    <span class="tooltip"><strong>Kelly Criterion</strong><br>Optimal fraction of <em>total portfolio capital</em> to deploy for a given edge &mdash; not the same as the &ldquo;Edge / Occurrence&rdquo; column, which is % of capital-at-risk per single trade. Half-Kelly halves variance while retaining most of the geometric growth.</span>
                                 </span>
+                                <span class="th-denom">% of total portfolio capital</span>
                             </th>
                         </tr>
                     </thead>
