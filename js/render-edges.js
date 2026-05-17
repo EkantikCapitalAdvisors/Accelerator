@@ -117,6 +117,20 @@
         const hk = halfKelly(winRate, wlRatio);
         bind('half_kelly', hk != null ? (hk * 100).toFixed(1) : '—');
 
+        // Update Ekantik's data-annual-r attribute so the table sort reflects live cadence.
+        const ekantikRow = document.querySelector('.landscape tr[data-ekantik]');
+        if (ekantikRow) ekantikRow.setAttribute('data-annual-r', annualR != null ? annualR.toFixed(1) : '0');
+
+        // Sort the landscape tbody by Annual R, descending. Stable: ties preserve doc order.
+        const tbody = document.querySelector('.landscape tbody');
+        if (tbody) {
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            rows
+                .map((r, i) => ({ r, i, v: parseFloat(r.getAttribute('data-annual-r') || '0') }))
+                .sort((a, b) => (b.v - a.v) || (a.i - b.i))
+                .forEach(({ r }) => tbody.appendChild(r));
+        }
+
         // Last update stamp
         if (times.length) {
             const last = times[times.length - 1];

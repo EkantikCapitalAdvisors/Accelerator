@@ -3706,3 +3706,15 @@ section.block.light { padding: 96px 0 112px; }
     letter-spacing: 0;
     text-transform: none;
 }
+
+/* Edge Landscape: 'ranked ↓' indicator on the Annual R column */
+.landscape th.th-sorted { position: relative; }
+.landscape th.th-sorted .unsized-tag {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+    font-size: 10.5px;
+    color: var(--gold);
+    opacity: 0.8;
+    letter-spacing: 0.06em;
+}
