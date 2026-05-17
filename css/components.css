@@ -3718,3 +3718,22 @@ section.block.light { padding: 96px 0 112px; }
     opacity: 0.8;
     letter-spacing: 0.06em;
 }
+
+/* Edge Landscape: denominator/unit hint under each table header label */
+.landscape th {
+    vertical-align: top;
+    padding-bottom: 16px;
+}
+.landscape th .th-denom {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 400;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--slate-light);
+    line-height: 1.4;
+    max-width: 22ch;
+}
