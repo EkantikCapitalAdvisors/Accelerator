@@ -469,6 +469,53 @@
                 <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
             </div>
 
+            <!-- Risk headroom — current sizing vs ½-Kelly supported maximum -->
+            <div class="risk-headroom" aria-labelledby="rh-h">
+                <p class="risk-headroom__eyebrow" id="rh-h">Risk headroom &nbsp;&middot;&nbsp; current sizing vs Kelly-supported ceiling</p>
+                <h3 class="risk-headroom__title">The edge has runway the sizing hasn&rsquo;t claimed.</h3>
+                <p class="risk-headroom__lede">Kelly Criterion answers a precise question: <em>given this edge, what fraction of total portfolio capital is mathematically optimal to deploy per trade?</em> The strategy currently sizes a fraction of that. The gap below is the headroom &mdash; the math&rsquo;s permission slip for adverse variance.</p>
+
+                <div class="risk-headroom__gauge">
+                    <div class="risk-headroom__bar">
+                        <div class="risk-headroom__bar-head">
+                            <span class="risk-headroom__bar-label">Currently deployed per trade</span>
+                            <span class="risk-headroom__bar-readout" id="rh-current-val">&mdash;</span>
+                        </div>
+                        <div class="risk-headroom__bar-track">
+                            <div class="risk-headroom__bar-fill risk-headroom__bar-fill--current" id="rh-current-fill" style="width:0%"></div>
+                            <div class="risk-headroom__bar-headroom" id="rh-current-headroom" style="left:0%;width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="risk-headroom__bar">
+                        <div class="risk-headroom__bar-head">
+                            <span class="risk-headroom__bar-label">&frac12;-Kelly supported maximum</span>
+                            <span class="risk-headroom__bar-readout" id="rh-kelly-val">&mdash;</span>
+                        </div>
+                        <div class="risk-headroom__bar-track">
+                            <div class="risk-headroom__bar-fill risk-headroom__bar-fill--kelly" id="rh-kelly-fill" style="width:100%"></div>
+                        </div>
+                    </div>
+                    <div class="risk-headroom__axis">
+                        <span class="risk-headroom__axis-start">0% of portfolio</span>
+                        <span class="risk-headroom__axis-end" id="rh-axis-end">&mdash; (½-Kelly ceiling)</span>
+                    </div>
+                </div>
+
+                <div class="risk-headroom__compare">
+                    <div class="risk-headroom__compare-cell">
+                        <span class="risk-headroom__compare-label">Today</span>
+                        <span class="risk-headroom__compare-val" id="rh-cmp-now"><span class="rh-r">+&mdash;R</span> &times; <span class="rh-risk">$&mdash;</span> = <strong>+$&mdash;</strong>/trade</span>
+                    </div>
+                    <div class="risk-headroom__compare-arrow">&rarr;</div>
+                    <div class="risk-headroom__compare-cell risk-headroom__compare-cell--target">
+                        <span class="risk-headroom__compare-label">At ½-Kelly sizing</span>
+                        <span class="risk-headroom__compare-val" id="rh-cmp-kelly"><span class="rh-r">+&mdash;R</span> &times; <span class="rh-risk">$&mdash;</span> = <strong>+$&mdash;</strong>/trade</span>
+                    </div>
+                </div>
+
+                <p class="risk-headroom__close" id="rh-close">Computing live headroom&hellip;</p>
+            </div>
+
             <aside class="record-panel" aria-labelledby="record-panel-h">
                 <p class="record-panel__eyebrow" id="record-panel-h">The complete record</p>
                 <p class="record-panel__body">There is no separate backtest. The public Discord fills are the entire sample. The operator&rsquo;s personal capital was deployed, every trade was posted before exit, and every metric on this page is computed from that record &mdash; nothing is reconstructed, nothing is selected, nothing is unwound.</p>
