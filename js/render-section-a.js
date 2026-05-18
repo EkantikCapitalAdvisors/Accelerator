@@ -50,6 +50,8 @@
         renderAnnualProjection(state);
         // Risk headroom — current sizing vs ½-Kelly supported ceiling.
         renderRiskHeadroom(state);
+        // Risk profile — realized drawdown / streak / worst trade.
+        renderRiskProfile(state);
 
         // Dynamic narrative — present asymmetry as a structural fact. No
         // fictional backtest baseline (there is no backtest; live fills are
@@ -68,11 +70,18 @@
     function parseTradeTime(t) {
         const raw = t.entry_time || t.entryTime || t.exit_time || t.exitTime;
         if (!raw) return null;
-        // Tolerate the same formats KPIs._parseTS handles
+        // ISO-ish: 2026-02-04 09:40:15
         let m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
         if (m) return new Date(+m[1], +m[2] - 1, +m[3], +(m[4]||0), +(m[5]||0), +(m[6]||0));
-        m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-        if (m) return new Date(+m[3], +m[1] - 1, +m[2]);
+        // US-slash with optional time: 2/18/2026 08:39  (24h) or 5/15/2026 1:30 PM (12h)
+        m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+        if (m) {
+            let h = +(m[4]||0); const min = +(m[5]||0); const s = +(m[6]||0);
+            const ap = (m[7] || '').toUpperCase();
+            if (ap === 'PM' && h < 12) h += 12;
+            if (ap === 'AM' && h === 12) h = 0;
+            return new Date(+m[3], +m[1] - 1, +m[2], h, min, s);
+        }
         const d = new Date(raw);
         return isNaN(d.getTime()) ? null : d;
     }
@@ -150,6 +159,104 @@
         if (p == null || b == null || !isFinite(b) || b <= 0) return null;
         const q = 1 - p;
         return Math.max(0, ((p - q / b) / 2));
+    }
+
+    // ─── Risk Profile — realized drawdown stats from the live equity curve. ───
+    // Pairs with Risk Headroom: Headroom shows upside capacity (Kelly says
+    // you could be N× larger); Risk Profile shows the cost of current sizing
+    // — what the operator's personal capital has actually weathered.
+    const BATTERY_TEST_7_THRESHOLD = 4;  // Battery Test 7 discipline ceiling
+
+    function renderRiskProfile(state) {
+        if (!document.getElementById('rp-h')) return;
+        const trades = state.trades || [];
+        if (trades.length < 3) return;
+
+        // Sort chronologically by entry time (tolerant of mixed formats).
+        const sorted = trades
+            .map(t => ({ t, ts: parseTradeTime(t) }))
+            .filter(x => x.ts)
+            .sort((a, b) => a.ts - b.ts)
+            .map(x => x.t);
+        if (sorted.length < 3) return;
+
+        // Walk the equity curve.
+        let cum = 0, peak = 0, peakAtTrough = 0;
+        let maxDD = 0, troughIdx = -1;
+        let worstTradeUSD = 0, worstTradeR = 0;
+        let streak = 0, streakR = 0;
+        let maxStreak = 0, maxStreakR = 0;
+        const allR = [];
+
+        sorted.forEach((t, i) => {
+            const pl = t.dollar_pl || t.dollarPL || 0;
+            const rd = t.risk_dollars || t.riskDollars || 0;
+            const R  = rd > 0 ? pl / rd : 0;
+            allR.push(R);
+            cum += pl;
+            if (cum > peak) peak = cum;
+            const dd = peak - cum;
+            if (dd > maxDD) { maxDD = dd; troughIdx = i; peakAtTrough = peak; }
+            if (pl < worstTradeUSD) { worstTradeUSD = pl; worstTradeR = R; }
+            if (pl < 0) { streak += 1; streakR += R; }
+            else {
+                if (streak > maxStreak) { maxStreak = streak; maxStreakR = streakR; }
+                streak = 0; streakR = 0;
+            }
+        });
+        if (streak > maxStreak) { maxStreak = streak; maxStreakR = streakR; }
+
+        // Max drawdown in R-units (independent of position-size variation).
+        let cumR = 0, peakR = 0, maxRdd = 0;
+        allR.forEach(R => {
+            cumR += R;
+            if (cumR > peakR) peakR = cumR;
+            const r = peakR - cumR;
+            if (r > maxRdd) maxRdd = r;
+        });
+
+        // Recovery: trades from trough back to prior peak.
+        let cum2 = 0, recoveredAt = null;
+        for (let i = 0; i < sorted.length; i++) {
+            cum2 += (sorted[i].dollar_pl || sorted[i].dollarPL || 0);
+            if (i > troughIdx && cum2 >= peakAtTrough) { recoveredAt = i; break; }
+        }
+        const recoveryTrades = recoveredAt != null ? (recoveredAt - troughIdx) : null;
+
+        // ─── Bind UI ───
+        const BASE = 20000;
+        const fmtUSD = v => '$' + Math.round(Math.abs(v)).toLocaleString();
+
+        if ($('rp-maxdd-r'))    $('rp-maxdd-r').textContent    = maxDD > 0 ? `−${fmtUSD(maxDD)}` : '$0';
+        if ($('rp-maxdd-sub'))  $('rp-maxdd-sub').textContent  = maxDD > 0
+            ? `−${maxRdd.toFixed(2)}R cumulative · ${(maxDD / BASE * 100).toFixed(2)}% of $20K base`
+            : 'No drawdown recorded yet.';
+
+        if ($('rp-streak'))     $('rp-streak').textContent     = maxStreak > 0 ? `${maxStreak}  in a row` : '0';
+        if ($('rp-streak-sub')) $('rp-streak-sub').textContent = maxStreak > 0
+            ? `${maxStreakR.toFixed(2)}R cumulative across the stretch`
+            : '—';
+
+        if ($('rp-worst'))     $('rp-worst').textContent      = worstTradeUSD < 0 ? `−${fmtUSD(worstTradeUSD)}` : '$0';
+        if ($('rp-worst-sub')) $('rp-worst-sub').textContent  = worstTradeUSD < 0
+            ? `${worstTradeR.toFixed(2)}R · single trade`
+            : '—';
+
+        if ($('rp-recovery'))     $('rp-recovery').textContent     = recoveryTrades != null
+            ? `${recoveryTrades}  trade${recoveryTrades === 1 ? '' : 's'}`
+            : (maxDD > 0 ? 'in progress' : '—');
+        if ($('rp-recovery-sub')) $('rp-recovery-sub').textContent = recoveryTrades != null
+            ? 'restored prior peak'
+            : (maxDD > 0 ? 'curve has not yet returned to peak' : '—');
+
+        // Dynamic close-line — interprets the numbers against the Battery
+        // Test 7 threshold and the Falsifiability Protocol trigger.
+        const close = $('rp-close');
+        if (close) {
+            const streakOK = maxStreak <= BATTERY_TEST_7_THRESHOLD;
+            const ddPct = (maxDD / BASE) * 100;
+            close.innerHTML = `Max drawdown of <strong>−${fmtUSD(maxDD)}</strong> (${ddPct.toFixed(1)}% of the $20K base, ${maxRdd.toFixed(1)}R cumulative) ${recoveryTrades != null ? `recovered in <strong>${recoveryTrades} trade${recoveryTrades === 1 ? '' : 's'}</strong>` : 'is still recovering'}. Longest losing streak of <strong>${maxStreak}</strong> ${streakOK ? `clears Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}` : `exceeds Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}`}. The Falsifiability Protocol&rsquo;s rolling-100 $0 trigger sits well below current realized cumulative R.`;
+        }
     }
 
     function renderRiskHeadroom(state) {
