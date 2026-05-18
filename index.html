@@ -516,6 +516,42 @@
                 <p class="risk-headroom__close" id="rh-close">Computing live headroom&hellip;</p>
             </div>
 
+            <!-- Risk profile — realized drawdown / streak / worst-trade -->
+            <div class="risk-profile" aria-labelledby="rp-h">
+                <p class="risk-profile__eyebrow" id="rp-h">Risk profile &nbsp;&middot;&nbsp; what the strategy has actually tolerated</p>
+                <h3 class="risk-profile__title">Drawdown is the path the Falsifiability Gate watches.</h3>
+                <p class="risk-profile__lede">Headroom (above) shows what the edge could mathematically support. This is what it has cost the operator&rsquo;s personal capital to produce the live record &mdash; the variance the defense architecture has weathered without modification.</p>
+
+                <div class="risk-profile__grid">
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Max realized drawdown</span>
+                        <span class="risk-profile__value" id="rp-maxdd-r">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-maxdd-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta" id="rp-maxdd-meta">at live sizing &middot; per 1 ES contract equivalent</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Longest losing streak</span>
+                        <span class="risk-profile__value" id="rp-streak">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-streak-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">Battery Test 7 threshold: &le; 4 consecutive losses</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Worst single trade</span>
+                        <span class="risk-profile__value" id="rp-worst">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-worst-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">single deepest realized hit</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Recovery from max DD</span>
+                        <span class="risk-profile__value" id="rp-recovery">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-recovery-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">trades to restore the prior peak</span>
+                    </div>
+                </div>
+
+                <p class="risk-profile__close" id="rp-close">Computing live risk profile&hellip;</p>
+            </div>
+
             <aside class="record-panel" aria-labelledby="record-panel-h">
                 <p class="record-panel__eyebrow" id="record-panel-h">The complete record</p>
                 <p class="record-panel__body">There is no separate backtest. The public Discord fills are the entire sample. The operator&rsquo;s personal capital was deployed, every trade was posted before exit, and every metric on this page is computed from that record &mdash; nothing is reconstructed, nothing is selected, nothing is unwound.</p>
