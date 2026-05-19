@@ -607,9 +607,10 @@
         const amtEl     = $('ind-amount');
         const amtVal    = $('ind-amount-val');
         const familyCap = $('ind-family-capital');
-        const ackBind   = $('ind-ack-binding');
+        const ackRelationship = $('ind-ack-relationship');
+        const ackBind    = $('ind-ack-binding');
         const ackManaged = $('ind-ack-managed');
-        const ackAccred = $('ind-ack-accred');
+        const ackAccred  = $('ind-ack-accred');
         const submit    = $('ind-submit');
         const errorEl   = $('ind-error');
         const thanks    = $('ind-thanks');
@@ -622,14 +623,7 @@
 
         function updateAmountLabel() {
             const amt = parseFloat(amtEl.value);
-            // Seats consumed = amt / target (rounded up, min 1). The target — not the floor —
-            // is the unit that defines a "full seat" of the cap.
-            const seatShare = Math.max(1, Math.ceil(amt / SEAT_TARGET));
-            const capPct = (seatShare / SEATS) * 100;
-            const scaleNote = amt < SEAT_TARGET
-                ? ` &middot; starting commitment &middot; scales toward $${(SEAT_TARGET).toLocaleString()}`
-                : '';
-            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong>  &middot;  ${seatShare} of ${SEATS} managed-account seat${seatShare === 1 ? '' : 's'} &middot; ${capPct.toFixed(0)}% of capacity${scaleNote}`;
+            amtVal.innerHTML = `<strong>${fmt$0(amt)}</strong> &middot; indicative range under consideration`;
         }
 
         function validateEmail(v) {
@@ -644,15 +638,16 @@
                 validateEmail((email.value || '').trim()) &&
                 amt >= SEAT_MIN &&
                 familyCap && familyCap.value &&
+                ackRelationship && ackRelationship.checked &&
                 ackBind.checked && ackManaged && ackManaged.checked && ackAccred.checked;
             submit.disabled = !ok;
             return ok;
         }
 
         amtEl.addEventListener('input', () => { updateAmountLabel(); validate(); });
-        [fName, lName, email, phone, ackBind, ackManaged, ackAccred].forEach(el =>
+        [fName, lName, email, phone, ackRelationship, ackBind, ackManaged, ackAccred].forEach(el =>
             el && el.addEventListener('input', validate));
-        [ackBind, ackManaged, ackAccred].forEach(el => el && el.addEventListener('change', validate));
+        [ackRelationship, ackBind, ackManaged, ackAccred].forEach(el => el && el.addEventListener('change', validate));
         familyCap && familyCap.addEventListener('change', validate);
 
         updateAmountLabel();
