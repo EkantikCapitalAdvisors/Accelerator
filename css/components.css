@@ -4253,3 +4253,155 @@ section.block.light { padding: 96px 0 112px; }
 @media (max-width: 760px) {
     .mod__outputs--paired { grid-template-columns: 1fr; }
 }
+
+/* =====================================================
+   Risk Tolerance Selector — badges, warnings, survival rails
+   ===================================================== */
+
+/* Chip badges (Recommended / Theoretical ceiling) */
+.risk-tier-chip { position: relative; padding-top: 28px; }
+.risk-tier-chip__badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+.risk-tier-chip__badge--rec {
+    background: var(--gold);
+    color: var(--navy);
+    border: 1px solid var(--gold);
+}
+.risk-tier-chip__badge--ceiling {
+    background: var(--white);
+    color: var(--slate);
+    border: 1px solid var(--slate);
+}
+.risk-tier-chip--recommended { border-color: var(--gold); }
+.risk-tier-chip--ceiling { border-color: var(--slate); border-style: dashed; }
+.risk-tier-chip--ceiling .risk-tier-chip__pct { color: var(--slate); }
+.risk-tier-chip--ceiling.risk-tier-chip--active .risk-tier-chip__pct { color: var(--fail); }
+.risk-tier-chip--active.risk-tier-chip--ceiling { border-style: solid; }
+
+/* Risk of ruin warning — appears dynamically */
+.ruin-warning {
+    margin: var(--s-3) 0 0;
+    padding: var(--s-3) var(--s-3) var(--s-3) var(--s-6);
+    background: linear-gradient(90deg, rgba(220,38,38,0.06), rgba(220,38,38,0.02) 50%, transparent);
+    border-left: 4px solid var(--fail);
+    border-radius: 0 4px 4px 0;
+    position: relative;
+}
+.ruin-warning[hidden] { display: none; }
+.ruin-warning__badge {
+    position: absolute;
+    top: var(--s-3);
+    left: -1px;
+    background: var(--fail);
+    color: var(--white);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 4px 10px;
+    border-radius: 0 2px 2px 0;
+}
+.ruin-warning__body {
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--navy);
+    margin: var(--s-3) 0 0;
+}
+.ruin-warning__body strong { color: var(--fail); font-weight: 700; }
+.ruin-warning__body em { color: var(--slate); font-style: italic; }
+.ruin-warning--severe {
+    background: linear-gradient(90deg, rgba(220,38,38,0.10), rgba(220,38,38,0.04) 50%, transparent);
+}
+
+/* Survival rails — links to Sit-Out + Falsifiability sections */
+.survival-rails {
+    margin: var(--s-3) 0 0;
+    padding: var(--s-3) var(--s-3) var(--s-2);
+    background: var(--ivory);
+    border-top: 1px dashed var(--border-strong);
+    border-radius: 4px;
+}
+.survival-rails__eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin: 0 0 var(--s-2);
+}
+.survival-rails__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-2);
+    margin-bottom: var(--s-2);
+}
+.survival-rails__cell {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    grid-template-rows: auto auto;
+    gap: 2px 8px;
+    padding: var(--s-2);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    color: var(--navy);
+}
+.survival-rails__cell:hover {
+    border-left-color: var(--gold);
+    background: rgba(200,169,81,0.04);
+    transform: translateY(-1px);
+}
+.survival-rails__icon {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    color: var(--gold);
+    grid-row: 1 / span 2;
+    align-self: center;
+}
+.survival-rails__title {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.survival-rails__body {
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--slate);
+}
+.survival-rails__close {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.6;
+    margin: var(--s-2) 0 0;
+    padding-top: var(--s-2);
+    border-top: 1px dashed var(--border);
+}
+
+@media (max-width: 760px) {
+    .survival-rails__grid { grid-template-columns: 1fr; }
+}
