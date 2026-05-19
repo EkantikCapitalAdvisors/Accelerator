@@ -4022,3 +4022,234 @@ section.block.light { padding: 96px 0 112px; }
 @media (max-width: 640px) {
     .hero-journal-link { margin-left: 0; padding: 12px 0; }
 }
+
+/* =====================================================
+   §2.6 Edge × Risk Tolerance — paradigm reframe
+   Prop-firm framing + shared Risk Tier Selector +
+   paired upside/downside output columns on Mode A and B
+   ===================================================== */
+
+/* Prop-firm framing block (above the modes section) */
+.prop-frame {
+    margin: var(--s-4) auto var(--s-6);
+    max-width: 880px;
+    padding: var(--s-3) var(--s-4);
+    background: var(--ivory);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+}
+.prop-frame__eyebrow {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin: 0 0 var(--s-2);
+}
+.prop-frame__body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--navy);
+    margin: 0;
+}
+.prop-frame__body em { color: var(--gold); font-style: italic; }
+
+/* Risk Tier Selector — the central control */
+.risk-tier-selector {
+    margin: 0 auto var(--s-6);
+    max-width: 1080px;
+    padding: var(--s-4) var(--s-4);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    border-radius: 0 0 4px 4px;
+}
+.risk-tier-selector__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--s-3);
+}
+.risk-tier-selector__label {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+}
+.risk-tier-selector__readout {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--navy);
+}
+.risk-tier-selector__readout strong { color: var(--gold); font-weight: 700; }
+
+.risk-tier-selector__chips {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--s-2);
+    margin-bottom: var(--s-3);
+}
+.risk-tier-chip {
+    appearance: none;
+    background: var(--ivory);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: var(--s-2) var(--s-2);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+    transition: all 0.2s ease;
+    min-height: 88px;
+}
+.risk-tier-chip:hover { border-color: var(--gold); transform: translateY(-1px); }
+.risk-tier-chip--active {
+    background: var(--navy);
+    border-color: var(--gold);
+    box-shadow: 0 4px 12px rgba(15,26,48,0.18);
+}
+.risk-tier-chip--active .risk-tier-chip__name,
+.risk-tier-chip--active .risk-tier-chip__pct,
+.risk-tier-chip--active .risk-tier-chip__note { color: var(--ivory); }
+.risk-tier-chip--active .risk-tier-chip__pct { color: var(--gold); }
+
+.risk-tier-chip__name {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.risk-tier-chip__pct {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+}
+.risk-tier-chip__note {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--slate);
+    font-style: italic;
+}
+
+.risk-tier-selector__custom {
+    display: none;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    background: var(--ivory);
+    border-radius: 4px;
+    margin-bottom: var(--s-2);
+}
+.risk-tier-selector__custom.is-active { display: grid; }
+.risk-tier-selector__custom-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+}
+.risk-tier-selector__custom input[type="range"] { width: 100%; }
+.risk-tier-selector__custom-val {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--navy);
+}
+.risk-tier-selector__custom-val strong { color: var(--gold); font-weight: 700; }
+
+.risk-tier-selector__note {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.55;
+    margin: 0;
+}
+
+@media (max-width: 880px) {
+    .risk-tier-selector__chips { grid-template-columns: 1fr 1fr; }
+    .risk-tier-chip { min-height: auto; }
+}
+@media (max-width: 520px) {
+    .risk-tier-selector__chips { grid-template-columns: 1fr; }
+}
+
+/* Derived (read-only) slider field — replaces the old rate slider */
+.slider-field--derived {
+    background: var(--ivory);
+    border-left: 3px solid var(--slate);
+    padding: var(--s-2) var(--s-3);
+    border-radius: 0 4px 4px 0;
+}
+.slider-field--derived label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+}
+.slider-derived-tag {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 1px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+.slider-value--derived {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    color: var(--gold);
+    font-weight: 500;
+    margin: 4px 0 6px;
+}
+.slider-derived-note {
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--slate);
+    margin: 0;
+    line-height: 1.45;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+/* Paired upside / downside output columns */
+.mod__outputs--paired {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-3);
+}
+.mod__col--downside {
+    background: var(--ivory);
+    border-left: 3px solid var(--slate);
+    border-radius: 0 4px 4px 0;
+    padding: var(--s-3);
+}
+.mod__col--downside .mod__col-eyebrow { color: var(--slate); }
+.mod__metric-val--neg { color: var(--fail) !important; }
+
+@media (max-width: 760px) {
+    .mod__outputs--paired { grid-template-columns: 1fr; }
+}
