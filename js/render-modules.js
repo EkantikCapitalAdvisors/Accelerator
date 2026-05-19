@@ -43,7 +43,7 @@
         let currentTier = 'operator';
         let customPct = 5.0;
         const subscribers = [];
-        let liveAnchors = { operatorPct: 1.6, halfKellyPct: 14.0, rExpectancy: 0.26, tradesPerMonth: 21 };
+        let liveAnchors = { operatorPct: 1.6, halfKellyPct: 14.0, rExpectancy: 0.26, tradesPerMonth: 21, realizedMaxDdPct: 6.0 };
 
         function activeTier() { return currentTier; }
 
@@ -87,6 +87,12 @@
                 const days = (times[times.length - 1] - times[0]) / 86400000;
                 if (days >= 7) liveAnchors.tradesPerMonth = (trades.length / days) * 30.4375;
             }
+            // Realized max DD as % of $20K base — used to project ruin-warning
+            // drawdown at non-operator sizing.
+            const realized = computeRealizedRiskProfile(trades);
+            if (realized.maxDdR > 0 && s.avgRiskDollar) {
+                liveAnchors.realizedMaxDdPct = (realized.maxDdR * s.avgRiskDollar / BASE_FOR_OPERATOR_PCT) * 100;
+            }
             paintReadout();
             notify();
         }
@@ -102,7 +108,8 @@
             const pctEl = document.getElementById('rts-pct');
             const derEl = document.getElementById('rts-derived');
             const monthlyRatePct = (deriveMonthlyRate() * 100);
-            if (pctEl) pctEl.textContent = currentPct().toFixed(2);
+            const pct = currentPct();
+            if (pctEl) pctEl.textContent = pct.toFixed(2);
             if (derEl) derEl.textContent = `~${monthlyRatePct.toFixed(1)}% monthly @ live edge`;
 
             // Active chip styling
@@ -114,6 +121,34 @@
             // Show/hide custom slider row
             const customRow = document.getElementById('rts-custom-row');
             if (customRow) customRow.classList.toggle('is-active', currentTier === 'custom');
+
+            // Risk-of-ruin warning surfaces whenever the selected tier sizes above
+            // the operator's live deployment. Severity escalates as we approach
+            // ½-Kelly. Specific to the new "recommended vs theoretical" framing.
+            const warning  = document.getElementById('ruin-warning');
+            const wPctEl   = document.getElementById('ruin-warning-pct');
+            const wDdEl    = document.getElementById('ruin-warning-dd');
+            const aboveOp  = pct > (liveAnchors.operatorPct + 0.05);  // tiny epsilon for rounding
+            const atCeil   = currentTier === 'halfkelly' || pct >= (liveAnchors.halfKellyPct * 0.85);
+            if (warning) {
+                if (aboveOp) {
+                    warning.hidden = false;
+                    warning.classList.toggle('ruin-warning--severe', atCeil);
+                    // Estimated drawdown at this sizing: realized maxDD-R scaled by
+                    // (selected / operator) ratio, expressed as % of base.
+                    // Kelly bet-theory says realized DD ≥ ~Kelly% × 4 in adverse regimes;
+                    // we use the safer floor of realized × selected/operator.
+                    const ddRatio = pct / Math.max(0.01, liveAnchors.operatorPct);
+                    // Live realized max-DD-% of base (rough): if Risk Profile says
+                    // ~6% at operator sizing, scaled DD = ratio × 6%.
+                    const baseDdPct = liveAnchors.realizedMaxDdPct || 6.0;
+                    const projectedDd = Math.min(95, baseDdPct * ddRatio);
+                    if (wPctEl) wPctEl.textContent = pct.toFixed(2) + '%';
+                    if (wDdEl)  wDdEl.textContent  = projectedDd.toFixed(0) + '%';
+                } else {
+                    warning.hidden = true;
+                }
+            }
         }
 
         function setTier(tier) {
