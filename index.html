@@ -825,14 +825,62 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 07 — MODES A & B (Dev Spec §3.7) ═══ -->
+    <!-- ═══ SECTION §2.6 — EDGE × RISK TOLERANCE (prop-firm reframe) ═══ -->
     <section class="section section--white modes-intro" id="modes" aria-labelledby="modes-h2">
         <a id="module-a-alias" aria-hidden="true"></a>
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="modes-h2">Two distribution modes. One architecture.</h2>
-                <p class="section-head__lead">Two distribution modes. Each managed-account seat picks one. Both obey the regulatory and capacity constraints described above. They differ only in distribution rhythm &mdash; quarterly income, or annual settlement after intra-year scaling.</p>
+                <h2 class="section-head__title" id="modes-h2">The edge &times; your risk tolerance.</h2>
+                <p class="section-head__lead">The edge is mechanical. Returns are a function of your risk-per-trade choice within the operator&rsquo;s discipline rules. The two calculators below illustrate the same edge expressed at the sizing you select, with distributions rhythm&rsquo;d two ways.</p>
             </header>
+
+            <aside class="prop-frame" aria-label="How prop traders think about this">
+                <p class="prop-frame__eyebrow">How prop traders think about this</p>
+                <p class="prop-frame__body">Prop firms grant traders buying power and bound them with discipline rules &mdash; max daily loss, max drawdown, profit targets. Within those rules, the trader chooses how aggressively to size per trade. Returns are a function of <em>the trader&rsquo;s edge &times; the trader&rsquo;s sizing &times; time</em>. You&rsquo;re the principal here. The Ekantik operator&rsquo;s edge is your edge. The Defense Architecture is the firm&rsquo;s rules. The slider below is your sizing knob.</p>
+            </aside>
+
+            <div class="risk-tier-selector" role="radiogroup" aria-label="Risk per trade — tier selector">
+                <div class="risk-tier-selector__head">
+                    <span class="risk-tier-selector__label">Risk per trade</span>
+                    <span class="risk-tier-selector__readout">
+                        <strong id="rts-pct">—</strong>% of working capital &nbsp;&middot;&nbsp;
+                        <span id="rts-derived">— monthly @ live edge</span>
+                    </span>
+                </div>
+                <div class="risk-tier-selector__chips">
+                    <button type="button" class="risk-tier-chip" data-tier="operator" aria-pressed="true">
+                        <span class="risk-tier-chip__name">Operator</span>
+                        <span class="risk-tier-chip__pct" id="rts-chip-operator">~1.6%</span>
+                        <span class="risk-tier-chip__note">current live sizing</span>
+                    </button>
+                    <button type="button" class="risk-tier-chip" data-tier="conservative">
+                        <span class="risk-tier-chip__name">Conservative</span>
+                        <span class="risk-tier-chip__pct">2%</span>
+                        <span class="risk-tier-chip__note">defensive</span>
+                    </button>
+                    <button type="button" class="risk-tier-chip" data-tier="moderate">
+                        <span class="risk-tier-chip__name">Moderate</span>
+                        <span class="risk-tier-chip__pct">5%</span>
+                        <span class="risk-tier-chip__note">~&frac13; of Kelly</span>
+                    </button>
+                    <button type="button" class="risk-tier-chip" data-tier="halfkelly">
+                        <span class="risk-tier-chip__name">&frac12;-Kelly</span>
+                        <span class="risk-tier-chip__pct" id="rts-chip-halfkelly">~14%</span>
+                        <span class="risk-tier-chip__note">mathematically optimal</span>
+                    </button>
+                    <button type="button" class="risk-tier-chip" data-tier="custom">
+                        <span class="risk-tier-chip__name">Custom</span>
+                        <span class="risk-tier-chip__pct"><span id="rts-chip-custom">5.0</span>%</span>
+                        <span class="risk-tier-chip__note">slider below</span>
+                    </button>
+                </div>
+                <div class="risk-tier-selector__custom" id="rts-custom-row">
+                    <label for="rts-custom-slider" class="risk-tier-selector__custom-label">Custom risk per trade</label>
+                    <input id="rts-custom-slider" type="range" min="0.5" max="20" step="0.5" value="5">
+                    <span class="risk-tier-selector__custom-val"><strong id="rts-custom-val">5.0</strong>%</span>
+                </div>
+                <p class="risk-tier-selector__note">Higher risk = larger $ per R = larger returns AND larger drawdowns. Move the slider to see the trade-off. The math is linear at the same R-multiple.</p>
+            </div>
         </div>
     </section>
 
@@ -851,9 +899,10 @@
                         <label for="mod-a-capital">Working capital · <span class="slider-value" id="mod-a-capital-val">$100,000</span></label>
                         <input id="mod-a-capital" type="range" min="20000" max="1000000" step="5000" value="100000">
                     </div>
-                    <div class="slider-field">
-                        <label for="mod-a-rate">Monthly rate · <span class="slider-value" id="mod-a-rate-val">5%/mo</span></label>
-                        <input id="mod-a-rate" type="range" min="1" max="20" step="1" value="5">
+                    <div class="slider-field slider-field--derived">
+                        <label>Monthly rate <span class="slider-derived-tag">derived</span></label>
+                        <span class="slider-value slider-value--derived" id="mod-a-rate-val">— /mo</span>
+                        <p class="slider-derived-note">Edge &times; risk-per-trade &times; cadence &mdash; not an input. Adjust the risk-tolerance selector above the modes to change this.</p>
                     </div>
                     <div class="slider-field">
                         <label>Distribution frequency</label>
@@ -865,22 +914,39 @@
                     </div>
                 </div>
 
-                <div class="mod__outputs mod__outputs--single" aria-label="Module A outputs">
+                <div class="mod__outputs mod__outputs--paired" aria-label="Module A outputs">
                     <div class="mod__col">
-                        <p class="mod__col-eyebrow">At Target Rate</p>
-                        <p class="mod__col-title">Designed to produce</p>
-                        <p class="mod__col-context" id="mod-a-target-header">5% per month — the strategy's income target.</p>
+                        <p class="mod__col-eyebrow">At your sizing &mdash; cash produced</p>
+                        <p class="mod__col-title">The edge, at your selected risk.</p>
+                        <p class="mod__col-context" id="mod-a-target-header">At your selected risk-per-trade, the live edge produces this monthly rate. Higher risk = higher rate AND higher drawdown.</p>
                         <div class="mod__metric">
                             <span class="mod__metric-label" id="mod-a-per-label">Per-quarter check</span>
-                            <span class="mod__metric-val" id="mod-a-target-period">—</span>
+                            <span class="mod__metric-val" id="mod-a-target-period">&mdash;</span>
                         </div>
                         <div class="mod__metric mod__metric--big">
                             <span class="mod__metric-label">Annual income</span>
-                            <span class="mod__metric-val" id="mod-a-target-annual">—</span>
+                            <span class="mod__metric-val" id="mod-a-target-annual">&mdash;</span>
                         </div>
                         <div class="mod__metric">
                             <span class="mod__metric-label">5-year cash total</span>
-                            <span class="mod__metric-val" id="mod-a-target-5y">—</span>
+                            <span class="mod__metric-val" id="mod-a-target-5y">&mdash;</span>
+                        </div>
+                    </div>
+                    <div class="mod__col mod__col--downside">
+                        <p class="mod__col-eyebrow">At your sizing &mdash; downside</p>
+                        <p class="mod__col-title">What the same sizing has cost.</p>
+                        <p class="mod__col-context">Live drawdown numbers (Risk Profile panel above) scaled by your selected risk-per-trade. Symmetric truth: every upside number on the left has a paired downside here.</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Max drawdown (scaled)</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-max">&mdash;</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Single-trade worst loss</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-trade">&mdash;</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">DD as % of base</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-pct">&mdash;</span>
                         </div>
                     </div>
                 </div>
@@ -903,16 +969,16 @@
                 </div>
 
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Target rate is the strategy's design parameter for sustained income at scale. Math assumes 10 active trading months per year — the strategy stands down for two months annually (typically low-liquidity / holiday windows). Realized performance to date is shown in The Edge section below and in the live trade log. Distributions are not guaranteed.</em>
+                    <em>Monthly rate is computed from the live edge &times; your risk-per-trade selection &times; ten active trading months per year (the strategy stands down for two months annually &mdash; typically low-liquidity / holiday windows). Drawdown scales with the same risk selection. Realized performance to date is shown in The Edge section above. Past performance is not indicative of future results. Distributions are not guaranteed.</em>
                 </p>
 
                 <div class="mod__caveat">
-                    Working capital stays at the base level by design. Strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents — a constraint set by execution mechanics, not ambition. Profits exit the strategy each quarter (or whatever cadence you select) and ship to the investor. The base remains; the cap is preserved; the cycle repeats — across 10 active trading months a year.
+                    Working capital stays at the base level by design. Profits exit the strategy each quarter (or whatever cadence you select) and ship to the investor. The base remains; the regulatory cap of fifteen managed accounts is preserved; the cycle repeats &mdash; across 10 active trading months a year.
                 </div>
             </article>
 
             <p class="mod-connector">
-                Quarterly cash, or year-end distribution? Mode A keeps the base flat and ships profits every quarter. Mode B lets position size ratchet up at each scaling milestone <em>within</em> the year, then distributes the full annual profit at year-end. Both modes obey the cap. Both reset to base on a defined cadence. They differ only in distribution rhythm.
+                Same edge. Same risk-per-trade selection. Different rhythm. Mode A (above) keeps the base flat and ships profits every quarter. Mode B (below) settles at year-end, with an optional <em>compound-within-year</em> toggle that doubles position size at each milestone before the year-end distribution.
             </p>
         </div>
     </section>
@@ -932,15 +998,16 @@
                         <label for="mod-b-capital">Working capital · <span class="slider-value" id="mod-b-capital-val">$100,000</span></label>
                         <input id="mod-b-capital" type="range" min="20000" max="1000000" step="5000" value="100000">
                     </div>
-                    <div class="slider-field">
-                        <label for="mod-b-rate">Monthly rate · <span class="slider-value" id="mod-b-rate-val">5%/mo</span></label>
-                        <input id="mod-b-rate" type="range" min="1" max="20" step="1" value="5">
+                    <div class="slider-field slider-field--derived">
+                        <label>Monthly rate <span class="slider-derived-tag">derived</span></label>
+                        <span class="slider-value slider-value--derived" id="mod-b-rate-val">— /mo</span>
+                        <p class="slider-derived-note">Edge &times; risk-per-trade &times; cadence &mdash; not an input. Adjust the risk-tolerance selector above the modes to change this.</p>
                     </div>
                     <div class="slider-field">
-                        <label>Scale-ups per year <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(max 4)</span></label>
-                        <div class="mod__radio-group" role="radiogroup" aria-label="Scale-ups per year">
-                            <label><input type="radio" name="mod-b-scaleups" value="0"><span>0</span></label>
-                            <label><input type="radio" name="mod-b-scaleups" value="1" checked><span>1</span></label>
+                        <label>Compound within year <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(geometric override &mdash; off by default)</span></label>
+                        <div class="mod__radio-group" role="radiogroup" aria-label="Compound within year (milestones)">
+                            <label><input type="radio" name="mod-b-scaleups" value="0" checked><span>Off</span></label>
+                            <label><input type="radio" name="mod-b-scaleups" value="1"><span>1</span></label>
                             <label><input type="radio" name="mod-b-scaleups" value="2"><span>2</span></label>
                             <label><input type="radio" name="mod-b-scaleups" value="3"><span>3</span></label>
                             <label><input type="radio" name="mod-b-scaleups" value="4"><span>4</span></label>
@@ -953,25 +1020,42 @@
                 </div>
 
                 <p class="muted" style="font-size:12px;margin:-8px 0 var(--s-2);font-family:var(--font-mono)">
-                    <strong style="color:var(--gold)">Scale-up mechanic:</strong> each scale-up triggers when cumulative profit reaches the next <strong>$5,000</strong> milestone and <strong>doubles position size</strong> (and therefore doubles future monthly profits). Pick how many you'd like to apply this year — up to 4.
+                    <strong style="color:var(--gold)">Compound-within-year mechanic:</strong> <em>off by default.</em> When on, each milestone triggers at the next <strong>$5,000</strong> cumulative-profit threshold and <strong>doubles position size</strong> &mdash; geometric compounding inside the year, distributed at year-end. <em>Off:</em> flat sizing, single annual distribution.
                 </p>
 
-                <div class="mod__outputs mod__outputs--single" aria-label="Module B scoreboard">
+                <div class="mod__outputs mod__outputs--paired" aria-label="Module B scoreboard">
                     <div class="mod__col">
-                        <p class="mod__col-eyebrow">At Target Rate</p>
-                        <p class="mod__col-title">Designed cadence</p>
-                        <p class="mod__col-context" id="mod-b-target-header">5% per month — the strategy's income target.</p>
+                        <p class="mod__col-eyebrow">At your sizing &mdash; cash produced</p>
+                        <p class="mod__col-title">Annual settlement.</p>
+                        <p class="mod__col-context" id="mod-b-target-header">At your selected risk-per-trade, the live edge produces this annual cash. Compound-within-year (if opted in) increases the year-end number and the drawdown together.</p>
                         <div class="mod__metric">
-                            <span class="mod__metric-label">Scale-ups applied</span>
-                            <span class="mod__metric-val" id="mod-b-target-events">—</span>
+                            <span class="mod__metric-label">Compound milestones applied</span>
+                            <span class="mod__metric-val" id="mod-b-target-events">&mdash;</span>
                         </div>
                         <div class="mod__metric mod__metric--big">
                             <span class="mod__metric-label">Year-end distribution</span>
-                            <span class="mod__metric-val" id="mod-b-target-yearend">—</span>
+                            <span class="mod__metric-val" id="mod-b-target-yearend">&mdash;</span>
                         </div>
                         <div class="mod__metric">
-                            <span class="mod__metric-label">Cumulative cash · horizon</span>
-                            <span class="mod__metric-val" id="mod-b-target-cumulative">—</span>
+                            <span class="mod__metric-label">Cumulative cash &middot; horizon</span>
+                            <span class="mod__metric-val" id="mod-b-target-cumulative">&mdash;</span>
+                        </div>
+                    </div>
+                    <div class="mod__col mod__col--downside">
+                        <p class="mod__col-eyebrow">At your sizing &mdash; downside</p>
+                        <p class="mod__col-title">What the same sizing has cost.</p>
+                        <p class="mod__col-context">Live drawdown numbers (Risk Profile panel above) scaled by your selected risk-per-trade. Compound-within-year amplifies these symmetrically with the upside.</p>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">Max drawdown (scaled)</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-max">&mdash;</span>
+                        </div>
+                        <div class="mod__metric mod__metric--big">
+                            <span class="mod__metric-label">Single-trade worst loss</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-trade">&mdash;</span>
+                        </div>
+                        <div class="mod__metric">
+                            <span class="mod__metric-label">DD as % of base</span>
+                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-pct">&mdash;</span>
                         </div>
                     </div>
                 </div>
@@ -996,11 +1080,11 @@
                 </div>
 
                 <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Target rate is the strategy's design parameter for sustained income at scale. Math assumes 10 active trading months per year — the strategy stands down for two months annually. Realized performance to date is shown in The Edge section below. Distributions are not guaranteed.</em>
+                    <em>Monthly rate is computed from the live edge &times; your risk-per-trade selection &times; ten active trading months per year. Compound-within-year (when opted in) doubles position size at each $5K profit milestone &mdash; amplifying both upside and drawdown by the same factor. Past performance is not indicative of future results. Distributions are not guaranteed.</em>
                 </p>
 
                 <div class="mod__caveat">
-                    Position size ratchets up at each milestone during the active trading window. At year-end, full profit is distributed and the working base resets. The reset is structural: strategy capacity is hard-capped at $5M AUM / 500 ES contract equivalents, and uncapped compounding would breach the ceiling within a few cycles. Each year begins fresh at the base allocation, with 10 active trading months and two months of stand-down.
+                    When compound-within-year is on, position size ratchets up at each milestone during the active trading window. At year-end, full profit is distributed and the working base resets. The reset is structural: the operation is hard-capped at fifteen managed-account relationships by regulatory exemption thresholds, and uncapped compounding would breach the structure within a few cycles. Each year begins fresh at the base allocation, with 10 active trading months and two months of stand-down.
                 </div>
             </article>
         </div>

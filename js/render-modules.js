@@ -23,6 +23,195 @@
     const ACTIVE_MONTHS_PER_YEAR = 10;
     const SCALE_TRIGGER_DOLLARS  = 5000;
     const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const BASE_FOR_OPERATOR_PCT  = 20000;  // operator's % of capital is measured against the $20K starting base
+
+    // ─────────────────────────────────────────────────────
+    // Risk Tolerance Selector — shared between Mode A and Mode B
+    // The investor's risk-per-trade choice (% of working capital) is THE
+    // primary lever. Monthly rate is *derived* from it × live edge cadence,
+    // not set independently. Five tier chips + custom slider.
+    // ─────────────────────────────────────────────────────
+    const RISK_TIERS = {
+        operator:     { name: 'Operator',     pct: null,  /* live: avgRisk/$20K base */ },
+        conservative: { name: 'Conservative', pct: 2.0  },
+        moderate:     { name: 'Moderate',     pct: 5.0  },
+        halfkelly:    { name: '½-Kelly',      pct: null,  /* live: halfKelly × 100 */ },
+        custom:       { name: 'Custom',       pct: 5.0    /* slider-driven */ },
+    };
+
+    const RiskSelector = (function () {
+        let currentTier = 'operator';
+        let customPct = 5.0;
+        const subscribers = [];
+        let liveAnchors = { operatorPct: 1.6, halfKellyPct: 14.0, rExpectancy: 0.26, tradesPerMonth: 21 };
+
+        function activeTier() { return currentTier; }
+
+        function pctFor(tier) {
+            if (tier === 'operator')     return liveAnchors.operatorPct;
+            if (tier === 'halfkelly')    return liveAnchors.halfKellyPct;
+            if (tier === 'conservative') return RISK_TIERS.conservative.pct;
+            if (tier === 'moderate')     return RISK_TIERS.moderate.pct;
+            if (tier === 'custom')       return customPct;
+            return 5.0;
+        }
+
+        function currentPct() { return pctFor(currentTier); }
+
+        function deriveMonthlyRate() {
+            const r = liveAnchors.rExpectancy || 0;
+            const tpm = liveAnchors.tradesPerMonth || 0;
+            const riskFrac = currentPct() / 100;
+            return r * tpm * riskFrac;  // monthly return as decimal (e.g., 0.05 for 5%/mo)
+        }
+
+        function notify() {
+            subscribers.forEach(cb => { try { cb(); } catch (e) { console && console.error && console.error(e); } });
+        }
+
+        function updateLiveAnchors(state) {
+            const s = (state && state.summary) || {};
+            const trades = (state && state.trades) || [];
+            if (s.avgRiskDollar != null) {
+                liveAnchors.operatorPct = (s.avgRiskDollar / BASE_FOR_OPERATOR_PCT) * 100;
+            }
+            if (s.winRate != null && s.winLossR != null && s.winLossR > 0) {
+                const p = s.winRate, q = 1 - p, b = s.winLossR;
+                const halfKelly = Math.max(0, (p - q / b) / 2);
+                liveAnchors.halfKellyPct = halfKelly * 100;
+            }
+            if (s.rExpectancy != null) liveAnchors.rExpectancy = s.rExpectancy;
+            // Trades per month — derive from live trade cadence (matches render-edges)
+            const times = trades.map(parseAnyTime).filter(Boolean).sort((a,b) => a - b);
+            if (times.length >= 2) {
+                const days = (times[times.length - 1] - times[0]) / 86400000;
+                if (days >= 7) liveAnchors.tradesPerMonth = (trades.length / days) * 30.4375;
+            }
+            paintReadout();
+            notify();
+        }
+
+        function paintReadout() {
+            const opEl  = document.getElementById('rts-chip-operator');
+            const hkEl  = document.getElementById('rts-chip-halfkelly');
+            const cuEl  = document.getElementById('rts-chip-custom');
+            if (opEl) opEl.textContent = '~' + liveAnchors.operatorPct.toFixed(1) + '%';
+            if (hkEl) hkEl.textContent = '~' + liveAnchors.halfKellyPct.toFixed(1) + '%';
+            if (cuEl) cuEl.textContent = customPct.toFixed(1);
+
+            const pctEl = document.getElementById('rts-pct');
+            const derEl = document.getElementById('rts-derived');
+            const monthlyRatePct = (deriveMonthlyRate() * 100);
+            if (pctEl) pctEl.textContent = currentPct().toFixed(2);
+            if (derEl) derEl.textContent = `~${monthlyRatePct.toFixed(1)}% monthly @ live edge`;
+
+            // Active chip styling
+            document.querySelectorAll('.risk-tier-chip').forEach(b => {
+                b.classList.toggle('risk-tier-chip--active', b.dataset.tier === currentTier);
+                b.setAttribute('aria-pressed', b.dataset.tier === currentTier ? 'true' : 'false');
+            });
+
+            // Show/hide custom slider row
+            const customRow = document.getElementById('rts-custom-row');
+            if (customRow) customRow.classList.toggle('is-active', currentTier === 'custom');
+        }
+
+        function setTier(tier) {
+            if (!RISK_TIERS[tier]) return;
+            currentTier = tier;
+            paintReadout();
+            notify();
+        }
+
+        function setCustomPct(p) {
+            customPct = Math.max(0.5, Math.min(20, Number(p) || 5));
+            const v = document.getElementById('rts-custom-val');
+            if (v) v.textContent = customPct.toFixed(1);
+            if (currentTier === 'custom') { paintReadout(); notify(); }
+            else paintReadout();
+        }
+
+        function onChange(cb) { if (typeof cb === 'function') subscribers.push(cb); }
+
+        function init() {
+            // Chip clicks
+            document.querySelectorAll('.risk-tier-chip').forEach(btn => {
+                btn.addEventListener('click', () => setTier(btn.dataset.tier));
+            });
+            // Custom slider
+            const slider = document.getElementById('rts-custom-slider');
+            if (slider) {
+                slider.addEventListener('input', () => setCustomPct(parseFloat(slider.value)));
+                customPct = parseFloat(slider.value) || 5;
+            }
+            // Live data subscription
+            if (root.Ekantik && root.Ekantik.Data) {
+                root.Ekantik.Data.onChange(updateLiveAnchors);
+                const cur = root.Ekantik.Data.get();
+                if (cur) updateLiveAnchors(cur);
+            } else {
+                paintReadout();
+            }
+        }
+
+        return {
+            init,
+            activeTier,
+            currentPct,
+            deriveMonthlyRate,
+            liveAnchors: () => liveAnchors,
+            onChange,
+        };
+    })();
+
+    // Time-parse helper used for cadence inference (matches render-section-a.js's parseTradeTime).
+    function parseAnyTime(t) {
+        const raw = t.entry_time || t.entryTime || t.exit_time || t.exitTime;
+        if (!raw) return null;
+        // ISO date with optional 24h or 12h-AM/PM time
+        let m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+        if (m) {
+            let h = +(m[4]||0); const min = +(m[5]||0); const s = +(m[6]||0);
+            const ap = (m[7] || '').toUpperCase();
+            if (ap === 'PM' && h < 12) h += 12;
+            if (ap === 'AM' && h === 12) h = 0;
+            return new Date(+m[1], +m[2] - 1, +m[3], h, min, s);
+        }
+        // US-slash date with optional 24h or 12h-AM/PM time
+        m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+        if (m) {
+            let h = +(m[4]||0); const min = +(m[5]||0); const s = +(m[6]||0);
+            const ap = (m[7] || '').toUpperCase();
+            if (ap === 'PM' && h < 12) h += 12;
+            if (ap === 'AM' && h === 12) h = 0;
+            return new Date(+m[3], +m[1] - 1, +m[2], h, min, s);
+        }
+        const d = new Date(raw); return isNaN(d.getTime()) ? null : d;
+    }
+
+    // Compute realized drawdown stats (in R-units, position-size-agnostic).
+    // Returns { maxDdR, worstTradeR } — to be scaled by the user's chosen
+    // risk-per-trade $ to project at-your-sizing drawdown.
+    function computeRealizedRiskProfile(trades) {
+        if (!Array.isArray(trades) || trades.length === 0) return { maxDdR: 0, worstTradeR: 0 };
+        const sorted = trades.map(t => ({ t, ts: parseAnyTime(t) }))
+                             .filter(x => x.ts)
+                             .sort((a,b) => a.ts - b.ts)
+                             .map(x => x.t);
+        let cumR = 0, peakR = 0, maxDdR = 0;
+        let worstTradeR = 0;
+        sorted.forEach(t => {
+            const rd = t.risk_dollars || t.riskDollars || 0;
+            const pl = t.dollar_pl || t.dollarPL || 0;
+            const R  = rd > 0 ? pl / rd : 0;
+            cumR += R;
+            if (cumR > peakR) peakR = cumR;
+            const dd = peakR - cumR;
+            if (dd > maxDdR) maxDdR = dd;
+            if (R < worstTradeR) worstTradeR = R;
+        });
+        return { maxDdR, worstTradeR };
+    }
 
     // ─────────────────────────────────────────────────────
     // Module A — Quarterly Income engine
@@ -143,22 +332,24 @@
     }
 
     // ─────────────────────────────────────────────────────
-    // Module A — Render (target rate only; live evidence lives elsewhere)
+    // Module A — Render (driven by Risk Tolerance Selector + live edge)
+    // Monthly rate is no longer an input; it's *derived* from the investor's
+    // risk-per-trade selection × live R-expectancy × live trades-per-month.
     // ─────────────────────────────────────────────────────
-    function renderModuleA(/* state */) {
-        const capEl  = $('mod-a-capital');
-        const rateEl = $('mod-a-rate');
-        if (!capEl || !rateEl) return;
+    function renderModuleA(state) {
+        const capEl = $('mod-a-capital');
+        if (!capEl) return;
 
         const recompute = () => {
-            const capital = parseFloat(capEl.value);
-            const monthlyRate = parseFloat(rateEl.value) / 100;
-            const freqRadio = document.querySelector('input[name="mod-a-freq"]:checked');
-            const frequency = freqRadio ? freqRadio.value : 'quarterly';
+            const capital     = parseFloat(capEl.value);
+            const monthlyRate = RiskSelector.deriveMonthlyRate();   // decimal, e.g. 0.05
+            const riskPct     = RiskSelector.currentPct();          // % of capital
+            const freqRadio   = document.querySelector('input[name="mod-a-freq"]:checked');
+            const frequency   = freqRadio ? freqRadio.value : 'quarterly';
 
             const tgt = moduleAMath({ capital, monthlyRate, frequency });
             $('mod-a-capital-val').textContent = fmt$0(capital);
-            $('mod-a-rate-val').textContent    = (monthlyRate * 100).toFixed(0) + '%/mo';
+            $('mod-a-rate-val').textContent    = (monthlyRate * 100).toFixed(2) + '% /mo';
 
             $('mod-a-target-period').textContent = fmt$0(tgt.perPeriodCheck);
             $('mod-a-target-annual').textContent = fmt$0(tgt.annualIncome);
@@ -168,19 +359,26 @@
             const perLabelEl = $('mod-a-per-label');
             if (perLabelEl) perLabelEl.textContent = `Per-${perWord} check`;
 
-            // Subhead reflects current slider value.
-            const subhead = $('mod-a-target-header');
-            if (subhead) {
-                subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month — the strategy's income target.`;
-            }
+            // Paired downside — drawdown scaled to investor's chosen risk-per-trade.
+            const dpRoot = state && state.trades ? state : (root.Ekantik && root.Ekantik.Data ? root.Ekantik.Data.get() : { trades: [] });
+            const realized = computeRealizedRiskProfile(dpRoot.trades || []);
+            const riskDollarPerTrade = capital * (riskPct / 100);
+            const ddMax   = realized.maxDdR     * riskDollarPerTrade;
+            const ddTrade = realized.worstTradeR * riskDollarPerTrade;  // negative
+            const ddPct   = capital > 0 ? (ddMax / capital) * 100 : 0;
+
+            const fmtNeg = v => v ? '−' + fmt$0(Math.abs(v)) : '$0';
+            const ddMaxEl   = $('mod-a-dd-max');   if (ddMaxEl)   ddMaxEl.textContent   = fmtNeg(ddMax);
+            const ddTrEl    = $('mod-a-dd-trade'); if (ddTrEl)    ddTrEl.textContent    = fmtNeg(ddTrade);
+            const ddPctEl   = $('mod-a-dd-pct');   if (ddPctEl)   ddPctEl.textContent   = ddPct ? '−' + ddPct.toFixed(2) + '%' : '0%';
 
             renderModuleATable(tgt.monthly);
         };
 
-        // Wire once
         if (!capEl._wired) {
-            [capEl, rateEl].forEach(el => el.addEventListener('input', recompute));
+            capEl.addEventListener('input', recompute);
             document.querySelectorAll('input[name="mod-a-freq"]').forEach(r => r.addEventListener('change', recompute));
+            RiskSelector.onChange(recompute);
             capEl._wired = true;
         }
         recompute();
@@ -192,44 +390,55 @@
     // distribution as the right-edge label. Scale-event count is shown in the
     // scoreboard, not as cluttered per-event labels on the bar.
     // ─────────────────────────────────────────────────────
-    function renderModuleB(/* state */) {
+    function renderModuleB(state) {
         const capEl = $('mod-b-capital');
-        const rateEl = $('mod-b-rate');
         const horEl = $('mod-b-horizon');
-        if (!capEl || !rateEl || !horEl) return;
+        if (!capEl || !horEl) return;
 
         const recompute = () => {
-            const capital = parseFloat(capEl.value);
-            const monthlyRate = parseFloat(rateEl.value) / 100;
-            const years = parseInt(horEl.value, 10);
-            const scaleRadio = document.querySelector('input[name="mod-b-scaleups"]:checked');
-            const maxScaleUps = scaleRadio ? parseInt(scaleRadio.value, 10) : 1;
+            const capital     = parseFloat(capEl.value);
+            const monthlyRate = RiskSelector.deriveMonthlyRate();
+            const riskPct     = RiskSelector.currentPct();
+            const years       = parseInt(horEl.value, 10);
+            const scaleRadio  = document.querySelector('input[name="mod-b-scaleups"]:checked');
+            const maxScaleUps = scaleRadio ? parseInt(scaleRadio.value, 10) : 0;
 
             $('mod-b-capital-val').textContent = fmt$0(capital);
-            $('mod-b-rate-val').textContent    = (monthlyRate * 100).toFixed(0) + '%/mo';
+            $('mod-b-rate-val').textContent    = (monthlyRate * 100).toFixed(2) + '% /mo';
             $('mod-b-horizon-val').textContent = years + (years === 1 ? ' yr' : ' yrs');
 
             const tgt = moduleBSimulate({ capital, monthlyRate, maxScaleUps, years });
 
-            // Build the "1x → 2x → 4x" trace for the scoreboard
             const multiTrace = ['1x'];
             tgt.scaleEvents.forEach(ev => multiTrace.push(`${ev.newMultiplier}x`));
             const scaleLabel = tgt.scaleUpsApplied === 0
-                ? '0 (position stays 1x)'
+                ? '0 (compound off · position stays 1x)'
                 : `${tgt.scaleUpsApplied} (${multiTrace.join(' → ')})`;
             $('mod-b-target-events').textContent     = scaleLabel;
             $('mod-b-target-yearend').textContent    = fmt$0(tgt.yearEndDistribution);
             $('mod-b-target-cumulative').textContent = fmt$0(tgt.totalDistribution);
 
-            const subhead = $('mod-b-target-header');
-            if (subhead) subhead.textContent = `${(monthlyRate * 100).toFixed(0)}% per month · up to ${maxScaleUps} scale-up${maxScaleUps === 1 ? '' : 's'} — the strategy's income target.`;
+            // Paired downside — drawdown scaled to investor's chosen risk × compound multiplier
+            const dpRoot = state && state.trades ? state : (root.Ekantik && root.Ekantik.Data ? root.Ekantik.Data.get() : { trades: [] });
+            const realized = computeRealizedRiskProfile(dpRoot.trades || []);
+            const riskDollarPerTrade = capital * (riskPct / 100);
+            // Compound milestones amplify both upside and drawdown by the *final* position multiplier.
+            const compoundMult = tgt.finalMultiplier || 1;
+            const ddMax   = realized.maxDdR      * riskDollarPerTrade * compoundMult;
+            const ddTrade = realized.worstTradeR * riskDollarPerTrade * compoundMult;
+            const ddPct   = capital > 0 ? (ddMax / capital) * 100 : 0;
+            const fmtNeg  = v => v ? '−' + fmt$0(Math.abs(v)) : '$0';
+            const ddMaxEl = $('mod-b-dd-max');   if (ddMaxEl) ddMaxEl.textContent = fmtNeg(ddMax);
+            const ddTrEl  = $('mod-b-dd-trade'); if (ddTrEl)  ddTrEl.textContent  = fmtNeg(ddTrade);
+            const ddPctEl = $('mod-b-dd-pct');   if (ddPctEl) ddPctEl.textContent = ddPct ? '−' + ddPct.toFixed(2) + '%' : '0%';
 
             renderModuleBTable(tgt.yearTimelines[0]?.monthly || []);
         };
 
         if (!capEl._wired) {
-            [capEl, rateEl, horEl].forEach(el => el.addEventListener('input', recompute));
+            [capEl, horEl].forEach(el => el.addEventListener('input', recompute));
             document.querySelectorAll('input[name="mod-b-scaleups"]').forEach(r => r.addEventListener('change', recompute));
+            RiskSelector.onChange(recompute);
             capEl._wired = true;
         }
         recompute();
@@ -477,7 +686,10 @@
     // ─────────────────────────────────────────────────────
     function init() {
         if (!root.Ekantik || !root.Ekantik.Data) return;
-        // Module A and B: render once on init (they're slider-driven from here on)
+        // Risk Tolerance Selector — must init BEFORE modules so they can subscribe.
+        RiskSelector.init();
+        // Module A and B: render once on init; recomputes are driven by capital
+        // slider, frequency/scale-up radios, and RiskSelector.onChange.
         renderModuleA();
         renderModuleB();
         // Module C and form: state-dependent + one-shot wiring

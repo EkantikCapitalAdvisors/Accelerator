@@ -70,10 +70,16 @@
     function parseTradeTime(t) {
         const raw = t.entry_time || t.entryTime || t.exit_time || t.exitTime;
         if (!raw) return null;
-        // ISO-ish: 2026-02-04 09:40:15
-        let m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
-        if (m) return new Date(+m[1], +m[2] - 1, +m[3], +(m[4]||0), +(m[5]||0), +(m[6]||0));
-        // US-slash with optional time: 2/18/2026 08:39  (24h) or 5/15/2026 1:30 PM (12h)
+        // ISO date with optional 24h or 12h-AM/PM time
+        let m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+        if (m) {
+            let h = +(m[4]||0); const min = +(m[5]||0); const s = +(m[6]||0);
+            const ap = (m[7] || '').toUpperCase();
+            if (ap === 'PM' && h < 12) h += 12;
+            if (ap === 'AM' && h === 12) h = 0;
+            return new Date(+m[1], +m[2] - 1, +m[3], h, min, s);
+        }
+        // US-slash with optional 24h or 12h-AM/PM time
         m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
         if (m) {
             let h = +(m[4]||0); const min = +(m[5]||0); const s = +(m[6]||0);
