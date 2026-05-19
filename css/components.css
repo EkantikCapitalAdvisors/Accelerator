@@ -3997,3 +3997,28 @@ section.block.light { padding: 96px 0 112px; }
 @media (max-width: 520px) {
     .risk-profile__grid { grid-template-columns: 1fr; }
 }
+
+/* Hero — tertiary 'watch the journal' link (Discord, public) */
+.hero-journal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(250,248,245,0.78);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    padding: 12px 4px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.25s ease;
+    margin-left: 8px;
+}
+.hero-journal-link:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+.hero-journal-link .arr { transition: transform 0.25s ease; }
+.hero-journal-link:hover .arr { transform: translateX(3px); }
+@media (max-width: 640px) {
+    .hero-journal-link { margin-left: 0; padding: 12px 0; }
+}
