@@ -56,22 +56,50 @@
                 <div id="csv-result" class="mt-2 mono" style="font-size:13px"></div>
             </div>
 
-            <!-- Discord paste -->
+            <!-- Discord import -->
             <div class="card mt-3">
-                <div class="card__header"><h3>Discord paste</h3></div>
+                <div class="card__header"><h3>Import Discord trades</h3></div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
                     <span class="mono" style="font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">Strategy</span>
                     <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="radio" name="strategy" value="futures" checked> Futures (ES/MES)</label>
                     <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="radio" name="strategy" value="options"> Options (SPX/SPY/etc.)</label>
                 </div>
-                <p class="muted" style="font-size:13px"><span class="strategy-hint strategy-hint--futures">Paste Discord <code>#alerts</code> messages (<code>F##: s 6940</code> / <code>F##: +12.5</code>) or a Discord JSON export. Points-based.</span><span class="strategy-hint strategy-hint--options hide">Paste Discord <code>#options</code> alerts in the multi-line <code>ID: n / Ticker / Type / Strike / Expiry / Entry / Stop price / Default: -N points / ID n: +$$$</code> format. Dollar-based P&amp;L. Both raw paste and DiscordChatExporter HTML are accepted.</span></p>
-                <textarea id="discord-text" rows="8" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:1px solid var(--divider);border-radius:var(--radius-sm);background:var(--white)" placeholder="Paste Discord text here, OR drop an HTML export below…"></textarea>
-                <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px">
-                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">…or HTML export</label>
-                    <input type="file" id="discord-html-file" accept=".html,.htm" style="font-size:12px">
+
+                <!-- Drag-and-drop zone -->
+                <div id="drop-zone" class="drop-zone">
+                    <input type="file" id="discord-html-file" accept=".html,.htm" class="drop-zone__input">
+                    <div class="drop-zone__inner">
+                        <div class="drop-zone__icon">⬆</div>
+                        <p class="drop-zone__title">Drop your Discord HTML export here</p>
+                        <p class="drop-zone__sub">or <span class="drop-zone__browse">browse for a file</span> &mdash; the DiscordChatExporter <code>.html</code> file</p>
+                        <p class="drop-zone__file mono" id="drop-zone-file"></p>
+                    </div>
                 </div>
-                <button class="btn btn--primary btn--sm mt-2" type="button" id="discord-upload">Parse & commit</button>
+
+                <details class="mt-2" style="font-size:13px">
+                    <summary style="cursor:pointer;color:var(--muted)">…or paste raw text instead</summary>
+                    <p class="muted" style="font-size:13px;margin-top:8px"><span class="strategy-hint strategy-hint--futures">Paste Discord <code>#alerts</code> messages (<code>F##: s 6940</code> / <code>F##: +12.5</code>) or a Discord JSON export. Points-based.</span><span class="strategy-hint strategy-hint--options hide">Paste Discord <code>#options</code> alerts in the multi-line <code>ID: n / Ticker / Type / Strike / Expiry / Entry / Stop price / Default: -N points / ID n: +$$$</code> format. Dollar-based P&amp;L.</span></p>
+                    <textarea id="discord-text" rows="6" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:1px solid var(--divider);border-radius:var(--radius-sm);background:var(--white)" placeholder="Paste Discord text here…"></textarea>
+                </details>
+
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+                    <button class="btn btn--primary btn--sm" type="button" id="discord-preview">Parse &amp; preview</button>
+                    <button class="btn btn--primary btn--sm hide" type="button" id="discord-commit">Commit <span id="commit-count"></span> trades</button>
+                    <button class="btn btn--tertiary btn--sm hide" type="button" id="discord-cancel">Cancel</button>
+                </div>
                 <div id="discord-result" class="mt-2 mono" style="font-size:13px"></div>
+
+                <!-- Preview table (hidden until parse) -->
+                <div id="preview-wrap" class="hide mt-3">
+                    <p class="mono" style="font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Preview &middot; review before committing</p>
+                    <div id="preview-warnings"></div>
+                    <div class="data-table__wrap data-table__wrap--scroll" style="max-height:340px">
+                        <table class="data-table" style="font-size:12px">
+                            <thead><tr><th>ID</th><th>Entry</th><th>Dir</th><th class="num">Entry px</th><th class="num">Pts</th><th class="num">$ P&amp;L</th><th>Size</th></tr></thead>
+                            <tbody id="preview-body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Export / clear -->
@@ -210,75 +238,137 @@
             });
         }
 
-        $('discord-upload').addEventListener('click', async () => {
-            // Source priority: HTML file > textarea content. Auto-detect HTML
-            // either way so the operator never has to think about the format.
-            const htmlFile = $('discord-html-file').files[0];
+        // ── Drag-and-drop zone wiring ──
+        const dropZone = $('drop-zone');
+        const fileInput = $('discord-html-file');
+        function showFileName() {
+            const f = fileInput.files[0];
+            $('drop-zone-file').textContent = f ? ('✓ ' + f.name) : '';
+        }
+        fileInput.addEventListener('change', showFileName);
+        ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => {
+            e.preventDefault(); e.stopPropagation(); dropZone.classList.add('drop-zone--over');
+        }));
+        ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => {
+            e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('drop-zone--over');
+        }));
+        dropZone.addEventListener('drop', e => {
+            const f = e.dataTransfer.files[0];
+            if (f) { fileInput.files = e.dataTransfer.files; showFileName(); }
+        });
+
+        // ── Parse → preview → commit flow ──
+        let parsedTrades = null;          // holds the parsed-but-not-committed set
+        let parsedStrategy = 'futures';
+
+        function setResult(msg, color) {
+            $('discord-result').innerHTML = msg;
+            $('discord-result').style.color = color || 'var(--muted)';
+        }
+        function resetPreview() {
+            parsedTrades = null;
+            $('preview-wrap').classList.add('hide');
+            $('discord-commit').classList.add('hide');
+            $('discord-cancel').classList.add('hide');
+        }
+
+        // Flag rows that look suspicious so the operator can catch them
+        // BEFORE committing (price-as-points garbage, MES sizing mismatch).
+        function auditRows(trades, strategy) {
+            const warns = [];
+            trades.forEach(t => {
+                const pts = t.pointsPL != null ? t.pointsPL : t.points_pl;
+                const pl  = t.dollarPL != null ? t.dollarPL : t.dollar_pl;
+                const mes = t.mesCount != null ? t.mesCount : t.mes_count;
+                const id  = t.tradeNum || t.trade_num || '?';
+                if (pts != null && Math.abs(pts) > 500) warns.push(`${id}: ${pts} points looks like a price, not a P&L — likely garbage.`);
+                if (mes && pts && Math.abs(pl / pts - mes * 5) > 0.5) warns.push(`${id}: ${mes} MES but $${pl} implies $${(pl/pts).toFixed(0)}/pt (expected $${mes*5}). Sizing mismatch.`);
+            });
+            return warns;
+        }
+
+        function renderPreview(trades, strategy) {
+            const body = $('preview-body');
+            if (strategy === 'options') {
+                $('preview-wrap').querySelector('thead').innerHTML =
+                    '<tr><th>ID</th><th>Ticker</th><th>Type</th><th class="num">Strike</th><th class="num">$ P&amp;L</th></tr>';
+                body.innerHTML = trades.map(t => `<tr><td class="mono">${t.tradeNum||t.trade_num||'—'}</td><td>${t.ticker||'—'}</td><td>${t.optionType||t.option_type||'—'}</td><td class="num mono">${t.strike||'—'}</td><td class="num mono">${(t.dollarPL!=null?t.dollarPL:t.dollar_pl)}</td></tr>`).join('');
+            } else {
+                body.innerHTML = trades.map(t => {
+                    const pl = t.dollarPL != null ? t.dollarPL : t.dollar_pl;
+                    const pts = t.pointsPL != null ? t.pointsPL : t.points_pl;
+                    return `<tr><td class="mono">${t.tradeNum||t.trade_num||'—'}</td><td class="mono" style="font-size:11px">${t.datetime||t.entry_time||'—'}</td><td>${t.direction||'—'}</td><td class="num mono">${t.entryPrice!=null?t.entryPrice:(t.entry_price||'—')}</td><td class="num mono">${pts!=null?(pts>0?'+':'')+pts:'—'}</td><td class="num mono" style="color:${pl>=0?'var(--pass)':'var(--fail)'}">${pl>=0?'+$':'−$'}${Math.abs(pl)}</td><td>${t.positionSize||t.position_size||'full'}</td></tr>`;
+                }).join('');
+            }
+            const warns = auditRows(trades, strategy);
+            $('preview-warnings').innerHTML = warns.length
+                ? `<div class="preview-warn">⚠ ${warns.length} row${warns.length>1?'s':''} flagged:<ul>${warns.map(w=>`<li>${w}</li>`).join('')}</ul>Review carefully — fix the source export or cancel and correct manually.</div>`
+                : `<div class="preview-ok">✓ No anomalies detected.</div>`;
+            $('preview-wrap').classList.remove('hide');
+        }
+
+        $('discord-preview').addEventListener('click', async () => {
+            resetPreview();
+            const htmlFile = fileInput.files[0];
             let text = $('discord-text').value.trim();
             let inputIsHTML = false;
-
             if (htmlFile) {
-                try {
-                    text = await readFileAsText(htmlFile);
-                    inputIsHTML = true;
-                } catch (e) {
-                    $('discord-result').textContent = 'Error reading HTML file: ' + e.message;
-                    $('discord-result').style.color = 'var(--fail)';
+                try { text = await readFileAsText(htmlFile); inputIsHTML = true; }
+                catch (e) { setResult('Error reading HTML file: ' + e.message, 'var(--fail)'); return; }
+            } else if (looksLikeDiscordHTML(text)) { inputIsHTML = true; }
+            if (!text) { setResult('Drop an HTML export or paste text first.', 'var(--fail)'); return; }
+
+            parsedStrategy = currentStrategy();
+            try {
+                let trades;
+                if (parsedStrategy === 'options') {
+                    trades = inputIsHTML ? parseDiscordOptionsHTML(text) : parseDiscordOptionsText(text);
+                } else if (inputIsHTML) {
+                    trades = parseDiscordTradeHTML(text);
+                } else {
+                    try { const j = JSON.parse(text); trades = Array.isArray(j) ? parseDiscordJSON(j) : parseDiscordTradeText(text); }
+                    catch (e) { trades = parseDiscordTradeText(text); }
+                }
+                if (!trades || trades.length === 0) {
+                    setResult('No trades detected. Check the file/format.', 'var(--fail)');
                     return;
                 }
-            } else if (looksLikeDiscordHTML(text)) {
-                inputIsHTML = true;
-            }
-
-            if (!text) return;
-            const strategy = currentStrategy();
-            try {
-                if (strategy === 'options') {
-                    const trades = inputIsHTML
-                        ? parseDiscordOptionsHTML(text)
-                        : parseDiscordOptionsText(text);
-                    if (trades.length === 0) {
-                        const pending = trades.pending || [];
-                        if (pending.length > 0) {
-                            $('discord-result').innerHTML =
-                                `Detected entry for <strong>${pending.join(', ')}</strong> but no close line. ` +
-                                `Add a final line like <code>ID ${pending[0].replace(/[^0-9]/g, '')}: +220</code> or ` +
-                                `<code>ID ${pending[0].replace(/[^0-9]/g, '')}: -100</code> (sign before the number).`;
-                        } else {
-                            $('discord-result').textContent = 'No options trades detected. Paste should start with `ID: <number>` and end with `ID <number>: +/-<dollars>`.';
-                        }
-                        $('discord-result').style.color = 'var(--fail)';
-                        return;
-                    }
-                    $('discord-result').textContent = `Parsed ${trades.length} options trades${inputIsHTML ? ' from HTML' : ''}. Committing…`;
-                    $('discord-result').style.color = 'var(--muted)';
-                    const batchId = 'opt-' + Date.now();
-                    const added = await commitOptionsTrades('options_trades', trades, batchId);
-                    $('discord-result').textContent = `Committed ${added}/${trades.length} options trades as batch ${batchId} (dupes skipped).`;
-                    $('discord-result').style.color = 'var(--pass)';
-                } else {
-                    let trades;
-                    if (inputIsHTML) {
-                        trades = parseDiscordTradeHTML(text);
-                    } else {
-                        try {
-                            const json = JSON.parse(text);
-                            trades = Array.isArray(json) ? parseDiscordJSON(json) : parseDiscordTradeText(text);
-                        } catch (e) {
-                            trades = parseDiscordTradeText(text);
-                        }
-                    }
-                    if (trades.length === 0) { $('discord-result').textContent = 'No trades detected.'; $('discord-result').style.color = 'var(--fail)'; return; }
-                    $('discord-result').textContent = `Parsed ${trades.length} trades${inputIsHTML ? ' from HTML' : ''}. Committing…`;
-                    $('discord-result').style.color = 'var(--muted)';
-                    const batchId = 'discord-' + Date.now();
-                    await DB.saveTrades('tenx_trades', trades, batchId);
-                    $('discord-result').textContent = `Committed ${trades.length} trades as batch ${batchId}.`;
-                    $('discord-result').style.color = 'var(--pass)';
-                }
+                parsedTrades = trades;
+                renderPreview(trades, parsedStrategy);
+                $('commit-count').textContent = trades.length;
+                $('discord-commit').classList.remove('hide');
+                $('discord-cancel').classList.remove('hide');
+                setResult(`Parsed <strong>${trades.length}</strong> trades${inputIsHTML ? ' from HTML' : ''}. Review the preview below, then commit.`, 'var(--navy)');
             } catch (e) {
-                $('discord-result').textContent = 'Error: ' + e.message;
-                $('discord-result').style.color = 'var(--fail)';
+                setResult('Parse error: ' + e.message, 'var(--fail)');
+            }
+        });
+
+        $('discord-cancel').addEventListener('click', () => {
+            resetPreview();
+            setResult('Cancelled. Nothing committed.', 'var(--muted)');
+        });
+
+        $('discord-commit').addEventListener('click', async () => {
+            if (!parsedTrades) return;
+            $('discord-commit').disabled = true;
+            try {
+                if (parsedStrategy === 'options') {
+                    const batchId = 'opt-' + Date.now();
+                    const added = await commitOptionsTrades('options_trades', parsedTrades, batchId);
+                    setResult(`Committed ${added}/${parsedTrades.length} options trades as batch ${batchId} (dupes skipped).`, 'var(--pass)');
+                } else {
+                    const batchId = 'discord-' + Date.now();
+                    await DB.saveTrades('tenx_trades', parsedTrades, batchId);
+                    setResult(`✓ Committed ${parsedTrades.length} trades as batch ${batchId}.`, 'var(--pass)');
+                }
+                resetPreview();
+                fileInput.value = ''; showFileName();
+                $('discord-text').value = '';
+            } catch (e) {
+                setResult('Commit error: ' + e.message, 'var(--fail)');
+            } finally {
+                $('discord-commit').disabled = false;
             }
         });
 
