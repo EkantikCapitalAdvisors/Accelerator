@@ -54,18 +54,10 @@
         if (s1) s1.textContent = stateLabel(g1.state) + (g1.note && g1.state === 'pending' ? ' · ' + g1.note : '');
         applyStateClass($('gate-01'), g1.state);
 
-        // Gate 02 — Mirror participants
-        const g2 = data.gate02 || {};
-        const v2 = $('gate-02-value');
-        if (v2) v2.textContent = (g2.participants != null) ? g2.participants : '—';
-        const s2 = $('gate-02-state');
-        if (s2) {
-            let txt = stateLabel(g2.state);
-            if (g2.state === 'in_progress' && g2.bandStatus === 'within_band') txt += ' · within band';
-            if (g2.state === 'pending' && g2.note) txt += ' · ' + g2.note;
-            s2.textContent = txt;
-        }
-        applyStateClass($('gate-02'), g2.state);
+        // Gate 02 — Statistical stability (rolling-100 ≥ +$50/trade). This is
+        // now computed from live data, not from gauntlet.json — see renderGate02
+        // below, which is also called from the Data.onChange subscription.
+        // (Legacy gauntlet.json gate02 fields are ignored.)
 
         // Updated stamp
         const upd = $('gauntlet-updated');
@@ -148,15 +140,45 @@
         }
     }
 
+    // Gate 02 — Statistical stability. Live derivation: rolling-100
+    // realized expectancy vs the +$50/trade re-deployment bar from the
+    // Falsifiability Protocol's Article III §1. No external participants
+    // required; the public Discord journal is the witness and the math
+    // is the adjudicator.
+    function renderGate02(state) {
+        const trades = (state && state.trades) || [];
+        const window = trades.length >= THRESH_SAMPLE ? trades.slice(-THRESH_SAMPLE) : trades;
+        if (!window.length) return;
+        const sum = window.reduce((a, t) => a + (t.dollar_pl || t.dollarPL || 0), 0);
+        const rollingEv = sum / window.length;
+
+        const passed   = window.length >= THRESH_SAMPLE && rollingEv >= THRESH_EV;
+        const tracking = rollingEv >= THRESH_EV;  // on-pace even with smaller sample
+        const stateKey = passed ? 'passed' : (tracking ? 'in_progress' : 'failed');
+
+        const v2 = $('gate-02-value');
+        if (v2) v2.textContent = fmtEV(rollingEv) + ' per trade';
+        const s2 = $('gate-02-state');
+        if (s2) {
+            if (passed) s2.textContent = 'Passed · ≥ +$' + THRESH_EV + ' over rolling-100';
+            else if (tracking) s2.textContent = `Tracking above +$${THRESH_EV} · ${window.length} of ${THRESH_SAMPLE} qualified trades`;
+            else s2.textContent = `Below +$${THRESH_EV} target · re-deployment bar not yet met`;
+        }
+        applyStateClass($('gate-02'), stateKey);
+    }
+
     function init() {
         if (!$('gauntlet')) return;
         load();
 
-        // Subscribe to the live trade feed for the threshold tracker.
+        // Subscribe to the live trade feed for the threshold tracker AND Gate 02.
         if (root.Ekantik && root.Ekantik.Data) {
-            root.Ekantik.Data.onChange(renderThreshold);
+            root.Ekantik.Data.onChange(state => {
+                renderThreshold(state);
+                renderGate02(state);
+            });
             const cur = root.Ekantik.Data.get();
-            if (cur) renderThreshold(cur);
+            if (cur) { renderThreshold(cur); renderGate02(cur); }
         }
     }
 
