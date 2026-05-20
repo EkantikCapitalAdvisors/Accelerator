@@ -35,10 +35,34 @@
         return res.json();
     }
 
+    // The Discord auto-importer emits one record per message, so a single
+    // trade can land as multiple rows sharing a trade_num (an entry/stop-
+    // adjust phantom plus the real P&L record). Collapse to one row per
+    // trade_num: prefer the record whose exit_time is empty — that's the
+    // authoritative P&L-bearing record the importer writes; the phantom
+    // carries a populated exit_time. Singles pass through untouched.
+    function dedupeTrades(trades) {
+        if (!Array.isArray(trades)) return [];
+        const groups = new Map();
+        for (const t of trades) {
+            const key = t.trade_num || (`${t.entry_time || ''}|${t.dollar_pl || 0}`);
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(t);
+        }
+        const out = [];
+        for (const recs of groups.values()) {
+            if (recs.length === 1) { out.push(recs[0]); continue; }
+            const authoritative = recs.find(r => !(r.exit_time || r.exitTime)) || recs[recs.length - 1];
+            out.push(authoritative);
+        }
+        return out;
+    }
+
     function computeFromTrades(trades) {
-        state.trades = trades;
-        state.battery = root.Ekantik.Battery.runTests(trades);
-        state.summary = root.Ekantik.Battery.summaryStats(trades);
+        const clean = dedupeTrades(trades);
+        state.trades = clean;
+        state.battery = root.Ekantik.Battery.runTests(clean);
+        state.summary = root.Ekantik.Battery.summaryStats(clean);
         state.computedAt = new Date();
     }
 

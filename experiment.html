@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Experiment Dashboard · Ekantik Capital</title>
+    <meta name="description" content="Full live instrumentation of the Ekantik trading experiment — trigger ladder, cumulative trajectory, monthly breakdown, contract-count history, and every fill. Public. No login.">
+    <meta name="theme-color" content="#1B2A4A">
+    <link rel="canonical" href="https://accelerator.ekantikcapital.com/experiment.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="/">ECA<span class="nav__brand-sub">Ekantik Capital</span></a>
+            <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link" href="/">The Experiment</a></li>
+                <li><a class="nav__link nav__link--active" href="/experiment.html" aria-current="page">Dashboard</a></li>
+                <li><a class="nav__link" href="/#reach-out">Reach out</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="cftc-banner" role="note">
+        <div class="cftc-banner__inner">
+            <span class="cftc-banner__tag">Live instrumentation &middot; Publicly observable</span>
+            <span class="cftc-banner__body">Every metric on this page is realized — measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. Trigger fires are publicly logged in the Ekantik Discord journal within 24 hours. Projection figures are descriptive, not predictive. <strong>Nothing on this page constitutes an offer or a solicitation.</strong> Past performance is not indicative of future results. Sample is pre-asymptotic.</span>
+        </div>
+    </div>
+
+    <!-- ═══ DASHBOARD HEADER ═══ -->
+    <section class="block dash-head" id="dash-top">
+        <div class="container">
+            <div class="eyebrow">Live Experiment Instrumentation</div>
+            <h1 class="dash-h1">The experiment, instrumented.</h1>
+            <p class="dash-lede">The protocol executing in real time — not just the metrics accumulating. Every panel below reads from the public trade journal. <a href="/" class="link-gold">Back to the experiment narrative →</a></p>
+            <div class="experiment-status experiment-status--dash" role="status" aria-label="Live experiment state">
+                <span class="experiment-status__items">
+                    <span><span class="dot"></span> Live</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Sample: <strong id="xp-sample">—</strong> trades</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Cumulative: <strong id="xp-cum">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Rolling EV: <strong id="xp-ev">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Triggers fired: <strong id="xp-triggers">— / 4</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Gate: <strong id="xp-gate">Armed</strong></span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 1 · TRIGGER LADDER ═══ -->
+    <section class="block dash-block" id="dash-ladder">
+        <div class="container">
+            <div class="component-label">The Trigger Ladder · Live</div>
+            <p class="dash-block__sub">Each buffer fires when accumulated realized profit crosses the threshold. The trigger is binary, frozen, and announced in the public Discord journal within 24 hours of firing. One ES contract per buffer (expressible as ≤ 10 MES).</p>
+            <div class="trigger-ladder" id="trigger-ladder">
+                <div class="trigger-step" data-trigger="B1">
+                    <span class="trigger-step__name">Buffer 1</span>
+                    <span class="trigger-step__threshold">$5,000 accumulated profit</span>
+                    <span class="trigger-step__action">Add 1 ES → 2 ES running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B2">
+                    <span class="trigger-step__name">Buffer 2</span>
+                    <span class="trigger-step__threshold">$10,000 cumulative profit</span>
+                    <span class="trigger-step__action">Add 1 ES → 3 ES running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B3">
+                    <span class="trigger-step__name">Buffer 3</span>
+                    <span class="trigger-step__threshold">$15,000 cumulative profit</span>
+                    <span class="trigger-step__action">Add 1 ES → 4 ES running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B4">
+                    <span class="trigger-step__name">Buffer 4</span>
+                    <span class="trigger-step__threshold">$20,000 cumulative profit</span>
+                    <span class="trigger-step__action">Position locked at 4 ES · evaluate next cycle</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 2 · NEXT-TRIGGER FORECAST ═══ -->
+    <section class="block dash-block" id="dash-forecast">
+        <div class="container">
+            <div class="component-label">Next-Trigger Forecast</div>
+            <div class="forecast-card" id="forecast-card">
+                <p id="forecast-body">Computing live projection&hellip;</p>
+                <p class="forecast-card__caveat"><em>Projection assumes current cadence continues. Real cadence is regime-dependent. The trigger fires when the milestone is reached, or it does not fire — projection is descriptive only.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 3 · CUMULATIVE TRAJECTORY ═══ -->
+    <section class="block dash-block" id="dash-trajectory">
+        <div class="container">
+            <div class="component-label">Cumulative Trajectory · Live</div>
+            <p class="dash-block__sub">Realized cumulative profit, fill by fill. Gold markers annotate trigger fires. The dashed slate line is the falsifiability-gate reference (rolling-100 EV at $0).
+                <label class="floor-toggle"><input type="checkbox" id="floor-toggle"> Show floor case</label>
+            </p>
+            <div class="dash-chart"><canvas id="chart-trajectory"></canvas></div>
+        </div>
+    </section>
+
+    <!-- ═══ 4 · MONTHLY PROFIT BREAKDOWN ═══ -->
+    <section class="block dash-block" id="dash-monthly">
+        <div class="container">
+            <div class="component-label">Monthly Realized Profit</div>
+            <p class="dash-block__sub">Realized profit per month. Buffer trigger thresholds drawn as horizontal markers. Hover any bar for monthly detail.</p>
+            <div class="dash-chart"><canvas id="chart-monthly"></canvas></div>
+        </div>
+    </section>
+
+    <!-- ═══ 5 · CONTRACT COUNT HISTORY ═══ -->
+    <section class="block dash-block" id="dash-contracts">
+        <div class="container">
+            <div class="component-label">Contract Count History · Live</div>
+            <p class="dash-block__sub">Position-size ceiling scales linearly with trigger fires. Each step up is annotated to the trigger that fired it.</p>
+            <div class="dash-chart"><canvas id="chart-contracts"></canvas></div>
+        </div>
+    </section>
+
+    <!-- ═══ 6 · TRADE TABLE ═══ -->
+    <section class="block dash-block" id="dash-table">
+        <div class="container">
+            <div class="component-label">Every Fill</div>
+            <p class="dash-block__sub">Every closed trade in the journal. Click a column header to sort. <button type="button" class="btn btn--secondary btn--sm" id="dash-csv">Download CSV</button></p>
+            <div class="data-table__wrap data-table__wrap--scroll">
+                <table class="data-table dash-trade-table" id="dash-trade-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="trade_num">ID</th>
+                            <th data-sort="time">Entry</th>
+                            <th data-sort="dir">Dir</th>
+                            <th class="num" data-sort="entry">Entry px</th>
+                            <th class="num" data-sort="pts">Pts</th>
+                            <th class="num" data-sort="pl">$ P&amp;L</th>
+                            <th class="num" data-sort="r">R</th>
+                            <th data-sort="size">Size</th>
+                            <th data-sort="dur">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dash-trade-body"><tr><td colspan="9" class="muted italic">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__disclosure">
+                <p><strong>Disclosures.</strong> Ekantik Capital Advisors LLC is the operator of this experiment and the publisher of this page. The experiment described is a live trading exercise conducted on the operator&rsquo;s own capital, with realized results publicly logged in the Ekantik Discord journal. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or any interest in any investment product.</strong> Past performance is not indicative of future results. Sample is pre-asymptotic.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/parser.js"></script>
+    <script src="js/battery.js"></script>
+    <script src="js/kpis.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/render-dashboard.js"></script>
+</body>
+</html>
