@@ -497,7 +497,17 @@ function parseDiscordTradeText(text) {
         const body = m[2].trim();
 
         // Is this a result line? e.g. "+4.5", "-3", "-10", "+ 3", "- 2.5"
-        const resultMatch = body.match(/^([+-])\s*(\d+\.?\d*)$/) || body.match(/^(\d+\.?\d*)$/);
+        const signedResult = body.match(/^([+-])\s*(\d+\.?\d*)$/);
+        const bareResult   = body.match(/^(\d+\.?\d*)$/);
+        // Guard: a *bare* (unsigned) number larger than MAX_RESULT_POINTS is
+        // almost certainly a price level posted without a +/- (e.g. "F78: 7372"
+        // is the ES price ~7372, not a +7372-point result). A real per-trade
+        // points P&L is small; reject implausible bare numbers so they don't
+        // get parsed as a catastrophic result. Signed numbers are always
+        // treated as results (the operator was explicit about direction).
+        const MAX_RESULT_POINTS = 500;
+        const resultMatch = signedResult ||
+            (bareResult && Math.abs(parseFloat(bareResult[1])) <= MAX_RESULT_POINTS ? bareResult : null);
         if (resultMatch) {
             // Handle both "sign number" (2 groups) and bare "number" (1 group) matches
             const rawPts = resultMatch[2] !== undefined
