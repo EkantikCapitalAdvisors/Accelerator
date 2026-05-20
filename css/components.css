@@ -4441,3 +4441,169 @@ section.block.light { padding: 96px 0 112px; }
 @media (max-width: 760px) {
     .cftc-banner__inner { padding: 10px 20px; font-size: 11.5px; }
 }
+
+/* =====================================================
+   ACC-REPOS-FINAL-V1 — Experiment repositioning
+   ===================================================== */
+
+/* Hero experiment-status strip */
+.experiment-status {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-dim);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.experiment-status__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.experiment-status__items {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: rgba(250,248,245,0.78);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+}
+.experiment-status__items strong { color: var(--ivory); font-weight: 500; }
+.experiment-status__sep { color: rgba(250,248,245,0.3); }
+.experiment-status .dot {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); margin-right: 4px; animation: pulse 2.4s ease-in-out infinite;
+}
+
+/* Section 01 — The Method */
+.method-section { background: var(--ivory); }
+.method-section .h-section { color: var(--navy); }
+.method-section .h-section em { color: var(--gold); }
+.method-section .lede { color: var(--slate); }
+.method-section .component-label { color: var(--gold); }
+.method-section .component-h { color: var(--navy); font-style: italic; }
+.method-pyramid {
+    background: var(--white); border: 1px solid var(--border);
+    border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0;
+    padding: var(--s-3) var(--s-4); margin-top: var(--s-2);
+}
+.method-pyramid p { font-family: var(--font-sans); font-size: 15px; color: var(--navy); margin: 0 0 var(--s-2); }
+.method-pyramid__list { list-style: none; padding: 0; margin: 0 0 var(--s-2); }
+.method-pyramid__list li {
+    font-family: var(--font-sans); font-size: 15px; line-height: 1.6; color: var(--navy);
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.method-pyramid__list li:last-child { border-bottom: none; }
+.method-pyramid__note { font-size: 14px !important; color: var(--slate) !important; font-style: italic; }
+
+/* Trigger ladder */
+.trigger-ladder {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: stretch; gap: 8px; margin: var(--s-3) 0;
+}
+.trigger-step {
+    background: var(--white); border: 1px solid var(--border); border-radius: 4px;
+    padding: var(--s-3); display: flex; flex-direction: column; gap: 6px;
+}
+.trigger-step__name { font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--gold); }
+.trigger-step__threshold { font-family: var(--font-mono); font-size: 13px; color: var(--navy); font-weight: 500; }
+.trigger-step__action { font-family: var(--font-sans); font-size: 12.5px; color: var(--slate); line-height: 1.45; flex: 1; }
+.trigger-step__status {
+    font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 5px 8px; border-radius: 3px; text-align: center;
+    background: rgba(100,116,139,0.12); color: var(--slate);
+}
+.trigger-step--fired { border-color: var(--gold); }
+.trigger-step--fired .trigger-step__status { background: var(--gold); color: var(--navy); }
+.trigger-step--active { border-color: var(--navy); box-shadow: var(--shadow-md); }
+.trigger-step--active .trigger-step__status { background: var(--navy); color: var(--ivory); animation: pulse 1.5s ease-in-out infinite; }
+.trigger-step__arrow { align-self: center; color: var(--gold); font-size: 20px; }
+@media (max-width: 880px) {
+    .trigger-ladder { grid-template-columns: 1fr; }
+    .trigger-step__arrow { transform: rotate(90deg); justify-self: center; }
+}
+.method-ladder__note, .method-traj__close {
+    font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate);
+    margin: var(--s-2) 0 0; max-width: 76ch;
+}
+
+/* Risk-parameter table + trajectory table */
+.method-risk-table, .trajectory-table {
+    width: 100%; border-collapse: collapse; margin-top: var(--s-2);
+    font-family: var(--font-sans); font-size: 14px;
+}
+.method-risk-table th, .trajectory-table th {
+    text-align: left; padding: 12px 14px; background: var(--navy); color: var(--ivory);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+}
+.method-risk-table td, .trajectory-table td {
+    padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--navy);
+}
+.method-risk-table .mono, .trajectory-table .mono { font-family: var(--font-mono); }
+.trajectory-table-wrap { overflow-x: auto; }
+.traj-row--coop td { background: var(--navy); color: var(--gold); }
+.traj-row--coop td:first-child { color: var(--ivory); }
+.traj-row--floor td { background: var(--slate); color: var(--ivory); }
+.traj-row--real td { background: var(--ivory); color: var(--navy); }
+.traj-sub { display: block; font-size: 11px; font-style: italic; opacity: 0.8; font-family: var(--font-sans); }
+.traj-end { font-family: var(--font-serif) !important; font-size: 18px; font-weight: 600; }
+.traj-mult { display: block; font-size: 12px; font-family: var(--font-sans); }
+.hypothetical-disclosure {
+    background: var(--ivory-warm); border: 1px solid var(--border); border-radius: 4px;
+    padding: var(--s-3); margin: var(--s-3) 0;
+}
+.hypothetical-disclosure p {
+    font-family: var(--font-sans); font-size: 12.5px; line-height: 1.6; color: var(--slate); margin: 0 0 var(--s-2);
+}
+.hypothetical-disclosure p:last-child { margin-bottom: 0; }
+.hypothetical-disclosure strong { color: var(--navy); }
+
+/* Architecture two-card layout + Falsifiability own section */
+.defense__layers--two { grid-template-columns: 1fr 1fr; }
+@media (max-width: 880px) { .defense__layers--two { grid-template-columns: 1fr; } }
+.defense-card--gate { grid-column: 1 / -1; }
+.defense-card__footer--commit { border-top: 1px solid rgba(250,248,245,0.18); padding-top: var(--s-2); margin-top: var(--s-2); color: var(--ivory) !important; font-style: normal !important; }
+.defense-open__link { color: var(--gold); border-bottom: 1px solid var(--gold); text-decoration: none; }
+.falsifiability-section .defense__layers { grid-template-columns: 1fr; }
+
+/* Section 06 — Participation cards */
+.participation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
+@media (max-width: 880px) { .participation-grid { grid-template-columns: 1fr; } }
+.participation-card { padding: var(--s-6) var(--s-4); border-radius: 4px; display: flex; flex-direction: column; }
+.participation-card--witness { background: var(--ivory); border: 1px solid var(--border); }
+.participation-card--reach { background: var(--navy); }
+.participation-card__eyebrow {
+    font-family: var(--font-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: var(--s-1);
+}
+.participation-card__tag { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--gold); margin: 0 0 var(--s-3); }
+.participation-card--witness .participation-card__tag { color: var(--navy); }
+.participation-card__body { font-family: var(--font-sans); font-size: 15px; line-height: 1.65; margin: 0 0 var(--s-2); }
+.participation-card--witness .participation-card__body { color: var(--navy); }
+.participation-card--reach .participation-card__body { color: rgba(250,248,245,0.82); }
+.participation-card__cta { margin-top: auto; padding-top: var(--s-3); }
+.btn-ghost-dark {
+    display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px;
+    font-family: var(--font-sans); font-weight: 500; font-size: 14.5px; letter-spacing: 0.04em;
+    text-transform: uppercase; text-decoration: none; border: 1px solid var(--gold);
+    color: var(--gold); background: transparent; transition: all 0.25s ease;
+}
+.btn-ghost-dark:hover { background: var(--gold); color: var(--navy); }
+
+/* Section 08 dashboard banner */
+.evidence-dashboard-banner { text-align: center; margin: 0 0 var(--s-6); }
+
+/* Section 09 — Reach Out form */
+.reach-intro { font-family: var(--font-sans); font-size: 17px; line-height: 1.7; color: var(--slate); max-width: 70ch; margin: var(--s-2) 0 var(--s-4); }
+.reach-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+@media (max-width: 640px) { .reach-form__grid { grid-template-columns: 1fr; } }
+.reach-form textarea {
+    width: 100%; padding: 12px 14px; font-family: var(--font-sans); font-size: 15px;
+    color: var(--navy); background: var(--white); border: 1px solid var(--border);
+    border-radius: 3px; resize: vertical; line-height: 1.5; box-sizing: border-box;
+}
+.reach-form textarea:focus { outline: none; border-color: var(--gold); }
