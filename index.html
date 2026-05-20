@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accelerator · Ekantik Capital</title>
-    <meta name="description" content="Capped, edge-validated cash-generation strategy. Quarterly or annual distributions. Founding allocations now being indicated.">
+    <title>The Experiment · Ekantik Capital</title>
+    <meta name="description" content="A live, publicly observable trading experiment testing whether a disclosed-protocol architecture can produce 10× returns in twelve months. Public method, public trades, public falsifiability conditions.">
     <meta name="theme-color" content="#1B2A4A">
     <link rel="canonical" href="https://accelerator.ekantikcapital.com/">
-    <meta property="og:title" content="Accelerator · Ekantik Capital">
-    <meta property="og:description" content="Capped, edge-validated cash-generation strategy. Quarterly or annual distributions. Founding allocations now being indicated.">
+    <meta property="og:title" content="The Experiment · Ekantik Capital">
+    <meta property="og:description" content="A live, publicly observable trading experiment. Public method. Public trades. Public falsifiability conditions. Anyone can watch it.">
     <meta property="og:url" content="https://accelerator.ekantikcapital.com/">
     <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,16 +31,16 @@
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
                 <li><a class="nav__link nav__link--active" href="/" aria-current="page">Accelerator</a></li>
-                <li><a class="nav__link" href="#allocation">Qualifying inquiry</a></li>
+                <li><a class="nav__link" href="#reach-out">Reach out</a></li>
             </ul>
         </div>
     </header>
 
-    <!-- ═══ CFTC RULE 4.14(a)(10) DISCLOSURE BANNER ═══ -->
+    <!-- ═══ EXPERIMENT DISCLOSURE BANNER ═══ -->
     <div class="cftc-banner" role="note">
         <div class="cftc-banner__inner">
-            <span class="cftc-banner__tag">Educational publication &middot; Not a solicitation</span>
-            <span class="cftc-banner__body">The Ekantik Trading Strategy is operated under <strong>CFTC Rule 4.14(a)(10)</strong>. No holding out generally to the public as a Commodity Trading Advisor. No advisory services offered absent a direct pre-existing relationship and executed subscription documents. This page describes the strategy&rsquo;s math, defense architecture, and operating posture for the benefit of existing clients and prospective candidates introduced through existing relationships.</span>
+            <span class="cftc-banner__tag">Live experiment &middot; Publicly observable</span>
+            <span class="cftc-banner__body">This page describes a live trading experiment conducted on the operator&rsquo;s own capital, with realized results publicly logged in the Ekantik Discord journal. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or interest in any investment product.</strong> Trajectory figures shown are hypothetical and projected, not realized. Past performance is not indicative of future results.</span>
         </div>
     </div>
 
@@ -57,40 +57,151 @@
         </div>
     </div>
 
-    <!-- ═══ SECTION §1.1 — HERO (Rebuild Spec §4.1) ═══ -->
+    <!-- ═══ SECTION 00 — HERO · The Experiment Thesis (ACC-REPOS-FINAL-V1) ═══ -->
     <header class="hero hero--casino" id="hero" aria-labelledby="hero-h1">
         <div class="hero__inner-rb">
-            <div class="hero-status">
-                <span><span class="dot"></span> Live trade journal &middot; updated each fill</span>
-                <span>Operating under CFTC Rule 4.14(a)(10) &middot; 15 managed-account ceiling &middot; By inquiry only</span>
-            </div>
-            <div class="hero-eyebrow">Ekantik Capital Advisors &middot; Educational publication</div>
-            <h1 id="hero-h1">A larger edge.<br>The same discipline.<br>A ceiling of <em>fifteen</em>.</h1>
+            <div class="hero-eyebrow">Live Experiment &middot; Q2 2026 &middot; Publicly Observable</div>
+            <h1 id="hero-h1">A live experiment to test whether a disclosed-protocol trading architecture can produce <em>10&times; returns</em> in twelve months.</h1>
             <p class="hero-lead">
-                The casinos figured this out a hundred years ago &mdash; a small edge, executed without exception, compounds against the population. We have a larger edge, the same discipline, and a structural ceiling of fifteen managed-account relationships. One operator. Personal capital on every fill. This page describes how the math works; it is not an offer or a solicitation.
+                Public method. Public trades. Public falsifiability conditions. The architecture is built. The protocol is locked. The experiment is running.
             </p>
             <p class="hero-sub">
-                Mechanical execution. Pre-committed defense architecture. The operator&rsquo;s own capital on every fill &mdash; not the operator&rsquo;s confidence. Verifiable below.
+                Anyone in the world can watch it.
             </p>
             <div class="cta-row">
-                <a href="#allocation" class="btn btn-gold">Inquire if you qualify <span class="arr">&rarr;</span></a>
-                <a href="#edges" class="btn btn-ghost">See where edges exist <span class="arr">&darr;</span></a>
-                <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer" class="hero-journal-link">Watch the journal <span class="arr">&rarr;</span></a>
+                <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Watch the experiment live <span class="arr">&rarr;</span></a>
+                <a href="#reach-out" class="btn btn-ghost">Reach out with questions <span class="arr">&rarr;</span></a>
+            </div>
+            <div class="experiment-status" role="status" aria-label="Live experiment state">
+                <span class="experiment-status__label">Experiment state</span>
+                <span class="experiment-status__items">
+                    <span><span class="dot"></span> Live</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Sample: <strong id="xp-sample">—</strong> qualified trades</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Rolling EV: <strong id="xp-ev">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Triggers fired: <strong id="xp-triggers">— / 4</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Falsifiability Gate: <strong id="xp-gate">Armed</strong></span>
+                </span>
             </div>
         </div>
     </header>
 
-    <!-- ═══ SECTION §1.2 — WHERE EDGES EXIST (Rebuild Spec §4.2) — NEW ═══ -->
+    <!-- ═══ SECTION 01 — THE METHOD · Disclosed Protocol (ACC-REPOS-FINAL-V1) ═══ -->
+    <section class="block method-section" id="method">
+        <div class="container section-inner">
+            <div class="eyebrow">01 · The Method</div>
+            <h2 class="h-section">The disclosed protocol.<br>Every parameter. <em>Locked.</em></h2>
+            <p class="lede">
+                The experiment runs against a specific, named protocol. The protocol is not under operator discretion. It is not modified under stress. It does not adapt to the operator&rsquo;s confidence level. It is the same on a winning week as on a losing one. The protocol is below in full.
+            </p>
+
+            <!-- 01.1 · The Pyramid -->
+            <div class="component-label">01.1 · The Pyramid &mdash; base unit</div>
+            <div class="method-pyramid">
+                <p>Each test unit is a Positive Expectancy Pyramid with three layers:</p>
+                <ul class="method-pyramid__list">
+                    <li><strong>Capital Buffer · 6–10×</strong> &mdash; the regime-absorption layer, never risked</li>
+                    <li><strong>Compounding Buffer · 2×</strong> &mdash; fills via realized profit; triggers a position-size step-up when full</li>
+                    <li><strong>Positive Expectancy · 1×</strong> &mdash; the per-trade working unit</li>
+                </ul>
+                <p class="method-pyramid__note">The standard test allocation is <strong>$5,000</strong> as the working unit, sitting on top of a $30,000 capital buffer. The ratios hold across allocation sizes.</p>
+            </div>
+
+            <!-- 01.2 · The Trigger Ladder -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.2 · The Trigger Ladder</div>
+            <h3 class="component-h">Four buffers. Each fires when realized profit crosses the threshold.</h3>
+            <div class="trigger-ladder" id="trigger-ladder">
+                <div class="trigger-step" data-trigger="B1">
+                    <span class="trigger-step__name">Buffer 1</span>
+                    <span class="trigger-step__threshold">$5,000 accumulated profit</span>
+                    <span class="trigger-step__action">Add 1 contract → 2 contracts running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B2">
+                    <span class="trigger-step__name">Buffer 2</span>
+                    <span class="trigger-step__threshold">$10,000 cumulative profit</span>
+                    <span class="trigger-step__action">Add 1 contract → 3 contracts running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B3">
+                    <span class="trigger-step__name">Buffer 3</span>
+                    <span class="trigger-step__threshold">$15,000 cumulative profit</span>
+                    <span class="trigger-step__action">Add 1 contract → 4 contracts running</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B4">
+                    <span class="trigger-step__name">Buffer 4</span>
+                    <span class="trigger-step__threshold">$20,000 cumulative profit</span>
+                    <span class="trigger-step__action">Position locked at 4 contracts · evaluate next cycle</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+            </div>
+            <p class="method-ladder__note">Each trigger requires a fresh $5,000 buffer fill before firing. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
+
+            <!-- 01.3 · Risk Parameters -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.3 · The Risk Parameters</div>
+            <table class="method-risk-table">
+                <thead><tr><th>Parameter</th><th>Threshold</th><th>Consequence</th></tr></thead>
+                <tbody>
+                    <tr><td>Per-contract max weekly loss</td><td class="mono">$1,000</td><td>No more trades that week — stand down to next session</td></tr>
+                    <tr><td>Consecutive weekly violations</td><td class="mono">2 in a row</td><td>Stand down for the remainder of the month</td></tr>
+                    <tr><td>Rolling 100-trade realized EV</td><td class="mono">$0 / trade</td><td>Falsifiability Gate fires — see Section 05</td></tr>
+                </tbody>
+            </table>
+
+            <!-- 01.4 · Cumulative Trajectory -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.4 · The Cumulative Trajectory</div>
+            <h3 class="component-h">Three trajectories. Published in equal weight.</h3>
+            <div class="trajectory-table-wrap">
+                <table class="trajectory-table">
+                    <thead>
+                        <tr><th>Scenario</th><th>Start</th><th>After Q1</th><th>After Q2</th><th>After Q3</th><th>After Q4</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr class="traj-row traj-row--coop">
+                            <td>Cooperative regime <span class="traj-sub">all triggers fire</span></td>
+                            <td class="mono">$5,000</td><td class="mono">$10,000</td><td class="mono">$20,000</td><td class="mono">$35,000</td><td class="mono traj-end">$55,000</td>
+                        </tr>
+                        <tr class="traj-row traj-row--floor">
+                            <td>Floor regime <span class="traj-sub">1 contract throughout</span></td>
+                            <td class="mono">$5,000</td><td class="mono">~$6,500</td><td class="mono">~$8,000</td><td class="mono">~$9,500</td><td class="mono traj-end">~$11,000</td>
+                        </tr>
+                        <tr class="traj-row traj-row--real">
+                            <td>Realistic envelope <span class="traj-sub">friction-adjusted</span></td>
+                            <td class="mono">$5,000</td><td class="mono">$7–9k</td><td class="mono">$13–17k</td><td class="mono">$25–32k</td><td class="mono traj-end">$45–55k <span class="traj-mult">≈9–11×</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hypothetical-disclosure">
+                <p><strong>About the figures above.</strong> The trajectory table presents three illustrative outcome scenarios — cooperative, floor, and realistic-envelope — derived from the documented experimental protocol applied to a $5,000 reference allocation. These are <strong>hypothetical and projected figures</strong>, not realized results. They are presented for the purpose of describing the architecture&rsquo;s structural behavior under stated regime conditions.</p>
+                <p>Hypothetical performance has inherent limitations. It does not reflect actual trading and cannot completely account for the impact of real-market factors on the execution of the protocol. The scenarios shown are derived from a defined methodology and assume continuous protocol execution under the stated regime conditions — assumptions that may not hold in live markets.</p>
+                <p>The figures should not be relied upon as a prediction of actual results. Past performance is not indicative of future results. Realized performance may differ materially from any scenario shown. The Falsifiability Gate (Section 05) supersedes all trajectory logic and halts the protocol if the rolling-100-trade expectancy crosses zero, regardless of capital level reached.</p>
+            </div>
+            <p class="method-traj__close">Three trajectories. Published in equal weight. The experiment&rsquo;s success is defined as reaching the cooperative-regime endpoint without the falsifiability gate firing. The experiment&rsquo;s &ldquo;quiet outcome&rdquo; is the floor case — capital preserved, edge expressed linearly, no triggers reached. The experiment&rsquo;s failure case is the gate firing. All three are disclosed in advance.</p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 02 — THE MATH, LIVE + 03 EDGE LANDSCAPE ═══ -->
     <section class="block edges-section" id="edges">
         <div class="container section-inner">
-            <div class="eyebrow">First Principles</div>
-            <h2 class="h-section">Where edges exist.<br>And <em>where they don&rsquo;t.</em></h2>
+            <div class="eyebrow">02 · The Math, Live · From the Operator&rsquo;s Account</div>
+            <h2 class="h-section">The edge, calculated live.<br><em>Every fill. Every recalculation.</em></h2>
             <p class="lede">
-                Every venue that handles capital &mdash; casinos, prop firms, broker platforms, mutual funds, advisory shops &mdash; operates on the same underlying mechanic. One side of every transaction has an edge. The other side doesn&rsquo;t. Over enough trials, the math wins. There is no exception to this.
+                From the operator&rsquo;s ES futures account. Computed live from closed fills. Recalculated each time a fill closes. No backtest values. No simulation. The numbers below populate from the live trade journal.
             </p>
 
             <!-- Component A: EV Formula -->
-            <div class="component-label">Component A &middot; The Math, Live</div>
+            <div class="component-label">The Expected-Value Formula</div>
             <h3 class="component-h">How the edge is calculated. Every fill. Every recalculation.</h3>
             <p class="component-sub">
                 From the operator&rsquo;s ES futures account. Computed live from closed fills. Recalculated each time a fill closes. No backtest values. No simulation. The numbers below populate from the live trade journal.
@@ -157,10 +268,10 @@
                 Live, from the operator&rsquo;s ES futures account. Sample is pre-asymptotic at this size. Past performance is not indicative of future results.
             </p>
 
-            <!-- Component B: Edge Landscape Table -->
+            <!-- Section 03: Edge Landscape Table -->
             <div class="component-block-divider"></div>
 
-            <div class="component-label">Component B &middot; The Edge Landscape</div>
+            <div class="component-label" id="edge-landscape">03 · The Edge Landscape &middot; Where the operator&rsquo;s edge sits</div>
             <h3 class="component-h">Every documented edge in capital markets. And where ours sits.</h3>
             <p class="component-sub">
                 Six rows. Five reference points. One operator. Each row represents a category of capital deployment with documented edge characteristics. The Ekantik row is where our ES futures operator sits inside this universe.
@@ -218,7 +329,7 @@
                         <tr data-annual-r="26">
                             <td class="row-strategy">High-Frequency Market-Making<span class="qualifier">Spread capture &middot; sub-second</span></td>
                             <td class="cell-pos">+0.017%</td>
-                            <td class="cell-neutral">&asymp; 100,000+</td>
+                            <td class="cell-neutral">&asymp; 100k+</td>
                             <td class="cell-neutral">&asymp; 26 R</td>
                             <td class="cell-dim">&asymp; 0.005%</td>
                         </tr>
@@ -243,41 +354,6 @@
             <p class="table-clarifier">
                 Annual R is shown <em>unsized</em> &mdash; i.e., before applying the Kelly position-size recommendation in the rightmost column. The relevant metric for capital deployment is Annual R &times; Kelly Allocation, which is where structural edge actually expresses itself.
             </p>
-
-            <!-- Bridge quote -->
-            <div class="bridge">
-                <p>
-                    Casinos don&rsquo;t beat customers with bigger edges than ours. They beat customers with smaller edges, executed <em>without exception</em>, across enough trials that variance loses to math. We&rsquo;ve borrowed the discipline. <em>We did not borrow the edge size.</em> And we&rsquo;ve capped how many people get to sit on our side of the table.
-                </p>
-            </div>
-
-            <!-- Component C: Two Operating Modes -->
-            <div class="modes-section">
-                <div class="component-label">Component C &middot; The Math, Two Ways</div>
-                <h3 class="component-h">Two operating modes. The same edge.</h3>
-                <p class="component-sub">
-                    The same edge can be expressed in two distinct modes &mdash; depending on whether stake size is fixed or scales with equity. Our architecture runs both, simultaneously, at different layers of the system.
-                </p>
-
-                <div class="modes-grid">
-                    <div class="mode-card">
-                        <span class="mode-tag">Linear &middot; Casino mode</span>
-                        <h4 class="mode-name">Fixed stake.<br>Edge &times; volume.</h4>
-                        <div class="mode-formula">Return = edge &times; stake &times; trials</div>
-                        <p>The casino&rsquo;s bet size doesn&rsquo;t change with the bankroll. A small edge on a fixed bet, repeated enough times, produces a predictable house take. The math <em>accumulates</em> rather than compounds. Our per-trade discipline runs on this principle &mdash; fixed risk per contract, no rule modification under stress, no exception across the rolling window.</p>
-                    </div>
-                    <div class="mode-card">
-                        <span class="mode-tag">Geometric &middot; Kelly mode</span>
-                        <h4 class="mode-name">Fractional stake.<br>The base compounds.</h4>
-                        <div class="mode-formula">Capital_n = Capital_0 &times; exp[n &times; G]</div>
-                        <p>When stake scales with equity, the base itself compounds. The same edge produces exponential growth instead of linear accumulation. Our scaling distribution mode (Mode B) runs on this principle &mdash; defined milestones trigger position-size doublings, the base grows, the curve bends.</p>
-                    </div>
-                </div>
-
-                <p class="modes-close">
-                    Most operations sit on one mode or the other. We run both &mdash; <em>linear at the trade level, geometric at the structural level.</em> The Pyramid (next section) is how a real edge survives long enough to express either.
-                </p>
-            </div>
 
             <div class="sourcing">
                 <p><strong>Sources.</strong> Casino house-edge figures: standard gaming regulatory disclosures; vary by table rules and machine class. Trend-following CTA performance characteristics: SocGen CTA Index, BarclayHedge CTA reports. Stat-arb edge characteristics: academic literature on equity pairs trading and statistical arbitrage. HFT market-making spread economics: SEC Tick Size Pilot data and academic market microstructure literature. Retail trader loss rates: ESMA aggregated broker disclosures, FINRA consumer alerts.</p>
@@ -319,13 +395,13 @@
                             <p class="credentials-grid__body">Personal risk capital on every fill in the public Discord log. Not pooled. Not managed. Not shared.</p>
                         </div>
                     </div>
-                    <p class="operator__close">The edge described above is the output of that decade. The ceiling of fifteen is how it gets shared.</p>
+                    <p class="operator__close">The edge described above is the output of that decade. The experiment is how it gets tested in public.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ SECTION §2.2 — DEFENSE (Rebuild §4.4 reframe · Pyramid cards UNCHANGED) ═══ -->
+    <!-- ═══ SECTION 04 — THE ARCHITECTURE (Pyramid + Sit-Out) ═══ -->
     <section class="section section--ivory defense" id="defense" aria-labelledby="defense-h2">
         <div class="section__inner section__inner--wide">
             <div class="epigraph">
@@ -333,21 +409,21 @@
                 <div class="attr">&mdash; Warren Buffett</div>
             </div>
 
-            <div class="section-eyebrow">The Architecture</div>
-            <h2 class="defense-h" id="defense-h2">How the edge survives long enough to express itself.</h2>
+            <div class="section-eyebrow">04 · The Architecture</div>
+            <h2 class="defense-h" id="defense-h2">How the experiment survives long enough to express itself.</h2>
             <p class="defense-open">
-                Every edge has variance. Without a buffer engineered around it, even a real edge gets ruined by a single bad regime. The Pyramid, the Sit-Out rules, and the Falsifiability Gate exist to protect <strong>the edge</strong> &mdash; not to protect the operator&rsquo;s confidence. The Buffett rule isn&rsquo;t an aphorism here. It&rsquo;s the engineering specification the entire defense layer is built to satisfy.
+                Every experiment needs the conditions under which it admits the hypothesis is wrong. Every architecture needs the conditions under which the operator stops, regardless of conviction. The architecture below is the experimental envelope. The <a href="#falsifiability" class="defense-open__link">Falsifiability Gate (Section 05)</a> is the experiment&rsquo;s termination protocol.
             </p>
 
-            <div class="defense__layers">
+            <div class="defense__layers defense__layers--two">
                 <article class="defense-card defense-card--light">
                     <span class="defense-card__num">01</span>
                     <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; The Capital Buffer</h3>
-                    <p class="defense-card__lead">The Positive Expectancy Pyramid. One founding slot, structurally mapped:</p>
+                    <p class="defense-card__lead">The Positive Expectancy Pyramid. One test unit, structurally mapped:</p>
                     <ul class="defense-card__list">
-                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $20,000 &nbsp;—&nbsp; the regime-absorption layer</li>
-                        <li><strong>Compounding buffer</strong> &nbsp;·&nbsp; 2× &nbsp;·&nbsp; $6,000</li>
-                        <li><strong>Positive expectancy</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $3,000</li>
+                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $30,000 &nbsp;—&nbsp; the regime-absorption layer, never risked</li>
+                        <li><strong>Compounding buffer</strong> &nbsp;·&nbsp; 2× &nbsp;—&nbsp; fills via realized profit; triggers a position-size step-up when full</li>
+                        <li><strong>Positive expectancy</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $5,000 &nbsp;—&nbsp; the per-trade working unit</li>
                     </ul>
                     <p class="defense-card__footer">The base is not extra cushion. It is what absorbs what regime detection misses.</p>
                 </article>
@@ -358,17 +434,29 @@
                     <p class="defense-card__lead">Pre-committed rules. No exceptions. No renegotiation.</p>
                     <ul class="defense-card__list">
                         <li><strong>Daily</strong> &nbsp;·&nbsp; 1 max loss &nbsp;→&nbsp; stand down. Resume next session.</li>
-                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss &nbsp;→&nbsp; stand down for the remainder of the week.</li>
+                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss per contract &nbsp;→&nbsp; stand down for the remainder of the week.</li>
                         <li><strong>Edge recovery</strong> &nbsp;·&nbsp; 2 consecutive losing weeks &nbsp;→&nbsp; virtual account, full month.</li>
                     </ul>
                     <p class="defense-card__footer">The rule about the rules: the operator under loss is a different cognitive agent than the operator who set them. Under stress, the designer is gone. Only the rule remains.</p>
                 </article>
+            </div>
+        </div>
+    </section>
 
-                <article class="defense-card defense-card--dark">
-                    <span class="defense-card__num">03</span>
-                    <h3 class="defense-card__title">Layer 03 &nbsp;·&nbsp; The Falsifiability Gate</h3>
-                    <p class="defense-card__sub">How we&rsquo;ve made it impossible to lie to ourselves.</p>
-                    <p class="defense-card__lead">Every credible system pre-defines the conditions under which it admits the edge is gone. Most trading operations do not. This one does &mdash; in writing, under witness, before founding capital is at risk.</p>
+    <!-- ═══ SECTION 05 — THE FALSIFIABILITY GATE (own section) ═══ -->
+    <section class="section section--ivory falsifiability-section" id="falsifiability" aria-labelledby="falsifiability-h2">
+        <div class="section__inner section__inner--wide">
+            <div class="section-eyebrow">05 · The Falsifiability Gate</div>
+            <h2 class="defense-h" id="falsifiability-h2">The condition under which the experiment ends.</h2>
+            <p class="defense-open">
+                An experiment without a falsifiability condition is not an experiment. It is faith. The condition below was written before any outside capital is at risk, locked under witness countersignature, and is structurally impossible for the operator to modify under stress without triggering the modification protocol.
+            </p>
+
+            <div class="defense__layers">
+                <article class="defense-card defense-card--dark defense-card--gate">
+                    <span class="defense-card__num">Gate</span>
+                    <h3 class="defense-card__title">The Falsifiability Gate</h3>
+                    <p class="defense-card__sub">The condition under which the experiment ends.</p>
                     <dl class="defense-card__deflist">
                         <div class="defense-card__defrow">
                             <dt>Trigger &nbsp;·&nbsp; Statistical death</dt>
@@ -380,10 +468,11 @@
                         </div>
                         <div class="defense-card__defrow">
                             <dt>Re-deploy gate &nbsp;·&nbsp; Earned re-entry only</dt>
-                            <dd>Fresh out-of-sample test of <strong>&ge; +$50 per trade over 50 qualified trades</strong> (on virtual / paper / prop-firm capital &mdash; never founding member capital) &nbsp;&middot;&nbsp; written re-derivation of the structural cause of decay &nbsp;&middot;&nbsp; <strong>48-hour cool-off</strong> after both. All three required.</dd>
+                            <dd>Fresh out-of-sample test of <strong>&ge; +$50 per trade over 50 qualified trades</strong> (on virtual / paper / prop-firm capital) &nbsp;&middot;&nbsp; written re-derivation of the structural cause of decay &nbsp;&middot;&nbsp; <strong>48-hour cool-off</strong> after both. All three required.</dd>
                         </div>
                     </dl>
                     <p class="defense-card__footer">Modification protocol: 48-hour cool-off before any rule change &nbsp;&middot;&nbsp; written justification (recent P&amp;L is facially insufficient) &nbsp;&middot;&nbsp; witness countersignature required to lock &nbsp;&middot;&nbsp; public disclosure within 24 hours.</p>
+                    <p class="defense-card__footer defense-card__footer--commit"><strong>Public commitment:</strong> every Gate event &mdash; whether triggered, near-triggered, or modification-attempted &mdash; is announced in the public Discord journal within 24 hours. The experiment is not over because the operator says so. The experiment is over because the data crossed the line.</p>
                     <p class="defense-card__cta">
                         <a class="link-gold" href="assets/ekantik-falsifiability-protocol-v1.pdf" download>Download the locked protocol (PDF) →</a>
                         <span class="defense-card__docref">Doc Ref: FP-V1-2026-05 &nbsp;&middot;&nbsp; Locked 15 May 2026</span>
@@ -393,14 +482,19 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION §2.3 — THE EDGE, LIVE (Dev Spec §3.4 · Rebuild §4.6 light reframe) ═══ -->
+    <!-- ═══ SECTION 08 — LIVE EVIDENCE PANEL ═══ -->
     <section class="section section--white" id="edge" aria-labelledby="a-h2">
         <a id="section-a" aria-hidden="true"></a>
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="a-h2">The edge, live.</h2>
-                <p class="section-head__lead">Every metric on this page is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. No simulations on this panel. No backtest figures. Live, or nothing.</p>
+                <div class="section-eyebrow">08 · Live Evidence</div>
+                <h2 class="section-head__title" id="a-h2">The experiment, instrumented.</h2>
+                <p class="section-head__lead">Every metric below is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. Trigger fires render with timestamps. The full instrumentation lives on the experiment dashboard.</p>
             </header>
+
+            <div class="evidence-dashboard-banner">
+                <a class="btn btn-gold" href="https://dashboard.ekantikcapital.com" target="_blank" rel="noopener noreferrer">Open the full experiment dashboard <span class="arr">&rarr;</span></a>
+            </div>
 
             <div class="edge-live edge-live--four">
                 <div class="edge-live__card">
@@ -425,37 +519,6 @@
                 </div>
             </div>
 
-            <!-- Annualized trajectory — extrapolated from live cadence -->
-            <aside class="annual-proj" aria-labelledby="annual-proj-h">
-                <p class="annual-proj__eyebrow" id="annual-proj-h">Annualized trajectory &nbsp;·&nbsp; extrapolated from live cadence</p>
-                <div class="annual-proj__grid">
-                    <div class="annual-proj__cell">
-                        <span class="annual-proj__label">Trades on pace</span>
-                        <span class="annual-proj__value" id="annual-trades">—</span>
-                        <span class="annual-proj__sub" id="annual-trades-sub">per year at current cadence</span>
-                    </div>
-                    <div class="annual-proj__cell">
-                        <span class="annual-proj__label">Annualized R-multiple</span>
-                        <span class="annual-proj__value" id="annual-r">—</span>
-                        <span class="annual-proj__sub" id="annual-r-sub">extrapolated from live expectancy</span>
-                    </div>
-                    <div class="annual-proj__cell">
-                        <span class="annual-proj__label">Annualized P&amp;L</span>
-                        <span class="annual-proj__value" id="annual-pl">—</span>
-                        <span class="annual-proj__sub" id="annual-pl-sub">on $20,000 base, fixed risk assumption</span>
-                    </div>
-                </div>
-                <p class="annual-proj__headline" id="annual-proj-headline">Computing live trajectory&hellip;</p>
-                <details class="annual-proj__caveats">
-                    <summary>Honest caveats &mdash; what this projection assumes, and what it doesn&rsquo;t</summary>
-                    <ul>
-                        <li id="annual-caveat-sample">Sample is still inside the statistical-confirmation zone &mdash; sample-size tests in the 8-Test Sustainability Battery (below) may not clear yet at this n. Treat the annualized figure as a <em>trajectory</em>, not a confirmed annual expectancy.</li>
-                        <li>Linear extrapolation assumes the edge expresses uniformly across the remaining calendar window. Regime drift, behavioral residuals (post-loss impulsivity windows, afternoon ES exposure), and seasonality are not priced in.</li>
-                        <li>Risk scaling: the dollar projection assumes risk stays fixed at the current per-trade average. If risk scales with the equity curve (compounding), the dollar number is materially higher. If it stays fixed, the linear projection holds.</li>
-                        <li id="annual-caveat-pf">Profit-factor confidence interval at this sample size is meaningful &mdash; the true PF could plausibly sit anywhere from <strong>~1.4 to ~2.1</strong>. The 8-Test Sustainability Battery quantifies that interval directly.</li>
-                    </ul>
-                </details>
-            </aside>
             <div class="r-asym" aria-labelledby="r-asym-h">
                 <p class="r-asym__eyebrow" id="r-asym-h">R-multiple distribution &nbsp;·&nbsp; the asymmetry</p>
                 <div class="r-asym__grid">
@@ -478,52 +541,6 @@
                 <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
             </div>
 
-            <!-- Risk headroom — current sizing vs ½-Kelly supported maximum -->
-            <div class="risk-headroom" aria-labelledby="rh-h">
-                <p class="risk-headroom__eyebrow" id="rh-h">Risk headroom &nbsp;&middot;&nbsp; current sizing vs Kelly-supported ceiling</p>
-                <h3 class="risk-headroom__title">The edge has runway the sizing hasn&rsquo;t claimed.</h3>
-                <p class="risk-headroom__lede">Kelly Criterion answers a precise question: <em>given this edge, what fraction of total portfolio capital is mathematically optimal to deploy per trade?</em> The strategy currently sizes a fraction of that. The gap below is the headroom &mdash; the math&rsquo;s permission slip for adverse variance.</p>
-
-                <div class="risk-headroom__gauge">
-                    <div class="risk-headroom__bar">
-                        <div class="risk-headroom__bar-head">
-                            <span class="risk-headroom__bar-label">Currently deployed per trade</span>
-                            <span class="risk-headroom__bar-readout" id="rh-current-val">&mdash;</span>
-                        </div>
-                        <div class="risk-headroom__bar-track">
-                            <div class="risk-headroom__bar-fill risk-headroom__bar-fill--current" id="rh-current-fill" style="width:0%"></div>
-                            <div class="risk-headroom__bar-headroom" id="rh-current-headroom" style="left:0%;width:0%"></div>
-                        </div>
-                    </div>
-                    <div class="risk-headroom__bar">
-                        <div class="risk-headroom__bar-head">
-                            <span class="risk-headroom__bar-label">&frac12;-Kelly supported maximum</span>
-                            <span class="risk-headroom__bar-readout" id="rh-kelly-val">&mdash;</span>
-                        </div>
-                        <div class="risk-headroom__bar-track">
-                            <div class="risk-headroom__bar-fill risk-headroom__bar-fill--kelly" id="rh-kelly-fill" style="width:100%"></div>
-                        </div>
-                    </div>
-                    <div class="risk-headroom__axis">
-                        <span class="risk-headroom__axis-start">0% of portfolio</span>
-                        <span class="risk-headroom__axis-end" id="rh-axis-end">&mdash; (½-Kelly ceiling)</span>
-                    </div>
-                </div>
-
-                <div class="risk-headroom__compare">
-                    <div class="risk-headroom__compare-cell">
-                        <span class="risk-headroom__compare-label">Today</span>
-                        <span class="risk-headroom__compare-val" id="rh-cmp-now"><span class="rh-r">+&mdash;R</span> &times; <span class="rh-risk">$&mdash;</span> = <strong>+$&mdash;</strong>/trade</span>
-                    </div>
-                    <div class="risk-headroom__compare-arrow">&rarr;</div>
-                    <div class="risk-headroom__compare-cell risk-headroom__compare-cell--target">
-                        <span class="risk-headroom__compare-label">At ½-Kelly sizing</span>
-                        <span class="risk-headroom__compare-val" id="rh-cmp-kelly"><span class="rh-r">+&mdash;R</span> &times; <span class="rh-risk">$&mdash;</span> = <strong>+$&mdash;</strong>/trade</span>
-                    </div>
-                </div>
-
-                <p class="risk-headroom__close" id="rh-close">Computing live headroom&hellip;</p>
-            </div>
 
             <!-- Risk profile — realized drawdown / streak / worst-trade -->
             <div class="risk-profile" aria-labelledby="rp-h">
@@ -649,461 +666,37 @@
             </div>
 
             <p class="auth-close">
-                We are not inventing this. We are <em class="gold">applying the same architecture at the scale of fifteen accounts</em> &mdash; to a documented, falsifiable trading edge with personal capital on every fill.
+                We are not inventing this. We are <em class="gold">applying the same architecture to a live, publicly conducted experiment</em> &mdash; a documented, falsifiable trading edge with personal capital on every fill.
             </p>
         </div>
     </section>
 
-    <!-- ═══ SECTION §1.3 — WHY FIFTEEN (Rebuild §4.7) — NEW ═══ -->
-    <section class="block why-fifteen">
-        <div class="container-tight">
-            <div class="why-fifteen-panel">
-                <div class="fifteen-mark">XV</div>
-                <div class="section-eyebrow center">The Cap</div>
-                <h2 class="why-fifteen-h">Why <em>fifteen</em>, specifically.</h2>
-                <p class="why-fifteen-body">
-                    Fifteen is the ceiling beneath which a money manager can operate inside specific regulatory exemptions without registrations that would otherwise apply. <strong>Family relationships aggregate to a single seat.</strong> Above fifteen, the structure becomes a different business &mdash; different oversight, different overhead, different attention. We chose to operate beneath the ceiling, by design. The number is structural, not promotional. When the fifteenth seat is taken, it&rsquo;s taken. The next person in becomes a candidate for whatever comes after &mdash; not a sixteenth seat.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ SECTION §2.4 — TWO PATHS (Path Two removed for CTA compliance) ═══ -->
-    <section class="section section--ivory paths" id="paths" aria-labelledby="paths-h2">
+    <!-- ═══ SECTION 06 — PARTICIPATION (two cards: Witness + Reach Out) ═══ -->
+    <section class="section section--ivory paths" id="participation" aria-labelledby="paths-h2">
         <div class="section__inner section__inner--wide">
             <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="paths-h2">Two paths. Watch the work, or inquire about a relationship.</h2>
-                <p class="section-head__lead">The Discord trade journal is open to anyone &mdash; you can verify every fill against the live market without any commitment. Beyond that, a managed-account relationship is available only to clients with a pre-existing relationship or who are introduced by an existing client.</p>
+                <div class="section-eyebrow">06 · Participation</div>
+                <h2 class="section-head__title" id="paths-h2">Two ways to engage with the experiment.</h2>
+                <p class="section-head__lead">The experiment is publicly conducted. The purpose of publication is credibility &mdash; to put a real architecture, a real method, and a real falsifiability gate in front of anyone who cares to evaluate them. Two ways to engage, both honest about what they are.</p>
             </header>
 
-            <div class="paths__grid">
-                <article class="path-card">
-                    <span class="path-card__num">01</span>
-                    <h3 class="path-card__title">Watch.</h3>
-                    <p class="path-card__tag">Free. Public. Verifiable.</p>
-                    <ul class="path-card__list">
-                        <li>Live Discord journal — every fill posted ~60 seconds after the broker fill</li>
-                        <li>Public trade log — every closed fill, CSV download</li>
-                        <li>8-test sustainability battery — re-run against live data</li>
-                        <li>Battery on your own data — uploaded files never leave your browser</li>
-                    </ul>
-                    <p class="path-card__meta">Cost: <strong>$0</strong> &nbsp;·&nbsp; Commitment: <strong>none</strong> &nbsp;·&nbsp; Time to start: <strong>60 seconds</strong></p>
-                    <p class="path-card__cta"><a class="link-gold" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Open the journal →</a></p>
+            <div class="participation-grid">
+                <article class="participation-card participation-card--witness">
+                    <span class="participation-card__eyebrow">Witness the experiment</span>
+                    <p class="participation-card__tag">Free · Unlimited · Public Discord community</p>
+                    <p class="participation-card__body">Watch every trade execute in real time. See the EV calculation update fill-by-fill. Watch the trigger ladder fire. See the Falsifiability Gate run. Engage with other observers. Ask questions of the operator. No fee, no cap, no relationship required.</p>
+                    <p class="participation-card__body">The Discord is more than a journal. It is the community around the work &mdash; where the method gets discussed, where edge cases get debated, and where the experiment is observed by people who want to think rigorously about what it shows.</p>
+                    <p class="participation-card__cta"><a class="btn btn-gold" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Join the public Discord <span class="arr">&rarr;</span></a></p>
                 </article>
 
-                <div class="path path-allocate" id="allocate">
-                    <span class="path-num">02</span>
-                    <span class="allocate-tag">By inquiry only &middot; existing relationships</span>
-                    <h3 class="allocate-h">Allocate &middot; <em>Managed Account</em></h3>
-                    <p class="allocate-sub">Fifteen-relationship structural ceiling. Direct management. Operator skin in every fill. Available only to clients with whom the operator has a pre-existing relationship or who are introduced by an existing client.</p>
-
-                    <ul class="allocate-bullets">
-                        <li>One of fifteen managed-account relationships. Hard-capped by regulatory structure, not by marketing.</li>
-                        <li>Family relationships aggregate to a single seat.</li>
-                        <li>Start at $20,000 working capital. Scale toward $100,000 per seat as the live edge holds &mdash; never as a precondition.</li>
-                        <li>Activates only after onboarding, KYC, and execution of subscription documents complete.</li>
-                        <li>Choose Mode A (quarterly income) or Mode B (annual distribution with intra-year scaling).</li>
-                        <li>Indication is non-binding until subscription documents are executed.</li>
-                    </ul>
-
-                    <div class="allocate-stats">
-                        <div>
-                            <div class="allocate-stat-label">Start</div>
-                            <div class="allocate-stat-value">$20,000</div>
-                            <div class="allocate-stat-sub">scaling target $100K</div>
-                        </div>
-                        <div>
-                            <div class="allocate-stat-label">Seats</div>
-                            <div class="allocate-stat-value">15 total</div>
-                            <div class="allocate-stat-sub">family-aggregated</div>
-                        </div>
-                        <div>
-                            <div class="allocate-stat-label">Activation</div>
-                            <div class="allocate-stat-value">Post-onboarding</div>
-                            <div class="allocate-stat-sub">KYC + subscription docs</div>
-                        </div>
-                    </div>
-
-                    <a href="#allocation" class="btn btn-gold">Inquire if you qualify <span class="arr">&rarr;</span></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ SECTION 06 — QUALIFYING GAUNTLET (Dev Spec §3.6) ═══ -->
-    <section class="section section--white gauntlet" id="gauntlet" aria-labelledby="gauntlet-h2">
-        <div class="section__inner section__inner--wide">
-            <header class="section-head section-head--centered">
-                <h2 class="section-head__title section-head__title--med" id="gauntlet-h2">The operator&rsquo;s qualifying gauntlet.</h2>
-                <p class="section-head__lead">The operator earns the right to founding capital. Two falsifiable gates run in parallel before your allocation activates. Locked criteria. Witness signature. No founding member capital is at risk during the gauntlet itself.</p>
-            </header>
-
-            <div class="gauntlet__grid">
-                <article class="gate-card" id="gate-01">
-                    <span class="gate-card__eyebrow">Gate 01</span>
-                    <h3 class="gate-card__title">Observation.</h3>
-                    <p class="gate-card__sub">Tradeify Lightning $100K instant-funded challenge</p>
-                    <dl class="gate-card__deflist">
-                        <div class="gate-card__defrow"><dt>Pass criterion</dt><dd>$6,000 profit target</dd></div>
-                        <div class="gate-card__defrow"><dt>Witness</dt><dd>Discord cohort</dd></div>
-                        <div class="gate-card__defrow"><dt>Adjudicator</dt><dd>Tradeify (external)</dd></div>
-                    </dl>
-                    <div class="gate-card__status">
-                        <p class="gate-card__status-label">Status</p>
-                        <div class="gate-card__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Gate 01 progress to target">
-                            <div class="gate-card__bar-fill" id="gate-01-fill" style="width:0%"></div>
-                        </div>
-                        <p class="gate-card__status-text"><strong id="gate-01-value">Loading…</strong> &nbsp;·&nbsp; <span id="gate-01-state">—</span></p>
-                    </div>
-                </article>
-
-                <article class="gate-card" id="gate-02">
-                    <span class="gate-card__eyebrow">Gate 02</span>
-                    <h3 class="gate-card__title">Statistical stability.</h3>
-                    <p class="gate-card__sub">Rolling-100 expectancy at the re-deployment bar</p>
-                    <dl class="gate-card__deflist">
-                        <div class="gate-card__defrow"><dt>Pass criterion</dt><dd>rolling-100 realized expectancy &ge; <strong>+$50/trade</strong> (the Falsifiability Protocol&rsquo;s Article III §1 bar)</dd></div>
-                        <div class="gate-card__defrow"><dt>Witness</dt><dd>public Discord trade journal &mdash; every fill timestamped and downloadable</dd></div>
-                        <div class="gate-card__defrow"><dt>Adjudicator</dt><dd>the math itself &mdash; any reader can compute it from the public log</dd></div>
-                    </dl>
-                    <div class="gate-card__status">
-                        <p class="gate-card__status-label">Status</p>
-                        <p class="gate-card__counter"><strong id="gate-02-value">&mdash;</strong> <span class="gate-card__counter-sub">/ +$50 target</span></p>
-                        <p class="gate-card__status-text"><span id="gate-02-state">&mdash;</span></p>
-                    </div>
+                <article class="participation-card participation-card--reach">
+                    <span class="participation-card__eyebrow">Reach out with questions</span>
+                    <p class="participation-card__tag">Concepts · Methodology · Context · Fit</p>
+                    <p class="participation-card__body">If something about the experiment raises questions &mdash; about the method, about the underlying concepts, about how to think about this in your own context &mdash; the operator is reachable directly. Drop a note. The form below opens a private conversation.</p>
+                    <p class="participation-card__body">No agenda on either side. Just a real exchange about the work and whatever you want to understand about it.</p>
+                    <p class="participation-card__cta"><a class="btn btn-ghost-dark" href="#reach-out">Reach out <span class="arr">&rarr;</span></a></p>
                 </article>
             </div>
-
-            <!-- Early-stability threshold tracker -->
-            <div class="threshold-tracker" aria-labelledby="threshold-h">
-                <p class="threshold-tracker__eyebrow" id="threshold-h">Early-stability threshold &nbsp;·&nbsp; when the gauntlet opens</p>
-                <p class="threshold-tracker__body">
-                    Both gates activate once the live trade sample crosses <strong>100 closed qualified trades</strong> with rolling-100 realized expectancy <strong>≥ +$50 per trade</strong> &mdash; the same bar set by <a href="#defense" class="link-inline">Article III §1 of the Falsifiability Protocol</a> as the re-deployment threshold. Anchoring gauntlet activation to the same statistical bar as edge re-deployment is intentional: the operator must demonstrate the same magnitude of edge demanded after a hypothetical stand-down before any founding capital can be put at risk.
-                </p>
-                <div class="threshold-tracker__bars">
-                    <div class="threshold-tracker__bar">
-                        <div class="threshold-tracker__bar-head">
-                            <span class="threshold-tracker__bar-label">Sample size</span>
-                            <span class="threshold-tracker__bar-val"><strong id="thresh-sample-val">—</strong> of <strong>100</strong> qualified trades</span>
-                        </div>
-                        <div class="threshold-tracker__bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="threshold-h">
-                            <div class="threshold-tracker__bar-fill" id="thresh-sample-fill" style="width:0%"></div>
-                        </div>
-                    </div>
-                    <div class="threshold-tracker__bar">
-                        <div class="threshold-tracker__bar-head">
-                            <span class="threshold-tracker__bar-label">Realized expectancy</span>
-                            <span class="threshold-tracker__bar-val"><strong id="thresh-ev-val">—</strong> of <strong>+$50</strong> per trade target</span>
-                        </div>
-                        <div class="threshold-tracker__bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="threshold-h">
-                            <div class="threshold-tracker__bar-fill" id="thresh-ev-fill" style="width:0%"></div>
-                        </div>
-                    </div>
-                </div>
-                <p class="threshold-tracker__status" id="thresh-status">Computing live status…</p>
-            </div>
-
-            <p class="gauntlet__footnote"><em>Either gate can pass first; both must pass before allocation activates. Either fails &rarr; full allocation deferred &middot; no founding capital is at risk during the gauntlet itself.</em></p>
-
-            <div class="activation-banner" role="note">
-                <div class="activation-banner__rule" aria-hidden="true"></div>
-                <p class="activation-banner__text">Both gates pass &nbsp;&rarr;&nbsp; <strong>managed-account onboarding activates for indicated founding seats.</strong></p>
-                <div class="activation-banner__rule" aria-hidden="true"></div>
-                <p class="activation-banner__updated">Updated: <span id="gauntlet-updated">—</span></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ SECTION §2.6 — EDGE × RISK TOLERANCE (prop-firm reframe) ═══ -->
-    <section class="section section--white modes-intro" id="modes" aria-labelledby="modes-h2">
-        <a id="module-a-alias" aria-hidden="true"></a>
-        <div class="section__inner section__inner--wide">
-            <header class="section-head section-head--centered">
-                <h2 class="section-head__title" id="modes-h2">The edge &times; your risk tolerance.</h2>
-                <p class="section-head__lead">The edge is mechanical. Returns are a function of your risk-per-trade choice within the operator&rsquo;s discipline rules. The two calculators below illustrate the same edge expressed at the sizing you select, with distributions rhythm&rsquo;d two ways.</p>
-            </header>
-
-            <aside class="prop-frame" aria-label="How prop traders think about this">
-                <p class="prop-frame__eyebrow">How prop traders think about this</p>
-                <p class="prop-frame__body">Prop firms grant traders buying power and bound them with discipline rules &mdash; max daily loss, max drawdown, profit targets. Within those rules, the trader chooses how aggressively to size per trade. Returns are a function of <em>the trader&rsquo;s edge &times; the trader&rsquo;s sizing &times; time</em>. You&rsquo;re the principal here. The Ekantik operator&rsquo;s edge is your edge. The Defense Architecture is the firm&rsquo;s rules. The slider below is your sizing knob.</p>
-            </aside>
-
-            <div class="risk-tier-selector" role="radiogroup" aria-label="Risk per trade — tier selector">
-                <div class="risk-tier-selector__head">
-                    <span class="risk-tier-selector__label">Risk per trade</span>
-                    <span class="risk-tier-selector__readout">
-                        <strong id="rts-pct">&mdash;</strong>% of working capital &nbsp;&middot;&nbsp;
-                        <span id="rts-derived">&mdash; monthly @ live edge</span>
-                    </span>
-                </div>
-                <div class="risk-tier-selector__chips">
-                    <button type="button" class="risk-tier-chip risk-tier-chip--recommended" data-tier="operator" aria-pressed="true">
-                        <span class="risk-tier-chip__badge risk-tier-chip__badge--rec">Recommended</span>
-                        <span class="risk-tier-chip__name">Operator</span>
-                        <span class="risk-tier-chip__pct" id="rts-chip-operator">~1.6%</span>
-                        <span class="risk-tier-chip__note">operator&rsquo;s own sizing</span>
-                    </button>
-                    <button type="button" class="risk-tier-chip" data-tier="conservative">
-                        <span class="risk-tier-chip__name">Conservative</span>
-                        <span class="risk-tier-chip__pct">2%</span>
-                        <span class="risk-tier-chip__note">defensive</span>
-                    </button>
-                    <button type="button" class="risk-tier-chip" data-tier="moderate">
-                        <span class="risk-tier-chip__name">Moderate</span>
-                        <span class="risk-tier-chip__pct">5%</span>
-                        <span class="risk-tier-chip__note">~&frac13; of Kelly</span>
-                    </button>
-                    <button type="button" class="risk-tier-chip risk-tier-chip--ceiling" data-tier="halfkelly">
-                        <span class="risk-tier-chip__badge risk-tier-chip__badge--ceiling">Theoretical ceiling</span>
-                        <span class="risk-tier-chip__name">&frac12;-Kelly</span>
-                        <span class="risk-tier-chip__pct" id="rts-chip-halfkelly">~14%</span>
-                        <span class="risk-tier-chip__note">geometric optimum, not a recommendation</span>
-                    </button>
-                    <button type="button" class="risk-tier-chip" data-tier="custom">
-                        <span class="risk-tier-chip__name">Custom</span>
-                        <span class="risk-tier-chip__pct"><span id="rts-chip-custom">5.0</span>%</span>
-                        <span class="risk-tier-chip__note">slider below</span>
-                    </button>
-                </div>
-                <div class="risk-tier-selector__custom" id="rts-custom-row">
-                    <label for="rts-custom-slider" class="risk-tier-selector__custom-label">Custom risk per trade</label>
-                    <input id="rts-custom-slider" type="range" min="0.5" max="20" step="0.5" value="5">
-                    <span class="risk-tier-selector__custom-val"><strong id="rts-custom-val">5.0</strong>%</span>
-                </div>
-                <p class="risk-tier-selector__note">Higher risk = larger $ per R = larger returns AND larger drawdowns. Move the slider to see the trade-off. The math is linear at the same R-multiple.</p>
-
-                <!-- Risk-of-ruin warning — surfaced when the user picks above operator sizing -->
-                <div class="ruin-warning" id="ruin-warning" hidden role="alert">
-                    <span class="ruin-warning__badge">Risk of ruin</span>
-                    <p class="ruin-warning__body" id="ruin-warning-body">
-                        At <strong id="ruin-warning-pct">&mdash;%</strong> per trade you are sizing above the operator&rsquo;s own deployment. The math&rsquo;s upside is real; so is the math&rsquo;s downside. Kelly-implied drawdowns at this tier reach <strong id="ruin-warning-dd">&mdash;%</strong> of working capital in adverse regimes &mdash; statistically certain to occur at some point on a long enough timeline. <em>The strategy survives this by structure (Sit-Out + Falsifiability, below). Your psychology survives it if you chose this tier knowing what it costs.</em>
-                    </p>
-                </div>
-
-                <!-- Survival rails — what bounds any sizing choice -->
-                <div class="survival-rails">
-                    <p class="survival-rails__eyebrow">What keeps any sizing choice survivable</p>
-                    <div class="survival-rails__grid">
-                        <a class="survival-rails__cell" href="#defense">
-                            <span class="survival-rails__icon" aria-hidden="true">&#8627;</span>
-                            <span class="survival-rails__title">Sit-Out Architecture</span>
-                            <span class="survival-rails__body">Daily and weekly max-loss rules &mdash; pre-committed, never renegotiated under stress. Caps how much capital a bad week can claim, regardless of your sizing choice.</span>
-                        </a>
-                        <a class="survival-rails__cell" href="#defense">
-                            <span class="survival-rails__icon" aria-hidden="true">&#8627;</span>
-                            <span class="survival-rails__title">Falsifiability Protocol</span>
-                            <span class="survival-rails__body">Rolling-100 expectancy &lt; $0 &rarr; immediate stand-down, locked under witness. Caps how long a degraded edge can keep compounding losses, regardless of your sizing choice.</span>
-                        </a>
-                    </div>
-                    <p class="survival-rails__close"><em>These are the rails. Without them, Kelly-aggressive sizing is gambling. With them, the operator has bounded the regime-driven catastrophe; you choose how aggressively to express the edge within the bound.</em></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ MODULE A — Quarterly Income Mode (spec §3) ═══ -->
-    <section class="section section--white" id="module-a" aria-labelledby="mod-a-h2">
-        <div class="section__inner">
-            <span class="eyebrow">Mode A · Quarterly Income · cash on a cadence</span>
-            <article class="mod">
-                <header class="mod__header">
-                    <h2 class="mod__title" id="mod-a-h2">The Quarterly Income Mode</h2>
-                    <p class="mod__subhead">Working capital stays flat. Profits ship every quarter.</p>
-                </header>
-
-                <div class="mod__sliders">
-                    <div class="slider-field">
-                        <label for="mod-a-capital">Working capital · <span class="slider-value" id="mod-a-capital-val">$100,000</span></label>
-                        <input id="mod-a-capital" type="range" min="20000" max="1000000" step="5000" value="100000">
-                    </div>
-                    <div class="slider-field slider-field--derived">
-                        <label>Monthly rate <span class="slider-derived-tag">derived</span></label>
-                        <span class="slider-value slider-value--derived" id="mod-a-rate-val">— /mo</span>
-                        <p class="slider-derived-note">Edge &times; risk-per-trade &times; cadence &mdash; not an input. Adjust the risk-tolerance selector above the modes to change this.</p>
-                    </div>
-                    <div class="slider-field">
-                        <label>Distribution frequency</label>
-                        <div class="mod__radio-group" role="radiogroup" aria-label="Distribution frequency">
-                            <label><input type="radio" name="mod-a-freq" value="monthly"><span>Monthly</span></label>
-                            <label><input type="radio" name="mod-a-freq" value="quarterly" checked><span>Quarterly</span></label>
-                            <label><input type="radio" name="mod-a-freq" value="semi-annual"><span>Semi-Annual</span></label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mod__outputs mod__outputs--paired" aria-label="Module A outputs">
-                    <div class="mod__col">
-                        <p class="mod__col-eyebrow">At your sizing &mdash; cash produced</p>
-                        <p class="mod__col-title">The edge, at your selected risk.</p>
-                        <p class="mod__col-context" id="mod-a-target-header">At your selected risk-per-trade, the live edge produces this monthly rate. Higher risk = higher rate AND higher drawdown.</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label" id="mod-a-per-label">Per-quarter check</span>
-                            <span class="mod__metric-val" id="mod-a-target-period">&mdash;</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Annual income</span>
-                            <span class="mod__metric-val" id="mod-a-target-annual">&mdash;</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">5-year cash total</span>
-                            <span class="mod__metric-val" id="mod-a-target-5y">&mdash;</span>
-                        </div>
-                    </div>
-                    <div class="mod__col mod__col--downside">
-                        <p class="mod__col-eyebrow">At your sizing &mdash; downside</p>
-                        <p class="mod__col-title">What the same sizing has cost.</p>
-                        <p class="mod__col-context">Live drawdown numbers (Risk Profile panel above) scaled by your selected risk-per-trade. Symmetric truth: every upside number on the left has a paired downside here.</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Max drawdown (scaled)</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-max">&mdash;</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Single-trade worst loss</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-trade">&mdash;</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">DD as % of base</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-a-dd-pct">&mdash;</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Month-by-month distribution table -->
-                <div class="mod-table-wrap mt-3">
-                    <h4 class="mod-table-title">Month-by-month — Year 1</h4>
-                    <table class="mod-table" id="mod-a-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Status</th>
-                                <th class="num">Monthly cash produced</th>
-                                <th class="num">Distribution</th>
-                                <th class="num">Cumulative paid</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mod-a-table-body"></tbody>
-                    </table>
-                </div>
-
-                <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Monthly rate is computed from the live edge &times; your risk-per-trade selection &times; ten active trading months per year (the strategy stands down for two months annually &mdash; typically low-liquidity / holiday windows). Drawdown scales with the same risk selection. Realized performance to date is shown in The Edge section above. Past performance is not indicative of future results. Distributions are not guaranteed.</em>
-                </p>
-
-                <div class="mod__caveat">
-                    Working capital stays at the base level by design. Profits exit the strategy each quarter (or whatever cadence you select) and ship to the investor. The base remains; the regulatory cap of fifteen managed accounts is preserved; the cycle repeats &mdash; across 10 active trading months a year.
-                </div>
-            </article>
-
-            <p class="mod-connector">
-                Same edge. Same risk-per-trade selection. Different rhythm. Mode A (above) keeps the base flat and ships profits every quarter. Mode B (below) settles at year-end, with an optional <em>compound-within-year</em> toggle that doubles position size at each milestone before the year-end distribution.
-            </p>
-        </div>
-    </section>
-
-    <!-- ═══ MODULE B — Scale-Then-Distribute Mode (spec §4) ═══ -->
-    <section class="section section--cream" id="module-b" aria-labelledby="mod-b-h2">
-        <div class="section__inner">
-            <span class="eyebrow">Mode B · Scale-Then-Distribute · annual settlement</span>
-            <article class="mod">
-                <header class="mod__header">
-                    <h2 class="mod__title" id="mod-b-h2">The Scale-Then-Distribute Mode</h2>
-                    <p class="mod__subhead">Each scaling milestone unlocks a larger position. Distribution settles at year-end.</p>
-                </header>
-
-                <div class="mod__sliders">
-                    <div class="slider-field">
-                        <label for="mod-b-capital">Working capital · <span class="slider-value" id="mod-b-capital-val">$100,000</span></label>
-                        <input id="mod-b-capital" type="range" min="20000" max="1000000" step="5000" value="100000">
-                    </div>
-                    <div class="slider-field slider-field--derived">
-                        <label>Monthly rate <span class="slider-derived-tag">derived</span></label>
-                        <span class="slider-value slider-value--derived" id="mod-b-rate-val">— /mo</span>
-                        <p class="slider-derived-note">Edge &times; risk-per-trade &times; cadence &mdash; not an input. Adjust the risk-tolerance selector above the modes to change this.</p>
-                    </div>
-                    <div class="slider-field">
-                        <label>Compound within year <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(geometric override &mdash; off by default)</span></label>
-                        <div class="mod__radio-group" role="radiogroup" aria-label="Compound within year (milestones)">
-                            <label><input type="radio" name="mod-b-scaleups" value="0" checked><span>Off</span></label>
-                            <label><input type="radio" name="mod-b-scaleups" value="1"><span>1</span></label>
-                            <label><input type="radio" name="mod-b-scaleups" value="2"><span>2</span></label>
-                            <label><input type="radio" name="mod-b-scaleups" value="3"><span>3</span></label>
-                            <label><input type="radio" name="mod-b-scaleups" value="4"><span>4</span></label>
-                        </div>
-                    </div>
-                    <div class="slider-field">
-                        <label for="mod-b-horizon">Horizon · <span class="slider-value" id="mod-b-horizon-val">1 yr</span></label>
-                        <input id="mod-b-horizon" type="range" min="1" max="5" step="1" value="1">
-                    </div>
-                </div>
-
-                <p class="muted" style="font-size:12px;margin:-8px 0 var(--s-2);font-family:var(--font-mono)">
-                    <strong style="color:var(--gold)">Compound-within-year mechanic:</strong> <em>off by default.</em> When on, each milestone triggers at the next <strong>$5,000</strong> cumulative-profit threshold and <strong>doubles position size</strong> &mdash; geometric compounding inside the year, distributed at year-end. <em>Off:</em> flat sizing, single annual distribution.
-                </p>
-
-                <div class="mod__outputs mod__outputs--paired" aria-label="Module B scoreboard">
-                    <div class="mod__col">
-                        <p class="mod__col-eyebrow">At your sizing &mdash; cash produced</p>
-                        <p class="mod__col-title">Annual settlement.</p>
-                        <p class="mod__col-context" id="mod-b-target-header">At your selected risk-per-trade, the live edge produces this annual cash. Compound-within-year (if opted in) increases the year-end number and the drawdown together.</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Compound milestones applied</span>
-                            <span class="mod__metric-val" id="mod-b-target-events">&mdash;</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Year-end distribution</span>
-                            <span class="mod__metric-val" id="mod-b-target-yearend">&mdash;</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Cumulative cash &middot; horizon</span>
-                            <span class="mod__metric-val" id="mod-b-target-cumulative">&mdash;</span>
-                        </div>
-                    </div>
-                    <div class="mod__col mod__col--downside">
-                        <p class="mod__col-eyebrow">At your sizing &mdash; downside</p>
-                        <p class="mod__col-title">What the same sizing has cost.</p>
-                        <p class="mod__col-context">Live drawdown numbers (Risk Profile panel above) scaled by your selected risk-per-trade. Compound-within-year amplifies these symmetrically with the upside.</p>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">Max drawdown (scaled)</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-max">&mdash;</span>
-                        </div>
-                        <div class="mod__metric mod__metric--big">
-                            <span class="mod__metric-label">Single-trade worst loss</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-trade">&mdash;</span>
-                        </div>
-                        <div class="mod__metric">
-                            <span class="mod__metric-label">DD as % of base</span>
-                            <span class="mod__metric-val mod__metric-val--neg" id="mod-b-dd-pct">&mdash;</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Month-by-month distribution table -->
-                <div class="mod-table-wrap mt-3">
-                    <h4 class="mod-table-title">Month-by-month — Year 1</h4>
-                    <table class="mod-table" id="mod-b-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Status</th>
-                                <th class="num">Position</th>
-                                <th class="num">Capital (end)</th>
-                                <th class="num">Monthly gain</th>
-                                <th class="num">Cumulative profit</th>
-                                <th class="num">Distribution</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mod-b-table-body"></tbody>
-                    </table>
-                </div>
-
-                <p class="muted" style="font-size:12px;margin-top:var(--s-2)">
-                    <em>Monthly rate is computed from the live edge &times; your risk-per-trade selection &times; ten active trading months per year. Compound-within-year (when opted in) doubles position size at each $5K profit milestone &mdash; amplifying both upside and drawdown by the same factor. Past performance is not indicative of future results. Distributions are not guaranteed.</em>
-                </p>
-
-                <div class="mod__caveat">
-                    When compound-within-year is on, position size ratchets up at each milestone during the active trading window. At year-end, full profit is distributed and the working base resets. The reset is structural: the operation is hard-capped at fifteen managed-account relationships by regulatory exemption thresholds, and uncapped compounding would breach the structure within a few cycles. Each year begins fresh at the base allocation, with 10 active trading months and two months of stand-down.
-                </div>
-            </article>
         </div>
     </section>
 
@@ -1212,7 +805,7 @@
                         <span class="mono muted" style="font-size:11px">Last 5 fills</span>
                     </div>
                     <div id="discord-feed" class="discord-feed">Loading…</div>
-                    <p class="muted italic mt-3" style="font-size:12px">Live mirror of the last 5 fills from the Discord trade journal. The journal is <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer"><strong>open to anyone</strong></a> &mdash; no submission required &mdash; and every executed trade posts there in real time. Submitters of the founding-interest form get a welcome ping when their indication is logged.</p>
+                    <p class="muted italic mt-3" style="font-size:12px">Live mirror of the last 5 fills from the Discord trade journal. The journal is <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer"><strong>open to anyone</strong></a> &mdash; no submission required &mdash; and every executed trade posts there in real time.</p>
                     <div class="callout callout--small mt-3" role="note">
                         <p class="callout__title" style="font-size:13px">Discord posts run ~60 seconds behind the actual fill.</p>
                         <p class="callout__body" style="font-size:13px">The operator types each alert in by hand <em>after</em> the order is entered at the broker, so by the time you read &ldquo;Short @ 7141&rdquo; on Discord the entry was already taken. The feed exists so you can verify every fill against real markets and study how the strategy reasons about entries, exits, sizing, and stops &mdash; <strong>it is a window into the mechanism, not a signal to follow</strong>. Don&rsquo;t try to mirror entries off the timestamps.</p>
@@ -1253,129 +846,46 @@
             </div>
 
             <div class="cta-row">
-                <a class="btn btn--primary" href="#allocation">Inquire if you qualify →</a>
-                <a class="btn btn--secondary" href="#modes">Re-run the modes →</a>
+                <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Watch the experiment live →</a>
+                <a class="btn btn--secondary" href="#reach-out">Reach out with questions →</a>
                 <a class="btn btn--tertiary" href="https://doubles.ekantikcapital.com">Read the doctrine</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══ MODULE C — Capacity & Allocation Status, full panel (spec §5.2.2) ═══ -->
-    <section class="section section--white" id="allocation" aria-labelledby="mod-c-h2">
-        <a id="module-c-panel" aria-hidden="true"></a>
+    <!-- ═══ SECTION 09 — REACH OUT (private inquiry · zero financial info) ═══ -->
+    <section class="section section--white" id="reach-out" aria-labelledby="reach-h2">
         <div class="section__inner">
-            <span class="eyebrow">By inquiry only</span>
-            <div class="mod-c-panel">
-                <h2 class="mod-c-panel__heading" id="mod-c-h2">Qualifying inquiry.</h2>
-                <p class="mod-c-panel__lead">For prospective clients with whom the operator has a direct pre-existing relationship, or who have been introduced by an existing client. Not an offer of securities. Not a solicitation. Submitting this form does not create a client relationship; a managed-account relationship activates only upon onboarding, KYC, and execution of subscription documents.</p>
+            <div class="section-eyebrow">09 · Reach Out</div>
+            <h2 class="section-head__title" id="reach-h2">Reach out.</h2>
+            <p class="reach-intro">Have a question about the experiment, the method, or how to think about this in your own context? Drop a note below. The operator reads each one personally. This is a private inquiry path &mdash; not an application, not an offer acceptance, and not an expression of intent to participate in anything.</p>
 
-                <div class="mod-c-statement">
-                    <p>The Ekantik Trading Strategy is operated under <strong>CFTC Rule 4.14(a)(10)</strong>: fewer than fifteen managed-account relationships in any twelve-month window, family relationships aggregate to a single client, and the operator does not hold out generally to the public as a Commodity Trading Advisor. The ceiling is a regulatory structural constraint, not a marketing device.</p>
-                </div>
-
-                <!-- Indication-of-Interest form (spec §5.6) -->
-                <form class="indication-form" id="indication-form"
-                      action="https://formspree.io/f/__FORMSPREE_ACCELERATOR__"
-                      method="POST"
-                      novalidate>
-                    <h3 class="indication-form__heading" id="ind-section-heading">Qualifying inquiry &middot; managed account</h3>
-                    <p class="indication-form__subhead">
-                        Submitting this form is not an offer to buy or sell securities, not an acceptance of any offer by Ekantik Capital Advisors, and does not create a client relationship. It is a request to be considered for a managed-account relationship if and when the operator&rsquo;s qualifying gauntlet activates the relationship for indicated candidates. Eligibility requires <strong>accredited-investor status</strong> AND <strong>a direct pre-existing relationship with the operator or an introduction from an existing client</strong>.
-                    </p>
-
-                    <div class="indication-form__grid">
-                        <div class="ind-field">
-                            <label for="ind-first">First name *</label>
-                            <input type="text" id="ind-first" name="first_name" maxlength="50" required autocomplete="given-name">
-                        </div>
-                        <div class="ind-field">
-                            <label for="ind-last">Last name *</label>
-                            <input type="text" id="ind-last" name="last_name" maxlength="50" required autocomplete="family-name">
-                        </div>
-                        <div class="ind-field">
-                            <label for="ind-email">Email *</label>
-                            <input type="email" id="ind-email" name="email" required autocomplete="email">
-                        </div>
-                        <div class="ind-field">
-                            <label for="ind-phone">Phone <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
-                            <input type="tel" id="ind-phone" name="phone" autocomplete="tel">
-                        </div>
-                    </div>
-
-                    <div class="ind-amount-block">
-                        <label for="ind-amount">Working-capital range under consideration * <span class="ind-amount-min">(indicative only &middot; not an offer or commitment)</span></label>
-                        <input type="range" id="ind-amount" name="booking_amount" min="20000" max="2000000" step="5000" value="100000">
-                        <span class="ind-amount-val" id="ind-amount-val"><strong>$100,000</strong> &middot; indicative range under consideration</span>
-                    </div>
-
+            <form class="reach-form" id="reach-form" action="https://formspree.io/f/__FORMSPREE_ACCELERATOR__" method="POST" novalidate>
+                <div class="reach-form__grid">
                     <div class="ind-field">
-                        <label for="ind-family-capital">Approximate family-aggregated investable capital *</label>
-                        <select id="ind-family-capital" name="family_capital" required class="form-select">
-                            <option value="" disabled selected>Select range</option>
-                            <option value="100-500">$100K &ndash; $500K</option>
-                            <option value="500-1000">$500K &ndash; $1M</option>
-                            <option value="1000-3000">$1M &ndash; $3M</option>
-                            <option value="3000-10000">$3M &ndash; $10M</option>
-                            <option value="10000+">$10M+</option>
-                        </select>
+                        <label for="reach-name">Name *</label>
+                        <input type="text" id="reach-name" name="name" maxlength="100" required autocomplete="name" placeholder="First and last">
                     </div>
-
-                    <div class="ind-mode-block">
-                        <label>Preferred mode <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
-                        <div class="ind-mode-options" role="radiogroup">
-                            <label><input type="radio" name="ind-mode" value="quarterly-income"><span>Mode A &middot; Quarterly Income</span></label>
-                            <label><input type="radio" name="ind-mode" value="annual-distribution"><span>Mode B &middot; Annual Distribution</span></label>
-                            <label><input type="radio" name="ind-mode" value="no-preference" checked><span>No preference</span></label>
-                        </div>
+                    <div class="ind-field">
+                        <label for="reach-email">Email *</label>
+                        <input type="email" id="reach-email" name="email" required autocomplete="email">
                     </div>
-
-                    <label class="ind-ack">
-                        <input type="checkbox" id="ind-ack-relationship" required>
-                        <span class="ind-ack-text"><em>I confirm I have a direct pre-existing relationship with Ekantik Capital Advisors or have been introduced by an existing client. I am not responding to public solicitation; I understand the operator does not hold out generally to the public as a Commodity Trading Advisor.</em></span>
-                    </label>
-
-                    <label class="ind-ack">
-                        <input type="checkbox" id="ind-ack-binding" required>
-                        <span class="ind-ack-text"><em>I understand this submission is not an offer or acceptance. No client relationship, subscription, transaction, or contractual commitment is being created. Any indicated working-capital range may be revised or withdrawn at any time prior to the execution of subscription documents.</em></span>
-                    </label>
-
-                    <label class="ind-ack">
-                        <input type="checkbox" id="ind-ack-managed" required>
-                        <span class="ind-ack-text"><em>I understand that a managed-account relationship activates only upon completion of onboarding, KYC, and the execution of subscription documents &mdash; and is contingent on the operator&rsquo;s qualifying gauntlet (Sit-Out and Falsifiability protocols, as described on this page) clearing successfully.</em></span>
-                    </label>
-
-                    <label class="ind-ack">
-                        <input type="checkbox" id="ind-ack-accred" required>
-                        <span class="ind-ack-text"><em>I confirm I am an accredited investor under applicable securities regulations, a qualifying family office, or am inquiring on behalf of one.</em>
-                            <a href="https://www.sec.gov/education/capitalraising/building-blocks/accredited-investor" target="_blank" rel="noopener" style="font-size:11px;text-decoration:underline">SEC definition &rarr;</a>
-                        </span>
-                    </label>
-
-                    <div class="ind-submit-row">
-                        <button type="submit" class="btn btn--primary btn--xl" id="ind-submit" disabled>Submit qualifying inquiry</button>
-                        <p id="ind-error" class="ind-error hide" role="alert"></p>
-                    </div>
-                    <p class="ind-submit-note">Not an offer, not an acceptance, not a contractual commitment. The Discord trade journal is publicly accessible regardless of submission. Past performance is not indicative of future results.</p>
-
-                    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px">
-                </form>
-
-                <div class="ind-thanks hide" id="ind-thanks" role="status">
-                    <h3>Inquiry received.</h3>
-                    <p>Your qualifying inquiry has been logged. A confirmation email has been sent to the address you provided. <strong>This does not create a client relationship.</strong> The operator will review the inquiry and, if appropriate given an existing or introduced relationship, follow up directly.</p>
-                    <p class="ind-thanks__gauntlet"><a href="#gauntlet">Watch the gauntlet in real time.</a> A managed-account relationship can activate only after both gauntlet gates close <em>and</em> subscription documents are executed.</p>
-
-                    <div class="ind-thanks__discord">
-                        <p class="ind-thanks__discord-eyebrow">Discord journal &middot; welcome</p>
-                        <p style="font-style:normal;font-family:var(--font-sans);font-size:14px;margin-bottom:var(--s-2)">
-                            The Discord journal is open to anyone &mdash; submission isn&rsquo;t a gate. We&rsquo;ll send a welcome ping after the operator sees your indication. Every executed trade posts there in real time; it&rsquo;s the source data behind every live metric on this page.
-                        </p>
-                        <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener">Open Discord journal &rarr;</a>
-                    </div>
-
-                    <p>We'll be in touch as licensing and due diligence complete — typically within 60 to 90 days. Until then, the live performance numbers on this page update weekly, and the Discord journal updates with every executed trade.</p>
-                    <p>If the confirmation email doesn't arrive within a few minutes, check your spam folder or contact <a href="mailto:info@ekantikcapital.com">info@ekantikcapital.com</a>.</p>
                 </div>
+                <div class="ind-field">
+                    <label for="reach-message">What would you like to discuss? *</label>
+                    <textarea id="reach-message" name="message" rows="4" maxlength="600" required placeholder="Questions about method, concepts, fit, anything — 1–3 sentences."></textarea>
+                </div>
+                <div class="ind-submit-row">
+                    <button type="submit" class="btn btn--primary btn--xl" id="reach-submit" disabled>Send note</button>
+                    <p id="reach-error" class="ind-error hide" role="alert"></p>
+                </div>
+                <p class="ind-submit-note"><em>Replies typically within 48 hours. Submissions establish a private contact channel; they create no obligation on either side. This form collects no financial information and does not constitute an application, subscription, or expression of intent to invest.</em></p>
+                <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px">
+            </form>
+
+            <div class="ind-thanks hide" id="reach-thanks" role="status">
+                <h3>Note received.</h3>
+                <p>Thanks for reaching out. The operator reads each note personally and typically replies within 48 hours. This exchange creates no obligation on either side.</p>
             </div>
         </div>
     </section>
@@ -1393,16 +903,17 @@
                     <a href="/">accelerator.ekantikcapital.com →</a>
                 </div>
                 <div>
-                    <p class="eyebrow">Qualifying inquiry</p>
-                    <a href="#allocation">Inquire if you qualify &rarr;</a>
+                    <p class="eyebrow">Reach out</p>
+                    <a href="#reach-out">Reach out with questions &rarr;</a>
                 </div>
             </div>
 
             <div class="footer__disclosure" id="disclosures">
-                <p class="footer__canon"><em>If the page and the deck ever disagree, the page is canonical. The numbers update live. The deck is a snapshot.</em></p>
-                <p><strong>CFTC Rule 4.14(a)(10) operating posture.</strong> Ekantik Capital Advisors LLC operates the Ekantik Trading Strategy in reliance on the exemption from registration as a Commodity Trading Advisor afforded by CFTC Rule 4.14(a)(10). The firm has not in the preceding twelve months furnished commodity trading advice to more than fifteen persons (with family relationships aggregated to a single person per the rule), and does not hold itself out generally to the public as a CTA. This page is published as an educational description of the strategy&rsquo;s mechanics, defense architecture, and live execution record &mdash; it is not commodity trading advice, not an offer of securities, not a solicitation, and does not create a client or advisory relationship. Inquiries received via the form on this page are accepted only from prospective clients with whom the firm has a direct pre-existing relationship or who are introduced by an existing client.</p>
-                <p>Past performance is not indicative of future results. Sample is pre-asymptotic at this size. Distribution amounts depend on realized strategy returns, which vary. Distributions are not guaranteed. The risk-tolerance illustrations on this page are educational projections of how the live edge scales with position sizing; they are not forecasts, guarantees, or recommendations. Higher sizing tiers (including ½-Kelly) carry materially larger expected drawdowns and a real risk of capital loss including, in the limit, ruin.</p>
-                <p>All trade fills shown on this page are sourced from trades posted publicly in the Ekantik Discord. The operator&rsquo;s capital is at risk; this is personal risk capital deployed to produce a public execution record. It is not pooled, managed, or shared capital. Realized expectancy is published live on this page and is the authoritative reference.</p>
+                <p class="footer__canon"><strong>Disclosures</strong></p>
+                <p>Ekantik Capital Advisors LLC is the operator of this experiment and the publisher of this page. The experiment described is a live trading exercise conducted on the operator&rsquo;s own capital, with realized results publicly logged in the Ekantik Discord journal.</p>
+                <p>The trajectory figures shown are hypothetical and projected &mdash; not realized &mdash; and reflect the architecture&rsquo;s structural behavior under stated regime conditions. Hypothetical performance has inherent limitations. The figures should not be relied upon as a prediction of actual results. Past performance is not indicative of future results.</p>
+                <p><strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or any interest in any investment product.</strong> Inquiry submissions and Discord participation create no obligation on either side and do not constitute an application, subscription, or expression of intent to invest.</p>
+                <p>Trigger events, sit-out events, and any Falsifiability Gate activity are announced in the public Discord journal within 24 hours of occurrence. Sample is pre-asymptotic.</p>
                 <p>© 2026 Ekantik Capital Advisors LLC.</p>
             </div>
         </div>
@@ -1421,7 +932,7 @@
     <script src="js/render-section-c.js"></script>
     <script src="js/render-modules.js"></script>
     <script src="js/render-edges.js"></script>
-    <script src="js/render-gauntlet.js"></script>
+    <script src="js/render-experiment.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
