@@ -159,6 +159,7 @@ const DB = {
                     ppt:          t.ppt         || 5,
                     position_size: t.positionSize || 'full',
                     mes_count:    t.mesCount    || null,
+                    buffer_phase: t.bufferPhase != null ? t.bufferPhase : null,
                     attribution:  t.attribution || null,
                     attribution_breach: !!t.attributionBreach,
                     tag_filed_at: t.tagFiledAt  || '',
@@ -445,6 +446,14 @@ const MONTH_NAMES = {
     'july':7,'august':8,'september':9,'october':10,'november':11,'december':12
 };
 
+// Buffer phase implied by the trade-ID prefix: F→1, S→2, T→3, FT→4.
+// FT is tested first so "FT3" reads as Fourth, not First.
+function bufferPhaseOf(id) {
+    const m = String(id).toUpperCase().match(/^(FT|F|S|T)\d/);
+    if (!m) return null;
+    return { F: 1, S: 2, T: 3, FT: 4 }[m[1]] || null;
+}
+
 function parseDiscordTradeText(text) {
     const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
     const pending = {};   // tradeNum → { direction, entryPrice, stopPrice, datetime, date }
@@ -469,7 +478,7 @@ function parseDiscordTradeText(text) {
         // 2. Date+time line: "Ekantik Capital  4/13/2026 8:33 AM" or bare "4/2/2026 10:12 AM"
         //    Also handles: "Ekantik Capital — 4/13/2026 8:33 AM" or with (edited)
         const headerMatch = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
-        if (headerMatch && !line.match(/^(B\d+-\d+|F\d+)/i)) {
+        if (headerMatch && !line.match(/^(FT\d+|F\d+|S\d+|T\d+)/i)) {
             const datePart = headerMatch[1]; // e.g. "4/13/2026"
             const timePart = headerMatch[2]; // e.g. "8:33 AM"
             const dp = datePart.split('/');
@@ -481,7 +490,7 @@ function parseDiscordTradeText(text) {
 
         // 2b. Time-only header: "Ekantik Capital  9:29 AM" (no date, use current date)
         const timeOnlyMatch = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
-        if (timeOnlyMatch && !line.match(/^(B\d+-\d+|F\d+)/i)) {
+        if (timeOnlyMatch && !line.match(/^(FT\d+|F\d+|S\d+|T\d+)/i)) {
             const timePart = timeOnlyMatch[1];
             if (currentDatetime) {
                 // Update time portion only
@@ -493,16 +502,19 @@ function parseDiscordTradeText(text) {
         // 3. Skip "(edited)" lines or other non-trade lines
         if (/^\(edited\)$/.test(line)) continue;
 
-        // 4. Match trade line: <id>: <content>  (case insensitive). IDs are
-        //    buffer-phase form "B<phase>-<seq>" (e.g. B1-07 — the live convention)
-        //    or legacy "F<n>" (e.g. F84 — preserved so historical trades parse).
-        const m = line.match(/^(B\d+-\d+|F\d+)\s*:\s*(.+)$/i);
+        // 4. Match trade line: <id>: <content>  (case insensitive). The ID prefix
+        //    encodes the buffer phase (and thus expected size): F = First buffer
+        //    (1 ES), S = Second (2 ES), T = Third (3 ES), FT = Fourth (4 ES) —
+        //    e.g. F84, S1, T12, FT3. The legacy F1–F84 are preserved unchanged:
+        //    they were first-buffer (1 ES) trades, which "F" now formally denotes.
+        //    FT is listed first so "FT3" matches Fourth, not First.
+        const m = line.match(/^(FT\d+|F\d+|S\d+|T\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
         const tradeNum = m[1].toUpperCase();
         let body = m[2].trim();
 
         // Attribution tag (Criterion 01): a trailing H2/H3 token on the close
-        // line — e.g. "B1-07: -3 H2". H2 = process breached, H3 = variance (the
+        // line — e.g. "S1: -3 H2". H2 = process breached, H3 = variance (the
         // resting default). H1 = edge failed is NOT an operator attribution; it
         // is system-derived from the Expression Gate's rolling-100 verdict and
         // must never be hand-tagged. A manual H1 is itself a fidelity breach —
@@ -572,6 +584,7 @@ function parseDiscordTradeText(text) {
                 positionSize,
                 mesCount,
                 contracts,
+                bufferPhase: bufferPhaseOf(tradeNum),
                 attribution,
                 attributionBreach,
                 tagFiledAt: currentDatetime,
