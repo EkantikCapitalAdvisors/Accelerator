@@ -122,7 +122,6 @@
         const tradesPerYear = (n / daysElapsed) * 365;
         const annualR  = (s.rExpectancy != null) ? tradesPerYear * s.rExpectancy : null;
         const annualPL = (s.evPerTrade  != null) ? tradesPerYear * s.evPerTrade  : null;
-        const annualPctOnBase = annualPL != null ? (annualPL / 20000) * 100 : null;
 
         if (tradesEl) tradesEl.textContent = '~' + Math.round(tradesPerYear);
         if (rEl)      rEl.textContent      = annualR  != null ? '~' + (annualR >= 0 ? '+' : '') + annualR.toFixed(0) + 'R' : '—';
@@ -132,8 +131,8 @@
         if (rSub && s.rExpectancy != null && annualR != null) {
             rSub.textContent = `${(s.rExpectancy >= 0 ? '+' : '')}${s.rExpectancy.toFixed(2)}R/trade × ~${Math.round(tradesPerYear)} trades`;
         }
-        if (plSub && s.evPerTrade != null && annualPctOnBase != null) {
-            plSub.textContent = `$${s.evPerTrade.toFixed(0)}/trade × ~${Math.round(tradesPerYear)} trades · ${annualPctOnBase.toFixed(0)}% on $20K base, fixed risk`;
+        if (plSub && s.evPerTrade != null) {
+            plSub.textContent = `$${s.evPerTrade.toFixed(0)}/trade × ~${Math.round(tradesPerYear)} trades · live realized dollars, fixed risk`;
         }
 
         // Headline — defensible single-line read.
@@ -142,7 +141,7 @@
                 ? `~${(annualR >= 0 ? '+' : '')}${annualR.toFixed(0)}R annualized`
                 : '';
             const plTxt = annualPL != null
-                ? `≈ $${Math.round(annualPL).toLocaleString()} on a fixed $20K base`
+                ? `≈ $${Math.round(annualPL).toLocaleString()} at the live fixed risk per trade`
                 : '';
             const tail = n >= CONFIRMATION_TRADE_THRESHOLD
                 ? 'Sample has crossed the early-stability threshold; trajectory is statistically supported.'
@@ -159,7 +158,7 @@
     // Shows the gap between what we currently risk per trade and what the
     // edge mathematically supports. The "8.6× headroom" framing makes the
     // conservative-by-design posture visible without sacrificing precision.
-    const BASE_CAPITAL = 20000;   // $20K starting working capital per spec
+    const BASE_CAPITAL = 5000;    // $5,000 working unit — consistent with the doubling doctrine
 
     function halfKelly(p, b) {
         if (p == null || b == null || !isFinite(b) || b <= 0) return null;
@@ -230,12 +229,11 @@
         const recoveryTrades = recoveredAt != null ? (recoveredAt - troughIdx) : null;
 
         // ─── Bind UI ───
-        const BASE = 20000;
         const fmtUSD = v => '$' + Math.round(Math.abs(v)).toLocaleString();
 
         if ($('rp-maxdd-r'))    $('rp-maxdd-r').textContent    = maxDD > 0 ? `−${fmtUSD(maxDD)}` : '$0';
         if ($('rp-maxdd-sub'))  $('rp-maxdd-sub').textContent  = maxDD > 0
-            ? `−${maxRdd.toFixed(2)}R cumulative · ${(maxDD / BASE * 100).toFixed(2)}% of $20K base`
+            ? `−${maxRdd.toFixed(2)}R cumulative · deepest peak-to-trough on the operator's capital`
             : 'No drawdown recorded yet.';
 
         if ($('rp-streak'))     $('rp-streak').textContent     = maxStreak > 0 ? `${maxStreak}  in a row` : '0';
@@ -260,8 +258,7 @@
         const close = $('rp-close');
         if (close) {
             const streakOK = maxStreak <= BATTERY_TEST_7_THRESHOLD;
-            const ddPct = (maxDD / BASE) * 100;
-            close.innerHTML = `Max drawdown of <strong>−${fmtUSD(maxDD)}</strong> (${ddPct.toFixed(1)}% of the $20K base, ${maxRdd.toFixed(1)}R cumulative) ${recoveryTrades != null ? `recovered in <strong>${recoveryTrades} trade${recoveryTrades === 1 ? '' : 's'}</strong>` : 'is still recovering'}. Longest losing streak of <strong>${maxStreak}</strong> ${streakOK ? `clears Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}` : `exceeds Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}`}. The Falsifiability Protocol&rsquo;s rolling-100 $0 trigger sits well below current realized cumulative R.`;
+            close.innerHTML = `Max drawdown of <strong>−${fmtUSD(maxDD)}</strong> (${maxRdd.toFixed(1)}R cumulative) ${recoveryTrades != null ? `recovered in <strong>${recoveryTrades} trade${recoveryTrades === 1 ? '' : 's'}</strong>` : 'is still recovering'}. Longest losing streak of <strong>${maxStreak}</strong> ${streakOK ? `clears Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}` : `exceeds Battery Test 7&rsquo;s discipline threshold of ≤ ${BATTERY_TEST_7_THRESHOLD}`}. The Falsifiability Protocol&rsquo;s rolling-100 $0 trigger sits well below current realized cumulative R.`;
         }
     }
 
@@ -326,7 +323,7 @@
         const multiple = kellyPct / currentPct;
         const close = $('rh-close');
         if (close) {
-            close.innerHTML = `The math supports <strong>~${multiple.toFixed(1)}&times;</strong> more position sizing per trade than the strategy currently deploys. The headroom is intentional &mdash; adverse variance never tests the operator&rsquo;s psychology, and the same edge mechanics scale cleanly as the base grows from $20K toward the $100K per-seat target.`;
+            close.innerHTML = `The math supports <strong>~${multiple.toFixed(1)}&times;</strong> more position sizing per trade than the strategy currently deploys. The headroom is intentional &mdash; adverse variance never tests the operator&rsquo;s psychology, and the same edge mechanics scale cleanly as the working unit doubles, buffer by buffer.`;
         }
     }
 
