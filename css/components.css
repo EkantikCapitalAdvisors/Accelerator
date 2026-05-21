@@ -4761,3 +4761,26 @@ section.block.light { padding: 96px 0 112px; }
 .doubles-step__n { font-family: var(--font-sans); font-size: 11px; color: var(--slate); text-transform: uppercase; letter-spacing: .06em; }
 .doubles-explainer__foot { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55; color: var(--slate); max-width: 64ch; margin: 0; }
 @media (max-width: 640px) { .doubles-ladder { flex-wrap: wrap; } .doubles-step { flex: 1 1 40%; } }
+
+/* ─── Doctrine alignment (ACC-DOCTRINE-ALIGN-V1) ─── */
+.hero-doctrine-link { font-family: var(--font-sans); font-size: 13px; margin-top: 14px; opacity: .82; }
+.hero-doctrine-link a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }
+.hero-doctrine-link a:hover { border-bottom-color: var(--gold); }
+
+.hero-bridge { background: var(--navy-deep); padding: 18px 0; border-bottom: 1px solid rgba(200,169,81,.18); }
+.hero-bridge__text { font-family: var(--font-sans); font-style: italic; font-size: 14px; line-height: 1.6; color: var(--slate-light); margin: 0; }
+.hero-bridge__text a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); font-style: normal; }
+.hero-bridge__text a:hover { border-bottom-color: var(--gold); }
+
+.doctrine-anchor { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate); background: rgba(200,169,81,.06); border-left: 3px solid var(--gold); padding: 12px 16px; margin: 0 0 16px; border-radius: 0 6px 6px 0; }
+.doctrine-anchor a { color: var(--navy); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(27,42,74,.3); }
+.doctrine-anchor a:hover { border-bottom-color: var(--navy); }
+
+.traj-doublings { font-weight: 600; color: var(--navy); white-space: nowrap; }
+
+.doctrine-echo { text-align: center; }
+.doctrine-echo__quote { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 600; font-style: italic; color: var(--navy); line-height: 1.2; margin: .4rem auto 1rem; max-width: 24ch; border: 0; }
+.doctrine-echo__body { font-family: var(--font-sans); font-size: 15px; line-height: 1.65; color: var(--slate); max-width: 60ch; margin: 0 auto 1.25rem; }
+.doctrine-echo__links { font-family: var(--font-sans); font-size: 14px; margin: 0; }
+.doctrine-echo__links a { color: var(--gold); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }
+.doctrine-echo__links a:hover { border-bottom-color: var(--gold); }
