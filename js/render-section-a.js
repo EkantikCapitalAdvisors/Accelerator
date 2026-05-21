@@ -339,14 +339,19 @@
         if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
 
         const netPL = trades.reduce((s, t) => s + (t.dollar_pl || 0), 0);
-        const retPct = (netPL / 20000) * 100;
         const end = 20000 + netPL;
+        // Each $5,000 of accumulated profit is one buffer (the scale-up trigger unit).
+        const BUFFER = 5000;
+        const buffers = netPL / BUFFER;
 
         const netEl = $('section-a-net');
-        const retEl = $('section-a-return');
+        const bufEl = $('section-a-buffers');
         const balEl = $('section-a-balance');
         if (netEl) netEl.textContent = (netPL >= 0 ? '+' : '−') + '$' + Math.abs(netPL).toLocaleString(undefined, { maximumFractionDigits: 0 });
-        if (retEl) retEl.textContent = (retPct >= 0 ? '+' : '') + retPct.toFixed(1) + '%';
+        if (bufEl) {
+            const mag = Math.abs(buffers).toFixed(1);
+            bufEl.textContent = (buffers < 0 ? '−' : '') + mag + (mag === '1.0' ? ' buffer' : ' buffers');
+        }
         if (balEl) balEl.textContent = '$' + end.toLocaleString(undefined, { maximumFractionDigits: 0 });
     }
 
