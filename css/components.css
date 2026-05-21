@@ -4790,3 +4790,10 @@ section.block.light { padding: 96px 0 112px; }
 .ladder-live-note a { color: var(--navy); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(27,42,74,.3); }
 .ladder-live-note a:hover { border-bottom-color: var(--navy); }
 .participation-card__caveat { font-size: 13px; opacity: .85; }
+
+/* ─── Dashboard Discord CTAs (experiment.html) ─── */
+.dash-head__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 18px; }
+.dash-head__cta-note { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--slate); max-width: 52ch; }
+.dash-follow { text-align: center; background: var(--navy-deep); }
+.dash-follow__h { font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 2.1rem); color: var(--ivory); margin: 0 0 .5rem; }
+.dash-follow__sub { font-family: var(--font-sans); font-size: 14.5px; line-height: 1.6; color: var(--slate-light); max-width: 56ch; margin: 0 auto 1.5rem; }
