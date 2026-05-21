@@ -1,5 +1,5 @@
 {
-  "_comment": "Stage 1 operator-fidelity counters. Criterion 01 auto-computes from the live trade log once attribution_active_since is set (per-trade H2/H3 tags appended to the close line, e.g. 'F12: -3 H2'); H1 is system-derived from the Expression Gate, never hand-tagged. Criteria 02/03 remain manual/daily-routine until Phase 3. Initial state = clean baseline.",
+  "_comment": "Stage 1 operator-fidelity counters. Criterion 01 auto-computes from the live trade log once attribution_active_since is set (per-trade H2/H3 tags appended to the close line, e.g. 'B1-07: -3 H2'); H1 is system-derived from the Expression Gate, never hand-tagged. Criteria 02/03 remain manual/daily-routine until Phase 3. Initial state = clean baseline.",
   "updated_at": "2026-05-20T21:00:00Z",
   "criterion_01_attribution": {
     "attribution_active_since": null,

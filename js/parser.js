@@ -469,7 +469,7 @@ function parseDiscordTradeText(text) {
         // 2. Date+time line: "Ekantik Capital  4/13/2026 8:33 AM" or bare "4/2/2026 10:12 AM"
         //    Also handles: "Ekantik Capital — 4/13/2026 8:33 AM" or with (edited)
         const headerMatch = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
-        if (headerMatch && !line.match(/^F\d+/i)) {
+        if (headerMatch && !line.match(/^(B\d+-\d+|F\d+)/i)) {
             const datePart = headerMatch[1]; // e.g. "4/13/2026"
             const timePart = headerMatch[2]; // e.g. "8:33 AM"
             const dp = datePart.split('/');
@@ -481,7 +481,7 @@ function parseDiscordTradeText(text) {
 
         // 2b. Time-only header: "Ekantik Capital  9:29 AM" (no date, use current date)
         const timeOnlyMatch = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
-        if (timeOnlyMatch && !line.match(/^F\d+/i)) {
+        if (timeOnlyMatch && !line.match(/^(B\d+-\d+|F\d+)/i)) {
             const timePart = timeOnlyMatch[1];
             if (currentDatetime) {
                 // Update time portion only
@@ -493,14 +493,16 @@ function parseDiscordTradeText(text) {
         // 3. Skip "(edited)" lines or other non-trade lines
         if (/^\(edited\)$/.test(line)) continue;
 
-        // 4. Match trade line: F##: <content>  (case insensitive)
-        const m = line.match(/^(F\d+)\s*:\s*(.+)$/i);
+        // 4. Match trade line: <id>: <content>  (case insensitive). IDs are
+        //    buffer-phase form "B<phase>-<seq>" (e.g. B1-07 — the live convention)
+        //    or legacy "F<n>" (e.g. F84 — preserved so historical trades parse).
+        const m = line.match(/^(B\d+-\d+|F\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
         const tradeNum = m[1].toUpperCase();
         let body = m[2].trim();
 
         // Attribution tag (Criterion 01): a trailing H2/H3 token on the close
-        // line — e.g. "F12: -3 H2". H2 = process breached, H3 = variance (the
+        // line — e.g. "B1-07: -3 H2". H2 = process breached, H3 = variance (the
         // resting default). H1 = edge failed is NOT an operator attribution; it
         // is system-derived from the Expression Gate's rolling-100 verdict and
         // must never be hand-tagged. A manual H1 is itself a fidelity breach —
@@ -539,6 +541,7 @@ function parseDiscordTradeText(text) {
             const sizeFraction = entry && entry.sizeFraction ? entry.sizeFraction : 1;
             const positionSize = entry && entry.positionSize ? entry.positionSize : 'full';
             const mesCount     = entry && entry.mesCount     != null ? entry.mesCount : null;
+            const contracts    = entry && entry.contracts    != null ? entry.contracts : 1;
             const round2 = v => Math.round(v * 100) / 100;
             const ppt = 50; // ES contract ($50/pt). MES trades scale via sizeFraction
                             // (mes_count / 10) so points and dollars are stored in
@@ -568,6 +571,7 @@ function parseDiscordTradeText(text) {
                 ppt: 50,
                 positionSize,
                 mesCount,
+                contracts,
                 attribution,
                 attributionBreach,
                 tagFiledAt: currentDatetime,
@@ -603,32 +607,41 @@ function parseDiscordTradeText(text) {
         }
 
         // Is this an entry line? Optional stop and optional position size.
-        //   "s 6837.5"                 — full position (default)
-        //   "sell 7153 stp 7156"       — full with stop
+        //   "s 6837.5"                 — 1 ES (default)
+        //   "sell 7153 stp 7156"       — 1 ES with stop
         //   "s 7141 5mes"              — 5 MES contracts ≡ 0.5 ES
         //   "s 7141 stp 7146 2mes"     — 2 MES ≡ 0.2 ES (one-fifth)
-        //   "b 6855 10 mes"            — full ES equivalent (10 MES)
+        //   "b 6855 10 mes"            — 1 ES equivalent (10 MES)
+        //   "s 7000 stp 7010 2es"      — 2 ES (after Buffer 1 fires; 3es / 4es as the ladder permits)
         //   "b 6992 half"              — legacy keyword (still accepted)
         //
-        // MES count → ES-equivalent: mes_count / 10. Stored points and dollars
-        // are normalized to ES so the whole dataset stays homogeneous.
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
+        // Size scales the stored points and dollars: MES → mes_count/10 ES;
+        // ES count → that many ES (1 ES = $50/pt). The whole dataset stays in
+        // ES-equivalent terms so it is homogeneous regardless of how it was sized.
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
         if (entryMatch) {
             const dirRaw = entryMatch[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
             const entryPrice = parseFloat(entryMatch[2]);
             const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
             const mesCountRaw = entryMatch[4];
-            const sizeKeyRaw = (entryMatch[5] || '').toLowerCase();
+            const esCountRaw  = entryMatch[5];
+            const sizeKeyRaw = (entryMatch[6] || '').toLowerCase();
 
             let sizeFraction = 1;
             let positionSize = 'full';
             let mesCount = null;
+            let contracts = 1;
 
             if (mesCountRaw) {
                 mesCount = parseInt(mesCountRaw, 10);
                 sizeFraction = mesCount / 10;
                 positionSize = `${mesCount} MES`;
+                contracts = 1;                       // sub-ES sizing — one ES line, fractional fill
+            } else if (esCountRaw) {
+                contracts = parseInt(esCountRaw, 10); // 2es / 3es / 4es once buffers green-light scaling
+                sizeFraction = contracts;
+                positionSize = `${contracts} ES`;
             } else if (sizeKeyRaw === 'half')                       { sizeFraction = 0.5;   positionSize = 'half'; }
             else if (sizeKeyRaw.startsWith('third'))                 { sizeFraction = 1 / 3; positionSize = 'third'; }
             else if (sizeKeyRaw === 'quarter' || sizeKeyRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
@@ -636,7 +649,7 @@ function parseDiscordTradeText(text) {
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
                 datetime: currentDatetime, date: currentDate,
-                sizeFraction, positionSize, mesCount
+                sizeFraction, positionSize, mesCount, contracts
             };
             continue;
         }
