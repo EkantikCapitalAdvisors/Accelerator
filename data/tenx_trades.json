@@ -1918,7 +1918,7 @@
         "mes_count":  null,
         "source":  "discord",
         "upload_batch":  "discord-1779286539366",
-        "attribution":  "H2"
+        "attribution":  "H3"
     },
     {
         "week_key":  "05/18/2026",
@@ -1971,7 +1971,7 @@
         "position_size":  "full",
         "mes_count":  null,
         "buffer_phase":  1,
-        "attribution":  "H2",
+        "attribution":  "H3",
         "attribution_breach":  false,
         "comment":  "",
         "tag_filed_at":  "2026-05-20 9:07 AM",
@@ -2000,7 +2000,7 @@
         "position_size":  "full",
         "mes_count":  null,
         "buffer_phase":  1,
-        "attribution":  "H2",
+        "attribution":  "H3",
         "attribution_breach":  false,
         "comment":  "",
         "tag_filed_at":  "",
