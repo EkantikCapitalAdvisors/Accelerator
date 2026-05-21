@@ -138,7 +138,7 @@
                         <tr><td class="mono">&minus;90%</td><td class="mono">+900%</td></tr>
                     </tbody>
                 </table>
-                <p class="method-pyramid__note">The capital mechanism that enforces it: a <strong>$5,000</strong> working unit sits on a <strong>$30,000</strong> capital base (6&times; absorption). The working unit is the only capital that trades; the base is never risked &mdash; so a bad regime drains the working unit, not the base. Realized profit fills the base first; only then does position size step up. Growth never lowers the floor. The ratios hold across allocation sizes.</p>
+                <p class="method-pyramid__note">What enforces it is <strong>adherence, not cushion</strong>: the working capital is <strong>$5,000</strong> per unit, and a single ES contract requires only ~$500 in day-trade margin &mdash; so the position is always a fraction of the capital. So long as the four principles hold and the stand-down architecture (&sect;04 Sit-Out, &sect;05 gates) fires on schedule, losses are capped before the $5,000 can reach the risk-of-ruin zone &mdash; the point from which no remaining edge could recover it.</p>
             </div>
 
             <!-- 01.2 · The Trigger Ladder -->
@@ -174,7 +174,7 @@
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
             </div>
-            <p class="method-ladder__note"><strong>One ES contract per buffer.</strong> Each buffer adds exactly one ES-contract of exposure &mdash; which the operator may express as up to ten MES contracts (10 MES = 1 ES) while staying within the one-ES-per-buffer ceiling. The base unit starts at 1 ES (≤ 10 MES); each trigger raises the ceiling by one ES, to a maximum of four. Each trigger requires a fresh $5,000 buffer fill before firing. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
+            <p class="method-ladder__note"><strong>One ES contract per buffer.</strong> Each buffer adds exactly one ES-contract of exposure &mdash; which the operator may express as up to ten MES contracts (10 MES = 1 ES) while staying within the one-ES-per-buffer ceiling. The base unit starts at 1 ES (≤ 10 MES); each trigger raises the ceiling by one ES, to a maximum of four. Each trigger requires a fresh $5,000 of accumulated profit before firing. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
 
             <!-- 01.3 · Risk Parameters -->
             <div class="component-block-divider"></div>
@@ -450,13 +450,13 @@
                 <article class="defense-card defense-card--light">
                     <span class="defense-card__num">01</span>
                     <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; Never Lose Money</h3>
-                    <p class="defense-card__lead">Rule No. 1, made structural. Because a loss needs a disproportionately larger gain to recover (&minus;50% needs +100% back), capital is kept out of the unrecoverable zone by design:</p>
+                    <p class="defense-card__lead">Rule No. 1, made structural &mdash; through <strong>adherence to the rules</strong>, not a cash cushion. Because a loss needs a disproportionately larger gain to recover (&minus;50% needs +100% back), the discipline is engineered to stop losses long before capital reaches the point from which it cannot recover.</p>
                     <ul class="defense-card__list">
-                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $30,000 &nbsp;—&nbsp; absorbs the regime; never risked</li>
-                        <li><strong>Working unit</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $5,000 &nbsp;—&nbsp; the only capital that trades</li>
-                        <li><strong>Step-up</strong> &nbsp;·&nbsp; profit fills the buffer first, then size increases &mdash; growth never lowers the floor</li>
+                        <li><strong>Working capital</strong> &nbsp;·&nbsp; $5,000 per unit &mdash; the capital at work.</li>
+                        <li><strong>Position</strong> &nbsp;·&nbsp; one ES contract requires only ~$500 in day-trade margin &mdash; a fraction of the working capital, never the whole.</li>
+                        <li><strong>Protection</strong> &nbsp;·&nbsp; the never-lose principles (positive expectancy, expected value, position sizing) plus the Sit-Out and Falsifiability stand-downs cap the downside <em>before</em> the math turns unrecoverable.</li>
                     </ul>
-                    <p class="defense-card__footer">The base is not extra cushion. It is what absorbs what regime detection misses &mdash; so a bad stretch costs the working unit, not the capital.</p>
+                    <p class="defense-card__footer">It is adherence that prevents ruin, not cushion. So long as the operator follows the rules and the stand-down architecture fires on schedule, the $5,000 working unit stays out of the risk-of-ruin zone &mdash; the region where no remaining edge can mathematically recover the loss.</p>
                 </article>
 
                 <article class="defense-card defense-card--light">
