@@ -4807,3 +4807,6 @@ section.block.light { padding: 96px 0 112px; }
 .criterion-card__track { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; border-radius: 4px; padding: 2px 7px; margin: 0 0 10px; }
 .criterion-card__track--auto { color: var(--pass); background: rgba(45,80,22,.1); border: 1px solid rgba(45,80,22,.35); }
 .criterion-card__track--manual { color: var(--slate); background: rgba(100,116,139,.1); border: 1px solid rgba(100,116,139,.3); }
+
+/* ─── Size-neutral note on the Edge Gate strip ─── */
+.gates-status__note { font-size: 10px; opacity: .7; font-style: italic; }

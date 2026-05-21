@@ -30,13 +30,36 @@
         return w.reduce((a, t) => a + (t.dollar_pl || t.dollarPL || 0), 0) / w.length;
     }
 
+    // Size-neutral companion: rolling-100 R-expectancy (profit per $1 risked).
+    // Both win and risk scale with position size, so this reads the edge cleanly
+    // through buffer scaling — it does not move when 1 ES becomes 2/3/4 ES.
+    function rollingR(trades) {
+        if (!trades || !trades.length) return null;
+        const w = trades.length >= 100 ? trades.slice(-100) : trades;
+        const rs = w.map(t => {
+            const pl = t.dollar_pl || t.dollarPL || 0;
+            const rd = t.risk_dollars || t.riskDollars || 0;
+            return rd > 0 ? pl / rd : null;
+        }).filter(v => v != null);
+        if (!rs.length) return null;
+        return rs.reduce((a, v) => a + v, 0) / rs.length;
+    }
+
+    function fmtR(v) {
+        if (v == null || !isFinite(v)) return '—';
+        return (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + 'R';
+    }
+
     function renderExpression(state) {
-        const ev = rollingEv((state && state.trades) || []);
+        const trades = (state && state.trades) || [];
+        const ev = rollingEv(trades);
         const txt = fmtEV(ev);
         ['gate-expression-ev', 'gate-expression-ev-2'].forEach(id => { const e = $(id); if (e) e.textContent = txt; });
+        const rTxt = fmtR(rollingR(trades));
+        ['gate-expression-r', 'gate-expression-r-2'].forEach(id => { const e = $(id); if (e) e.textContent = rTxt; });
         const st = $('gate-expression-state');
         if (st) {
-            const fired = ev != null && ev <= 0 && (state.trades || []).length >= 100;
+            const fired = ev != null && ev <= 0 && trades.length >= 100;
             st.textContent = fired ? 'TRIGGERED' : 'Monitoring';
             st.classList.toggle('gates-status__value--fired', fired);
         }
