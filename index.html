@@ -98,16 +98,23 @@
                 The experiment runs against a specific, named protocol. The protocol is not under operator discretion. It is not modified under stress. It does not adapt to the operator&rsquo;s confidence level. It is the same on a winning week as on a losing one. The protocol is below in full.
             </p>
 
-            <!-- 01.1 · The Pyramid -->
-            <div class="component-label">01.1 · The Pyramid &mdash; base unit</div>
+            <!-- 01.1 · Never Lose Money -->
+            <div class="component-label">01.1 · Never Lose Money &mdash; the base discipline</div>
             <div class="method-pyramid">
-                <p>Each test unit is a Positive Expectancy Pyramid with three layers:</p>
-                <ul class="method-pyramid__list">
-                    <li><strong>Capital Buffer · 6–10×</strong> &mdash; the regime-absorption layer, never risked</li>
-                    <li><strong>Compounding Buffer · 2×</strong> &mdash; fills via realized profit; triggers a position-size step-up when full</li>
-                    <li><strong>Positive Expectancy · 1×</strong> &mdash; the per-trade working unit</li>
-                </ul>
-                <p class="method-pyramid__note">The standard test allocation is <strong>$5,000</strong> as the working unit, sitting on top of a $30,000 capital buffer. The ratios hold across allocation sizes.</p>
+                <p class="nlm-rule">&ldquo;Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.&rdquo; <span class="nlm-attr">&mdash; Warren Buffett</span></p>
+                <p>This isn&rsquo;t a slogan here &mdash; it&rsquo;s an engineering constraint, built on a piece of arithmetic most operators ignore: <strong>losses and gains are not symmetric.</strong> A loss requires a disproportionately larger gain just to return to even, and the bigger the loss, the more punishing the recovery:</p>
+                <table class="nlm-table">
+                    <thead><tr><th>Drawdown taken</th><th>Gain required to recover</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">&minus;10%</td><td class="mono">+11%</td></tr>
+                        <tr><td class="mono">&minus;25%</td><td class="mono">+33%</td></tr>
+                        <tr><td class="mono">&minus;50%</td><td class="mono">+100%</td></tr>
+                        <tr><td class="mono">&minus;75%</td><td class="mono">+300%</td></tr>
+                        <tr><td class="mono">&minus;90%</td><td class="mono">+900%</td></tr>
+                    </tbody>
+                </table>
+                <p>Past a certain point, recovery stops being a question of edge and becomes a question of luck. So the entire architecture is built to keep capital out of that zone &mdash; to <em>never lose money</em> in the structural, unrecoverable sense.</p>
+                <p class="method-pyramid__note">The mechanism: a <strong>$5,000</strong> working unit sits on top of a <strong>$30,000</strong> capital buffer (6&times; absorption). The working unit is what trades; the buffer is never risked &mdash; it exists so a bad regime drains the working unit, not the base. Realized profit fills the buffer first; only when it is full does position size step up. Growth never comes at the cost of the floor. The ratios hold across allocation sizes.</p>
             </div>
 
             <!-- 01.2 · The Trigger Ladder -->
@@ -401,7 +408,7 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 04 — THE ARCHITECTURE (Pyramid + Sit-Out) ═══ -->
+    <!-- ═══ SECTION 04 — THE ARCHITECTURE (Never Lose Money + Sit-Out) ═══ -->
     <section class="section section--ivory defense" id="defense" aria-labelledby="defense-h2">
         <div class="section__inner section__inner--wide">
             <div class="epigraph">
@@ -418,14 +425,14 @@
             <div class="defense__layers defense__layers--two">
                 <article class="defense-card defense-card--light">
                     <span class="defense-card__num">01</span>
-                    <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; The Capital Buffer</h3>
-                    <p class="defense-card__lead">The Positive Expectancy Pyramid. One test unit, structurally mapped:</p>
+                    <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; Never Lose Money</h3>
+                    <p class="defense-card__lead">Rule No. 1, made structural. Because a loss needs a disproportionately larger gain to recover (&minus;50% needs +100% back), capital is kept out of the unrecoverable zone by design:</p>
                     <ul class="defense-card__list">
-                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $30,000 &nbsp;—&nbsp; the regime-absorption layer, never risked</li>
-                        <li><strong>Compounding buffer</strong> &nbsp;·&nbsp; 2× &nbsp;—&nbsp; fills via realized profit; triggers a position-size step-up when full</li>
-                        <li><strong>Positive expectancy</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $5,000 &nbsp;—&nbsp; the per-trade working unit</li>
+                        <li><strong>Capital buffer</strong> &nbsp;·&nbsp; 6–10× &nbsp;·&nbsp; $30,000 &nbsp;—&nbsp; absorbs the regime; never risked</li>
+                        <li><strong>Working unit</strong> &nbsp;·&nbsp; 1× &nbsp;·&nbsp; $5,000 &nbsp;—&nbsp; the only capital that trades</li>
+                        <li><strong>Step-up</strong> &nbsp;·&nbsp; profit fills the buffer first, then size increases &mdash; growth never lowers the floor</li>
                     </ul>
-                    <p class="defense-card__footer">The base is not extra cushion. It is what absorbs what regime detection misses.</p>
+                    <p class="defense-card__footer">The base is not extra cushion. It is what absorbs what regime detection misses &mdash; so a bad stretch costs the working unit, not the capital.</p>
                 </article>
 
                 <article class="defense-card defense-card--light">
