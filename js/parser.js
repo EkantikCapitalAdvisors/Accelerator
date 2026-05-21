@@ -539,6 +539,11 @@ function parseDiscordTradeText(text) {
                 attribution = closeMatch[3].toUpperCase();
                 if (attribution === 'H1') attributionBreach = true;
             }
+            // Fall back to H-tag from the entry line if result line didn't repeat it
+            if (!attribution && entry && entry.attribution) {
+                attribution = entry.attribution;
+                if (attribution === 'H1') attributionBreach = true;
+            }
             comment = (closeMatch[4] || '').trim();
             resultMatch = true;
         }
@@ -627,11 +632,15 @@ function parseDiscordTradeText(text) {
         //   "b 6855 10 mes"            — 1 ES equivalent (10 MES)
         //   "s 7000 stp 7010 2es"      — 2 ES (after Buffer 1 fires; 3es / 4es as the ladder permits)
         //   "b 6992 half"              — legacy keyword (still accepted)
+        //   "s 7386 H2"               — H-tag on entry line (attribution hypothesis, carried to close)
+        //   "s 7386 5mes H2"          — size + H-tag combined
         //
         // Size scales the stored points and dollars: MES → mes_count/10 ES;
         // ES count → that many ES (1 ES = $50/pt). The whole dataset stays in
         // ES-equivalent terms so it is homogeneous regardless of how it was sized.
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?\s*$/i);
+        // H-tag (H1/H2/H3) may appear anywhere after the price/size and is stored
+        // on the pending entry so the close line inherits it automatically.
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?(?:\s+(H[123]))?\s*$/i);
         if (entryMatch) {
             const dirRaw = entryMatch[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
@@ -640,6 +649,7 @@ function parseDiscordTradeText(text) {
             const mesCountRaw = entryMatch[4];
             const esCountRaw  = entryMatch[5];
             const sizeKeyRaw = (entryMatch[6] || '').toLowerCase();
+            const entryAttribution = entryMatch[7] ? entryMatch[7].toUpperCase() : null;
 
             let sizeFraction = 1;
             let positionSize = 'full';
@@ -662,7 +672,8 @@ function parseDiscordTradeText(text) {
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
                 datetime: currentDatetime, date: currentDate,
-                sizeFraction, positionSize, mesCount, contracts
+                sizeFraction, positionSize, mesCount, contracts,
+                attribution: entryAttribution  // carried to the close line
             };
             continue;
         }
