@@ -4784,3 +4784,9 @@ section.block.light { padding: 96px 0 112px; }
 .doctrine-echo__links { font-family: var(--font-sans); font-size: 14px; margin: 0; }
 .doctrine-echo__links a { color: var(--gold); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }
 .doctrine-echo__links a:hover { border-bottom-color: var(--gold); }
+
+/* ─── Live-follow invite + Discord delay caveat ─── */
+.ladder-live-note { font-family: var(--font-sans); font-size: 13.5px; line-height: 1.6; color: var(--slate); margin: 14px 0 0; padding: 12px 16px; background: rgba(200,169,81,.06); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; }
+.ladder-live-note a { color: var(--navy); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(27,42,74,.3); }
+.ladder-live-note a:hover { border-bottom-color: var(--navy); }
+.participation-card__caveat { font-size: 13px; opacity: .85; }
