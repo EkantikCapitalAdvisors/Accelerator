@@ -6,7 +6,8 @@
     'use strict';
 
     const instances = {};
-    const STARTING_BALANCE = 20000;
+    const STARTING_BALANCE = 5000;   // $5,000 working unit per Never Lose Money
+    const BUFFER_STEP = 5000;        // each $5,000 of accumulated profit = one buffer
 
     function parseTime(str) {
         const m = (str || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
@@ -151,9 +152,47 @@
         const peak = Math.max(...allValues);
         const low  = Math.min(...allValues);
 
+        // Buffer milestones: each +$5,000 of profit green-lights one position-size
+        // step-up. Mark the buffers reached (and the next one as the live target).
+        const BUFFER_LABELS = [
+            'Buffer 1 reached → double position',
+            'Buffer 2 → scale to 3 ES',
+            'Buffer 3 → scale to 4 ES (ceiling)'
+        ];
+        const bufferLines = [];
+        for (let i = 0; i < BUFFER_LABELS.length; i++) {
+            const bal = STARTING_BALANCE + (i + 1) * BUFFER_STEP;
+            if (bal <= peak + BUFFER_STEP) bufferLines.push({ bal, label: BUFFER_LABELS[i], reached: bal <= peak });
+        }
+        const axisMax = Math.max(peak, bufferLines.length ? bufferLines[bufferLines.length - 1].bal : peak);
+
+        const bufferPlugin = {
+            id: 'bufferLines',
+            afterDatasetsDraw(chart) {
+                const { ctx, chartArea: { left, right, top, bottom }, scales: { y } } = chart;
+                ctx.save();
+                bufferLines.forEach(b => {
+                    const yPos = y.getPixelForValue(b.bal);
+                    if (yPos < top || yPos > bottom) return;
+                    ctx.beginPath();
+                    ctx.setLineDash([5, 4]);
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = b.reached ? 'rgba(45,80,22,0.6)' : 'rgba(100,116,139,0.45)';
+                    ctx.moveTo(left, yPos); ctx.lineTo(right, yPos); ctx.stroke();
+                    ctx.setLineDash([]);
+                    ctx.font = "600 10px 'JetBrains Mono', monospace";
+                    ctx.fillStyle = b.reached ? '#2D5016' : '#64748B';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(b.label, left + 6, yPos - 4);
+                });
+                ctx.restore();
+            }
+        };
+
         instances[key] = new root.Chart(canvas, {
             type: 'line',
             data: { labels, datasets },
+            plugins: [bufferPlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -197,7 +236,7 @@
                             callback: (v) => '$' + Number(v).toLocaleString()
                         },
                         min: Math.floor(low / 1000) * 1000,
-                        max: Math.ceil(peak / 1000) * 1000
+                        max: Math.ceil(axisMax / 1000) * 1000
                     }
                 }
             }

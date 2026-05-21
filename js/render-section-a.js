@@ -339,7 +339,7 @@
         if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
 
         const netPL = trades.reduce((s, t) => s + (t.dollar_pl || 0), 0);
-        const end = 20000 + netPL;
+        const end = 5000 + netPL;   // $5,000 working unit base
         // Each $5,000 of accumulated profit is one buffer (the scale-up trigger unit).
         const BUFFER = 5000;
         const buffers = netPL / BUFFER;
