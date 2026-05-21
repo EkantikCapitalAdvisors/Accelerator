@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Falsifiability Protocol v2.0 · Ekantik Capital Advisors</title>
+<style>
+  @page { size: letter; margin: 22mm 20mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #1B2A4A; line-height: 1.55; font-size: 11.5pt; margin: 0; padding: 40px; max-width: 760px; margin: 0 auto; }
+  .gold { color: #9a7d2e; }
+  .eyebrow { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9pt; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A951; font-weight: 700; }
+  h1 { font-size: 30pt; font-weight: 600; letter-spacing: -0.01em; margin: 6px 0 4px; }
+  h1 + .sub { font-style: italic; font-size: 16pt; color: #9a7d2e; margin: 0 0 24px; }
+  h2 { font-size: 18pt; font-weight: 600; margin: 34px 0 4px; border-top: 1px solid #C8A951; padding-top: 14px; page-break-after: avoid; }
+  h2 .art { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase; color: #C8A951; display: block; font-weight: 700; margin-bottom: 2px; }
+  h3 { font-size: 12pt; font-weight: 700; margin: 18px 0 4px; font-family: 'Helvetica Neue', Arial, sans-serif; letter-spacing: 0.02em; page-break-after: avoid; }
+  p { margin: 0 0 11px; }
+  .lead { font-style: italic; font-size: 13pt; color: #1B2A4A; }
+  ul { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 5px; }
+  .box { background: #FAF8F5; border: 1px solid #e3ddcd; border-left: 3px solid #C8A951; padding: 14px 18px; margin: 14px 0; page-break-inside: avoid; }
+  .box .label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: #C8A951; font-weight: 700; margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10.5pt; page-break-inside: avoid; }
+  th { background: #1B2A4A; color: #fff; text-align: left; padding: 8px 10px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase; }
+  td { padding: 8px 10px; border-bottom: 1px solid #e3ddcd; vertical-align: top; }
+  .meta { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5pt; color: #64748B; }
+  .meta-table td { border: none; padding: 3px 0; }
+  .meta-table td:first-child { font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 8pt; color: #64748B; width: 160px; }
+  .sig { background: #1B2A4A; color: #FAF8F5; padding: 24px; margin: 24px 0; page-break-inside: avoid; }
+  .sig .label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: #C8A951; }
+  .sig-line { border-bottom: 1px solid rgba(250,248,245,0.4); margin: 18px 0 4px; min-height: 28px; }
+  footer { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e3ddcd; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 8.5pt; color: #64748B; }
+  .pagebreak { page-break-before: always; }
+  @media print { body { padding: 0; } .noprint { display: none; } }
+  .noprint { background: #1B2A4A; color: #fff; padding: 10px 16px; border-radius: 6px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 10pt; margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<div class="noprint">To save as PDF: <strong>Cmd/Ctrl-P → Destination: Save as PDF → Save</strong>. Replace <code>assets/ekantik-falsifiability-protocol-v1.pdf</code> with the result (or add as <code>-v2.pdf</code> and update the link in Section&nbsp;05).</div>
+
+<div class="eyebrow">Ekantik Capital Advisors LLC</div>
+<h1>Falsifiability Protocol</h1>
+<p class="sub">A pre-committed operational charter · v2.0</p>
+<p class="meta">Governing the Ekantik Trading Strategy. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.</p>
+
+<table class="meta-table">
+  <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
+  <tr><td>Version</td><td>2.0 — adds the Operator Fidelity Layer to the v1.0 edge charter</td></tr>
+  <tr><td>Reference</td><td>FP-V2-2026-05</td></tr>
+  <tr><td>Strategy</td><td>Ekantik Trading Strategy · ES / MES Futures</td></tr>
+  <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
+  <tr><td>Date locked</td><td>____ May 2026</td></tr>
+  <tr><td>Distribution</td><td>Public · accelerator.ekantikcapital.com</td></tr>
+</table>
+
+<h2><span class="art">Preamble</span>Two gates, both binding.</h2>
+<p class="lead">Every credible system pre-defines the conditions under which it admits failure. Most trading operations do not. This one defines two — and runs them in parallel.</p>
+<p>The v1.0 charter defined the <strong>Expression Layer</strong>: the precise statistical threshold at which the operator agrees the edge is dead, the stand-down sequence, and the re-deployment gate (Articles I–IV, retained below). v2.0 adds the <strong>Fidelity Layer</strong>: the criteria under which the operator admits the <em>published method is not what is actually running</em> — independent of whether the edge itself is sound.</p>
+<p>The two layers are bound by a single interpretation rule. The edge cannot be declared falsified using data produced while transmission fidelity is in breach. Both layers are reported on the public page in real time.</p>
+
+<div class="box">
+  <div class="label">The Binding Interpretation Rule</div>
+  <p>Expression-Layer (Edge Gate) firings while a Fidelity-Layer Tier&nbsp;2 or Tier&nbsp;3 breach is active in the rolling 30-day window are <strong>interpretation-suspended</strong> pending operator remediation. The edge cannot be declared falsified from data generated during a known transmission-fidelity breach.</p>
+</div>
+
+<h2><span class="art">Article I</span>The Expression Layer — Trigger Condition</h2>
+<p>The operator agrees to declare the edge statistically dead upon satisfaction of the following condition:</p>
+<p class="lead gold">Realized expectancy across rolling 100 qualified trades drops to $0 per trade — the edge becomes net-negative.</p>
+<p>Evaluated continuously; the trigger is satisfied at the close of the trade that first brings rolling-100 expectancy to zero or below. A qualified trade is one entered and exited under all operative documented rules, unaffected by execution error, platform malfunction, or extraordinary market event.</p>
+<div class="box"><div class="label">Rationale — threshold</div><p>$0 is the cleanest falsifiability bar: the strategy stands down when, and only when, it is no longer producing positive expectancy. A threshold above zero would trip on ordinary variance from any working edge. The 100-trade window’s standard error (≈$30) places $0 roughly 2.2 SE below the documented live expectancy — statistical evidence of collapse, not noise.</p></div>
+
+<h2><span class="art">Article II</span>The Expression Layer — Action Protocol</h2>
+<p>Upon trigger satisfaction, immediately and without exception:</p>
+<ul>
+  <li><strong>New entries</strong> drop to zero size from the next session, on any account, under any rule, until the Re-Deployment Gate is satisfied in full.</li>
+  <li><strong>Open positions</strong> close at the next defined exit per the original trade plan. No discretionary acceleration or delay.</li>
+  <li><strong>Strategy status</strong> moves to research-only (analysis, paper, prop-firm-funded virtual deployment permitted; no live capital).</li>
+  <li><strong>Public notification</strong> in the Discord journal within 24 hours: the rolling-100 figure that satisfied the trigger, the closing trade ID, and a statement of research-only status.</li>
+</ul>
+
+<h2><span class="art">Article III</span>The Expression Layer — Re-Deployment Gate</h2>
+<p>The strategy does not return to live deployment until <strong>all three</strong> conditions are satisfied:</p>
+<ul>
+  <li><strong>Out-of-sample test</strong> — ≥ +$50 per trade across ≥ 50 qualified trades on virtual / paper / prop-firm capital. Never on member capital.</li>
+  <li><strong>Written re-derivation</strong> — explaining the structural cause of decay, any logic changes, and the rationale for believing the edge has returned.</li>
+  <li><strong>48-hour cool-off</strong> — between satisfaction of the above and any new live entry.</li>
+</ul>
+<div class="box"><div class="label">Rationale — asymmetric bar</div><p>Stand-down requires only evidence the edge crossed into net-negative territory ($0). Re-deployment requires evidence of meaningfully positive expectancy (+$50). Quick to fail; slow to forgive.</p></div>
+
+<div class="pagebreak"></div>
+
+<h2><span class="art">Article IV</span>Modification Protocol</h2>
+<p>Any modification to this protocol — thresholds, window sizes, action steps, re-deployment criteria, cool-off periods, or any Fidelity-Layer criterion — is subject to:</p>
+<ul>
+  <li><strong>48-hour cool-off</strong> — no modification enacted within 48 hours of first proposal.</li>
+  <li><strong>Written justification</strong> — identifying the structural reason, not the recent outcome. Justifications referencing recent P&amp;L are facially insufficient. Must specify which layer the change addresses (operator capacity vs edge improvement) and establish it is not an edge conclusion drawn from contaminated transmission-fidelity data.</li>
+  <li><strong>Witness countersignature</strong> — at least one named witness signs that the protocol was followed (the witness does not endorse the substance).</li>
+  <li><strong>Public disclosure</strong> — posted to the Discord journal within 24 hours of becoming operative; reflected in the next-issued version with incremented version and refreshed lock date.</li>
+</ul>
+
+<h2><span class="art">Article V</span>The Fidelity Layer — Three Criteria</h2>
+<p class="lead">Is the published method what is actually running? Each criterion is pre-committed, observable, binary-checkable, and time-bounded — mapping to a distinct layer of operator fidelity: cognitive, structural, substrate.</p>
+
+<h3>Criterion 01 — Per-Trade Attribution Discipline</h3>
+<p>Every qualified trade receives an attribution tag — <strong>H1 (edge failed)</strong>, <strong>H2 (process breached)</strong>, or <strong>H3 (variance)</strong> — logged before the next entry, against a pre-decision log (rationale, expected outcome, frozen-process checklist). H1 is locked out as a default; H2 or H3 is the resting attribution. H1 becomes admissible only after a pattern across N events warrants it.</p>
+<p><strong>Breach:</strong> tag missing at next entry · tag inconsistent with pre-decision log · H1 invoked without pattern justification. <strong>Threshold:</strong> zero breaches inside rolling 100-trade window. <strong>Verification:</strong> witness audits the attribution log monthly.</p>
+
+<h3>Criterion 02 — Rule-Modification Integrity</h3>
+<p>Zero unannounced or witness-uncountersigned protocol modifications inside the rolling window, per the Article IV four-step protocol. <strong>Breach:</strong> any modification executed without the four steps. <strong>Threshold:</strong> binary — zero breaches, period. <strong>Verification:</strong> witness countersignature artifact retrievable per modification.</p>
+
+<h3>Criterion 03 — Daily Routine Adherence</h3>
+<p>Three pre-committed daily components, filed before market open:</p>
+<ul>
+  <li><strong>Phelps winning/stress visualization</strong> — pre-market rehearsal of both regime endpoints (cooperative and adverse), so neither arrival is novel.</li>
+  <li><strong>Predisposal trade-decision visualization</strong> — pre-decided responses to the session’s likely decision points, logged before open.</li>
+  <li><strong>Scaling-up / scaling-down law visualization</strong> — pre-commitment to mechanical response under both regime directions. Scaling triggers are not judgment calls.</li>
+</ul>
+<p><strong>Breach:</strong> adherence below 95% across any rolling 30 trading days. <strong>Threshold:</strong> ≥ 95% completion across rolling 30 days. <strong>Verification:</strong> witness reviews the adherence log monthly; below-threshold weeks require written explanation.</p>
+
+<h2><span class="art">Article VI</span>The Fidelity Layer — Three-Tier Stand-Down</h2>
+<table>
+  <tr><th>Tier</th><th>Trigger</th><th>Response</th><th>Resume</th></tr>
+  <tr><td><strong>T1</strong><br>Logged breach</td><td>Single isolated breach of Criterion 01 or 03.</td><td>Logged within 24h + Discord entry. Witness review within 7 days, written corrective action. Stage-1 counter resets to zero. No size/operational change.</td><td>Immediate; counter restarts at zero.</td></tr>
+  <tr><td><strong>T2</strong><br>Conditions reduced</td><td>3+ breaches of Criterion 01/03 in rolling 30 trades, or sustained Criterion 03 below 95% across rolling 30 days.</td><td>Position cut to minimum (1 MES, no scaling, no ES) for next 20 qualified trades. Daily filing under witness oversight. Counter resets. Trading continues at reduced conditions.</td><td>20 clean minimum-size trades + witness countersignature.</td></tr>
+  <tr><td><strong>T3</strong><br>Full cessation</td><td>Any Criterion 02 breach, or a second T2 inside rolling 100 trades.</td><td>Immediate cessation; new entries → zero next session; open positions exit per plan. Discord entry within 24h with breach, structural cause, remediation pathway. Witness convenes structural review. Protocol update if breach revealed structural inadequacy.</td><td>Witness-countersigned remediation artifact + 30-day calendar gap + 20 minimum-size trades.</td></tr>
+</table>
+<p class="meta"><strong>Calibration.</strong> The first 30 days following public launch are observation-only while baseline adherence is established; the Fidelity Layer is binding from day 31. The Expression Layer (Articles I–III) is binding from day one.</p>
+
+<h2><span class="art">Article VII</span>Witness &amp; Verification</h2>
+<p>The named witness holds authority over: modification approvals (Article IV), breach tier classifications (Article VI), and Stage-1 resumption events (T2/T3). The witness signs that protocol was followed; the witness does not endorse the substance of any decision or modification.</p>
+<ul>
+  <li><strong>Countersignature</strong> required for: modifications, T2/T3 resumptions, monthly attribution audits. Artifact retrievable from the public page.</li>
+  <li><strong>Classification disputes:</strong> 7-day cool-off from initial classification; witness reviews with written rationale; if unresolved, a named third-party adjudicator decides; decision binding and published in the breach record.</li>
+  <li><strong>Monthly audit:</strong> findings across all three criteria published monthly to <code>witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
+</ul>
+
+<div class="sig">
+  <div class="label">Operator</div>
+  <p style="margin:6px 0 0; font-size:14pt;">Hiren Desai · Founder &amp; Chief Investment Officer · Ekantik Capital Advisors LLC</p>
+  <div class="sig-line"></div>
+  <div class="label">Signature / Date locked</div>
+  <div style="margin-top:18px;"><span class="label">Witness 01</span><div class="sig-line"></div><span class="label">Name · Relationship · Signature · Date</span></div>
+  <p style="font-size:9pt; color:rgba(250,248,245,0.7); margin-top:14px;">By signature, the operator attests this protocol was derived prior to the deployment of member capital and is hereby locked as the governing operational charter. Witness signature attests only that the modification protocol was followed.</p>
+</div>
+
+<footer>
+  Falsifiability Protocol · v2.0 · Doc Ref FP-V2-2026-05 · Ekantik Capital Advisors LLC · Maple Grove, MN · Public — accelerator.ekantikcapital.com · © 2026 Ekantik Capital Advisors LLC. All rights reserved.
+</footer>
+
+</body>
+</html>
