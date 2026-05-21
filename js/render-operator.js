@@ -50,8 +50,15 @@
         return (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + 'R';
     }
 
+    // Gate activation: it can fire from GATE_ACTIVE_MIN (SE only ~12% wider than
+    // at 100), and is labelled "provisional" until it reaches the locked-protocol
+    // binding sample of GATE_BINDING_MIN.
+    const GATE_ACTIVE_MIN = 80;
+    const GATE_BINDING_MIN = 100;
+
     function renderExpression(state) {
         const trades = (state && state.trades) || [];
+        const n = trades.length;
         const ev = rollingEv(trades);
         const txt = fmtEV(ev);
         ['gate-expression-ev', 'gate-expression-ev-2'].forEach(id => { const e = $(id); if (e) e.textContent = txt; });
@@ -59,8 +66,12 @@
         ['gate-expression-r', 'gate-expression-r-2'].forEach(id => { const e = $(id); if (e) e.textContent = rTxt; });
         const st = $('gate-expression-state');
         if (st) {
-            const fired = ev != null && ev <= 0 && trades.length >= 100;
-            st.textContent = fired ? 'TRIGGERED' : 'Monitoring';
+            const active = n >= GATE_ACTIVE_MIN;
+            const fired = ev != null && ev <= 0 && active;
+            const provisional = n < GATE_BINDING_MIN;
+            let label = !active ? 'Arming' : (fired ? 'TRIGGERED' : 'Monitoring');
+            if (active && provisional) label += ' · provisional';
+            st.textContent = label;
             st.classList.toggle('gates-status__value--fired', fired);
         }
     }

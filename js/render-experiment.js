@@ -45,13 +45,17 @@
 
         // Triggers fired = number of buffer thresholds the cumulative profit has crossed.
         const fired = BUFFERS.filter(b => cum >= b.threshold).length;
-        const gateFired = ev100 != null && ev100 < FALSIFIABILITY_BAR && n >= 100;
+        // Edge gate is active from 80 trades (provisional until 100), per the
+        // operator-falsifiability calibration.
+        const gateActive = n >= 80;
+        const gateFired = ev100 != null && ev100 < FALSIFIABILITY_BAR && gateActive;
+        const gateProvisional = n >= 80 && n < 100;
 
         // ── Hero status strip ──
         if ($('xp-sample'))   $('xp-sample').textContent   = n ? String(n) : '—';
         if ($('xp-ev'))       $('xp-ev').textContent       = evAll != null ? fmtSignedUSD(evAll) : '—';
         if ($('xp-triggers')) $('xp-triggers').textContent = `${fired} / 4`;
-        if ($('xp-gate'))     $('xp-gate').textContent     = gateFired ? 'TRIGGERED' : 'Armed';
+        if ($('xp-gate'))     $('xp-gate').textContent     = gateFired ? 'TRIGGERED' : (gateProvisional ? 'Armed · provisional' : 'Armed');
 
         // ── Trigger ladder ──
         const ladder = $('trigger-ladder');
