@@ -22,7 +22,6 @@
         if (root.Ekantik.SectionA) root.Ekantik.SectionA.init();
         if (root.Ekantik.SectionB) root.Ekantik.SectionB.init();
         if (root.Ekantik.SectionC) root.Ekantik.SectionC.init();
-        if (root.Ekantik.Modules)  root.Ekantik.Modules.init();
 
         // Kick off first load
         root.Ekantik.Data.load();

@@ -270,8 +270,8 @@
     }
 
     // The legacy "Notify me when autotrading opens" form was retired in the
-    // Accelerator repositioning. The canonical indication-of-interest form now
-    // lives in Module C (js/render-modules.js + #indication-form in index.html).
+    // Accelerator repositioning. The canonical Reach Out form now lives in
+    // js/render-experiment.js (#reach-form in index.html).
 
     function init() {
         root.Ekantik.Data.onChange(state => {
