@@ -523,7 +523,7 @@
                 <article class="criterion-card">
                     <span class="criterion-card__num">01</span>
                     <h3 class="criterion-card__title">Per-Trade Attribution Discipline</h3>
-                    <p class="criterion-card__body">Every qualified trade is tagged <strong>H1 (edge failed)</strong>, <strong>H2 (process breached)</strong>, or <strong>H3 (variance)</strong>, logged before the next entry, against a pre-decision log. H1 is locked out as a default — only admissible after a pattern warrants it.</p>
+                    <p class="criterion-card__body">Every qualified trade carries an operator tag &mdash; <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong>, logged before the next entry against a pre-decision log. <strong>H1 (edge failed) is never tagged per trade</strong> &mdash; that verdict belongs to the Expression Gate&rsquo;s rolling-100 reading, not to any single trade. A hand-applied H1 is itself a breach.</p>
                     <div class="criterion-card__metric">
                         <span>Tags filed (rolling 100)</span><strong id="c01-tags">—</strong>
                     </div>

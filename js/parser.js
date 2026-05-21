@@ -159,6 +159,9 @@ const DB = {
                     ppt:          t.ppt         || 5,
                     position_size: t.positionSize || 'full',
                     mes_count:    t.mesCount    || null,
+                    attribution:  t.attribution || null,
+                    attribution_breach: !!t.attributionBreach,
+                    tag_filed_at: t.tagFiledAt  || '',
                     source:       t.source      || 'tradovate',
                     upload_batch: batchId
                 }));
@@ -494,7 +497,21 @@ function parseDiscordTradeText(text) {
         const m = line.match(/^(F\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
         const tradeNum = m[1].toUpperCase();
-        const body = m[2].trim();
+        let body = m[2].trim();
+
+        // Attribution tag (Criterion 01): a trailing H2/H3 token on the close
+        // line — e.g. "F12: -3 H2". H2 = process breached, H3 = variance (the
+        // resting default). H1 = edge failed is NOT an operator attribution; it
+        // is system-derived from the Expression Gate's rolling-100 verdict and
+        // must never be hand-tagged. A manual H1 is itself a fidelity breach —
+        // captured here so the audit can flag it.
+        let attribution = null, attributionBreach = false;
+        const tagMatch = body.match(/\s+(H[123])\s*$/i);
+        if (tagMatch) {
+            attribution = tagMatch[1].toUpperCase();
+            if (attribution === 'H1') attributionBreach = true;
+            body = body.slice(0, tagMatch.index).trim();
+        }
 
         // Is this a result line? e.g. "+4.5", "-3", "-10", "+ 3", "- 2.5"
         const signedResult = body.match(/^([+-])\s*(\d+\.?\d*)$/);
@@ -551,6 +568,9 @@ function parseDiscordTradeText(text) {
                 ppt: 50,
                 positionSize,
                 mesCount,
+                attribution,
+                attributionBreach,
+                tagFiledAt: currentDatetime,
                 source: 'discord'
             });
             delete pending[tradeNum];

@@ -47,18 +47,52 @@
         catch (e) { return null; }
     }
 
+    // Criterion 01 goes live once a launch date is set; until then the static
+    // baseline (clean) shows, because the legacy trades predate per-trade tagging.
+    let attributionActiveSince = null;
+
+    function tagOf(t) { return (t.attribution || '').toUpperCase(); }
+    function inAttributionScope(t, since) {
+        const raw = t.exit_time || t.exitTime || t.entry_time || t.entryTime;
+        if (!raw) return false;
+        const d = new Date(raw);
+        return !isNaN(d.getTime()) && d >= since;
+    }
+
+    // H2/H3 are operator attributions; H1 (or a hand-typed H1 flagged at parse
+    // time) is never valid per-trade — it is the Expression Gate's verdict.
+    function recomputeCriterion01() {
+        if (!attributionActiveSince) return;          // not yet active → keep baseline
+        const since = new Date(attributionActiveSince);
+        if (isNaN(since.getTime())) return;
+        const st = (root.Ekantik && root.Ekantik.Data) ? root.Ekantik.Data.get() : null;
+        const trades = (st && st.trades) || [];
+        const scope = trades.filter(t => inAttributionScope(t, since));
+        const last100 = scope.slice(-100);
+        const last30  = scope.slice(-30);
+        const valid   = t => tagOf(t) === 'H2' || tagOf(t) === 'H3';
+        const isH1    = t => tagOf(t) === 'H1' || t.attribution_breach === true;
+        const missing = t => !t.attribution;
+        const tagsFiled  = last100.filter(valid).length;
+        const breaches30 = last30.filter(t => missing(t) || isH1(t)).length;
+        $('c01-tags') && ($('c01-tags').textContent = String(tagsFiled));
+        $('c01-breaches') && ($('c01-breaches').textContent = String(breaches30));
+    }
+
     async function renderCriteria() {
         const c = await fetchJSON('data/operator-criteria.json');
         if (!c) return;
         const a = c.criterion_01_attribution || {};
         const m = c.criterion_02_rule_modification || {};
         const r = c.criterion_03_routine_adherence || {};
+        attributionActiveSince = a.attribution_active_since || null;
         $('c01-tags') && ($('c01-tags').textContent = a.tags_filed_rolling_100 ?? '—');
         $('c01-breaches') && ($('c01-breaches').textContent = a.breaches_rolling_30_trades ?? '—');
         $('c02-unauthorized') && ($('c02-unauthorized').textContent = m.unauthorized_modifications ?? '—');
         $('c02-days') && ($('c02-days').textContent = m.days_since_last_modification ?? '—');
         $('c03-adherence') && ($('c03-adherence').textContent = (r.rolling_30_day_pct != null ? r.rolling_30_day_pct.toFixed(1) + '%' : '—'));
         $('c03-streak') && ($('c03-streak').textContent = (r.current_streak_days != null ? r.current_streak_days + ' days' : '—'));
+        recomputeCriterion01();   // overrides c01 from the live feed once active
     }
 
     async function renderStandDown() {
@@ -110,9 +144,10 @@
     }
 
     function init() {
-        // Stage 2 binds to the live trade feed
+        // Stage 2 + live Criterion 01 bind to the live trade feed
         if (root.Ekantik && root.Ekantik.Data) {
             root.Ekantik.Data.onChange(renderExpression);
+            root.Ekantik.Data.onChange(recomputeCriterion01);
             const cur = root.Ekantik.Data.get();
             if (cur) renderExpression(cur);
         }
