@@ -1,0 +1,27 @@
+{
+  "_comment": "Stage 1 operator-fidelity counters. Phase 2: auto-computed from trade log + daily-routine.json. Initial state = clean baseline.",
+  "updated_at": "2026-05-20T21:00:00Z",
+  "criterion_01_attribution": {
+    "tags_filed_rolling_100": 0,
+    "h1_invoked_unjustified": 0,
+    "missing_tags": 0,
+    "inconsistent_tags": 0,
+    "breaches_rolling_30_trades": 0
+  },
+  "criterion_02_rule_modification": {
+    "modifications_this_quarter": 0,
+    "days_since_last_modification": 0,
+    "unauthorized_modifications": 0
+  },
+  "criterion_03_routine_adherence": {
+    "rolling_30_day_pct": 100.0,
+    "current_streak_days": 0,
+    "missed_days_rolling_30": 0,
+    "below_threshold_weeks": 0,
+    "component_breakdown": {
+      "phelps_visualization": 100.0,
+      "predisposal_visualization": 100.0,
+      "scaling_law_visualization": 100.0
+    }
+  }
+}

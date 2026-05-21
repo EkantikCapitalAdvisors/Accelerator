@@ -1,0 +1,18 @@
+{
+  "_comment": "Operator stand-down state machine. Phase 3: computed from breach-events.json. Initial = T0 normal operations.",
+  "current_tier": "T0",
+  "active_since": null,
+  "active_breach_events": [],
+  "resumption_conditions": {
+    "minimum_size_trades_required": 0,
+    "minimum_size_trades_completed": 0,
+    "calendar_days_required": 0,
+    "calendar_days_elapsed": 0,
+    "witness_countersignature_received": null
+  },
+  "stage1_counter": {
+    "qualified_trades_in_current_window": 0,
+    "last_reset_event": null,
+    "last_reset_at": null
+  }
+}

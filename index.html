@@ -443,20 +443,86 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 05 — THE FALSIFIABILITY GATE (own section) ═══ -->
+    <!-- ═══ SECTION 05 — THE TWO FALSIFIABILITY GATES ═══ -->
     <section class="section section--ivory falsifiability-section" id="falsifiability" aria-labelledby="falsifiability-h2">
         <div class="section__inner section__inner--wide">
-            <div class="section-eyebrow">05 · The Falsifiability Gate</div>
-            <h2 class="defense-h" id="falsifiability-h2">The condition under which the experiment ends.</h2>
+            <div class="section-eyebrow">05 · The Two Falsifiability Gates</div>
+            <h2 class="defense-h" id="falsifiability-h2">Two gates. Both binding. Both reported live.</h2>
             <p class="defense-open">
-                An experiment without a falsifiability condition is not an experiment. It is faith. The condition below was written before any outside capital is at risk, locked under witness countersignature, and is structurally impossible for the operator to modify under stress without triggering the modification protocol.
+                An experiment without a falsifiability condition is not an experiment. It is faith. This one runs <strong>two</strong> gates in parallel, from day one. The <strong>Expression Layer</strong> watches the edge&rsquo;s realized math for decay. The <strong>Fidelity Layer</strong> watches whether the published method is what is actually running &mdash; cognitive, structural, and substrate discipline. Both were written before any outside capital is at risk, locked under witness countersignature.
             </p>
 
+            <!-- Gates status strip -->
+            <div class="gates-status" id="gates-status" role="status" aria-label="Falsifiability gate status">
+                <div class="gates-status__gate">
+                    <span class="gates-status__label">Expression Gate</span>
+                    <span class="gates-status__value" id="gate-expression-state">Monitoring</span>
+                    <span class="gates-status__detail">Rolling-100 EV: <strong id="gate-expression-ev">—</strong> / trade</span>
+                </div>
+                <div class="gates-status__gate">
+                    <span class="gates-status__label">Fidelity Gate</span>
+                    <span class="gates-status__value" id="gate-fidelity-state">Monitoring</span>
+                    <span class="gates-status__detail">Stand-down tier: <strong id="gate-fidelity-tier">T0 — Normal</strong></span>
+                </div>
+            </div>
+
+            <!-- The Binding Interpretation Rule -->
+            <div class="interp-rule">
+                <span class="interp-rule__tag">The Binding Interpretation Rule</span>
+                <p class="interp-rule__body">Edge-Gate firings while a Fidelity-Layer T2 or T3 breach is active in the rolling 30-day window are <strong>interpretation-suspended</strong> pending operator remediation. <em>The edge cannot be declared falsified from data generated during a known transmission-fidelity breach.</em></p>
+                <p class="interp-rule__note">This is published as a load-bearing architectural commitment, not buried in a protocol document. It is what makes parallel monitoring structurally coherent.</p>
+            </div>
+
+            <!-- STAGE 1 — Fidelity Layer -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Stage 1 · Fidelity Layer &mdash; is the published method what is actually running?</div>
+            <div class="criteria-grid">
+                <article class="criterion-card">
+                    <span class="criterion-card__num">01</span>
+                    <h3 class="criterion-card__title">Per-Trade Attribution Discipline</h3>
+                    <p class="criterion-card__body">Every qualified trade is tagged <strong>H1 (edge failed)</strong>, <strong>H2 (process breached)</strong>, or <strong>H3 (variance)</strong>, logged before the next entry, against a pre-decision log. H1 is locked out as a default — only admissible after a pattern warrants it.</p>
+                    <div class="criterion-card__metric">
+                        <span>Tags filed (rolling 100)</span><strong id="c01-tags">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Breaches (rolling 30)</span><strong id="c01-breaches">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: zero breaches inside rolling 100-trade window.</p>
+                </article>
+                <article class="criterion-card">
+                    <span class="criterion-card__num">02</span>
+                    <h3 class="criterion-card__title">Rule-Modification Integrity</h3>
+                    <p class="criterion-card__body">Zero unannounced or witness-uncountersigned protocol modifications. Every change: 48-hour cool-off · written justification (which layer it addresses) · witness countersignature · public disclosure within 24 hours.</p>
+                    <div class="criterion-card__metric">
+                        <span>Unauthorized modifications</span><strong id="c02-unauthorized">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Days since last modification</span><strong id="c02-days">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: binary &mdash; zero breaches, period.</p>
+                </article>
+                <article class="criterion-card">
+                    <span class="criterion-card__num">03</span>
+                    <h3 class="criterion-card__title">Daily Routine Adherence</h3>
+                    <p class="criterion-card__body">Three pre-committed daily visualizations, filed before market open: winning/stress rehearsal, predisposal trade decisions, and scaling-up/down law. Scaling triggers are not judgment calls.</p>
+                    <div class="criterion-card__metric">
+                        <span>Adherence (rolling 30 days)</span><strong id="c03-adherence">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Current streak</span><strong id="c03-streak">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: &ge; 95% completion across rolling 30 trading days.</p>
+                </article>
+            </div>
+
+            <!-- STAGE 2 — Expression Layer (the original edge gate) -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Stage 2 · Expression Layer &mdash; is the validated edge still expressing?</div>
             <div class="defense__layers">
                 <article class="defense-card defense-card--dark defense-card--gate">
-                    <span class="defense-card__num">Gate</span>
-                    <h3 class="defense-card__title">The Falsifiability Gate</h3>
-                    <p class="defense-card__sub">The condition under which the experiment ends.</p>
+                    <span class="defense-card__num">Edge</span>
+                    <h3 class="defense-card__title">The Edge Gate</h3>
+                    <p class="defense-card__sub">The condition under which the experiment ends. Live rolling-100 EV: <strong id="gate-expression-ev-2">—</strong> / trade.</p>
                     <dl class="defense-card__deflist">
                         <div class="defense-card__defrow">
                             <dt>Trigger &nbsp;·&nbsp; Statistical death</dt>
@@ -471,13 +537,59 @@
                             <dd>Fresh out-of-sample test of <strong>&ge; +$50 per trade over 50 qualified trades</strong> (on virtual / paper / prop-firm capital) &nbsp;&middot;&nbsp; written re-derivation of the structural cause of decay &nbsp;&middot;&nbsp; <strong>48-hour cool-off</strong> after both. All three required.</dd>
                         </div>
                     </dl>
-                    <p class="defense-card__footer">Modification protocol: 48-hour cool-off before any rule change &nbsp;&middot;&nbsp; written justification (recent P&amp;L is facially insufficient) &nbsp;&middot;&nbsp; witness countersignature required to lock &nbsp;&middot;&nbsp; public disclosure within 24 hours.</p>
                     <p class="defense-card__footer defense-card__footer--commit"><strong>Public commitment:</strong> every Gate event &mdash; whether triggered, near-triggered, or modification-attempted &mdash; is announced in the public Discord journal within 24 hours. The experiment is not over because the operator says so. The experiment is over because the data crossed the line.</p>
                     <p class="defense-card__cta">
                         <a class="link-gold" href="assets/ekantik-falsifiability-protocol-v1.pdf" download>Download the locked protocol (PDF) →</a>
                         <span class="defense-card__docref">Doc Ref: FP-V1-2026-05 &nbsp;&middot;&nbsp; Locked 15 May 2026</span>
                     </p>
                 </article>
+            </div>
+
+            <!-- Three-tier stand-down (Fidelity Layer graduated response) -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Fidelity-Layer stand-down &mdash; graduated by breach type</div>
+            <div class="tier-grid">
+                <div class="tier-card tier-card--t1">
+                    <span class="tier-card__badge">Tier 1 · Logged breach</span>
+                    <p class="tier-card__trigger">Single isolated breach of Criterion 01 or 03.</p>
+                    <p class="tier-card__response">Logged within 24h + Discord entry. Witness review within 7 days. Stage-1 counter resets to zero. No size/operational change. Resume immediate.</p>
+                </div>
+                <div class="tier-card tier-card--t2">
+                    <span class="tier-card__badge">Tier 2 · Conditions reduced</span>
+                    <p class="tier-card__trigger">3+ breaches of Criterion 01/03 in rolling 30 trades, or sustained sub-95% routine adherence.</p>
+                    <p class="tier-card__response">Position cut to minimum (1 MES, no scaling) for next 20 qualified trades. Daily filing under witness oversight. Resume on 20 clean min-size trades + witness countersignature.</p>
+                </div>
+                <div class="tier-card tier-card--t3">
+                    <span class="tier-card__badge">Tier 3 · Full cessation</span>
+                    <p class="tier-card__trigger">Any Criterion 02 breach, or a second Tier 2 inside rolling 100 trades.</p>
+                    <p class="tier-card__response">Immediate cessation. Discord entry within 24h with structural cause. Witness structural review. Resume on countersigned remediation + 30-day calendar gap + 20 min-size trades.</p>
+                </div>
+            </div>
+            <p class="tier-note"><em>Calibration: the first 30 days post-launch are observation-only while baseline adherence is established; binding from day 31. Witness identity and binding scope are named in the locked protocol PDF. Phases 2&ndash;3 (live per-trade attribution, automated breach detection, monthly witness audits) roll out within 30&ndash;60 days of launch.</em></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 05.1 — STAND-DOWN STATE WIDGET ═══ -->
+    <section class="section section--white standdown-section" id="standdown" aria-labelledby="standdown-h2">
+        <div class="section__inner">
+            <div class="section-eyebrow">Stand-Down State · Live</div>
+            <h2 class="section-head__title" id="standdown-h2">The current operating state &mdash; in public, in real time.</h2>
+            <p class="standdown-lede">Failure-state visibility equals success-state visibility. This widget renders the real operating tier with the same prominence whether it&rsquo;s normal operations or a Tier-3 cessation. No retroactive editing &mdash; the audit trail is the artifact.</p>
+            <div class="standdown-widget" id="standdown-widget">
+                <div class="standdown-widget__head">
+                    <span class="standdown-widget__title">Stand-Down State</span>
+                    <span class="standdown-widget__tier" id="sd-tier">T0 — Normal Operations</span>
+                </div>
+                <div class="standdown-widget__grid">
+                    <div class="standdown-widget__row"><span>Last event</span><strong id="sd-last-event">None on record</strong></div>
+                    <div class="standdown-widget__row"><span>Stage 1 counter</span><strong id="sd-counter">— qualified trades</strong></div>
+                    <div class="standdown-widget__row"><span>Active breach events</span><strong id="sd-active-breaches">0</strong></div>
+                    <div class="standdown-widget__row"><span>Pending witness reviews</span><strong id="sd-pending-reviews">0</strong></div>
+                </div>
+                <div class="standdown-widget__resumption hide" id="sd-resumption">
+                    <p class="standdown-widget__resumption-label">Resumption conditions</p>
+                    <div id="sd-resumption-rows"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -933,6 +1045,7 @@
     <script src="js/render-modules.js"></script>
     <script src="js/render-edges.js"></script>
     <script src="js/render-experiment.js"></script>
+    <script src="js/render-operator.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
