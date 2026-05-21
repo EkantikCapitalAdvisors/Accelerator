@@ -4735,3 +4735,11 @@ section.block.light { padding: 96px 0 112px; }
 .nlm-table td:first-child { color: var(--fail); }
 .nlm-table td:last-child { color: var(--navy); }
 .nlm-table .mono { font-family: var(--font-mono); }
+
+/* Never Lose Money — four principles grid (Section 01.1) */
+.nlm-principles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); margin: var(--s-3) 0; }
+@media (max-width:760px){ .nlm-principles { grid-template-columns: 1fr; } }
+.nlm-principle { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0; padding: var(--s-2) var(--s-3); }
+.nlm-principle__name { display:block; font-family: var(--font-serif); font-weight:600; font-size: 18px; color: var(--navy); margin-bottom: 4px; }
+.nlm-principle p { font-family: var(--font-sans); font-size: 13.5px; line-height:1.5; color: var(--slate); margin: 0 0 6px; }
+.nlm-principle__where { font-family: var(--font-mono); font-size: 11px; color: var(--gold); }

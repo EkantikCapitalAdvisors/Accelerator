@@ -102,7 +102,32 @@
             <div class="component-label">01.1 · Never Lose Money &mdash; the base discipline</div>
             <div class="method-pyramid">
                 <p class="nlm-rule">&ldquo;Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.&rdquo; <span class="nlm-attr">&mdash; Warren Buffett</span></p>
-                <p>This isn&rsquo;t a slogan here &mdash; it&rsquo;s an engineering constraint, built on a piece of arithmetic most operators ignore: <strong>losses and gains are not symmetric.</strong> A loss requires a disproportionately larger gain just to return to even, and the bigger the loss, the more punishing the recovery:</p>
+                <p>Every durable &ldquo;never-lose&rdquo; system &mdash; casinos, insurers, Berkshire &mdash; runs on the same four principles. The outer rings protect the inner core: you only deploy where the edge is proven, you size so no single bet can hurt you, and you cap the downside so a bad regime can never cause permanent impairment.</p>
+
+                <div class="nlm-principles">
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Positive Expectancy</span>
+                        <p>A structural edge that tilts the odds in your favor. Deploy only where advantage can be mathematically proven &mdash; never on hope.</p>
+                        <span class="nlm-principle__where">Instrumented in §02 (live EV) &amp; §03 (edge landscape)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Expected Value</span>
+                        <p>Positive average return per unit of risk, computed before every entry &mdash; and re-measured on every fill.</p>
+                        <span class="nlm-principle__where">Instrumented in §02 (the EV formula, live)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Position Sizing</span>
+                        <p>Never risk too much on a single bet. Size proportionally to capital and edge &mdash; 1 ES per buffer, expressible as &le; 10 MES.</p>
+                        <span class="nlm-principle__where">Instrumented in §01.2 (the trigger ladder)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Risk Management</span>
+                        <p>Pre-committed caps and circuit breakers that ensure survival: weekly max-loss stand-downs and the falsifiability gate.</p>
+                        <span class="nlm-principle__where">Instrumented in §04 (Sit-Out) &amp; §05 (the gates)</span>
+                    </div>
+                </div>
+
+                <p>The reason the downside cap matters more than the upside is arithmetic: <strong>losses and gains are not symmetric.</strong> A loss needs a disproportionately larger gain just to return to even &mdash; and past a point, recovery stops being a question of edge and becomes a question of luck.</p>
                 <table class="nlm-table">
                     <thead><tr><th>Drawdown taken</th><th>Gain required to recover</th></tr></thead>
                     <tbody>
@@ -113,8 +138,7 @@
                         <tr><td class="mono">&minus;90%</td><td class="mono">+900%</td></tr>
                     </tbody>
                 </table>
-                <p>Past a certain point, recovery stops being a question of edge and becomes a question of luck. So the entire architecture is built to keep capital out of that zone &mdash; to <em>never lose money</em> in the structural, unrecoverable sense.</p>
-                <p class="method-pyramid__note">The mechanism: a <strong>$5,000</strong> working unit sits on top of a <strong>$30,000</strong> capital buffer (6&times; absorption). The working unit is what trades; the buffer is never risked &mdash; it exists so a bad regime drains the working unit, not the base. Realized profit fills the buffer first; only when it is full does position size step up. Growth never comes at the cost of the floor. The ratios hold across allocation sizes.</p>
+                <p class="method-pyramid__note">The capital mechanism that enforces it: a <strong>$5,000</strong> working unit sits on a <strong>$30,000</strong> capital base (6&times; absorption). The working unit is the only capital that trades; the base is never risked &mdash; so a bad regime drains the working unit, not the base. Realized profit fills the base first; only then does position size step up. Growth never lowers the floor. The ratios hold across allocation sizes.</p>
             </div>
 
             <!-- 01.2 · The Trigger Ladder -->
