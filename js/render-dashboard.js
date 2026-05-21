@@ -221,8 +221,13 @@
             const av = accessor[sortKey](a), bv = accessor[sortKey](b);
             if (av < bv) return -1*sortDir; if (av > bv) return 1*sortDir; return 0;
         });
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
         tbody.innerHTML = rows.map(t => {
             const pl = t.dollar_pl || 0; const r = t.risk_dollars ? pl/t.risk_dollars : null;
+            const tag = t.attribution
+                ? `<span class="trade-tag${t.attribution_breach ? ' trade-tag--breach' : ''}">${esc(t.attribution)}</span> `
+                : '';
+            const note = (tag + (t.comment ? esc(t.comment) : '')).trim();
             return `<tr>
                 <td class="mono">${t.trade_num||'—'}</td>
                 <td class="mono" style="font-size:11px">${t.entry_time||'—'}</td>
@@ -233,6 +238,7 @@
                 <td class="num mono">${fmtR(r)}</td>
                 <td>${t.position_size||'—'}</td>
                 <td class="mono" style="font-size:11px">${durationStr(t)}</td>
+                <td class="trade-note">${note||'—'}</td>
             </tr>`;
         }).join('');
     }
