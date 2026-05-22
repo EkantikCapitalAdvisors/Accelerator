@@ -698,8 +698,12 @@ function parseRoutineText(text) {
     if (looksLikeDiscordHTML(text)) text = htmlToDiscordText(text);
     const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
 
-    const DONE = /✅|✓|\[x\]|\bdone\b|\byes\b/i;
-    const NOT  = /❌|✗|\[\s\]|\bno\b|\bmissed\b|\bskip(?:ped)?\b|n\/a/i;
+    // Completion is driven by explicit symbols, not stray words — free-text
+    // descriptions routinely contain "no" / "skip" / "missed" (e.g. "no forced
+    // trades"), which must not flip a ✅ line to incomplete. ✅/✓/[x]/"done" mark
+    // done; ❌/✗/[ ] mark not-done; a ✅ always wins over incidental prose.
+    const DONE = /✅|✓|\[x\]|\bdone\b/i;
+    const NOT  = /❌|✗|\[\s\]/;
     const isDone = ln => DONE.test(ln) && !NOT.test(ln);
 
     function ymd(dstr) {
