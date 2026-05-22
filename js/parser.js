@@ -721,7 +721,6 @@ function parseRoutineText(text) {
     const out = [];
     let curDatetime = '', curDate = '', block = null;
     const pushBlock = () => { if (block) { block.complete = block.phelps && block.predisposal && block.scaling; out.push(block); block = null; } };
-
     for (const line of lines) {
         // Date/time header (same shapes the trade parser accepts)
         let hm = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
@@ -748,13 +747,18 @@ function parseRoutineText(text) {
             pushBlock();
             const d = ymd(line) || curDate || (curDatetime.split(' ')[0] || '');
             block = { date: d, filed_at: curDatetime || '', before_open: beforeOpen(curDatetime),
-                      phelps: false, predisposal: false, scaling: false };
+                      phelps: false, predisposal: false, scaling: false, abundance: false };
             continue;
         }
         if (!block) continue;
         if (/phelps/i.test(line))                         block.phelps      = isDone(line);
         else if (/pre-?disposal|predispos/i.test(line))   block.predisposal = isDone(line);
         else if (/scal/i.test(line))                      block.scaling     = isDone(line);
+        // 4th reminder line (abundance / patience). Captured for the journal,
+        // NOT part of the locked 3-component completion bar — promoting it to a
+        // scored component is a witness-countersigned protocol change.
+        else if (/abundance|patience|edge potential|majority opinion|\bimo\b|\bmo\b/i.test(line))
+            block.abundance = isDone(line);
     }
     pushBlock();
     return out.filter(b => b.date);
