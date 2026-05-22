@@ -149,6 +149,7 @@
         const win = [];
         let guard = 0;
         while (win.length < 30 && guard++ < 200) {
+            if (cur < since) break;                          // never score days before activation
             if (isTradingDay(cur)) win.push(cur.toISOString().slice(0, 10));
             cur.setUTCDate(cur.getUTCDate() - 1);
         }

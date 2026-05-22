@@ -15,7 +15,7 @@
     "unauthorized_modifications": 0
   },
   "criterion_03_routine_adherence": {
-    "routine_active_since": null,
+    "routine_active_since": "2026-05-22",
     "rolling_30_day_pct": 100.0,
     "current_streak_days": 0,
     "missed_days_rolling_30": 0,
