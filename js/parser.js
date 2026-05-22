@@ -539,9 +539,10 @@ function parseDiscordTradeText(text) {
                 attribution = closeMatch[3].toUpperCase();
                 if (attribution === 'H1') attributionBreach = true;
             }
-            // Fall back to H-tag from the entry line if result line didn't repeat it
-            if (!attribution && entry && entry.attribution) {
-                attribution = entry.attribution;
+            // Fall back to H-tag from the entry line if the result line didn't repeat it
+            const pend = pending[tradeNum];
+            if (!attribution && pend && pend.attribution) {
+                attribution = pend.attribution;
                 if (attribution === 'H1') attributionBreach = true;
             }
             comment = (closeMatch[4] || '').trim();
