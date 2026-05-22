@@ -102,6 +102,15 @@
                 </div>
             </div>
 
+            <!-- Pre-market routine (Criterion 03) -->
+            <div class="card mt-3">
+                <div class="card__header"><h3>Pre-market routine &middot; Criterion 03</h3></div>
+                <p class="mono" style="font-size:12px;color:var(--muted)">Paste the <strong>#protocol-routine</strong> channel export (HTML or text). PRE-MARKET ROUTINE blocks score adherence; NO SESSION lines are excluded days (holiday / personal / stand-down). Market holidays are excluded automatically.</p>
+                <textarea id="routine-input" rows="6" style="width:100%;box-sizing:border-box;font-family:monospace;font-size:12px" placeholder="PRE-MARKET ROUTINE &middot; 5/22/2026&#10;Phelps: ✅ ...&#10;Predisposal: ✅ ...&#10;Scaling: ✅ ...&#10;NO SESSION &middot; 5/25/2026 &middot; Memorial Day"></textarea>
+                <button class="btn btn--primary btn--sm mt-2" type="button" id="routine-commit">Parse &amp; commit routine</button>
+                <div id="routine-result" class="mt-2 mono" style="font-size:13px"></div>
+            </div>
+
             <!-- Export / clear -->
             <div class="card mt-3">
                 <div class="card__header"><h3>Maintenance</h3></div>
@@ -389,6 +398,31 @@
                 const data = await DB.loadTrades('tenx_trades');
                 $('maint-result').textContent = `GitHub has ${data.length} trades.`;
             } catch (e) { $('maint-result').textContent = 'Error: ' + e.message; }
+        });
+
+        // Pre-market routine → daily-routine.json (upsert by date).
+        $('routine-commit').addEventListener('click', async () => {
+            const res = $('routine-result');
+            try {
+                const text = ($('routine-input').value || '').trim();
+                if (!text) { res.textContent = 'Paste a routine export first.'; return; }
+                const parsed = parseRoutineText(text);
+                if (!parsed.length) { res.textContent = 'No PRE-MARKET ROUTINE blocks or NO SESSION markers found.'; return; }
+                let existing = [];
+                try { existing = await DB._read('daily-routine'); } catch (e) { existing = []; }
+                if (!Array.isArray(existing)) existing = [];
+                const byDate = {};
+                existing.forEach(r => { if (r && r.date) byDate[r.date] = r; });
+                parsed.forEach(r => { byDate[r.date] = r; });          // upsert: re-posting a date overwrites
+                const merged = Object.values(byDate).sort((a, b) => (a.date < b.date ? -1 : 1));
+                await DB._write('daily-routine', merged,
+                    `Routine: +${parsed.length} day(s) [${new Date().toISOString().slice(0, 10)}]`);
+                const comp = parsed.filter(r => r.complete).length;
+                const exc  = parsed.filter(r => r.excluded).length;
+                const miss = parsed.length - comp - exc;
+                res.textContent = `Committed ${parsed.length} day(s): ${comp} complete, ${miss} incomplete, ${exc} excluded. Total on file: ${merged.length}.`;
+                $('routine-input').value = '';
+            } catch (e) { res.textContent = 'Error: ' + e.message; }
         });
     })();
     </script>

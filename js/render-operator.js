@@ -113,8 +113,26 @@
         $('c01-breaches') && ($('c01-breaches').textContent = String(breaches30));
     }
 
-    // Criterion 03 — daily routine adherence, computed from data/daily-routine.json
-    // over a rolling 30-trading-day (weekday) window once routine_active_since is set.
+    // US equity/futures full-day market closures (NYSE/CME). Excluded from the
+    // trading-day window so they never count as routine misses.
+    const MARKET_HOLIDAYS = new Set([
+        // 2026
+        '2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19',
+        '2026-07-03','2026-09-07','2026-11-26','2026-12-25',
+        // 2027
+        '2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18',
+        '2027-07-05','2027-09-06','2027-11-25','2027-12-24'
+    ]);
+    function isTradingDay(d /* Date (UTC) */) {
+        const dow = d.getUTCDay();
+        if (dow === 0 || dow === 6) return false;            // weekend
+        return !MARKET_HOLIDAYS.has(d.toISOString().slice(0, 10));  // not a holiday
+    }
+
+    // Criterion 03 — daily routine adherence from data/daily-routine.json over a
+    // rolling 30-TRADING-day window (weekdays minus market holidays) once
+    // routine_active_since is set. Adherence = complete / (trading days − excluded),
+    // where excluded = declared NO SESSION days (holiday/personal/stand-down).
     let routineActiveSince = null;
     async function recomputeCriterion03() {
         if (!routineActiveSince) return;                       // not yet active → keep baseline
@@ -125,19 +143,27 @@
         const scope = routine.filter(x => { const d = new Date(x.date); return !isNaN(d.getTime()) && d >= since; });
         if (!scope.length) return;
         const byDate = {}; scope.forEach(x => { byDate[x.date] = x; });
-        // Rolling 30 weekdays ending at the latest logged date (holidays count as misses).
+        // Build the last 30 *trading* days ending at the latest logged date.
         const dates = scope.map(x => x.date).sort();
         const cur = new Date(dates[dates.length - 1] + 'T00:00:00Z');
-        const wk = [];
-        while (wk.length < 30) {
-            const dow = cur.getUTCDay();
-            if (dow !== 0 && dow !== 6) wk.push(cur.toISOString().slice(0, 10));
+        const win = [];
+        let guard = 0;
+        while (win.length < 30 && guard++ < 200) {
+            if (isTradingDay(cur)) win.push(cur.toISOString().slice(0, 10));
             cur.setUTCDate(cur.getUTCDate() - 1);
         }
-        const complete = wk.filter(d => byDate[d] && byDate[d].complete).length;
-        const pct = (complete / wk.length) * 100;
+        let complete = 0, excluded = 0;
+        win.forEach(d => {
+            const r = byDate[d];
+            if (r && r.excluded) excluded++;
+            else if (r && r.complete) complete++;
+        });
+        const denom = win.length - excluded;
+        const pct = denom > 0 ? (complete / denom) * 100 : 100;
+        // Streak over trading days, latest first: complete +1, excluded neutral, miss breaks.
         const sorted = scope.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
-        let streak = 0; for (const r of sorted) { if (r.complete) streak++; else break; }
+        let streak = 0;
+        for (const r of sorted) { if (r.excluded) continue; if (r.complete) streak++; else break; }
         $('c03-adherence') && ($('c03-adherence').textContent = pct.toFixed(1) + '%');
         $('c03-streak') && ($('c03-streak').textContent = streak + ' days');
     }

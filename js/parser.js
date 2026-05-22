@@ -729,8 +729,19 @@ function parseRoutineText(text) {
             curDate = ymd(hm[1]); curDatetime = `${curDate} ${hm[2].trim()}`; continue;
         }
         let tm = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
-        if (tm && !/pre-?market routine/i.test(line) && !/phelps|predisposal|scal/i.test(line)) {
+        if (tm && !/pre-?market routine/i.test(line) && !/phelps|predisposal|scal|no\s*-?\s*session|stand[\s-]?down/i.test(line)) {
             if (curDate) curDatetime = `${curDate} ${tm[1].trim()}`;
+            continue;
+        }
+        // NO SESSION marker — a deliberate, declared day out (holiday, personal,
+        // FOMC sit-out, stand-down). Excluded from the adherence denominator.
+        if (/no\s*-?\s*session|stand[\s-]?down|market\s+closed|day\s+off/i.test(line)) {
+            pushBlock();
+            const d = ymd(line) || curDate || (curDatetime.split(' ')[0] || '');
+            // reason = text after the last "·" / "-" separator, else the marker tail
+            const parts = line.split(/[·\-—|]/).map(s => s.trim()).filter(Boolean);
+            const reason = parts.length > 1 ? parts[parts.length - 1] : 'declared';
+            if (d) out.push({ date: d, excluded: true, reason, filed_at: curDatetime || '', complete: false });
             continue;
         }
         if (/pre-?market routine|^routine\b/i.test(line)) {
