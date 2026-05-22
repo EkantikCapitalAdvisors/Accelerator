@@ -684,8 +684,72 @@ function parseDiscordTradeText(text) {
 }
 
 // =====================================================
-// DISCORD HTML EXPORT → flat text
+// PRE-MARKET ROUTINE PARSER (Criterion 03 — daily routine adherence)
 // =====================================================
+// Reads a #protocol-routine channel export. Each routine entry is a message:
+//   PRE-MARKET ROUTINE · 5/22/2026
+//   Phelps: ✅ ...
+//   Predisposal: ✅ ...
+//   Scaling: ✅ ...
+// A component is "done" only with an explicit positive marker (✅ ✓ [x] done
+// yes); ❌ ✗ [ ] no/missed/skip — or an absent line — counts as not done.
+// Output: [{ date, filed_at, before_open, phelps, predisposal, scaling, complete }]
+function parseRoutineText(text) {
+    if (looksLikeDiscordHTML(text)) text = htmlToDiscordText(text);
+    const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+
+    const DONE = /✅|✓|\[x\]|\bdone\b|\byes\b/i;
+    const NOT  = /❌|✗|\[\s\]|\bno\b|\bmissed\b|\bskip(?:ped)?\b|n\/a/i;
+    const isDone = ln => DONE.test(ln) && !NOT.test(ln);
+
+    function ymd(dstr) {
+        // accept M/D/YYYY or YYYY-MM-DD
+        let m = dstr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+        if (m) return `${m[3]}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`;
+        m = dstr.match(/(\d{4})-(\d{2})-(\d{2})/);
+        return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+    }
+    function beforeOpen(dt) {
+        // dt like "2026-05-22 8:12 AM" — true if filed before 9:30 AM (RTH cash open, ET-ish heuristic)
+        const m = (dt || '').match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+        if (!m) return null;
+        let h = +m[1]; const min = +m[2]; const ap = (m[3]||'').toUpperCase();
+        if (ap === 'PM' && h < 12) h += 12; if (ap === 'AM' && h === 12) h = 0;
+        return (h*60 + min) < (9*60 + 30);
+    }
+
+    const out = [];
+    let curDatetime = '', curDate = '', block = null;
+    const pushBlock = () => { if (block) { block.complete = block.phelps && block.predisposal && block.scaling; out.push(block); block = null; } };
+
+    for (const line of lines) {
+        // Date/time header (same shapes the trade parser accepts)
+        let hm = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
+        if (hm && !/pre-?market routine/i.test(line)) {
+            curDate = ymd(hm[1]); curDatetime = `${curDate} ${hm[2].trim()}`; continue;
+        }
+        let tm = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
+        if (tm && !/pre-?market routine/i.test(line) && !/phelps|predisposal|scal/i.test(line)) {
+            if (curDate) curDatetime = `${curDate} ${tm[1].trim()}`;
+            continue;
+        }
+        if (/pre-?market routine|^routine\b/i.test(line)) {
+            pushBlock();
+            const d = ymd(line) || curDate || (curDatetime.split(' ')[0] || '');
+            block = { date: d, filed_at: curDatetime || '', before_open: beforeOpen(curDatetime),
+                      phelps: false, predisposal: false, scaling: false };
+            continue;
+        }
+        if (!block) continue;
+        if (/phelps/i.test(line))                         block.phelps      = isDone(line);
+        else if (/pre-?disposal|predispos/i.test(line))   block.predisposal = isDone(line);
+        else if (/scal/i.test(line))                      block.scaling     = isDone(line);
+    }
+    pushBlock();
+    return out.filter(b => b.date);
+}
+
+
 // DiscordChatExporter (and similar tools) emit chat history as HTML where
 // each message is an <li>. Each li has a `.time` span and a content <p>.
 // Converting that to the same text format my plain-text Discord parser

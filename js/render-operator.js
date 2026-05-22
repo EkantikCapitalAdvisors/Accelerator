@@ -113,6 +113,35 @@
         $('c01-breaches') && ($('c01-breaches').textContent = String(breaches30));
     }
 
+    // Criterion 03 — daily routine adherence, computed from data/daily-routine.json
+    // over a rolling 30-trading-day (weekday) window once routine_active_since is set.
+    let routineActiveSince = null;
+    async function recomputeCriterion03() {
+        if (!routineActiveSince) return;                       // not yet active → keep baseline
+        const since = new Date(routineActiveSince);
+        if (isNaN(since.getTime())) return;
+        const routine = await fetchJSON('data/daily-routine.json');
+        if (!routine || !routine.length) return;
+        const scope = routine.filter(x => { const d = new Date(x.date); return !isNaN(d.getTime()) && d >= since; });
+        if (!scope.length) return;
+        const byDate = {}; scope.forEach(x => { byDate[x.date] = x; });
+        // Rolling 30 weekdays ending at the latest logged date (holidays count as misses).
+        const dates = scope.map(x => x.date).sort();
+        const cur = new Date(dates[dates.length - 1] + 'T00:00:00Z');
+        const wk = [];
+        while (wk.length < 30) {
+            const dow = cur.getUTCDay();
+            if (dow !== 0 && dow !== 6) wk.push(cur.toISOString().slice(0, 10));
+            cur.setUTCDate(cur.getUTCDate() - 1);
+        }
+        const complete = wk.filter(d => byDate[d] && byDate[d].complete).length;
+        const pct = (complete / wk.length) * 100;
+        const sorted = scope.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+        let streak = 0; for (const r of sorted) { if (r.complete) streak++; else break; }
+        $('c03-adherence') && ($('c03-adherence').textContent = pct.toFixed(1) + '%');
+        $('c03-streak') && ($('c03-streak').textContent = streak + ' days');
+    }
+
     async function renderCriteria() {
         const c = await fetchJSON('data/operator-criteria.json');
         if (!c) return;
@@ -120,6 +149,7 @@
         const m = c.criterion_02_rule_modification || {};
         const r = c.criterion_03_routine_adherence || {};
         attributionActiveSince = a.attribution_active_since || null;
+        routineActiveSince = r.routine_active_since || null;
         $('c01-tags') && ($('c01-tags').textContent = a.tags_filed_rolling_100 ?? '—');
         $('c01-breaches') && ($('c01-breaches').textContent = a.breaches_rolling_30_trades ?? '—');
         $('c02-unauthorized') && ($('c02-unauthorized').textContent = m.unauthorized_modifications ?? '—');
@@ -127,6 +157,7 @@
         $('c03-adherence') && ($('c03-adherence').textContent = (r.rolling_30_day_pct != null ? r.rolling_30_day_pct.toFixed(1) + '%' : '—'));
         $('c03-streak') && ($('c03-streak').textContent = (r.current_streak_days != null ? r.current_streak_days + ' days' : '—'));
         recomputeCriterion01();   // overrides c01 from the live feed once active
+        recomputeCriterion03();   // overrides c03 from daily-routine.json once active
     }
 
     async function renderStandDown() {
