@@ -462,7 +462,7 @@ function parseDiscordTradeText(text) {
     let currentDatetime = '';
     let currentDate = '';
 
-    for (const line of lines) {
+    for (let line of lines) {
         // 1. Discord date divider: "— April 14, 2026 —" or "April 14, 2026"
         const dividerMatch = line.match(/^—?\s*(\w+)\s+(\d{1,2}),?\s+(\d{4})\s*—?$/);
         if (dividerMatch) {
@@ -500,8 +500,12 @@ function parseDiscordTradeText(text) {
             continue;
         }
 
-        // 3. Skip "(edited)" lines or other non-trade lines
+        // 3. Skip "(edited)" lines or other non-trade lines, AND strip a trailing
+        //    " (edited)" marker that Discord appends inline (otherwise it would
+        //    break the trailing `$` anchor on the entry/adjust/close regexes).
         if (/^\(edited\)$/.test(line)) continue;
+        line = line.replace(/\s*\(edited\)\s*$/i, '').trim();
+        if (!line) continue;
 
         // 4. Match trade line: <id>: <content>  (case insensitive). The ID prefix
         //    encodes the buffer phase (and thus expected size): F = First buffer
@@ -641,7 +645,9 @@ function parseDiscordTradeText(text) {
         // ES-equivalent terms so it is homogeneous regardless of how it was sized.
         // H-tag (H1/H2/H3) may appear anywhere after the price/size and is stored
         // on the pending entry so the close line inherits it automatically.
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+stp\s+(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?(?:\s+(H[123]))?\s*$/i);
+        // Stop keyword on entry accepts stp / sl / stop (the standalone adjust
+        // line already accepts the same set, so the two paths agree).
+        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+(?:stp|sl|stop)\s*(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?(?:\s+(H[123]))?\s*$/i);
         if (entryMatch) {
             const dirRaw = entryMatch[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
