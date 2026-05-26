@@ -4810,3 +4810,33 @@ section.block.light { padding: 96px 0 112px; }
 
 /* ─── Size-neutral note on the Edge Gate strip ─── */
 .gates-status__note { font-size: 10px; opacity: .7; font-style: italic; }
+
+/* ─── Convexity Experiment (convexity.html) ─── */
+.convex-why { background: var(--ivory); }
+.convex-hero-figure { margin: 1.5rem 0; }
+.convex-hero-figure svg { width: 100%; height: auto; max-width: 760px; display: block; margin: 0 auto; border-radius: 8px; }
+.convex-hero-figure figcaption { font-family: var(--font-sans); font-size: 12px; color: var(--slate); text-align: center; margin-top: .5rem; max-width: 64ch; margin-left: auto; margin-right: auto; }
+
+.convex-twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 1.5rem; }
+.convex-callout { padding: 18px 20px; border-radius: 10px; }
+.convex-callout h4 { font-family: var(--font-serif); font-size: 1.15rem; margin: 0 0 .5rem; color: var(--navy); }
+.convex-callout p { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate); margin: 0; }
+.convex-callout--why  { background: rgba(200,169,81,.08); border-left: 3px solid var(--gold); }
+.convex-callout--fail { background: rgba(220,38,38,.05);  border-left: 3px solid var(--fail); }
+
+.convex-mechanism { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; background: var(--navy-deep); color: var(--ivory); padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 1rem 0 1.25rem; }
+.convex-rules { padding-left: 1.4rem; margin: 0 0 1rem; }
+.convex-rules li { font-family: var(--font-sans); font-size: 14px; line-height: 1.65; color: var(--navy-deep); margin-bottom: .65rem; }
+
+.convex-badge { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,81,.12); border: 1px solid rgba(200,169,81,.4); border-radius: 4px; padding: 2px 7px; margin-left: 6px; }
+.convex-badge--prelim { color: var(--slate); background: rgba(100,116,139,.1); border-color: rgba(100,116,139,.3); }
+
+.convex-buffer-widget { background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: 18px 20px; margin: 1rem 0 1.25rem; }
+.convex-buffer-widget__row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font-family: var(--font-sans); font-size: 13.5px; color: var(--slate); }
+.convex-buffer-widget__lbl { font-weight: 500; }
+.convex-buffer-widget__val { font-family: var(--font-mono); color: var(--navy); font-weight: 600; }
+.convex-buffer-widget__bar { background: #F0EBDA; border-radius: 999px; height: 8px; margin: 8px 0; overflow: hidden; }
+.convex-buffer-widget__fill { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), #E2C26A); transition: width .25s ease; }
+
+.convex-revert-log { background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: 18px 20px; margin: 1rem 0 1.25rem; }
+.convex-revert-log p, .convex-revert-log li { font-family: var(--font-sans); font-size: 13.5px; color: var(--slate); }
