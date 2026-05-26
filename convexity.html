@@ -158,16 +158,17 @@
             <!-- 01.1 · Convex Discipline -->
             <div class="component-label">01.1 · Convex Discipline &mdash; the base discipline</div>
             <h3 class="component-h">Never Lose Money, restated for the convex instrument.</h3>
+            <p class="component-sub">The four principles are the same as the linear track&rsquo;s; only the unit definitions change for options. <a class="link-gold" href="/#layer-01">See the full Never Lose Money framing &rarr;</a></p>
             <div class="nlm-principles">
-                <div class="nlm-principle"><span class="nlm-principle__name">Positive Expectancy</span><p>A structural edge that tilts the odds. On long short-dated options near the money, edge can come from structural pricing inefficiency in defined timeframes, the asymmetric payoff geometry of the instrument itself (see above), and the operator&rsquo;s process discipline at entry and exit.</p></div>
-                <div class="nlm-principle"><span class="nlm-principle__name">Expected Value</span><p>Positive average return per unit of risk, computed before every entry. <strong>1R = premium paid</strong> on a single long-option position. Each entry&rsquo;s EV is the probability-weighted payoff distribution minus the premium, recomputed live as each fill closes.</p></div>
-                <div class="nlm-principle"><span class="nlm-principle__name">Position Sizing</span><p>Never risk too much on a single bet. Sizing starts at one option contract (one unit of premium-at-risk) and doubles on each earned buffer per §01.2.</p></div>
-                <div class="nlm-principle"><span class="nlm-principle__name">Risk Management</span><p>Pre-committed caps and circuit breakers. Daily max one loss. Weekly $600 max-loss stand-down. Auto-revert on buffer-give-back. Falsifiability Gate.</p></div>
+                <div class="nlm-principle"><span class="nlm-principle__name">Positive Expectancy</span><p>Structural edge on long short-dated options near the money &mdash; pricing inefficiency in defined timeframes plus the asymmetric payoff geometry above.</p></div>
+                <div class="nlm-principle"><span class="nlm-principle__name">Expected Value</span><p><strong>1R = premium paid</strong>. Each entry&rsquo;s EV is the probability-weighted payoff minus the premium, recomputed live as fills close.</p></div>
+                <div class="nlm-principle"><span class="nlm-principle__name">Position Sizing</span><p>Starts at one option contract (one unit of premium-at-risk); doubles on each earned buffer per &sect;01.2.</p></div>
+                <div class="nlm-principle"><span class="nlm-principle__name">Risk Management</span><p>Daily max one loss. Weekly $600 cap. Auto-revert on buffer give-back. Falsifiability Gate.</p></div>
             </div>
 
-            <p class="method-pyramid__note"><strong>The $5K unit and the risk-of-ruin floor.</strong> Working capital per unit is <strong>$5,000</strong>. This is both the working unit <em>and</em> the initial buffer &mdash; the entire allocation is at risk. Protection comes from adherence to the stand-down architecture, not from a separate cushion. So long as the daily, weekly, and monthly stand-downs fire on schedule, the $5,000 stays out of the risk-of-ruin zone &mdash; the region where no remaining edge can mathematically recover the loss. The drawdown-recovery arithmetic (&minus;10% needs +11%, &minus;50% needs +100%) applies verbatim.</p>
+            <p class="method-pyramid__note"><strong>The $5K unit doubles as the initial buffer.</strong> Working capital per unit is <strong>$5,000</strong> &mdash; the entire allocation is at risk. Adherence-protected, not cushion-protected: so long as the stand-down architecture fires on schedule, the $5,000 stays out of the risk-of-ruin zone. Same drawdown-recovery arithmetic as the linear track (&minus;50% needs +100% back).</p>
 
-            <p class="method-pyramid__note"><strong>Why the weekly cap is tighter on this track.</strong> The Experiment runs a $1,000 per-contract weekly max-loss &mdash; 20% of the $5K working unit. The Convexity Experiment runs $600 &mdash; <strong>12%</strong>. The tighter cap is deliberate: gamma instruments are regime-brittle, and faster stand-downs are the correct architectural response.</p>
+            <p class="method-pyramid__note"><strong>Why the weekly cap is tighter on this track.</strong> Linear track: $1,000 weekly cap = 20% of $5K. Convex track: <strong>$600 = 12%</strong>. Gamma instruments are regime-brittle &mdash; faster stand-downs are the correct architectural response.</p>
 
             <div class="doctrine-anchor">
                 <strong>Note on regime classification &mdash; what we deliberately don&rsquo;t do.</strong> The architecture does not classify market regime in advance. We do not maintain a regime tag, a volatility bucket, or a trend filter that gates entry. The reason is doctrinal: reactive empirical protection (the daily/weekly/monthly stand-downs and the auto-revert) is <em>guaranteed</em> to fire when the regime is bad &mdash; because a bad regime produces losses, and losses fire the stand-downs. Predictive classification, by contrast, adds modification surface (someone must maintain the classifier), classification-as-judgment risk (the bright lines can be wrong), and opportunity cost (cooperative trades incorrectly tagged are missed). The reactive layer provides the protection; the predictive layer provides only the cost. So we run reactive only. <em>The architecture handles whatever regime arrives.</em>
@@ -349,12 +350,12 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
                 <article class="defense-card">
                     <span class="defense-card__num">01</span>
                     <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; Never Lose Money</h3>
-                    <p class="defense-card__lead">The $5K unit framing from §01.1. <strong>Adherence-protected, not cushion-protected.</strong> One ES&hellip; — wait, here: one option contract is sized in premium dollars. The stand-down architecture is what prevents the $5,000 from reaching the risk-of-ruin zone.</p>
+                    <p class="defense-card__lead"><strong>Adherence-protected, not cushion-protected.</strong> The $5K working unit (§01.1) doubles as the initial buffer; the stand-down architecture is what prevents it from reaching the risk-of-ruin zone. <a class="link-gold" href="/#layer-01">Same framing as the linear track &rarr;</a></p>
                 </article>
                 <article class="defense-card">
                     <span class="defense-card__num">02</span>
                     <h3 class="defense-card__title">Layer 02 &nbsp;·&nbsp; The Sit-Out Architecture</h3>
-                    <p class="defense-card__lead"><strong>Daily 1-loss · Weekly $600 cap · Monthly two-week stand-down.</strong> Each tier escalates the time-out window in response to accumulating loss evidence. Faster than the linear track because gamma instruments are regime-brittle.</p>
+                    <p class="defense-card__lead"><strong>Daily 1-loss · Weekly $600 cap · Monthly two-week stand-down.</strong> Same escalation pattern as the linear track, with tighter caps (12% vs 20% of unit) because gamma is regime-brittle.</p>
                 </article>
                 <article class="defense-card defense-card--dark">
                     <span class="defense-card__num">03</span>
@@ -395,40 +396,27 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
             <article class="defense-card defense-card--dark defense-card--gate">
                 <span class="defense-card__num">Edge</span>
                 <h3 class="defense-card__title">The Edge Gate &mdash; Convex track</h3>
-                <dl class="defense-card__deflist">
-                    <div class="defense-card__defrow"><dt>Trigger</dt><dd>Rolling 100-qualified-trade realized expectancy drops to <strong>$0 per trade</strong>. Active (provisional) from 80 trades; binding at 100.</dd></div>
-                    <div class="defense-card__defrow"><dt>Action</dt><dd>Immediate stand-down. Open positions close at next defined exit. Strategy moves to research-only. Public Discord notification within 24 hours.</dd></div>
-                    <div class="defense-card__defrow"><dt>Re-deploy gate</dt><dd>&ge; +$50/trade over 50 qualified out-of-sample trades + written re-derivation of structural cause + 48-hour cool-off. All three required.</dd></div>
-                </dl>
+                <p class="defense-card__lead">Same gate as the linear track, calibrated to the convex instrument: <strong>rolling-100 realized EV &le; $0/trade</strong> &mdash; active (provisional) from 80 trades, binding at 100. R = premium paid. Action on trigger and re-deploy gate are identical to the linear gate.</p>
                 <p class="defense-card__cta">
-                    <a class="link-gold" href="falsifiability-protocol-v3.html" target="_blank" rel="noopener">Read the convex protocol (v3 draft) →</a>
+                    <a class="link-gold" href="falsifiability-protocol-v3.html" target="_blank" rel="noopener">Read the convex protocol (v3 draft) &rarr;</a>
+                    &nbsp;&middot;&nbsp;
+                    <a class="link-gold" href="/#falsifiability">See the full Edge Gate framing (linear track) &rarr;</a>
                     <span class="defense-card__docref">Doc Ref: FP-V3-2026-06 &middot; draft, witness countersignature pending</span>
                 </p>
             </article>
 
             <div class="component-block-divider"></div>
-            <div class="component-label">Fidelity Gate · Three criteria (mirror)</div>
+            <div class="component-label">Fidelity Gate · Three criteria</div>
+            <p class="component-sub">Same three criteria as the linear track (attribution H2/H3, rule-modification integrity, daily-routine adherence ≥ 95%). The one convex-specific difference is in Criterion 03 below. <a class="link-gold" href="/#falsifiability">See the linear-track criterion cards for full framing &rarr;</a></p>
             <div class="criteria-grid">
                 <article class="criterion-card">
-                    <span class="criterion-card__num">01</span>
-                    <h3 class="criterion-card__title">Per-Trade Attribution Discipline</h3>
-                    <span class="criterion-card__track criterion-card__track--manual">Auto-tracked from launch (6/30)</span>
-                    <p class="criterion-card__body">Every qualified trade carries <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong>, logged before the next entry. H1 (edge failed) is never tagged per trade &mdash; that verdict belongs to the Expression Gate, not to any single trade.</p>
-                </article>
-                <article class="criterion-card">
-                    <span class="criterion-card__num">02</span>
-                    <h3 class="criterion-card__title">Rule-Modification Integrity</h3>
-                    <span class="criterion-card__track criterion-card__track--manual">Witness-attested</span>
-                    <p class="criterion-card__body">Zero unannounced or witness-uncountersigned protocol modifications. Every change: 48-hour cool-off · written justification · witness countersignature · public disclosure within 24 hours.</p>
-                </article>
-                <article class="criterion-card">
                     <span class="criterion-card__num">03</span>
-                    <h3 class="criterion-card__title">Daily Routine Adherence</h3>
+                    <h3 class="criterion-card__title">Daily Routine Adherence &mdash; bidirectional scaling watch</h3>
                     <span class="criterion-card__track criterion-card__track--manual">Daily-logged &middot; pending launch</span>
-                    <p class="criterion-card__body">Pre-committed daily filings including predisposal log and scaling-rules log <strong>bidirectional &mdash; doublings + reverts both watched</strong>. ≥ 95% completion across rolling 30 trading days.</p>
+                    <p class="criterion-card__body">Same predisposal-log requirement as the linear track, with one addition: the scaling-rules log is <strong>bidirectional &mdash; doublings AND reverts both watched</strong>. This is the convex-track-only differentiator, because revert is primary regime-response here (&sect;04 Layer 03), not a graceful step-down.</p>
                 </article>
             </div>
-            <p class="tier-note"><em><strong>Binding Interpretation Rule.</strong> Expression-Gate firings during an active Fidelity T2/T3 breach are <em>interpretation-suspended</em> pending remediation. The architecture refuses to declare an edge falsified from data generated during a fidelity breach.</em></p>
+            <p class="tier-note"><em><strong>Binding Interpretation Rule.</strong> Expression-Gate firings during an active Fidelity T2/T3 breach are <em>interpretation-suspended</em> pending remediation. The architecture refuses to declare an edge falsified from data generated during a fidelity breach. <a class="link-gold" href="falsifiability-protocol-v3.html" target="_blank" rel="noopener">See FP-V3 &rarr;</a></em></p>
         </div>
     </section>
 
