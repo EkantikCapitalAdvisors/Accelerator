@@ -4840,3 +4840,13 @@ section.block.light { padding: 96px 0 112px; }
 
 .convex-revert-log { background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: 18px 20px; margin: 1rem 0 1.25rem; }
 .convex-revert-log p, .convex-revert-log li { font-family: var(--font-sans); font-size: 13.5px; color: var(--slate); }
+
+/* ─── Convexity §01.2 four-rule card grid (below the ladder SVG) ─── */
+.convex-rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 1.25rem 0; }
+.convex-rule-card { padding: 14px 16px; border-radius: 8px; }
+.convex-rule-card__num { display: block; font-family: var(--font-sans); font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.convex-rule-card p { font-family: var(--font-sans); font-size: 13px; line-height: 1.55; color: var(--slate); margin: 0; }
+.convex-rule-card--neutral { background: #EFEFEF; border-left: 3px solid #94A3B8; }
+.convex-rule-card--ok      { background: #DCEFE5; border-left: 3px solid #0F6E56; }
+.convex-rule-card--info    { background: #D6E4F0; border-left: 3px solid #185FA5; }
+.convex-rule-card--warn    { background: #F8E0E0; border-left: 3px solid #DC2626; }
