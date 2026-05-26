@@ -953,21 +953,29 @@ function parseDiscordOptionsText(text) {
             continue;
         }
 
-        // 3. Result line: "ID 11: +800" / "ID 11: +$800" / "ID 11: +220$" / "ID 11: -100$"
-        // Dollar sign tolerated on either side of the number, optional sign defaults to +.
-        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*\$?\s*$/i);
+        // 3. Result line: "ID 11: +800" / "ID 11: +$800" / "ID 11: +220$" /
+        //    "ID 11: -100$" — optionally with a trailing attribution tag
+        //    (H2/H3). Dollar sign tolerated on either side of the number;
+        //    sign defaults to + when absent.
+        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*\$?\s*(?:\s+(H[123]))?\s*$/i);
         if (resultMatch) {
             const id = resultMatch[1];
             const sign = resultMatch[2] === '-' ? -1 : 1;
             const dollars = parseFloat(resultMatch[3]) * sign;
+            const attribution = resultMatch[4] ? resultMatch[4].toUpperCase() : null;
+            const attributionBreach = attribution === 'H1';
 
             if (current && current._id === id) {
-                completed.push(finishTrade(current, dollars));
+                const t = finishTrade(current, dollars);
+                t.attribution = attribution; t.attribution_breach = attributionBreach;
+                completed.push(t);
                 current = null;
                 continue;
             }
             if (pending[id]) {
-                completed.push(finishTrade(pending[id], dollars));
+                const t = finishTrade(pending[id], dollars);
+                t.attribution = attribution; t.attribution_breach = attributionBreach;
+                completed.push(t);
                 delete pending[id];
                 continue;
             }
@@ -1020,6 +1028,9 @@ function parseDiscordOptionsText(text) {
             }
             case 'stop':
             case 'stop price': {
+                // "all in" means the whole premium is at risk (no protective stop).
+                // Risk dollars then = entry × multiplier in finishTrade().
+                if (/all\s*in/i.test(val)) { current._all_in = true; break; }
                 const n = parseFloat(val.replace(/[^0-9.-]/g, ''));
                 if (!isNaN(n)) current._stop_price = n;
                 break;
