@@ -1,0 +1,121 @@
+/* ═══════════════════════════════════════════════════
+   MOCKUP-ONLY STYLES · subscription rewrite preview
+   These styles overlay/extend the production tokens + components
+   for the v1.1 spec sections. Strip before any main merge.
+   ═══════════════════════════════════════════════════ */
+
+/* Mockup ribbon — visible only on /mockup/ pages */
+.mockup-ribbon {
+    position: sticky; top: 0; z-index: 999;
+    background: #2D5016; color: #FAF8F5;
+    font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5;
+    padding: 8px 16px; text-align: center;
+    border-bottom: 1px solid rgba(250,248,245,.25);
+}
+.mockup-ribbon code { background: rgba(250,248,245,.12); padding: 1px 5px; border-radius: 3px; }
+.mockup-ribbon .tflag { background: #DC2626; color: #fff; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+
+/* Block 2 — Header notice */
+.header-notice {
+    background: var(--ivory);
+    border-bottom: 1px solid #E5E0D0;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    color: var(--slate);
+    padding: 10px 0;
+}
+
+/* Hero — subscription frame */
+.hero--subscription { background: linear-gradient(180deg, var(--navy-deep), var(--navy)); padding: 4rem 0 3rem; }
+.hero--subscription .hero-eyebrow { color: var(--gold); font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1rem; }
+.hero--subscription h1 { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; color: var(--ivory); margin: 0 0 1.25rem; max-width: 22ch; }
+.hero--subscription h1 em { color: var(--gold); font-style: italic; }
+.hero--subscription .hero-lead { font-family: var(--font-sans); font-size: 16px; line-height: 1.65; color: var(--slate-light); max-width: 62ch; margin: 0 0 1.75rem; }
+
+/* Hero badges */
+.hero-badges { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding: 0; margin: 0 0 1.75rem; }
+.hero-badges li { display: flex; flex-direction: column; gap: 2px; background: rgba(250,248,245,.06); border: 1px solid rgba(200,169,81,.25); border-radius: 8px; padding: 12px 14px; }
+.hero-badge__icon { font-size: 18px; }
+.hero-badges li strong { font-family: var(--font-sans); font-size: 13.5px; color: var(--ivory); font-weight: 600; }
+.hero-badges li span { font-family: var(--font-sans); font-size: 12px; color: var(--slate-light); }
+
+.hero-cross-link { font-family: var(--font-sans); font-size: 13px; color: var(--slate-light); margin-top: 14px; }
+.hero-cross-link a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }
+
+/* Section B — Tier cards */
+.tiers-section { background: var(--ivory); }
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 2rem 0 1.5rem; }
+.tier-card { background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: 22px 22px 18px; position: relative; }
+.tier-card--featured { border-color: var(--gold); box-shadow: 0 4px 20px rgba(200,169,81,.18); }
+.tier-card__badge { position: absolute; top: -12px; right: 16px; background: var(--gold); color: var(--navy); font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+.tier-card__icon { font-size: 28px; margin-bottom: .5rem; }
+.tier-card__title { font-family: var(--font-serif); font-size: 1.35rem; color: var(--navy); margin: 0 0 .25rem; }
+.tier-card__sub { font-family: var(--font-sans); font-size: 13px; color: var(--gold); font-weight: 600; margin: 0 0 .75rem; }
+.tier-card__body { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate); margin: 0 0 .75rem; }
+.tier-card__time { font-family: var(--font-mono); font-size: 12.5px; color: var(--navy); margin: 0 0 .5rem; }
+.tier-card__best { font-family: var(--font-sans); font-size: 12.5px; color: var(--slate); margin: 0; }
+.tier-notice { font-family: var(--font-sans); font-size: 14px; color: var(--navy); background: rgba(200,169,81,.08); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 0 6px 6px 0; }
+
+/* Section C — Setup timeline */
+.setup-section { background: #fff; }
+.setup-timeline { list-style: none; padding: 0; margin: 2rem 0 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.setup-step { display: flex; gap: 14px; background: var(--ivory); border-radius: 10px; padding: 18px; }
+.setup-step__num { display: flex; align-items: center; justify-content: center; flex: 0 0 36px; height: 36px; background: var(--navy); color: var(--gold); font-family: var(--font-mono); font-weight: 700; border-radius: 50%; }
+.setup-step__title { font-family: var(--font-serif); font-size: 1.1rem; color: var(--navy); margin: 0 0 .15rem; }
+.setup-step__time { font-family: var(--font-mono); font-size: 11.5px; color: var(--gold); margin: 0 0 .35rem; text-transform: uppercase; letter-spacing: .06em; }
+.setup-step__body { font-family: var(--font-sans); font-size: 13.5px; color: var(--slate); margin: 0; line-height: 1.55; }
+.setup-notice { font-family: var(--font-sans); font-size: 12.5px; color: var(--slate); margin: 1rem 0; }
+.setup-cta { margin: 1.5rem 0 0; }
+
+/* Section D — Dashboard preview */
+.dashboard-section { background: var(--ivory); }
+.dashboard-preview { background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: 18px; margin: 1.5rem 0; }
+.dashboard-preview svg { width: 100%; height: auto; max-width: 720px; display: block; margin: 0 auto; }
+.dashboard-preview__caption { font-family: var(--font-sans); font-size: 12px; color: var(--slate); text-align: center; margin: .5rem 0 0; }
+.dashboard-body p { font-family: var(--font-sans); font-size: 15px; line-height: 1.7; color: var(--navy-deep); margin: 0 0 1rem; }
+.dashboard-notice { background: var(--navy); color: var(--ivory); border-radius: 10px; padding: 20px 24px; margin: 1.5rem 0; }
+.dashboard-notice__heading { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 .75rem; }
+.dashboard-notice p { font-family: var(--font-sans); font-size: 13.5px; line-height: 1.65; color: var(--slate-light); margin: 0 0 .65rem; }
+.dashboard-notice p:last-child { margin: 0; }
+.dashboard-cta { margin: 1.5rem 0 0; }
+
+/* Architecture-proof band (HYBRID) */
+.proof-band { background: linear-gradient(180deg, var(--navy-deep), var(--navy)); color: var(--ivory); }
+.proof-band .eyebrow { color: var(--gold); }
+.proof-band h2 { color: var(--ivory); }
+.proof-band h2 em { color: var(--gold); font-style: italic; }
+.proof-band .lede { color: var(--slate-light); max-width: 70ch; }
+.proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 1.75rem 0 1.25rem; }
+.proof-card { background: rgba(250,248,245,.06); border: 1px solid rgba(200,169,81,.25); border-radius: 8px; padding: 18px 20px; }
+.proof-card h3 { font-family: var(--font-serif); font-size: 1.25rem; color: var(--ivory); margin: 0 0 .5rem; }
+.proof-card p { font-family: var(--font-sans); font-size: 13.5px; line-height: 1.6; color: var(--slate-light); margin: 0 0 .65rem; }
+.proof-card__link a { color: var(--gold); font-size: 12.5px; text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }
+.proof-band__close { font-family: var(--font-sans); font-style: italic; font-size: 14px; color: var(--slate-light); max-width: 70ch; margin: 1rem 0 0; }
+
+/* Section E — How We Operate */
+.how-we-operate-section { background: var(--ivory); padding: 4rem 0; }
+.how-we-operate__h { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy); text-align: center; margin: 0 0 1.5rem; }
+.how-we-operate__body p { font-family: var(--font-sans); font-size: 15.5px; line-height: 1.75; color: var(--navy-deep); margin: 0 0 1rem; }
+.how-we-operate__list { padding-left: 1.2rem; }
+.how-we-operate__list li { font-family: var(--font-sans); font-size: 14.5px; line-height: 1.7; color: var(--navy-deep); margin-bottom: .6rem; }
+
+/* Section F — Subscribe form */
+.subscribe-section { background: #fff; padding: 4rem 0; }
+.subscribe__h { font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.4rem); color: var(--navy); text-align: center; margin: 0 0 .5rem; }
+.subscribe__sub { font-family: var(--font-sans); font-size: 16px; color: var(--slate); text-align: center; margin: 0 0 2rem; }
+.subscribe-form { background: var(--ivory); border-radius: 12px; padding: 28px; }
+.subscribe-form__field { display: block; margin-bottom: 14px; }
+.subscribe-form__field span { display: block; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.subscribe-form__field input { width: 100%; padding: 10px 12px; font-family: var(--font-sans); font-size: 14px; border: 1px solid #E5E0D0; border-radius: 6px; background: #fff; }
+.subscribe-ack { border: 1px solid #E5E0D0; border-radius: 8px; padding: 18px; margin: 16px 0; background: #fff; }
+.subscribe-ack legend { font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--navy); padding: 0 8px; }
+.subscribe-ack__note { font-family: var(--font-sans); font-size: 12px; color: var(--slate); margin: 0 0 12px; }
+.subscribe-ack label { display: flex; gap: 10px; font-family: var(--font-sans); font-size: 13.5px; line-height: 1.55; color: var(--navy-deep); margin-bottom: 10px; align-items: flex-start; }
+.subscribe-ack input[type="checkbox"] { margin-top: 4px; flex-shrink: 0; }
+.btn-large { display: inline-block; padding: 14px 28px; font-size: 15px; font-weight: 700; }
+.subscribe-form__note { font-family: var(--font-mono); font-size: 11.5px; color: var(--slate); margin: 12px 0 0; text-align: center; }
+
+/* Compliance footer */
+.footer--compliance { background: var(--navy-deep); color: var(--slate-light); padding: 3rem 0 2rem; }
+.footer--compliance p { font-family: var(--font-sans); font-size: 13px; line-height: 1.65; margin: 0 0 .85rem; max-width: 78ch; }
+.footer__tagline { color: var(--gold) !important; font-family: var(--font-serif) !important; font-style: italic; font-size: 1.1rem !important; margin-top: 1.5rem !important; }

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Futures · Ekantik Capital (MOCKUP — subscription rewrite)</title>
+    <meta name="description" content="Active Futures alerts you can execute automatically without ever handing over your account. Subscribe to receive alerts in Discord; route them to your own broker through your own platform.">
+    <meta name="theme-color" content="#1B2A4A">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="mockup.css">
+</head>
+<body>
+
+    <!-- MOCKUP RIBBON (visible only on mockup; remove before merge) -->
+    <div class="mockup-ribbon">
+        <strong>MOCKUP · subscription rewrite</strong> &nbsp;·&nbsp; This file is on <code>subscription-rewrite</code> branch only.
+        Counsel review required before public deployment. Items marked <span class="tflag">TRUTHFULNESS-FLAG</span> use intermediate
+        language pending real prop-firm relationship.
+    </div>
+
+    <!-- ═══ NAV (carried over) ═══ -->
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="/">ECA<span class="nav__brand-sub">Ekantik Capital</span></a>
+            <ul class="nav__links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link nav__link--active" href="#" aria-current="page">Active Futures</a></li>
+                <li><a class="nav__link" href="convexity-active.html">Convexity Experiment</a></li>
+                <li><a class="nav__link" href="/experiment.html">Dashboard</a></li>
+                <li><a class="nav__link" href="#reach-out">Reach out</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ═══ BLOCK 2 — HEADER NOTICE (compliance) ═══ -->
+    <div class="header-notice" role="note">
+        <div class="container-narrow">
+            Ekantik publishes market intelligence under the publisher&rsquo;s exemption. We are not a registered investment adviser. Information only &mdash; not personalized advice.
+        </div>
+    </div>
+
+    <!-- ═══ SECTION A — HERO ═══ -->
+    <header class="hero hero--subscription" id="hero" aria-labelledby="af-hero-h1">
+        <div class="hero__inner-rb">
+            <div class="hero-eyebrow">Active Futures &middot; Published Market Intelligence &middot; Subscriber Access</div>
+            <h1 id="af-hero-h1">Active Futures. Alerts You Can Execute Automatically &mdash; <em>Without Ever Handing Over Your Account.</em></h1>
+            <p class="hero-lead">
+                Receive Active Futures alerts in Discord. Route them to your own broker through your own execution platform. Watch the model portfolio and the live account, side by side, in real time.
+            </p>
+
+            <ul class="hero-badges" aria-label="What you get">
+                <li><span class="hero-badge__icon">🔐</span><strong>Your Account, Your Keys</strong><span>We never touch your broker.</span></li>
+                <li><span class="hero-badge__icon">📊</span><strong>Model + Live, Side by Side</strong><span>Verifiable in real time.</span></li>
+                <li><span class="hero-badge__icon">⚡</span><strong>30-Min Setup to Live Auto-Execution</strong><span>Three execution tiers.</span></li>
+            </ul>
+
+            <div class="cta-row">
+                <a href="#how" class="btn btn-gold">See How It Works <span class="arr">&rarr;</span></a>
+                <a href="#dashboard" class="btn btn-ghost">View the Live Dashboard <span class="arr">&rarr;</span></a>
+            </div>
+
+            <p class="hero-cross-link">Also see: <a href="convexity-active.html">Convexity Experiment (options strategy) &rarr;</a></p>
+        </div>
+    </header>
+
+    <!-- ═══ SECTION B — THREE-TIER EXECUTION ═══ -->
+    <section class="block tiers-section" id="how">
+        <div class="container section-inner">
+            <div class="eyebrow">B &middot; How It Works</div>
+            <h2 class="h-section">Three ways to execute. <em>You choose.</em></h2>
+
+            <div class="tier-grid">
+                <article class="tier-card">
+                    <div class="tier-card__icon">👆</div>
+                    <h3 class="tier-card__title">Manual Execution</h3>
+                    <p class="tier-card__sub">Full discretionary control</p>
+                    <p class="tier-card__body">Read each alert in Discord. Decide whether to act. Place the order in your broker yourself.</p>
+                    <p class="tier-card__time"><strong>~1–3 minutes</strong> per trade</p>
+                    <p class="tier-card__best"><em>Best for:</em> active traders who want each alert as research input, not auto-execute.</p>
+                </article>
+
+                <article class="tier-card tier-card--featured">
+                    <span class="tier-card__badge">Most popular</span>
+                    <div class="tier-card__icon">✓</div>
+                    <h3 class="tier-card__title">Semi-Automated</h3>
+                    <p class="tier-card__sub">One-tap confirm via TradersPost</p>
+                    <p class="tier-card__body">Alerts route to your TradersPost account. Push notification on every trade. Tap confirm or skip. Confirmed trades fire to your broker.</p>
+                    <p class="tier-card__time"><strong>~10 seconds</strong> per trade</p>
+                    <p class="tier-card__best"><em>Best for:</em> subscribers who want speed without surrendering decision rights.</p>
+                </article>
+
+                <article class="tier-card">
+                    <div class="tier-card__icon">⚡</div>
+                    <h3 class="tier-card__title">Fully Automated</h3>
+                    <p class="tier-card__sub">Hands-off mirroring</p>
+                    <p class="tier-card__body">Alerts route to your TradersPost account. TradersPost fires orders to your broker per your pre-set risk caps.</p>
+                    <p class="tier-card__time"><strong>0 seconds</strong> per trade</p>
+                    <p class="tier-card__best"><em>Best for:</em> subscribers whose schedules don&rsquo;t allow real-time engagement.</p>
+                </article>
+            </div>
+
+            <p class="tier-notice">You choose. You can switch tiers anytime. <strong>Ekantik never touches your account, your credentials, or your fills.</strong></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION C — 30-MINUTE SETUP ═══ -->
+    <section class="block setup-section">
+        <div class="container section-inner">
+            <div class="eyebrow">C &middot; The Setup</div>
+            <h2 class="h-section">From signup to live auto-execution: <em>~30 minutes.</em></h2>
+
+            <ol class="setup-timeline">
+                <li class="setup-step">
+                    <span class="setup-step__num">1</span>
+                    <div>
+                        <h3 class="setup-step__title">Open Broker Account</h3>
+                        <p class="setup-step__time">5 min</p>
+                        <p class="setup-step__body">Choose Tradovate, TradeStation, or Interactive Brokers.</p>
+                    </div>
+                </li>
+                <li class="setup-step">
+                    <span class="setup-step__num">2</span>
+                    <div>
+                        <h3 class="setup-step__title">Open TradersPost Account</h3>
+                        <p class="setup-step__time">10 min</p>
+                        <p class="setup-step__body">Independent platform. Connect your broker via OAuth.</p>
+                    </div>
+                </li>
+                <li class="setup-step">
+                    <span class="setup-step__num">3</span>
+                    <div>
+                        <h3 class="setup-step__title">Configure Your Risk Controls</h3>
+                        <p class="setup-step__time">5 min</p>
+                        <p class="setup-step__body">Set your max position size, daily loss cap, allowed symbols.</p>
+                    </div>
+                </li>
+                <li class="setup-step">
+                    <span class="setup-step__num">4</span>
+                    <div>
+                        <h3 class="setup-step__title">Connect to the Active Futures Alert Channel</h3>
+                        <p class="setup-step__time">10 min</p>
+                        <p class="setup-step__body">Test on paper trading. Then go live.</p>
+                    </div>
+                </li>
+            </ol>
+
+            <p class="setup-notice"><em>TradersPost is an independent third-party execution platform. Ekantik does not own, operate, or have access to your TradersPost account.</em></p>
+            <p class="setup-cta"><a href="onboarding.html" class="btn btn-ghost-dark">Get the Full Setup Guide <span class="arr">&rarr;</span></a></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION D — TRANSPARENCY STANDARD (DASHBOARD) ═══ -->
+    <section class="block dashboard-section" id="dashboard">
+        <div class="container section-inner">
+            <div class="eyebrow">D &middot; The Transparency Standard</div>
+            <h2 class="h-section">Most firms show you a backtest. <em>We show you real fills.</em></h2>
+
+            <div class="dashboard-preview" aria-label="Performance preview placeholder">
+                <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img">
+                    <rect width="720" height="320" fill="#FAF8F5" rx="8"/>
+                    <line x1="40" y1="280" x2="700" y2="280" stroke="#1B2A4A" stroke-width="1"/>
+                    <line x1="40" y1="40" x2="40" y2="280" stroke="#1B2A4A" stroke-width="1"/>
+                    <!-- Model portfolio (gold) -->
+                    <path d="M 40 250 L 130 230 L 220 210 L 310 175 L 400 165 L 490 140 L 580 110 L 670 90" fill="none" stroke="#C8A951" stroke-width="3"/>
+                    <!-- Live account (navy) -->
+                    <path d="M 40 250 L 130 240 L 220 225 L 310 205 L 400 195 L 490 175 L 580 155 L 670 130" fill="none" stroke="#1B2A4A" stroke-width="3" stroke-dasharray="6 4"/>
+                    <!-- legend -->
+                    <rect x="460" y="50" width="14" height="3" fill="#C8A951"/><text x="482" y="55" font-family="DM Sans" font-size="12" fill="#1B2A4A">Model Portfolio (alerted prices)</text>
+                    <rect x="460" y="72" width="14" height="3" fill="#1B2A4A"/><text x="482" y="77" font-family="DM Sans" font-size="12" fill="#1B2A4A">Live Account &mdash; Real Fills</text>
+                    <text x="40" y="30" font-family="JetBrains Mono" font-size="10" fill="#64748B">$ cumulative</text>
+                    <text x="700" y="305" font-family="JetBrains Mono" font-size="10" fill="#64748B" text-anchor="end">trade sequence →</text>
+                </svg>
+                <p class="dashboard-preview__caption"><em>Illustrative placeholder. The live dashboard renders from the published trade journal in real time. Past performance is not indicative of future results.</em></p>
+            </div>
+
+            <div class="dashboard-body">
+                <p>Most firms show you a backtested track record. We show you the actual live trading accounts publishing the model portfolio &mdash; <!-- TRUTHFULNESS-FLAG: spec calls for "including the prop firm accounts where we execute the model portfolio" — held until prop-firm relationship exists -->every fill, every slippage point, every miss. The model portfolio (alerted prices) and the live account (real fills) run side by side, publicly, in real time.</p>
+                <p>Your own results, should you choose to act on our alerts, will differ from both. <!-- TRUTHFULNESS-FLAG: spec adds "prop fills and retail fills are not identical — commission structures, lot sizes, and available instruments vary" — held pending prop-firm relationship -->Commission structures, lot sizes, account types, and timing all introduce variance. We make those differences visible rather than hide them, so you can assess realistic replicability for yourself.</p>
+            </div>
+
+            <!-- Block 8 — Dashboard Notice (verbatim) -->
+            <div class="dashboard-notice">
+                <p class="dashboard-notice__heading">THE EKANTIK TRANSPARENCY STANDARD</p>
+                <p>The performance shown below reflects our own model portfolio and, where labeled, the live trading accounts <!-- TRUTHFULNESS-FLAG -->we use to execute it. It is not a record of any subscriber&rsquo;s results. Your results will differ from both based on your broker, your account type, your timing, your sizing, and your execution discretion.</p>
+                <p>Past performance does not guarantee future results. Trading involves substantial risk of loss. This is published for informational purposes only and is not personalized advice.</p>
+            </div>
+
+            <p class="dashboard-cta"><a href="/experiment.html" class="btn btn-gold">Open the Full Live Dashboard <span class="arr">&rarr;</span></a></p>
+        </div>
+    </section>
+
+    <!-- ═══ HYBRID — ARCHITECTURE PROOF BAND ═══ -->
+    <section class="block proof-band">
+        <div class="container section-inner">
+            <div class="eyebrow">The architecture behind the alerts</div>
+            <h2 class="h-section">The alerts aren&rsquo;t the product. <em>The architecture that produces them is.</em></h2>
+            <p class="lede">Every Active Futures alert is generated by a disclosed, locked architecture &mdash; the same doubling-doctrine, falsifiability-gated, attribution-disciplined protocol that runs on the operator&rsquo;s capital before any subscriber ever receives a fill. The full architecture is published. The protocols are locked under witness countersignature. The gates are binding.</p>
+
+            <div class="proof-grid">
+                <article class="proof-card">
+                    <h3>Doubling doctrine</h3>
+                    <p>Capital grows in <strong>doublings</strong>, not straight lines. ≈3.3 doublings = 10×. The trigger ladder advances size only on earned profit.</p>
+                    <p class="proof-card__link"><a href="/#trigger-ladder">See the trigger ladder &rarr;</a></p>
+                </article>
+                <article class="proof-card">
+                    <h3>Falsifiability Gate</h3>
+                    <p>Rolling-100 realized EV ≤ $0 fires the gate. The publication ends when the data crosses the line &mdash; not when the operator says so. Active from 80 trades, binding at 100.</p>
+                    <p class="proof-card__link"><a href="/falsifiability-protocol-v2.html">Read the locked protocol &rarr;</a></p>
+                </article>
+                <article class="proof-card">
+                    <h3>Attribution discipline</h3>
+                    <p>Every trade carries an honest post-mortem tag <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong>. H1 (edge failed) is the gate&rsquo;s verdict alone &mdash; never hand-applied.</p>
+                    <p class="proof-card__link"><a href="/#falsifiability">See the criterion cards &rarr;</a></p>
+                </article>
+                <article class="proof-card">
+                    <h3>Buffer ladder</h3>
+                    <p>Size advances only when a buffer of accumulated profit is earned. Position doubling is mechanical, not discretionary. The operator&rsquo;s confidence is not an input.</p>
+                    <p class="proof-card__link"><a href="/#method">See the doubling ladder &rarr;</a></p>
+                </article>
+            </div>
+
+            <p class="proof-band__close">If you want to subscribe without understanding the architecture, you can. If you want to understand the architecture first, every layer is published &mdash; click any link above.</p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION E — HOW WE OPERATE (Block 3 verbatim) ═══ -->
+    <section class="block how-we-operate-section" id="how-we-operate">
+        <div class="container-narrow">
+            <div class="section-eyebrow center">E &middot; How We Operate</div>
+            <h2 class="how-we-operate__h">Read this before you subscribe.</h2>
+
+            <div class="how-we-operate__body">
+                <p>Ekantik Capital Advisors LLC is a publisher of market intelligence and investment research. We are not currently registered as an investment adviser under the Investment Advisers Act of 1940 or the laws of any state. We operate under the publisher&rsquo;s exemption, which permits the publication of impersonal market commentary, analysis, and educational content to a general audience.</p>
+
+                <p><strong>What this means in plain language:</strong></p>
+
+                <ul class="how-we-operate__list">
+                    <li>Everything we publish reflects our own analysis and the positions we hold in our own model portfolio. We are not giving you personalized advice tailored to your specific situation.</li>
+                    <li>We do not manage your account, hold your capital, or direct your trades. Every decision you make on your own account is your own.</li>
+                    <li>We do not receive compensation for recommending specific securities from any third party. We are paid only by our subscribers, for the intelligence we publish.</li>
+                    <li>Our performance dashboard shows what we are doing in our own model portfolio in real time. Your results, should you choose to act on our publications, will differ based on your timing, sizing, broker, and execution discipline.</li>
+                </ul>
+
+                <p>We have chosen this structure deliberately. It keeps our publication clean of conflicts and keeps you in full control of your capital. As the firm scales and we register as an investment adviser, we will update this page accordingly and notify subscribers in advance of any change to our regulatory status.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION F — SUBSCRIBE CTA ═══ -->
+    <section class="block subscribe-section" id="subscribe">
+        <div class="container-narrow">
+            <div class="section-eyebrow center">F &middot; Subscribe</div>
+            <h2 class="subscribe__h">Subscribe to Active Futures.</h2>
+            <p class="subscribe__sub">Three tiers. You choose. Your account stays yours.</p>
+
+            <form class="subscribe-form" novalidate>
+                <label class="subscribe-form__field"><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
+                <label class="subscribe-form__field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+                <label class="subscribe-form__field"><span>Discord handle</span><input type="text" name="discord" autocomplete="off" required></label>
+
+                <fieldset class="subscribe-ack">
+                    <legend>Required acknowledgments</legend>
+                    <p class="subscribe-ack__note"><em>Each box must be checked individually. None pre-checked. Form submission is rejected if any acknowledgment is unchecked.</em></p>
+
+                    <label><input type="checkbox" required> I understand that Ekantik Capital Advisors LLC is not a registered investment adviser and publishes market intelligence under the publisher&rsquo;s exemption.</label>
+                    <label><input type="checkbox" required> I understand that all content I receive &mdash; including alerts, research, and commentary &mdash; is general market intelligence and not personalized investment advice.</label>
+                    <label><input type="checkbox" required> I understand that I am solely responsible for my own investment decisions, including position sizing, risk management, and whether to act on any published alert.</label>
+                    <label><input type="checkbox" required> I understand that trading and investing involve substantial risk of loss, that past performance does not guarantee future results, and that I may lose all capital I invest.</label>
+                    <label><input type="checkbox" required> I understand that any third-party execution platform (e.g., TradersPost) and my broker are independent of Ekantik and that Ekantik does not have access to my account, my credentials, or my positions.</label>
+                    <label><input type="checkbox" required> I have read and agree to the Ekantik Terms of Service and Privacy Policy.</label>
+                </fieldset>
+
+                <button type="submit" class="btn btn-gold btn-large">Start with Paper Trading <span class="arr">&rarr;</span></button>
+                <p class="subscribe-form__note"><em>Pricing tiers TBD &mdash; pending operator confirmation. Mockup form does not submit.</em></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- ═══ REACH OUT ═══ -->
+    <section class="section section--white" id="reach-out">
+        <div class="container-narrow">
+            <div class="section-eyebrow center">Reach Out</div>
+            <h2 class="defense-h">Questions before you subscribe?</h2>
+            <p class="reach-intro">Drop a note. The operator reads each one personally. This is a private inquiry path &mdash; not a subscription. Use the form above to subscribe.</p>
+            <p class="setup-cta"><a href="/#reach-out" class="btn btn-ghost-dark">Open the inquiry form <span class="arr">&rarr;</span></a></p>
+        </div>
+    </section>
+
+    <!-- ═══ BLOCK 1 — MASTER FOOTER DISCLAIMER ═══ -->
+    <footer class="footer footer--compliance" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__disclosure">
+                <p>Ekantik Capital Advisors LLC publishes market intelligence, research, and educational content. We are not registered as an investment adviser and operate under the publisher&rsquo;s exemption to the Investment Advisers Act of 1940. Our content reflects our own analysis and the positions we hold in our own model portfolio. It is not personalized investment advice and is not a recommendation to buy, sell, or hold any security, derivative, or other financial instrument.</p>
+                <p>Subscribers and readers are solely responsible for their own investment decisions. Trading and investing involve substantial risk, including the potential loss of all capital invested. Past performance is not indicative of future results. Before acting on any information, consult a qualified financial, legal, or tax professional in your jurisdiction.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC. All rights reserved.</p>
+                <p class="footer__tagline"><em>What We Trade. What You See. No Edits.</em></p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
