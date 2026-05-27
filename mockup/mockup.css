@@ -119,3 +119,7 @@
 .footer--compliance { background: var(--navy-deep); color: var(--slate-light); padding: 3rem 0 2rem; }
 .footer--compliance p { font-family: var(--font-sans); font-size: 13px; line-height: 1.65; margin: 0 0 .85rem; max-width: 78ch; }
 .footer__tagline { color: var(--gold) !important; font-family: var(--font-serif) !important; font-style: italic; font-size: 1.1rem !important; margin-top: 1.5rem !important; }
+
+/* Two-tier layout — cap at 2 columns so cards don't over-stretch */
+.tier-grid--two { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 880px; margin-left: auto; margin-right: auto; }
+@media (min-width: 720px) { .tier-grid--two { grid-template-columns: repeat(2, 1fr); } }
