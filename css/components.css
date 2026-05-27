@@ -4744,24 +4744,6 @@ section.block.light { padding: 96px 0 112px; }
 .nlm-principle p { font-family: var(--font-sans); font-size: 13.5px; line-height:1.5; color: var(--slate); margin: 0 0 6px; }
 .nlm-principle__where { font-family: var(--font-mono); font-size: 11px; color: var(--gold); }
 
-/* ─── Doubles explainer — 10× is 3.3 doublings (Section A equity arc) ─── */
-.doubles-explainer { margin: 2.5rem 0 1rem; padding: 1.75rem; border: 1px solid var(--gold); border-radius: 12px; background: linear-gradient(180deg, rgba(200,169,81,.06), rgba(200,169,81,.02)); }
-.doubles-explainer__kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 .35rem; }
-.doubles-explainer__h { font-family: var(--font-serif); font-size: 1.9rem; line-height: 1.15; color: var(--navy); margin: 0 0 .6rem; }
-.doubles-explainer__lead { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate); max-width: 64ch; margin: 0 0 1.5rem; }
-.doubles-ladder { list-style: none; display: flex; gap: .75rem; align-items: flex-end; padding: 0; margin: 0 0 1.25rem; }
-.doubles-step { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: .4rem; background: #fff; border: 1px solid #E5E0D0; border-radius: 10px; padding: .85rem .5rem; text-align: center; }
-.doubles-step--1 { min-height: 78px; }
-.doubles-step--2 { min-height: 100px; }
-.doubles-step--3 { min-height: 124px; }
-.doubles-step--target { min-height: 148px; border-color: var(--gold); background: linear-gradient(180deg, rgba(200,169,81,.16), rgba(200,169,81,.04)); box-shadow: 0 4px 18px rgba(200,169,81,.18); }
-.doubles-step__x { font-family: var(--font-serif); font-size: 1.85rem; font-weight: 600; color: var(--navy); line-height: 1; }
-.doubles-step--target .doubles-step__x { color: var(--gold); }
-.doubles-step__amt { font-family: var(--font-mono); font-size: 13px; color: var(--navy-deep); }
-.doubles-step__n { font-family: var(--font-sans); font-size: 11px; color: var(--slate); text-transform: uppercase; letter-spacing: .06em; }
-.doubles-explainer__foot { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55; color: var(--slate); max-width: 64ch; margin: 0; }
-@media (max-width: 640px) { .doubles-ladder { flex-wrap: wrap; } .doubles-step { flex: 1 1 40%; } }
-
 /* ─── Doctrine alignment (ACC-DOCTRINE-ALIGN-V1) ─── */
 .hero-doctrine-link { font-family: var(--font-sans); font-size: 13px; margin-top: 14px; opacity: .82; }
 .hero-doctrine-link a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,81,.4); }

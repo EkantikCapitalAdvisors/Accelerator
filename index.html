@@ -864,8 +864,8 @@
                 <p class="record-panel__body">The <a href="#battery" class="link-inline">8-Test Sustainability Battery</a> below is how we evaluate whether a sample of this size carries statistical weight. The <a href="#fills" class="link-inline">public trade log</a> further down is every fill, downloadable as CSV, verifiable against the live market.</p>
             </aside>
 
-            <h3 class="mt-4">Sample Equity Arc — $5,000 working unit · scaling on buffers</h3>
-            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $5,000 working unit. The arc prints as each Discord fill closes. Each dashed line marks a <strong>buffer</strong> &mdash; $5,000 of accumulated profit. Crossing the first buffer green-lights doubling the position size; each later buffer adds one ES, to a four-ES ceiling. Capital resets to the working unit annually.</p>
+            <h3 class="mt-4">Sample Equity Arc — $5,000 working unit · live</h3>
+            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $5,000 working unit. The arc prints as each Discord fill closes; each dashed line marks a $5,000 profit-buffer threshold (full mechanism in <a href="#method" class="link-inline">§01.2 Trigger Ladder</a>; aspirational 12-month path in the <a href="#compounding-ladder" class="link-inline">Compounding Ladder</a> above). Capital resets to the working unit annually.</p>
             <div class="mini-chart">
                 <canvas id="section-a-equity"></canvas>
             </div>
@@ -882,20 +882,6 @@
                     <span class="mini-stats__label">Profit buffers reached</span>
                     <span class="mini-stats__val" id="section-a-buffers">—</span>
                 </div>
-            </div>
-
-            <!-- ═══ DOUBLES EXPLAINER — 10× is 3.3 doublings ═══ -->
-            <div class="doubles-explainer" aria-labelledby="doubles-h">
-                <p class="doubles-explainer__kicker">Why 10&times; is not as far as it sounds</p>
-                <h3 class="doubles-explainer__h" id="doubles-h">Ten-fold is three-and-a-half doublings.</h3>
-                <p class="doubles-explainer__lead">Capital grows in <strong>doublings</strong>, not straight lines. Each time the working unit doubles, the next double is the same job again &mdash; never a bigger one. Reaching 10&times; the $5,000 working unit is just <strong>3.3 doublings</strong>. Each $5,000 of accumulated profit is one <strong>buffer</strong> &mdash; and buffers, paid for one at a time and never borrowed against, are how the doublings are funded.</p>
-                <ol class="doubles-ladder" aria-label="Doubling ladder from the $5,000 working unit to 10×">
-                    <li class="doubles-step doubles-step--1"><span class="doubles-step__x">2&times;</span><span class="doubles-step__amt">$10,000</span><span class="doubles-step__n">1 double</span></li>
-                    <li class="doubles-step doubles-step--2"><span class="doubles-step__x">4&times;</span><span class="doubles-step__amt">$20,000</span><span class="doubles-step__n">2 doubles</span></li>
-                    <li class="doubles-step doubles-step--3"><span class="doubles-step__x">8&times;</span><span class="doubles-step__amt">$40,000</span><span class="doubles-step__n">3 doubles</span></li>
-                    <li class="doubles-step doubles-step--target"><span class="doubles-step__x">10&times;</span><span class="doubles-step__amt">$50,000</span><span class="doubles-step__n">3.3 doubles</span></li>
-                </ol>
-                <p class="doubles-explainer__foot"><em>Targets are illustrative of the doubling structure, not promised outcomes. Whether and how fast any doubling occurs is governed entirely by the live edge and the stand-down architecture. Past performance is not indicative of future results.</em></p>
             </div>
 
             <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
