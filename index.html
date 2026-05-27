@@ -150,6 +150,58 @@
                 <p class="method-pyramid__note">What enforces it is <strong>adherence, not cushion</strong>: the working capital is <strong>$5,000</strong> per unit, and a single ES contract requires only ~$500 in day-trade margin &mdash; so the position is always a fraction of the capital. So long as the four principles hold and the stand-down architecture (&sect;04 Sit-Out, &sect;05 gates) fires on schedule, losses are capped before the $5,000 can reach the risk-of-ruin zone &mdash; the point from which no remaining edge could recover it.</p>
             </div>
 
+            <!-- 01.1.1 · Capital architecture · the buffer ratio behind the $5K -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.1.1 · The capital architecture &middot; what the $5K assumes behind it</div>
+            <h3 class="component-h">Active capital is the smallest tier. <em>The buffer behind it is the largest.</em></h3>
+            <p class="component-sub">The foundational design separates the <strong>working unit</strong> (active capital at risk) from the larger <strong>risk-capital buffer</strong> held behind it. Positive expectancy alone is not enough &mdash; it compounds only when the buffer behind it is large enough to absorb realistic drawdowns without forcing capitulation. The 1× / 6&ndash;10× / 2× pyramid below is the design; the table beside it maps it onto this experiment.</p>
+
+            <div class="capital-arch">
+                <figure class="capital-arch__figure">
+                    <svg viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ultra-safe growth pyramid: Buffer 6 to 10 times at base, Positive Expectancy 1 times in middle, Compounding Buffer 2 times at apex">
+                        <rect width="460" height="380" fill="#FAF8F5" rx="8"/>
+                        <text x="230" y="32" text-anchor="middle" font-family="Cormorant Garamond" font-size="18" font-weight="600" fill="#1B2A4A">Ultra-safe growth · the capital architecture</text>
+
+                        <!-- Top tier · Compounding Buffer (2×) -->
+                        <polygon points="230,52 154,160 306,160" fill="#94A3B8" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="120" text-anchor="middle" font-family="DM Sans" font-size="11" font-weight="600" fill="#FAF8F5">Compounding Buffer</text>
+                        <text x="230" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#FAF8F5">2× &middot; ~$10K</text>
+
+                        <!-- Middle tier · Positive Expectancy (1×) -->
+                        <polygon points="154,160 306,160 357,240 103,240" fill="#C8A951" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="198" text-anchor="middle" font-family="DM Sans" font-size="12" font-weight="700" fill="#1B2A4A">Positive Expectancy (1×)</text>
+                        <text x="230" y="218" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#1B2A4A">$5,000 &middot; working unit</text>
+
+                        <!-- Bottom tier · Buffer (6-10×) -->
+                        <polygon points="103,240 357,240 420,340 40,340" fill="#1B2A4A" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="282" text-anchor="middle" font-family="DM Sans" font-size="13" font-weight="700" fill="#FAF8F5">Buffer (6&ndash;10×)</text>
+                        <text x="230" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#C8A951">~$30K &ndash; $50K risk capital</text>
+                        <text x="230" y="322" text-anchor="middle" font-family="DM Sans" font-size="10" font-style="italic" fill="#94A3B8">held in reserve · not deployed</text>
+
+                        <text x="230" y="364" text-anchor="middle" font-family="DM Sans" font-size="10" font-style="italic" fill="#64748B">*1× = minimum capital buffer to be profitable on positive-expectancy alone</text>
+                    </svg>
+                </figure>
+
+                <div class="capital-arch__mapping">
+                    <h4 class="capital-arch__h">Implementation on this experiment</h4>
+                    <dl class="capital-arch__list">
+                        <dt><span class="capital-arch__tag capital-arch__tag--mid">1×</span> Positive Expectancy unit</dt>
+                        <dd><strong>$5,000 working unit</strong> &mdash; the active capital deployed in the market. The operator&rsquo;s position size is anchored here so positive expectancy can express across a meaningful sample (R-expectancy +0.30R/trade live, 84 trades).</dd>
+
+                        <dt><span class="capital-arch__tag capital-arch__tag--base">6&ndash;10×</span> Risk-capital buffer</dt>
+                        <dd><strong>$30,000 &ndash; $50,000 held in reserve</strong>, <em>not</em> deployed in active positions. This is what makes the architecture work: ordinary drawdowns on the $5K unit are absorbed by the buffer behind it; the operator never trades scared because the active capital is a fraction of the risk capital.</dd>
+
+                        <dt><span class="capital-arch__tag capital-arch__tag--top">2×</span> Compounding buffer</dt>
+                        <dd><strong>~$10,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is what funds position-size scale-up: each $5K of accumulated profit is one buffer that releases one additional ES contract, up to the 4-ES cap.</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="capital-arch__suitability">
+                <p class="suitability__h">Suitability &middot; read carefully before acting on this experiment with your own capital</p>
+                <p>This architecture presumes a buffer ratio of <strong>at least 6× the working unit</strong>. If you are considering acting on what this experiment publishes with your own capital, the structural premise is that you have <strong>roughly $30,000 of risk capital you can afford to lose entirely</strong> sitting behind whatever you might deploy in an active position &mdash; not the $5,000 working unit alone. <strong>Without the buffer, you don&rsquo;t have the architecture; you have the working unit by itself, which is materially more fragile than what the design contemplates.</strong> The operator runs this on personal capital under that architecture; observers without comparable buffer should treat what is published here as research input, not as a signal to follow into live capital deployment. Nothing on this page constitutes an offer, a solicitation, or personalized investment advice.</p>
+            </div>
+
             <!-- 01.2 · The Trigger Ladder -->
             <div class="component-block-divider"></div>
             <div class="component-label">01.2 · The Trigger Ladder</div>

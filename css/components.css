@@ -4876,3 +4876,23 @@ section.block.light { padding: 96px 0 112px; }
 .cl-explainer-card p strong { color: var(--gold); }
 
 .cl-compliance { font-family: var(--font-sans); font-size: 12.5px; color: var(--slate-light); line-height: 1.65; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(250,248,245,.1); max-width: 90ch; }
+
+/* ─── Capital architecture (§01.1.1) ─── */
+.capital-arch { display: grid; grid-template-columns: minmax(280px, 1fr) 1.4fr; gap: 28px; align-items: start; margin: 1.5rem 0 1rem; }
+.capital-arch__figure { margin: 0; }
+.capital-arch__figure svg { width: 100%; height: auto; max-width: 460px; border-radius: 8px; box-shadow: 0 4px 18px rgba(27,42,74,.08); }
+.capital-arch__h { font-family: var(--font-serif); font-size: 1.25rem; color: var(--navy); margin: 0 0 .85rem; }
+.capital-arch__list { margin: 0; }
+.capital-arch__list dt { font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--navy); margin: .65rem 0 .25rem; display: flex; align-items: center; gap: 8px; }
+.capital-arch__list dd { font-family: var(--font-sans); font-size: 13.5px; line-height: 1.6; color: var(--slate); margin: 0; }
+.capital-arch__tag { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 2px 7px; border-radius: 4px; }
+.capital-arch__tag--top  { color: #fff; background: #94A3B8; }
+.capital-arch__tag--mid  { color: var(--navy); background: var(--gold); }
+.capital-arch__tag--base { color: var(--gold); background: var(--navy); }
+
+.capital-arch__suitability { background: rgba(220,38,38,.06); border-left: 3px solid #DC2626; border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 1.5rem 0 .5rem; }
+.suitability__h { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: #DC2626; font-weight: 700; margin: 0 0 .5rem; }
+.capital-arch__suitability p:last-child { font-family: var(--font-sans); font-size: 14px; line-height: 1.65; color: var(--navy-deep); margin: 0; }
+.capital-arch__suitability strong { color: var(--navy); }
+
+@media (max-width: 720px) { .capital-arch { grid-template-columns: 1fr; } }
