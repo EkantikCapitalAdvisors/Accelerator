@@ -905,11 +905,15 @@ function parseDiscordOptionsText(text) {
         }
         // Round to 2 decimals — kills floating-point artifacts like 159.9999999.
         riskDollars = Math.round(riskDollars * 100) / 100;
+        // trade_num: prefix "O" for pure-digit IDs (legacy: "1" → "O1");
+        // alphanumeric IDs pass through as-is (display case preserved: "test" → "test").
+        const idRaw = t._id_raw || t._id || '';
+        const tradeNum = /^\d+$/.test(idRaw) ? 'O' + idRaw : idRaw;
         return {
             datetime:    t._datetime || '',
             entry_time:  t._datetime || '',
             exit_time:   '',
-            trade_num:   'O' + t._id,
+            trade_num:   tradeNum,
             ticker:      t._ticker || '',
             option_type: t._option_type || '',
             strike:      t._strike != null ? t._strike : 0,
@@ -917,6 +921,7 @@ function parseDiscordOptionsText(text) {
             direction:   t._direction || 'Buy',
             entry_price: entry,
             stop_price:  stop,
+            exit_target: t._exit_target || '',
             notes:       t._notes || '',
             dollar_pl:   dollarPL,
             risk_dollars: riskDollars,
@@ -954,12 +959,12 @@ function parseDiscordOptionsText(text) {
         }
 
         // 3. Result line: "ID 11: +800" / "ID 11: +$800" / "ID 11: +220$" /
-        //    "ID 11: -100$" — optionally with a trailing attribution tag
-        //    (H2/H3). Dollar sign tolerated on either side of the number;
-        //    sign defaults to + when absent.
-        const resultMatch = line.match(/^ID\s+(\d+)\s*:\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*\$?\s*(?:\s+(H[123]))?\s*$/i);
+        //    "ID 11: -100$" / "ID test: +180 H3" — alphanumeric IDs accepted;
+        //    optional trailing attribution tag (H2/H3). Dollar sign tolerated
+        //    on either side; sign defaults to + when absent.
+        const resultMatch = line.match(/^ID\s+([\w-]+)\s*:\s*([+-]?)\s*\$?\s*(\d+\.?\d*)\s*\$?\s*(?:\s+(H[123]))?\s*$/i);
         if (resultMatch) {
-            const id = resultMatch[1];
+            const id = resultMatch[1].toLowerCase();   // normalized for lookup; entry stores lowercase _id
             const sign = resultMatch[2] === '-' ? -1 : 1;
             const dollars = parseFloat(resultMatch[3]) * sign;
             const attribution = resultMatch[4] ? resultMatch[4].toUpperCase() : null;
@@ -983,16 +988,21 @@ function parseDiscordOptionsText(text) {
             continue;
         }
 
-        // 4. Key-value line: "Ticker: SPX" / "Entry: 5.6" / etc.
-        const kv = line.match(/^([A-Za-z][A-Za-z\s]*?)\s*:\s*(.+?)\s*$/);
+        // 4. Key-value line: "Ticker: SPX" / "Entry: 5.6" / "Strike(OTM): 7500" /
+        //    "Exit Target Price Level(ITM Potential): " / etc.
+        //    Keys may contain parenthetical annotations — stripped before matching.
+        //    Empty values are tolerated (e.g., "Entry: " on a template stub).
+        const kv = line.match(/^([A-Za-z][A-Za-z\s()]*?)\s*:\s*(.*?)\s*$/);
         if (!kv) continue;
-        const key = kv[1].toLowerCase().replace(/\s+/g, ' ').trim();
+        const key = kv[1].toLowerCase().replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
         const val = kv[2].trim();
 
         if (key === 'id') {
+            if (!val) continue;                          // skip "ID:" with empty value
             if (current && current._id) pending[current._id] = current;
             current = {
-                _id: val.replace(/[^0-9]/g, ''),
+                _id:     val.toLowerCase(),              // normalized for lookup (matches close-line)
+                _id_raw: val,                            // original case for display
                 _datetime: currentDatetime,
                 _trade_date: currentDate
             };
@@ -1044,9 +1054,20 @@ function parseDiscordOptionsText(text) {
                 }
                 break;
             }
+            case 'exit target price level':
+            case 'exit target':
+            case 'target':
+                // Informational — the ITM price level the underlying needs to reach
+                // for the option to hit its profit target. Not used in risk math; the
+                // close-line dollar amount is authoritative for P&L.
+                current._exit_target = val;
+                break;
             case 'notes':
             case 'note':
                 current._notes = val;
+                // "All In Always Unless Otherwise Noted" style annotation in notes
+                // sets the default risk = full premium (same as `Stop price: all in`).
+                if (/all\s*in/i.test(val)) current._all_in = true;
                 break;
             // Unknown keys — ignore
         }
