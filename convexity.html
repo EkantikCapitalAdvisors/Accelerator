@@ -319,7 +319,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
             <p class="lede">One illustrative path under the doubling doctrine on the convex instrument. The engine compounds via earned doublings, position size growing geometrically <strong>1 &rarr; 2 &rarr; 4 &rarr; 8 &rarr; 16 contracts</strong> as each six-uncorrelated-trade buffer is earned. <strong>Cooperative ceiling: 4 doublings (16&times;) on the working unit &mdash; clipped pending live record.</strong> Hard constraint: the trailing floor at HWM &minus; 12% of the working unit, matching the weekly $600 cap. The X-axis is calendar months for visual comparability; the real driver is <em>regime-window time</em> &mdash; gamma instruments compound on regime presence, not on calendar.</p>
 
             <div class="cl-aspirational-note">
-                <strong>Aspirational &middot; pre-launch &middot; under stated assumptions.</strong> The Convexity Experiment launches 6/30/2026. The cooperative scenario assumes every buffer fires and no revert event occurs (the realistic envelope is 2&times;&ndash;8&times; per the trajectory table above). The current backtest is <strong>seven trades</strong> &mdash; statistical noise around zero, not a defensible edge claim. Nothing on this page constitutes a forecast or guarantee.
+                <strong>Aspirational &middot; pre-launch &middot; under stated assumptions.</strong> The Convexity Experiment launches 6/30/2026. The cooperative scenario assumes every buffer fires and no revert event occurs (the realistic envelope is 2&times;&ndash;8&times; per the trajectory table above). <strong>No live convex trades on record yet</strong> &mdash; the live experiment from 6/30 onward is what will generate a statistically meaningful track on this exact framework. Nothing on this page constitutes a forecast or guarantee.
             </div>
 
             <div class="eq-legend">
@@ -440,7 +440,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
                 </article>
             </div>
 
-            <p class="cl-compliance">Aspirational and illustrative. Headline targets (16&times; engine ceiling, 4 doublings, 12-month window) are <strong>design intent</strong>, not forecasts &mdash; the cooperative scenario where every buffer fires and no revert occurs. The realistic envelope per the trajectory table is 2&times;&ndash;8&times; (mixed window, 1&ndash;3 doublings). The trailing floor at HWM &minus; 12% mirrors the structural intent of the existing convex sit-out cadence. The current backtest is <strong>seven trades</strong> &mdash; statistical noise around zero, not a defensible edge claim. The Convexity Experiment launches 6/30/2026. Past performance is not indicative of future results.</p>
+            <p class="cl-compliance">Aspirational and illustrative. Headline targets (16&times; engine ceiling, 4 doublings, 12-month window) are <strong>design intent</strong>, not forecasts &mdash; the cooperative scenario where every buffer fires and no revert occurs. The realistic envelope per the trajectory table is 2&times;&ndash;8&times; (mixed window, 1&ndash;3 doublings). The trailing floor at HWM &minus; 12% mirrors the structural intent of the existing convex sit-out cadence. <strong>No live convex trades on record yet</strong>; the Convexity Experiment launches 6/30/2026. Past performance is not indicative of future results.</p>
         </div>
     </section>
 
@@ -460,16 +460,16 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
             <!-- 03 · Edge Landscape -->
             <div class="component-block-divider"></div>
             <div class="component-label">03 · The Edge Landscape &middot; Where the convex track sits</div>
-            <p class="doctrine-anchor"><strong>Three rows for institutional context.</strong> The Ekantik row is the architecture&rsquo;s pitch &mdash; same instrument family, different operator, different rules &mdash; but the present backtest is <strong>seven trades</strong>, far below any statistically meaningful sample. The figures below are honest at <em>n=7</em>; the live experiment from 6/30/2026 onward is what will generate a real edge read.</p>
+            <p class="doctrine-anchor"><strong>Three rows for institutional context.</strong> The Ekantik row is the architecture&rsquo;s pitch &mdash; same instrument family, different operator, different rules. <strong>No live convex trades on record yet</strong>; the row will populate from closed fills once the live experiment opens on 6/30/2026.</p>
             <table class="method-risk-table">
                 <thead><tr><th>Strategy category</th><th>Edge / occurrence</th><th>Frequency / mo</th><th>Annual R (unsized)</th><th>½ Kelly Allocation</th></tr></thead>
                 <tbody>
                     <tr><td>Institutional Vol Trading Desks (Jane Street / SIG)</td><td class="mono">+0.05–0.15%</td><td class="mono">very high</td><td class="mono">reference</td><td class="mono">institutional-only</td></tr>
                     <tr><td>Retail 0DTE / Short-Dated Options (aggregated)</td><td class="mono">negative</td><td class="mono">high</td><td class="mono">strongly negative</td><td class="mono">0% (negative edge)</td></tr>
-                    <tr><td><strong>Ekantik · Short-Dated Long Options</strong> <span class="convex-badge convex-badge--prelim">backtested · n=7 · pre-asymptotic</span></td><td class="mono">&approx; &minus;0.5% / trade</td><td class="mono">~15</td><td class="mono">&approx; &minus;2R</td><td class="mono">0% (no edge demonstrated at n=7)</td></tr>
+                    <tr><td><strong>Ekantik · Short-Dated Long Options</strong> <span class="convex-badge convex-badge--prelim">pre-launch &middot; no live record</span></td><td class="mono">&mdash;</td><td class="mono">&mdash;</td><td class="mono">&mdash;</td><td class="mono">&mdash;</td></tr>
                 </tbody>
             </table>
-            <p class="muted" style="font-size:12px"><em>Sources: standard institutional vol-desk disclosures, ESMA retail-options loss-rate aggregates, FINRA consumer alerts. The Ekantik row is computed from the operator&rsquo;s seven Discord-logged options fills to date (3 wins · 4 losses · −$10 net · profit factor 0.99 · R-expectancy −0.01R · avg risk $263). At a sample this small, the figures are statistical noise around zero rather than a defensible edge claim &mdash; which is precisely why the live experiment exists. The row updates from closed fills once the 6/30 window opens.</em></p>
+            <p class="muted" style="font-size:12px"><em>Sources: standard institutional vol-desk disclosures, ESMA retail-options loss-rate aggregates, FINRA consumer alerts. The Ekantik row populates from the convex-track trade log once the live experiment opens on 6/30/2026; no figures shown until a meaningful sample accumulates.</em></p>
         </div>
     </section>
 
