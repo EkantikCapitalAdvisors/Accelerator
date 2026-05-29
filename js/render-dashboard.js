@@ -138,17 +138,16 @@
         destroy('traj');
         let cum = 0; const labels = [], data = [], floor = [], fullLabels = [];
         const baseEv = clean.length ? (clean.reduce((a,t)=>a+(t.dollar_pl||0),0)/clean.length) : 0;
-        let lastMonthLabel = '';
         clean.forEach((t,i) => {
             cum += (t.dollar_pl||0);
             const d = parseTS(t.entry_time || t.entryTime || t.trade_date);
-            const monthLabel = d ? d.toLocaleDateString('en-US', { month:'short', year:'2-digit' }) : '';
-            // Show date label only at month boundaries — Chart.js auto-skips repeats cleanly
-            labels.push(monthLabel !== lastMonthLabel ? monthLabel : '');
-            if (monthLabel) lastMonthLabel = monthLabel;
+            const tn = t.trade_num || ('#'+(i+1));
+            const dateStr = d ? d.toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '';
+            // Multi-line tick label: trade ID on top, date below. Chart.js auto-skips
+            // so only a representative subset renders — both lines remain visible.
+            labels.push([tn, dateStr]);
             data.push(Math.round(cum));
             floor.push(Math.round(baseEv * (i+1) * 0.5));
-            const tn = t.trade_num || ('#'+(i+1));
             fullLabels.push(d ? `${tn} · ${d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}` : tn);
         });
         // trigger fire markers
@@ -172,7 +171,7 @@
                         title: items => fullLabels[items[0].dataIndex] || '',
                         afterBody:(items)=>{ const i=items[0].dataIndex; return fireAnno[i]?['▲ '+fireAnno[i]+' fired here']:[]; }
                     } } },
-                scales:{ x:{ ticks:{ maxTicksLimit:12, font:{family:'JetBrains Mono', size:10}, autoSkip:false } },
+                scales:{ x:{ ticks:{ maxTicksLimit:12, font:{family:'JetBrains Mono', size:10} } },
                     y:{ ticks:{ callback:v=>'$'+v.toLocaleString(), font:{family:'JetBrains Mono', size:10} } } } }
         });
     }
@@ -198,17 +197,15 @@
         const cv = $('chart-contracts'); if (!cv || !root.Chart) return;
         destroy('ct');
         let cum = 0, contracts = 1; const labels = [], data = [], fullLabels = [];
-        let lastMonthLabel = '';
         clean.forEach((t,i) => {
             cum += (t.dollar_pl||0);
             const fired = BUFFERS.filter(b => cum >= b.threshold).length;
-            contracts = 1 + Math.min(fired, 3); // base 1 ES, +1 per buffer up to 4
+            contracts = 1 + Math.min(fired, 3);
             const d = parseTS(t.entry_time || t.entryTime || t.trade_date);
-            const monthLabel = d ? d.toLocaleDateString('en-US', { month:'short', year:'2-digit' }) : '';
-            labels.push(monthLabel !== lastMonthLabel ? monthLabel : '');
-            if (monthLabel) lastMonthLabel = monthLabel;
-            data.push(contracts);
             const tn = t.trade_num || ('#'+(i+1));
+            const dateStr = d ? d.toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '';
+            labels.push([tn, dateStr]);
+            data.push(contracts);
             fullLabels.push(d ? `${tn} · ${d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}` : tn);
         });
         charts.ct = new root.Chart(cv, {
@@ -218,7 +215,7 @@
                 interaction:{ mode:'index', intersect:false },
                 plugins:{ legend:{display:false},
                     tooltip:{ callbacks:{ title: items => fullLabels[items[0].dataIndex] || '' } } },
-                scales:{ x:{ ticks:{ maxTicksLimit:12, font:{family:'JetBrains Mono', size:10}, autoSkip:false } },
+                scales:{ x:{ ticks:{ maxTicksLimit:12, font:{family:'JetBrains Mono', size:10} } },
                     y:{ min:0, max:5, ticks:{ stepSize:1, font:{family:'JetBrains Mono', size:10} } } } }
         });
     }
