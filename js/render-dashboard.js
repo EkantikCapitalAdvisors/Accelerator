@@ -261,16 +261,137 @@
         a.download = 'ekantik-experiment-trades.csv'; a.click();
     }
 
+    // ──────────────────────────────────────────────────────────────
+    // Timeframe filter + KPI grid
+    // ──────────────────────────────────────────────────────────────
+    let currentTf = 'all';
+
+    function filterByTimeframe(trades, tf) {
+        if (!tf || tf === 'all' || !trades.length) return trades;
+        const tsOf = t => parseTS(t.entry_time || t.entryTime || t.trade_date || t.datetime);
+        const latest = trades.reduce((max, t) => { const d = tsOf(t); return d && (!max || d > max) ? d : max; }, null);
+        if (!latest) return trades;
+        const cutoff = new Date(latest);
+        switch (tf) {
+            case '7d':  cutoff.setDate(cutoff.getDate() - 7); break;
+            case '30d': cutoff.setDate(cutoff.getDate() - 30); break;
+            case '90d': cutoff.setDate(cutoff.getDate() - 90); break;
+            case 'mtd': cutoff.setDate(1); cutoff.setHours(0,0,0,0); break;
+            case 'ytd': cutoff.setMonth(0, 1); cutoff.setHours(0,0,0,0); break;
+            default: return trades;
+        }
+        return trades.filter(t => { const d = tsOf(t); return d && d >= cutoff; });
+    }
+
+    function computeKpis(trades) {
+        const n = trades.length;
+        if (!n) return null;
+        const pls   = trades.map(t => t.dollar_pl || 0);
+        const risks = trades.map(t => t.risk_dollars || 0);
+        const Rs    = trades.map(t => (t.risk_dollars > 0 ? (t.dollar_pl || 0) / t.risk_dollars : null)).filter(v => v != null);
+        const wins   = pls.filter(v => v > 0);
+        const losses = pls.filter(v => v <= 0);
+        const gp = wins.reduce((a, v) => a + v, 0);
+        const gl = Math.abs(losses.reduce((a, v) => a + v, 0));
+        const net = pls.reduce((a, v) => a + v, 0);
+
+        // Max drawdown + recovery
+        let cum = 0, peak = 0, maxDD = 0, troughIdx = -1, peakAtTrough = 0;
+        trades.forEach((t, i) => {
+            cum += t.dollar_pl || 0;
+            if (cum > peak) peak = cum;
+            const dd = peak - cum;
+            if (dd > maxDD) { maxDD = dd; troughIdx = i; peakAtTrough = peak; }
+        });
+        let recovery = null;
+        if (troughIdx >= 0 && maxDD > 0) {
+            let cum2 = 0;
+            for (let i = 0; i < trades.length; i++) {
+                cum2 += trades[i].dollar_pl || 0;
+                if (i > troughIdx && cum2 >= peakAtTrough) { recovery = i - troughIdx; break; }
+            }
+        }
+
+        // Longest losing streak
+        let streak = 0, maxStreak = 0;
+        pls.forEach(v => { if (v <= 0) { streak++; if (streak > maxStreak) maxStreak = streak; } else streak = 0; });
+
+        // Window span
+        const ts = trades.map(t => parseTS(t.entry_time || t.entryTime || t.trade_date)).filter(Boolean).sort((a,b) => a - b);
+        const span = ts.length >= 2 ? { start: ts[0], end: ts[ts.length-1] } : null;
+
+        return {
+            n, wins: wins.length, losses: losses.length,
+            winRate: wins.length / n,
+            net, gp, gl,
+            pf: gl > 0 ? gp / gl : (gp > 0 ? Infinity : 0),
+            avgWin: wins.length ? gp / wins.length : 0,
+            avgLoss: losses.length ? -gl / losses.length : 0,
+            bestTrade: pls.reduce((m, v) => Math.max(m, v), 0),
+            worstTrade: pls.reduce((m, v) => Math.min(m, v), 0),
+            rexp: Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null,
+            evPerTrade: net / n,
+            avgRisk: risks.length ? risks.reduce((a, v) => a + v, 0) / risks.length : 0,
+            maxDD, recovery, maxStreak,
+            span
+        };
+    }
+
+    function renderKpis(k) {
+        const $set = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+        if (!k) {
+            ['kpi-wr','kpi-pf','kpi-rexp','kpi-ev','kpi-avgwin','kpi-avgloss','kpi-best','kpi-worst','kpi-dd','kpi-recovery','kpi-streak','kpi-avgrisk'].forEach(id => $set(id, '—'));
+            $set('dash-tf-window', '0 trades in window');
+            return;
+        }
+        const dateStr = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const winStr = k.span ? `${k.n} trades · ${dateStr(k.span.start)} → ${dateStr(k.span.end)}` : `${k.n} trades`;
+        $set('dash-tf-window', winStr);
+
+        $set('kpi-wr',     (k.winRate * 100).toFixed(1) + '%');
+        $set('kpi-wr-sub', `${k.wins} W · ${k.losses} L`);
+        $set('kpi-pf',     isFinite(k.pf) ? k.pf.toFixed(2) : '∞');
+        $set('kpi-rexp',   fmtR(k.rexp));
+        $set('kpi-ev',     fmtSigned(k.evPerTrade));
+        $set('kpi-ev-sub', `net ${fmtSigned(k.net)} over window`);
+
+        $set('kpi-avgwin', fmtSigned(k.avgWin));
+        $set('kpi-avgwin-sub', `${k.wins} winning trades`);
+        $set('kpi-avgloss', fmtSigned(k.avgLoss));
+        $set('kpi-avgloss-sub', `${k.losses} losing trades`);
+        $set('kpi-best', fmtSigned(k.bestTrade));
+        $set('kpi-worst', fmtSigned(k.worstTrade));
+
+        $set('kpi-dd', '−' + fmtUSD(k.maxDD).replace('−','').replace('$','$'));
+        $set('kpi-dd-sub', k.maxDD > 0 ? `${(k.maxDD / 5000 * 100).toFixed(1)}% of $5K working unit` : '—');
+        $set('kpi-recovery', k.recovery != null ? `${k.recovery} trades` : (k.maxDD > 0 ? 'in progress' : '—'));
+        $set('kpi-streak', k.maxStreak + ' in a row');
+        $set('kpi-avgrisk', fmtUSD(k.avgRisk));
+    }
+
+    function setActiveTf(tf) {
+        currentTf = tf;
+        document.querySelectorAll('.dash-tf-chip').forEach(b => {
+            const on = b.dataset.tf === tf;
+            b.classList.toggle('dash-tf-chip--active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+
     function renderAll(state) {
-        const clean = cleanTrades((state && state.trades) || []);
-        if (!clean.length) return;
-        const { cum } = renderStatus(clean);
+        const all = cleanTrades((state && state.trades) || []);
+        if (!all.length) return;
+        const { cum } = renderStatus(all);
         renderLadder(cum);
-        renderForecast(clean, cum);
-        renderTrajectory(clean, $('floor-toggle') && $('floor-toggle').checked);
-        renderMonthly(clean);
-        renderContracts(clean);
-        renderTable(clean);
+        renderForecast(all, cum);
+        renderTrajectory(all, $('floor-toggle') && $('floor-toggle').checked);
+        renderMonthly(all);
+        renderContracts(all);
+
+        // KPIs and trade table filter by timeframe; charts/ladder/forecast stay all-time.
+        const windowed = filterByTimeframe(all, currentTf);
+        renderKpis(computeKpis(windowed));
+        renderTable(windowed);
     }
 
     function init() {
@@ -288,6 +409,21 @@
         }
         wireSort();
         const csv = $('dash-csv'); if (csv) csv.addEventListener('click', downloadCSV);
+
+        // Timeframe selector — re-render KPIs + trade table on click.
+        // Persist the chosen window in localStorage.
+        try { const saved = localStorage.getItem('ekantik-dash-tf'); if (saved) currentTf = saved; } catch (e) {}
+        setActiveTf(currentTf);
+        document.querySelectorAll('.dash-tf-chip').forEach(b => {
+            b.addEventListener('click', () => {
+                setActiveTf(b.dataset.tf);
+                try { localStorage.setItem('ekantik-dash-tf', currentTf); } catch (e) {}
+                if (root.Ekantik && root.Ekantik.Data) {
+                    const cur = root.Ekantik.Data.get();
+                    if (cur) renderAll(cur);
+                }
+            });
+        });
 
         if (root.Ekantik && root.Ekantik.Data) {
             root.Ekantik.Data.onChange(renderAll);

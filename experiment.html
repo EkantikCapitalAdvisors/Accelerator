@@ -65,6 +65,46 @@
         </div>
     </section>
 
+    <!-- ═══ TIMEFRAME SELECTOR + KPI GRID ═══ -->
+    <section class="block dash-block" id="dash-kpis">
+        <div class="container">
+            <div class="component-label">Key Performance Indicators &middot; live</div>
+
+            <div class="dash-tf-row" role="radiogroup" aria-label="Window selector">
+                <span class="dash-tf-label">Window:</span>
+                <button type="button" class="dash-tf-chip" data-tf="7d">7d</button>
+                <button type="button" class="dash-tf-chip" data-tf="30d">30d</button>
+                <button type="button" class="dash-tf-chip" data-tf="90d">90d</button>
+                <button type="button" class="dash-tf-chip" data-tf="mtd">MTD</button>
+                <button type="button" class="dash-tf-chip" data-tf="ytd">YTD</button>
+                <button type="button" class="dash-tf-chip dash-tf-chip--active" data-tf="all" aria-pressed="true">All time</button>
+                <span class="dash-tf-window" id="dash-tf-window">&mdash;</span>
+            </div>
+
+            <p class="dash-block__sub">Edge, magnitudes, and risk metrics over the selected window. Trade table below also filters. Charts and the trigger ladder remain all-time as context.</p>
+
+            <div class="dash-kpi-grid">
+                <!-- Edge -->
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Win rate</span><span class="dash-kpi-value" id="kpi-wr">&mdash;</span><span class="dash-kpi-sub" id="kpi-wr-sub">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Profit factor</span><span class="dash-kpi-value" id="kpi-pf">&mdash;</span><span class="dash-kpi-sub">gross profit / gross loss</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">R-expectancy</span><span class="dash-kpi-value" id="kpi-rexp">&mdash;</span><span class="dash-kpi-sub">size-neutral per-trade</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">EV / trade</span><span class="dash-kpi-value" id="kpi-ev">&mdash;</span><span class="dash-kpi-sub" id="kpi-ev-sub">avg net per trade</span></div>
+
+                <!-- Magnitudes -->
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg win</span><span class="dash-kpi-value dash-kpi-value--pos" id="kpi-avgwin">&mdash;</span><span class="dash-kpi-sub" id="kpi-avgwin-sub">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg loss</span><span class="dash-kpi-value dash-kpi-value--neg" id="kpi-avgloss">&mdash;</span><span class="dash-kpi-sub" id="kpi-avgloss-sub">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Best trade</span><span class="dash-kpi-value dash-kpi-value--pos" id="kpi-best">&mdash;</span><span class="dash-kpi-sub">single largest win</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Worst trade</span><span class="dash-kpi-value dash-kpi-value--neg" id="kpi-worst">&mdash;</span><span class="dash-kpi-sub">single deepest loss</span></div>
+
+                <!-- Risk -->
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Max drawdown</span><span class="dash-kpi-value dash-kpi-value--neg" id="kpi-dd">&mdash;</span><span class="dash-kpi-sub" id="kpi-dd-sub">deepest peak-to-trough</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Recovery</span><span class="dash-kpi-value" id="kpi-recovery">&mdash;</span><span class="dash-kpi-sub">trades to restore peak</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Loss streak (max)</span><span class="dash-kpi-value" id="kpi-streak">&mdash;</span><span class="dash-kpi-sub">longest consecutive losses</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg risk / trade</span><span class="dash-kpi-value" id="kpi-avgrisk">&mdash;</span><span class="dash-kpi-sub">1R · per-trade dollar risk</span></div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══ 1 · TRIGGER LADDER ═══ -->
     <section class="block dash-block" id="dash-ladder">
         <div class="container">
