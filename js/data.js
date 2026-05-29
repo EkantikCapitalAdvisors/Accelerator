@@ -85,10 +85,13 @@
             } catch (e) { /* ignore */ }
         }
 
-        // Always fetch fresh trades in the background (or on explicit bust)
+        // Always fetch fresh trades — bust browser/CDN cache on the trades JSON
+        // unconditionally so newly-committed Discord-parsed trades show on the
+        // next page load instead of being hidden behind a stale cached copy.
+        // (archive/spy/capacity are slowly-changing and keep default caching.)
         try {
             const [trades, archiveIndex, spyMonthly, capacity] = await Promise.all([
-                fetchJSON(TRADES_URL, bust),
+                fetchJSON(TRADES_URL, true),
                 fetchJSON(ARCHIVE_URL, bust).catch(() => ({ archives: [] })),
                 fetchJSON(SPY_URL, bust).catch(() => null),
                 fetchJSON(CAPACITY_URL, bust).catch(() => null)
