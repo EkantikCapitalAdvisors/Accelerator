@@ -291,7 +291,12 @@
                 const mes = t.mesCount != null ? t.mesCount : t.mes_count;
                 const id  = t.tradeNum || t.trade_num || '?';
                 if (pts != null && Math.abs(pts) > 500) warns.push(`${id}: ${pts} points looks like a price, not a P&L — likely garbage.`);
-                if (mes && pts && Math.abs(pl / pts - mes * 5) > 0.5) warns.push(`${id}: ${mes} MES but $${pl} implies $${(pl/pts).toFixed(0)}/pt (expected $${mes*5}). Sizing mismatch.`);
+                // Parser self-consistency: scaled pts × $50/pt should equal scaled $ P&L
+                // regardless of sizing (because both are scaled by sizeFraction). Catches
+                // real math errors; never false-positives on MES vs ES sizing.
+                if (pts != null && pl != null && Math.abs(pl - pts * 50) > 0.51) {
+                    warns.push(`${id}: pts × $50 = $${(pts * 50).toFixed(2)} but P&L = $${pl}. Math inconsistent — parser bug or hand-edit error.`);
+                }
             });
             return warns;
         }
