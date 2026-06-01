@@ -358,6 +358,7 @@
             worstTrade: pls.reduce((m, v) => Math.min(m, v), 0),
             rexp,
             annualR, tradesPerYear,
+            tradesPerMonth: tradesPerYear != null ? tradesPerYear / 12 : null,
             evPerTrade: net / n,
             avgRisk: risks.length ? risks.reduce((a, v) => a + v, 0) / risks.length : 0,
             maxDD, recovery, maxStreak,
@@ -368,7 +369,7 @@
     function renderKpis(k) {
         const $set = (id, v) => { const e = $(id); if (e) e.textContent = v; };
         if (!k) {
-            ['kpi-wr','kpi-pf','kpi-rexp','kpi-annualr','kpi-ev','kpi-avgwin','kpi-avgloss','kpi-best','kpi-worst','kpi-dd','kpi-recovery','kpi-streak','kpi-avgrisk'].forEach(id => $set(id, '—'));
+            ['kpi-wr','kpi-pf','kpi-rexp','kpi-annualr','kpi-tpm','kpi-ev','kpi-avgwin','kpi-avgloss','kpi-best','kpi-worst','kpi-dd','kpi-recovery','kpi-streak','kpi-avgrisk'].forEach(id => $set(id, '—'));
             $set('dash-tf-window', '0 trades in window');
             return;
         }
@@ -382,6 +383,8 @@
         $set('kpi-rexp',   fmtR(k.rexp));
         $set('kpi-annualr', k.annualR != null ? (k.annualR >= 0 ? '+' : '') + k.annualR.toFixed(0) + 'R' : '—');
         $set('kpi-annualr-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : 'extrapolated from cadence');
+        $set('kpi-tpm', k.tradesPerMonth != null ? k.tradesPerMonth.toFixed(1) : '—');
+        $set('kpi-tpm-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : 'avg cadence in window');
         $set('kpi-ev',     fmtSigned(k.evPerTrade));
         $set('kpi-ev-sub', `net ${fmtSigned(k.net)} over window`);
 
