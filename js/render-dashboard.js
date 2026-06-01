@@ -335,6 +335,18 @@
         const ts = trades.map(t => parseTS(t.entry_time || t.entryTime || t.trade_date)).filter(Boolean).sort((a,b) => a - b);
         const span = ts.length >= 2 ? { start: ts[0], end: ts[ts.length-1] } : null;
 
+        // Annual R — R-expectancy extrapolated to a full calendar year at the
+        // window's observed trade cadence. Needs ≥2 trades and ≥1 day of span;
+        // very-short windows produce noisy annualizations and should be read
+        // with that in mind.
+        const rexp = Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null;
+        let annualR = null, tradesPerYear = null;
+        if (rexp != null && span) {
+            const days = Math.max(1, (span.end - span.start) / 86400000);
+            tradesPerYear = (n / days) * 365;
+            annualR = rexp * tradesPerYear;
+        }
+
         return {
             n, wins: wins.length, losses: losses.length,
             winRate: wins.length / n,
@@ -344,7 +356,8 @@
             avgLoss: losses.length ? -gl / losses.length : 0,
             bestTrade: pls.reduce((m, v) => Math.max(m, v), 0),
             worstTrade: pls.reduce((m, v) => Math.min(m, v), 0),
-            rexp: Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null,
+            rexp,
+            annualR, tradesPerYear,
             evPerTrade: net / n,
             avgRisk: risks.length ? risks.reduce((a, v) => a + v, 0) / risks.length : 0,
             maxDD, recovery, maxStreak,
@@ -355,7 +368,7 @@
     function renderKpis(k) {
         const $set = (id, v) => { const e = $(id); if (e) e.textContent = v; };
         if (!k) {
-            ['kpi-wr','kpi-pf','kpi-rexp','kpi-ev','kpi-avgwin','kpi-avgloss','kpi-best','kpi-worst','kpi-dd','kpi-recovery','kpi-streak','kpi-avgrisk'].forEach(id => $set(id, '—'));
+            ['kpi-wr','kpi-pf','kpi-rexp','kpi-annualr','kpi-ev','kpi-avgwin','kpi-avgloss','kpi-best','kpi-worst','kpi-dd','kpi-recovery','kpi-streak','kpi-avgrisk'].forEach(id => $set(id, '—'));
             $set('dash-tf-window', '0 trades in window');
             return;
         }
@@ -367,6 +380,8 @@
         $set('kpi-wr-sub', `${k.wins} W · ${k.losses} L`);
         $set('kpi-pf',     isFinite(k.pf) ? k.pf.toFixed(2) : '∞');
         $set('kpi-rexp',   fmtR(k.rexp));
+        $set('kpi-annualr', k.annualR != null ? (k.annualR >= 0 ? '+' : '') + k.annualR.toFixed(0) + 'R' : '—');
+        $set('kpi-annualr-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : 'extrapolated from cadence');
         $set('kpi-ev',     fmtSigned(k.evPerTrade));
         $set('kpi-ev-sub', `net ${fmtSigned(k.net)} over window`);
 
