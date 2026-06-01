@@ -662,6 +662,7 @@ function parseDiscordTradeText(text) {
             let positionSize = 'full';
             let mesCount = null;
             let contracts = 1;
+            let sizeFromPrefix = false;
 
             if (mesCountRaw) {
                 mesCount = parseInt(mesCountRaw, 10);
@@ -675,11 +676,24 @@ function parseDiscordTradeText(text) {
             } else if (sizeKeyRaw === 'half')                       { sizeFraction = 0.5;   positionSize = 'half'; }
             else if (sizeKeyRaw.startsWith('third'))                 { sizeFraction = 1 / 3; positionSize = 'third'; }
             else if (sizeKeyRaw === 'quarter' || sizeKeyRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
+            else {
+                // No explicit size token — default by buffer-phase prefix:
+                //   F → 1 ES, S → 2 ES, T → 3 ES, FT → 4 ES.
+                // Operator can always override per-trade with an explicit Nes/Nmes/keyword.
+                const phase = bufferPhaseOf(tradeNum);
+                if (phase) {
+                    contracts = phase;
+                    sizeFraction = phase;
+                    positionSize = phase === 1 ? 'full' : `${phase} ES (default · ${tradeNum.match(/^[A-Z]+/i)[0].toUpperCase()} prefix)`;
+                    sizeFromPrefix = phase > 1;
+                }
+            }
 
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
                 datetime: currentDatetime, date: currentDate,
                 sizeFraction, positionSize, mesCount, contracts,
+                sizeFromPrefix,
                 attribution: entryAttribution  // carried to the close line
             };
             continue;
