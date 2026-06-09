@@ -567,7 +567,16 @@ function parseDiscordTradeText(text) {
             const ppt = 50; // ES contract ($50/pt). MES trades scale via sizeFraction
                             // (mes_count / 10) so points and dollars are stored in
                             // ES-equivalent terms; the whole dataset stays homogeneous.
-            const rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
+            let rawRiskPts = stopPrice && entryPrice ? Math.abs(entryPrice - stopPrice) : Math.abs(rawPts);
+            // Sanity guard: ES trades around 4000–7000; any single-trade risk above
+            // ~100 points indicates a decimal-misplacement typo in the journal
+            // (e.g. "75560" for "7556.0"). Drop the risk to 0 so it doesn't poison
+            // the avg-risk / R-expectancy metrics; the audit will surface the trade
+            // for manual correction.
+            if (stopPrice && entryPrice && rawRiskPts > 100) {
+                console.warn(`[Parser] Trade ${tradeNum}: implausible risk ${rawRiskPts.toFixed(1)} pts (entry ${entryPrice}, stop ${stopPrice}) — clearing risk fields. Likely decimal typo.`);
+                rawRiskPts = 0;
+            }
             // Compute dollars from RAW (unrounded) values so 1/3 → $83.33, not $83.50.
             const pts        = round2(rawPts * sizeFraction);
             const riskPts    = round2(rawRiskPts * sizeFraction);
