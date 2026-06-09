@@ -1,8 +1,8 @@
 [
   {
     "date": "2026-05-22",
-    "filed_at": "",
-    "before_open": null,
+    "filed_at": "2026-05-22 8:49 AM",
+    "before_open": true,
     "phelps": true,
     "predisposal": true,
     "scaling": true,
@@ -13,7 +13,97 @@
     "date": "2026-05-23",
     "excluded": true,
     "reason": "declared",
-    "filed_at": "",
+    "filed_at": "2026-05-23 8:19 PM",
     "complete": false
+  },
+  {
+    "date": "2026-05-26",
+    "filed_at": "2026-05-26 6:10 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-05-27",
+    "filed_at": "2026-05-27 8:14 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-05-28",
+    "filed_at": "2026-05-28 6:30 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-01",
+    "filed_at": "2026-06-01 6:21 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-02",
+    "filed_at": "2026-06-02 8:06 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-03",
+    "filed_at": "2026-06-03 6:32 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-04",
+    "filed_at": "2026-06-04 6:17 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-08",
+    "filed_at": "2026-06-04 6:42 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
+  },
+  {
+    "date": "2026-06-09",
+    "filed_at": "2026-06-04 6:13 AM",
+    "before_open": true,
+    "phelps": true,
+    "predisposal": true,
+    "scaling": true,
+    "abundance": true,
+    "complete": true
   }
 ]
