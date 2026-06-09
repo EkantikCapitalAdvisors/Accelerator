@@ -816,6 +816,14 @@ function parseRoutineText(text) {
 
 function htmlToDiscordText(html) {
     if (typeof html !== 'string' || html.length === 0) return '';
+    // Two Discord export formats are supported:
+    //   (a) Legacy <li>+<span class="time"> shape (DiscordChatExporter old / custom).
+    //   (b) DiscordChatExporter "Exported" HTML — message-containers with
+    //       chatlog__timestamp + chatlog__markdown-preserve.
+    // Branch by sniffing distinctive markers.
+    if (/chatlog__message-container/i.test(html)) {
+        return htmlToDiscordText_chatlog(html);
+    }
     const liRegex = /<li\b[^>]*>([\s\S]*?)<\/li>/gi;
     const out = [];
     let lim;
@@ -865,6 +873,68 @@ function htmlToDiscordText(html) {
     return out.join('\n');
 }
 
+// DiscordChatExporter "Exported" HTML format. Each message lives in a
+// .chatlog__message-container; the timestamp is either chatlog__timestamp
+// (first message in a group, full date in title) or chatlog__short-timestamp
+// (continuation message in the same group, full date in title). Content sits
+// in chatlog__markdown-preserve. Multi-line messages preserve their newlines.
+function htmlToDiscordText_chatlog(html) {
+    const containerRegex = /<div\b[^>]*class\s*=\s*["']?[^"'>]*\bchatlog__message-container\b[^"'>]*["']?[^>]*>([\s\S]*?)(?=<div\b[^>]*class\s*=\s*["']?[^"'>]*\bchatlog__message-container\b|<\/div>\s*<div\s+class=postamble)/gi;
+    const out = [];
+    let cm;
+    while ((cm = containerRegex.exec(html)) !== null) {
+        const block = cm[1];
+
+        // Prefer full chatlog__timestamp title (full date+time); fall back to
+        // short-timestamp title for continuation messages within a group.
+        let ts = null;
+        const tsFull = block.match(/<span\b[^>]*class\s*=\s*["']?[^"'>]*\bchatlog__timestamp\b[^"'>]*["']?[^>]*\btitle\s*=\s*["']([^"']+)["']/i);
+        if (tsFull) ts = tsFull[1];
+        if (!ts) {
+            const tsShort = block.match(/<div\b[^>]*class\s*=\s*["']?[^"'>]*\bchatlog__short-timestamp\b[^"'>]*["']?[^>]*\btitle\s*=\s*["']([^"']+)["']/i);
+            if (tsShort) ts = tsShort[1];
+        }
+
+        // Content: every chatlog__markdown-preserve span in the block.
+        const contentRegex = /<span\b[^>]*class\s*=\s*["']?[^"'>]*\bchatlog__markdown-preserve\b[^"'>]*["']?[^>]*>([\s\S]*?)<\/span>/gi;
+        let pieces = [];
+        let pm;
+        while ((pm = contentRegex.exec(block)) !== null) {
+            const c = pm[1]
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
+                .replace(/\s*\(edited\)\s*$/i, '')
+                .trim();
+            if (c) pieces.push(c);
+        }
+        if (pieces.length === 0) continue;
+
+        if (ts) {
+            const cleaned = ts.replace(/\s*\(.*\)\s*$/, '');
+            const d = new Date(cleaned);
+            if (!isNaN(d.getTime())) {
+                const mo = d.getMonth() + 1;
+                const day = d.getDate();
+                const y = d.getFullYear();
+                let h = d.getHours();
+                const min = String(d.getMinutes()).padStart(2, '0');
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                if (h === 0) h = 12;
+                else if (h > 12) h -= 12;
+                out.push(`${mo}/${day}/${y} ${h}:${min} ${ampm}`);
+            }
+        }
+        out.push(pieces.join('\n'));
+    }
+    return out.join('\n');
+}
+
 // Convenience wrappers that route HTML through the existing text parsers.
 function parseDiscordOptionsHTML(html) {
     return parseDiscordOptionsText(htmlToDiscordText(html));
@@ -878,7 +948,8 @@ function parseDiscordTradeHTML(html) {
 function looksLikeDiscordHTML(text) {
     if (typeof text !== 'string' || text.length === 0) return false;
     return /<li\b[\s\S]*?class\s*=\s*["']time["']/i.test(text)
-        || /chatContent/i.test(text);
+        || /chatContent/i.test(text)
+        || /chatlog__message-container/i.test(text);
 }
 
 // =====================================================
