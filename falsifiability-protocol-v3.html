@@ -1,90 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Falsifiability Protocol v3 · The Convexity Experiment · DRAFT</title>
-<style>
-  body { font-family: 'Cormorant Garamond', Georgia, serif; background: #FAF8F5; color: #1B2A4A; max-width: 760px; margin: 40px auto; padding: 0 24px; line-height: 1.6; }
-  .draft-banner { background: #DC2626; color: #FAF8F5; padding: 10px 16px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 24px; text-align: center; }
-  h1 { font-size: 2rem; font-style: italic; margin-bottom: .25rem; }
-  .sub { color: #64748B; font-family: 'DM Sans', sans-serif; font-size: 14px; }
-  h2 { font-size: 1.35rem; margin-top: 2rem; border-top: 1px solid #C8A951; padding-top: 1rem; }
-  .art { display: inline-block; background: #1B2A4A; color: #FAF8F5; padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .06em; margin-right: 8px; vertical-align: middle; }
-  h3 { font-size: 1.1rem; margin-top: 1.5rem; }
-  p, li { font-family: 'DM Sans', sans-serif; font-size: 14.5px; }
-  .lead { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #1B2A4A; }
-  .gold { color: #C8A951; font-weight: 600; }
-  .box { background: #fff; border-left: 3px solid #C8A951; padding: 12px 16px; margin: 10px 0; border-radius: 0 6px 6px 0; }
-  .label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #C8A951; }
-  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-family: 'DM Sans', sans-serif; font-size: 13.5px; }
-  th, td { border: 1px solid #E5E0D0; padding: 8px 10px; text-align: left; vertical-align: top; }
-  th { background: #1B2A4A; color: #FAF8F5; font-weight: 600; }
-  .sig { background: #1B2A4A; color: #FAF8F5; padding: 24px; border-radius: 8px; margin-top: 32px; }
-  .sig-line { border-bottom: 1px solid rgba(250,248,245,.4); height: 1.6em; margin: 12px 0 8px; }
-  footer { color: #64748B; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 32px; text-align: center; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Not yet public · Ekantik Capital Advisors</title>
+    <style>
+        :root { color-scheme: dark; }
+        html, body { margin: 0; padding: 0; height: 100%; }
+        body {
+            background: #0e0d0b;
+            color: #faf8f5;
+            font-family: ui-serif, Georgia, "Times New Roman", serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .wrap { max-width: 520px; }
+        h1 {
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin: 0 0 14px;
+            color: #d4b886;
+        }
+        p { font-size: 14.5px; line-height: 1.6; color: rgba(250,248,245,0.78); margin: 0 0 18px; }
+        a { color: #d4b886; text-decoration: none; border-bottom: 1px solid rgba(212,184,134,0.4); }
+        a:hover { border-bottom-color: #d4b886; }
+        .small { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,248,245,0.4); margin-top: 28px; }
+    </style>
 </head>
 <body>
-<div class="draft-banner">DRAFT v3.0 · pending witness countersignature · binding before first live fill on 6/30/2026</div>
-
-<h1>Falsifiability Protocol v3 — The Convexity Experiment</h1>
-<p class="sub">Doc Ref FP-V3-2026-06 · Ekantik Capital Advisors LLC · Companion to FP-V2-2026-05 (linear track)</p>
-
-<h2><span class="art">Article I</span>Scope</h2>
-<p>This protocol governs <strong>the Convexity Experiment</strong> &mdash; a publicly-conducted, operator-capital live trading exercise on <em>long short-dated options</em> (0&ndash;7 DTE) on SPX and single-stock underlyings. It is the convex-instrument companion to the linear-track protocol (FP-V2-2026-05) and runs on segregated capital with independent triggers, gates, and Discord journal.</p>
-
-<h2><span class="art">Article II</span>The Expression Layer — when the edge is declared falsified</h2>
-<p class="lead gold">Realized expectancy across rolling 100 qualified trades drops to $0 per trade &mdash; the edge becomes net-negative.</p>
-<p>Evaluated continuously; provisional binding from 80 trades, full binding at 100. A qualified trade is one entered and exited under all operative documented rules, unaffected by execution error, platform malfunction, or extraordinary market event. R = premium paid at entry on a single long-option position.</p>
-<div class="box"><div class="label">Action on trigger</div><p>Immediate stand-down. New entries → zero size next session. Open positions close at next defined exit per the original trade plan. Strategy moves to research-only. Public notification in the Convexity Discord journal within 24 hours.</p></div>
-<div class="box"><div class="label">Re-deploy gate · all three required</div><p>(a) Fresh out-of-sample test of <strong>≥ +$50/trade over 50 qualified trades</strong> (paper / prop). (b) Written re-derivation of the structural cause of decay. (c) 48-hour cool-off after both.</p></div>
-
-<h2><span class="art">Article III</span>The Revert Architecture — primary regime-response</h2>
-<p>Pre-committed automated step-down rules. No exceptions. No renegotiation.</p>
-<ul>
-  <li><strong>Buffer-lost revert.</strong> Cumulative P&amp;L returns to the N×-doubling level → auto-revert to N/2×.</li>
-  <li><strong>Tight-revert pause.</strong> Two reverts within 14 days → auto-pause + witness review + countersigned restart.</li>
-  <li><strong>Re-double earn-back.</strong> After a revert, the next double requires a fresh six-uncorrelated-trade buffer at the post-revert size; the previously earned buffer does not carry.</li>
-</ul>
-<p>On convex instruments, revert is regime-response: when an entire level&rsquo;s buffer is given back, the most likely structural explanation is a condition shift, not a single bad trade.</p>
-
-<h2><span class="art">Article IV</span>The Fidelity Layer — three criteria</h2>
-<h3>Criterion 01 — Per-Trade Attribution Discipline</h3>
-<p>Every qualified trade receives an operator attribution tag &mdash; <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong> &mdash; logged before the next entry, against a pre-decision log. H3 is the resting attribution; H2 is the exception. <strong>H1 (edge failed) is not an operator attribution and is never applied to a single trade.</strong> H1 is system-derived: declared solely by the Expression Gate&rsquo;s rolling-100 verdict, subject to the Binding Interpretation Rule.</p>
-<p><strong>Breach:</strong> tag missing at next entry · tag inconsistent with pre-decision log · H1 hand-applied. <strong>Threshold:</strong> zero breaches inside rolling 100 trades. <strong>Verification:</strong> witness audits monthly.</p>
-
-<h3>Criterion 02 — Rule-Modification Integrity</h3>
-<p>Zero unannounced or witness-uncountersigned protocol modifications inside the rolling window, per the four-step modification protocol (48h cool-off · written structural justification · witness countersignature · 24h public disclosure). <strong>Threshold:</strong> binary &mdash; zero breaches, period.</p>
-
-<h3>Criterion 03 — Daily Routine Adherence</h3>
-<p>Pre-committed daily filings before market open, including <strong>scaling-rules log bidirectional</strong> (doublings AND reverts both watched). <strong>Threshold:</strong> ≥ 95% completion across rolling 30 trading days. <strong>Verification:</strong> witness reviews monthly.</p>
-
-<h2><span class="art">Article V</span>Three-Tier Stand-Down</h2>
-<table>
-  <tr><th>Tier</th><th>Trigger</th><th>Response</th><th>Resume</th></tr>
-  <tr><td><strong>T1</strong> Logged breach</td><td>Single isolated breach of Criterion 01 or 03.</td><td>Discord entry within 24h. Witness review within 7 days. Counter resets.</td><td>Immediate; counter restarts at zero.</td></tr>
-  <tr><td><strong>T2</strong> Conditions reduced</td><td>3+ breaches of 01/03 in rolling 30 trades, or sustained Criterion 03 below 95%.</td><td>Position cut to minimum (1 contract, no scaling) for next 20 qualified trades. Daily filing under witness oversight.</td><td>20 clean minimum-size trades + witness countersignature.</td></tr>
-  <tr><td><strong>T3</strong> Full cessation</td><td>Any Criterion 02 breach, or a second T2 inside rolling 100 trades.</td><td>Immediate cessation; new entries → zero next session. Witness convenes structural review.</td><td>Countersigned remediation artifact + 30-day calendar gap + 20 minimum-size trades.</td></tr>
-</table>
-<p><em>Calibration: first 30 days post-launch (6/30/2026) are observation-only while baseline adherence is established; the Fidelity Layer is binding from day 31. The Expression Layer is binding from day one.</em></p>
-
-<h2><span class="art">Article VI</span>The Binding Interpretation Rule</h2>
-<p>Expression-Gate firings during an active Fidelity T2/T3 breach are <strong>interpretation-suspended</strong> pending remediation. The architecture refuses to declare an edge falsified from data generated during a fidelity breach.</p>
-
-<h2><span class="art">Article VII</span>Witness &amp; Verification</h2>
-<p>The named witness for this protocol is <strong>Manish Dharod</strong> (default, pending confirmation), holding authority over modification approvals, breach tier classifications, and Stage-1 resumption events. Monthly audit findings published to <code>witness-audits-convex.json</code>.</p>
-
-<div class="sig">
-  <div class="label">Operator</div>
-  <p style="margin:6px 0 0; font-size:14pt;">Hiren Desai · Founder &amp; Chief Investment Officer · Ekantik Capital Advisors LLC</p>
-  <div class="sig-line"></div>
-  <div class="label">Signature / Date locked</div>
-  <div style="margin-top:18px;"><span class="label">Witness 01 · Manish Dharod</span><div class="sig-line"></div><span class="label">Relationship · Signature · Date</span></div>
-  <p style="font-size:9pt; color:rgba(250,248,245,0.7); margin-top:14px;"><strong>DRAFT v3.0.</strong> By signature, the operator attests this protocol is derived prior to the first live fill on 6/30/2026 and is hereby locked as the governing operational charter for the Convexity Experiment. Witness signature attests only that the modification protocol was followed.</p>
-</div>
-
-<footer>Falsifiability Protocol v3.0 · DRAFT · Doc Ref FP-V3-2026-06 · Ekantik Capital Advisors LLC · Maple Grove, MN · Public — accelerator.ekantikcapital.com/convexity.html · © 2026 Ekantik Capital Advisors LLC.</footer>
-
+    <div class="wrap">
+        <h1>Not yet public.</h1>
+        <p>Falsifiability Protocol v3 (convex track) is in draft and not yet released. The linear-track protocol remains the only active governing charter.</p>
+        <p><a href="/falsifiability-protocol-v2.html">Read the active protocol (v2) &rarr;</a></p>
+        <div class="small">Ekantik Capital Advisors LLC</div>
+    </div>
 </body>
 </html>
