@@ -3,14 +3,15 @@
 //   · Hero status strip (sample / rolling EV / buffer / gate)
 //   · §02 KPI strip (WR / PF / R-exp / avg risk)
 //   · §08 Buffer-progress widget, revert event log, public trade log
-//   · Reads data/convexity_trades.json (empty pre-launch)
+//   · Reads data/options_trades.json (same dataset as /options.html — the
+//     SPX-options track is the convex experiment)
 // All panels render baseline / "—" when no trades are present.
 // =====================================================
 (function (root) {
     'use strict';
 
     const $ = id => document.getElementById(id);
-    const TRADES_URL  = 'data/convexity_trades.json';
+    const TRADES_URL  = 'data/options_trades.json';
     const ROUTINE_URL = 'data/convexity-routine.json';
     const BUFFER_TRADES = 6;
 
