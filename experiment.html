@@ -53,7 +53,7 @@
                     <span class="experiment-status__sep">·</span>
                     <span>Rolling EV: <strong id="xp-ev">—</strong></span>
                     <span class="experiment-status__sep">·</span>
-                    <span>Triggers fired: <strong id="xp-triggers">— / 4</strong></span>
+                    <span>Position: <strong id="xp-triggers">— ES</strong></span>
                     <span class="experiment-status__sep">·</span>
                     <span>Gate: <strong id="xp-gate">Armed</strong></span>
                 </span>
@@ -111,33 +111,40 @@
     <section class="block dash-block" id="dash-ladder">
         <div class="container">
             <div class="component-label">The Trigger Ladder · Live</div>
-            <p class="dash-block__sub">Each buffer fires when accumulated realized profit crosses the threshold. The trigger is binary, frozen, and announced in the public Discord journal within 24 hours of firing. One ES contract per buffer (expressible as ≤ 10 MES).</p>
+            <p class="dash-block__sub">The trial run is separate and runs at 1 ES — bank the first $10,000. Then the buffer ladder begins, and each buffer runs as many ES as its number: Buffer 1 = 1 ES, Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). Each step up requires a fresh $10,000 of cumulative profit; the trigger is binary, frozen, and announced in the public Discord journal within 24 hours.</p>
             <div class="trigger-ladder" id="trigger-ladder">
+                <div class="trigger-step trigger-step--trial" data-trigger="TRIAL">
+                    <span class="trigger-step__name">Trial run &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">Bank the first $10,000</span>
+                    <span class="trigger-step__action">Separate from the ladder · proves discipline first</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B1">
-                    <span class="trigger-step__name">Buffer 1 &middot; Trial run</span>
-                    <span class="trigger-step__threshold">$10,000 accumulated profit</span>
-                    <span class="trigger-step__action">Trial run cleared → real challenge begins · scale to 2 ES</span>
+                    <span class="trigger-step__name">Buffer 1 &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">$10,000 &mdash; real challenge begins</span>
+                    <span class="trigger-step__action">Run 1 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B2">
-                    <span class="trigger-step__name">Buffer 2</span>
+                    <span class="trigger-step__name">Buffer 2 &middot; 2 ES</span>
                     <span class="trigger-step__threshold">$20,000 cumulative profit</span>
-                    <span class="trigger-step__action">Add 1 ES → 3 ES running</span>
+                    <span class="trigger-step__action">Scale to 2 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B3">
-                    <span class="trigger-step__name">Buffer 3</span>
+                    <span class="trigger-step__name">Buffer 3 &middot; 3 ES</span>
                     <span class="trigger-step__threshold">$30,000 cumulative profit</span>
-                    <span class="trigger-step__action">Add 1 ES → 4 ES running</span>
+                    <span class="trigger-step__action">Scale to 3 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B4">
-                    <span class="trigger-step__name">Buffer 4</span>
+                    <span class="trigger-step__name">Buffer 4 &middot; 4 ES</span>
                     <span class="trigger-step__threshold">$40,000 cumulative profit</span>
-                    <span class="trigger-step__action">Position locked at 4 ES · evaluate next cycle</span>
+                    <span class="trigger-step__action">Scale to 4 ES · cap</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
             </div>

@@ -10,11 +10,14 @@
     function $(id) { return document.getElementById(id); }
 
     // Buffer thresholds from the locked protocol (Section 01.2).
+    // Buffer N runs N ES. The separate trial run (1 ES) banks the first $10K;
+    // Buffer 1 (also 1 ES) is where the real challenge begins. Each buffer is
+    // "active" while cumulative profit sits in [threshold, nextThreshold).
     const BUFFERS = [
-        { id: 'B1', threshold: 10000 },
-        { id: 'B2', threshold: 20000 },
-        { id: 'B3', threshold: 30000 },
-        { id: 'B4', threshold: 40000 },
+        { id: 'B1', threshold: 10000, es: 1 },
+        { id: 'B2', threshold: 20000, es: 2 },
+        { id: 'B3', threshold: 30000, es: 3 },
+        { id: 'B4', threshold: 40000, es: 4 },
     ];
     const FALSIFIABILITY_BAR = 0; // rolling-100 EV crossing $0 fires the gate
     const TRIAL_RUN_TARGET = 10000; // Phase 0 → Phase 1 once this much P&L is banked
@@ -44,8 +47,9 @@
         const ev100 = rollingEv(trades, 100);
         const evAll = n ? cum / n : null;
 
-        // Triggers fired = number of buffer thresholds the cumulative profit has crossed.
-        const fired = BUFFERS.filter(b => cum >= b.threshold).length;
+        // Current position size: 1 ES through the trial run and Buffer 1, then
+        // 2 ES at $20K, 3 ES at $30K, 4 ES at $40K (the cap).
+        const posEs = cum >= 40000 ? 4 : cum >= 30000 ? 3 : cum >= 20000 ? 2 : 1;
         // Edge gate is active from 80 trades (provisional until 100), per the
         // operator-falsifiability calibration.
         const gateActive = n >= 80;
@@ -55,7 +59,7 @@
         // ── Hero status strip ──
         if ($('xp-sample'))   $('xp-sample').textContent   = n ? String(n) : '—';
         if ($('xp-ev'))       $('xp-ev').textContent       = evAll != null ? fmtSignedUSD(evAll) : '—';
-        if ($('xp-triggers')) $('xp-triggers').textContent = `${fired} / 4`;
+        if ($('xp-triggers')) $('xp-triggers').textContent = `${posEs} ES`;
         if ($('xp-gate'))     $('xp-gate').textContent     = gateFired ? 'TRIGGERED' : (gateProvisional ? 'Armed · provisional' : 'Armed');
 
         // ── Phase indicator — auto-switches on the live balance ──
@@ -75,23 +79,38 @@
         // ── Trigger ladder ──
         const ladder = $('trigger-ladder');
         if (ladder) {
-            // ACTIVE = the first unfired buffer.
-            const activeIdx = BUFFERS.findIndex(b => cum < b.threshold);
+            const setState = (step, cls, html) => {
+                if (!step) return;
+                const st = step.querySelector('[data-status]');
+                step.classList.remove('trigger-step--fired', 'trigger-step--active', 'trigger-step--pending');
+                step.classList.add(cls);
+                if (st) st.innerHTML = html;
+            };
+            // Trial run — separate from the ladder, 1 ES, target $10K.
+            const trialStep = ladder.querySelector('[data-trigger="TRIAL"]');
+            if (trialStep) {
+                if (cum >= TRIAL_RUN_TARGET) setState(trialStep, 'trigger-step--fired', 'CLEARED');
+                else {
+                    const pct = Math.max(0, Math.min(100, (cum / TRIAL_RUN_TARGET) * 100));
+                    setState(trialStep, 'trigger-step--active', `ACTIVE &middot; ${fmtUSD(Math.max(0, cum))} of ${fmtUSD(TRIAL_RUN_TARGET)} &middot; ${pct.toFixed(0)}%`);
+                }
+            }
+            // Buffers — active while cumulative profit sits in [threshold, nextThreshold).
             BUFFERS.forEach((b, i) => {
                 const step = ladder.querySelector(`[data-trigger="${b.id}"]`);
                 if (!step) return;
-                const statusEl = step.querySelector('[data-status]');
-                step.classList.remove('trigger-step--fired', 'trigger-step--active', 'trigger-step--pending');
-                if (cum >= b.threshold) {
-                    step.classList.add('trigger-step--fired');
-                    if (statusEl) statusEl.textContent = 'FIRED';
-                } else if (i === activeIdx) {
-                    step.classList.add('trigger-step--active');
-                    const pct = Math.max(0, Math.min(100, (cum / b.threshold) * 100));
-                    if (statusEl) statusEl.innerHTML = `ACTIVE &middot; ${fmtUSD(cum)} of ${fmtUSD(b.threshold)} &middot; ${pct.toFixed(0)}%`;
+                const next = (i + 1 < BUFFERS.length) ? BUFFERS[i + 1].threshold : Infinity;
+                if (cum >= next) {
+                    setState(step, 'trigger-step--fired', 'CLEARED');
+                } else if (cum >= b.threshold) {
+                    if (isFinite(next)) {
+                        const pct = Math.max(0, Math.min(100, ((cum - b.threshold) / (next - b.threshold)) * 100));
+                        setState(step, 'trigger-step--active', `ACTIVE &middot; running ${b.es} ES &middot; ${pct.toFixed(0)}% to next`);
+                    } else {
+                        setState(step, 'trigger-step--active', `ACTIVE &middot; running ${b.es} ES &middot; cap`);
+                    }
                 } else {
-                    step.classList.add('trigger-step--pending');
-                    if (statusEl) statusEl.textContent = 'PENDING';
+                    setState(step, 'trigger-step--pending', 'PENDING');
                 }
             });
         }

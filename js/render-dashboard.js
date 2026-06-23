@@ -11,12 +11,18 @@
 
     function $(id) { return document.getElementById(id); }
 
+    // Buffer N runs N ES. A separate trial run (1 ES) banks the first $10K;
+    // Buffer 1 (also 1 ES) starts the real challenge. Each buffer is active
+    // while cumulative profit sits in [threshold, nextThreshold).
     const BUFFERS = [
-        { id: 'B1', threshold: 10000, contractsAfter: 2 },
-        { id: 'B2', threshold: 20000, contractsAfter: 3 },
-        { id: 'B3', threshold: 30000, contractsAfter: 4 },
-        { id: 'B4', threshold: 40000, contractsAfter: 4 },
+        { id: 'B1', threshold: 10000, es: 1 },
+        { id: 'B2', threshold: 20000, es: 2 },
+        { id: 'B3', threshold: 30000, es: 3 },
+        { id: 'B4', threshold: 40000, es: 4 },
     ];
+    const TRIAL_TARGET = 10000;
+    // 1 ES through the trial + Buffer 1, then 2/3/4 ES at $20K/$30K/$40K.
+    function currentEs(cum) { return cum >= 40000 ? 4 : cum >= 30000 ? 3 : cum >= 20000 ? 2 : 1; }
     const NAVY = '#1B2A4A', GOLD = '#C8A951', SLATE = '#64748B', POS = '#2D5016', NEG = '#DC2626';
     const charts = {};
 
@@ -75,7 +81,7 @@
         $('xp-sample') && ($('xp-sample').textContent = n || '—');
         $('xp-cum') && ($('xp-cum').textContent = fmtSigned(cum));
         $('xp-ev') && ($('xp-ev').textContent = fmtSigned(evAll));
-        $('xp-triggers') && ($('xp-triggers').textContent = `${fired} / 4`);
+        $('xp-triggers') && ($('xp-triggers').textContent = `${currentEs(cum)} ES`);
         $('xp-gate') && ($('xp-gate').textContent = gateFired ? 'TRIGGERED' : 'Armed');
         return { n, cum, fired };
     }
@@ -83,17 +89,35 @@
     // ─── trigger ladder ───
     function renderLadder(cum) {
         const ladder = $('trigger-ladder'); if (!ladder) return;
-        const activeIdx = BUFFERS.findIndex(b => cum < b.threshold);
-        BUFFERS.forEach((b, i) => {
-            const step = ladder.querySelector(`[data-trigger="${b.id}"]`); if (!step) return;
+        const setState = (step, cls, html) => {
+            if (!step) return;
             const st = step.querySelector('[data-status]');
             step.classList.remove('trigger-step--fired','trigger-step--active','trigger-step--pending');
-            if (cum >= b.threshold) { step.classList.add('trigger-step--fired'); st && (st.textContent='FIRED'); }
-            else if (i === activeIdx) {
-                step.classList.add('trigger-step--active');
-                const pct = Math.max(0,Math.min(100,(cum/b.threshold)*100));
-                st && (st.innerHTML = `ACTIVE &middot; ${fmtUSD(cum)} of ${fmtUSD(b.threshold)} &middot; ${pct.toFixed(0)}%`);
-            } else { step.classList.add('trigger-step--pending'); st && (st.textContent='PENDING'); }
+            step.classList.add(cls);
+            if (st) st.innerHTML = html;
+        };
+        // Trial run — separate, 1 ES, target $10K.
+        const trialStep = ladder.querySelector('[data-trigger="TRIAL"]');
+        if (trialStep) {
+            if (cum >= TRIAL_TARGET) setState(trialStep, 'trigger-step--fired', 'CLEARED');
+            else {
+                const pct = Math.max(0, Math.min(100, (cum / TRIAL_TARGET) * 100));
+                setState(trialStep, 'trigger-step--active', `ACTIVE &middot; ${fmtUSD(Math.max(0, cum))} of ${fmtUSD(TRIAL_TARGET)} &middot; ${pct.toFixed(0)}%`);
+            }
+        }
+        // Buffers — active while cumulative profit sits in [threshold, nextThreshold).
+        BUFFERS.forEach((b, i) => {
+            const step = ladder.querySelector(`[data-trigger="${b.id}"]`); if (!step) return;
+            const next = (i + 1 < BUFFERS.length) ? BUFFERS[i + 1].threshold : Infinity;
+            if (cum >= next) setState(step, 'trigger-step--fired', 'CLEARED');
+            else if (cum >= b.threshold) {
+                if (isFinite(next)) {
+                    const pct = Math.max(0, Math.min(100, ((cum - b.threshold) / (next - b.threshold)) * 100));
+                    setState(step, 'trigger-step--active', `ACTIVE &middot; running ${b.es} ES &middot; ${pct.toFixed(0)}% to next`);
+                } else {
+                    setState(step, 'trigger-step--active', `ACTIVE &middot; running ${b.es} ES &middot; cap`);
+                }
+            } else setState(step, 'trigger-step--pending', 'PENDING');
         });
     }
 
@@ -199,8 +223,7 @@
         let cum = 0, contracts = 1; const labels = [], data = [], fullLabels = [];
         clean.forEach((t,i) => {
             cum += (t.dollar_pl||0);
-            const fired = BUFFERS.filter(b => cum >= b.threshold).length;
-            contracts = 1 + Math.min(fired, 3);
+            contracts = currentEs(cum);
             const d = parseTS(t.entry_time || t.entryTime || t.trade_date);
             const tn = t.trade_num || ('#'+(i+1));
             const dateStr = d ? d.toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '';

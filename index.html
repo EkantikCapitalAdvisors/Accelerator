@@ -91,7 +91,7 @@
                     <span class="experiment-status__sep">·</span>
                     <span>Rolling EV: <strong id="xp-ev">—</strong></span>
                     <span class="experiment-status__sep">·</span>
-                    <span>Triggers fired: <strong id="xp-triggers">— / 4</strong></span>
+                    <span>Position: <strong id="xp-triggers">— ES</strong></span>
                     <span class="experiment-status__sep">·</span>
                     <span>Falsifiability Gate: <strong id="xp-gate">Armed</strong></span>
                 </span>
@@ -199,7 +199,7 @@
                         <dd><strong>$60,000 &ndash; $100,000 held in reserve</strong>, <em>not</em> deployed in active positions. This is what makes the architecture work: ordinary drawdowns on the $10K unit are absorbed by the buffer behind it; the operator never trades scared because the active capital is a fraction of the risk capital.</dd>
 
                         <dt><span class="capital-arch__tag capital-arch__tag--top">2×</span> Compounding buffer</dt>
-                        <dd><strong>~$20,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is what funds position-size scale-up: each $10K of accumulated profit is one buffer that releases one additional ES contract, up to the 4-ES cap.</dd>
+                        <dd><strong>~$20,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is what funds position-size scale-up: after the separate 1-ES trial run banks the first $10K, each further $10K of cumulative profit advances the buffer ladder one rung &mdash; Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap).</dd>
                     </dl>
                 </div>
             </div>
@@ -212,38 +212,45 @@
             <!-- 01.2 · The Trigger Ladder -->
             <div class="component-block-divider"></div>
             <div class="component-label">01.2 · The Trigger Ladder</div>
-            <h3 class="component-h">Four buffers. Each fires when realized profit crosses the threshold.</h3>
-            <p class="component-sub"><strong>Buffer 1 is the trial run.</strong> Clearing its $10,000 threshold is exactly the moment Phase 0 (the trial run) ends and Phase 1 (the real challenge) begins &mdash; and it is also the first scale-up. Buffers 2&ndash;4 are the scaling milestones inside the real challenge.</p>
+            <h3 class="component-h">A separate trial run, then four buffers &mdash; Buffer N runs N contracts.</h3>
+            <p class="component-sub">The <strong>trial run is separate from the ladder</strong> and runs at <strong>1 ES</strong>: one job &mdash; bank the first $10,000 and prove the discipline. Only then does the buffer ladder (the real challenge) begin, and <strong>each buffer runs as many ES contracts as its number</strong> &mdash; Buffer 1 = 1 ES, Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). Each step up requires a fresh $10,000 of cumulative profit.</p>
             <div class="trigger-ladder" id="trigger-ladder">
+                <div class="trigger-step trigger-step--trial" data-trigger="TRIAL">
+                    <span class="trigger-step__name">Trial run &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">Bank the first $10,000</span>
+                    <span class="trigger-step__action">Separate from the ladder · proves discipline first</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B1">
-                    <span class="trigger-step__name">Buffer 1 &middot; Trial run</span>
-                    <span class="trigger-step__threshold">$10,000 accumulated profit</span>
-                    <span class="trigger-step__action">Trial run cleared → real challenge begins · scale to 2 ES</span>
+                    <span class="trigger-step__name">Buffer 1 &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">$10,000 &mdash; real challenge begins</span>
+                    <span class="trigger-step__action">Run 1 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B2">
-                    <span class="trigger-step__name">Buffer 2</span>
+                    <span class="trigger-step__name">Buffer 2 &middot; 2 ES</span>
                     <span class="trigger-step__threshold">$20,000 cumulative profit</span>
-                    <span class="trigger-step__action">Add 1 ES → 3 ES running</span>
+                    <span class="trigger-step__action">Scale to 2 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B3">
-                    <span class="trigger-step__name">Buffer 3</span>
+                    <span class="trigger-step__name">Buffer 3 &middot; 3 ES</span>
                     <span class="trigger-step__threshold">$30,000 cumulative profit</span>
-                    <span class="trigger-step__action">Add 1 ES → 4 ES running</span>
+                    <span class="trigger-step__action">Scale to 3 ES</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
                 <div class="trigger-step__arrow" aria-hidden="true">→</div>
                 <div class="trigger-step" data-trigger="B4">
-                    <span class="trigger-step__name">Buffer 4</span>
+                    <span class="trigger-step__name">Buffer 4 &middot; 4 ES</span>
                     <span class="trigger-step__threshold">$40,000 cumulative profit</span>
-                    <span class="trigger-step__action">Position locked at 4 ES · evaluate next cycle</span>
+                    <span class="trigger-step__action">Scale to 4 ES · cap</span>
                     <span class="trigger-step__status" data-status>—</span>
                 </div>
             </div>
-            <p class="method-ladder__note"><strong>One ES contract per buffer.</strong> Each buffer adds exactly one ES-contract of exposure &mdash; which the operator may express as up to ten MES contracts (10 MES = 1 ES) while staying within the one-ES-per-buffer ceiling. The base unit starts at 1 ES (≤ 10 MES); each trigger raises the ceiling by one ES, to a maximum of four. Each trigger requires a fresh $10,000 of accumulated profit before firing. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
+            <p class="method-ladder__note"><strong>Buffer N runs N contracts.</strong> The trial run and Buffer 1 both run <strong>1 ES</strong> (which the operator may express as up to ten MES; 10 MES = 1 ES); from Buffer 2 on, each step adds exactly one ES &mdash; 2 ES, 3 ES, then 4 ES at the cap. Each step up requires a fresh $10,000 of cumulative profit before it fires. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
             <p class="ladder-live-note">Prefer to watch the buffers advance as it happens? The whole challenge runs in the open &mdash; follow the live trade journal in the <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">public Discord</a>. Every fill is posted by hand the moment an order goes in, so expect a short delay between the live execution and the post &mdash; close, but not to the millisecond.</p>
 
             <!-- 01.3 · Risk Parameters -->
@@ -322,10 +329,10 @@
                 <circle cx="785" cy="160" r="7" fill="#C8A951" stroke="#1B2A4A" stroke-width="2"/>
 
                 <g font-family="DM Sans" font-size="10.5" fill="#C8A951" font-weight="700">
-                    <text x="170" y="350" text-anchor="middle">pos: 1 ES</text>
-                    <text x="317" y="318" text-anchor="middle">↑ 2 ES · Buffer 1</text>
-                    <text x="552" y="251" text-anchor="middle">↑ 3 ES · Buffer 2</text>
-                    <text x="787" y="151" text-anchor="middle">↑ 4 ES (cap) · Buffer 3</text>
+                    <text x="170" y="350" text-anchor="middle">trial + B1 · 1 ES</text>
+                    <text x="317" y="318" text-anchor="middle">↑ Buffer 2 · 2 ES</text>
+                    <text x="552" y="251" text-anchor="middle">↑ Buffer 3 · 3 ES</text>
+                    <text x="787" y="151" text-anchor="middle">↑ Buffer 4 · 4 ES (cap)</text>
                 </g>
 
                 <g font-family="DM Sans" font-size="10.5" fill="#DC2626" font-weight="700"><text x="1020" y="200" text-anchor="end">↗ floor: peak − 10%</text></g>
