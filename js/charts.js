@@ -6,8 +6,8 @@
     'use strict';
 
     const instances = {};
-    const STARTING_BALANCE = 5000;   // $5,000 working unit per Never Lose Money
-    const BUFFER_STEP = 5000;        // each $5,000 of accumulated profit = one buffer
+    const STARTING_BALANCE = 10000;  // $10,000 working unit per Never Lose Money
+    const BUFFER_STEP = 10000;       // each $10,000 of accumulated profit = one buffer
 
     function parseTime(str) {
         const m = (str || '').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
@@ -152,7 +152,7 @@
         const peak = Math.max(...allValues);
         const low  = Math.min(...allValues);
 
-        // Buffer milestones: each +$5,000 of profit green-lights one position-size
+        // Buffer milestones: each +$10,000 of profit green-lights one position-size
         // step-up. Mark the buffers reached (and the next one as the live target).
         const BUFFER_LABELS = [
             'Buffer 1 reached → double position',

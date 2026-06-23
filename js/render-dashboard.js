@@ -12,10 +12,10 @@
     function $(id) { return document.getElementById(id); }
 
     const BUFFERS = [
-        { id: 'B1', threshold: 5000,  contractsAfter: 2 },
-        { id: 'B2', threshold: 10000, contractsAfter: 3 },
-        { id: 'B3', threshold: 15000, contractsAfter: 4 },
-        { id: 'B4', threshold: 20000, contractsAfter: 4 },
+        { id: 'B1', threshold: 10000, contractsAfter: 2 },
+        { id: 'B2', threshold: 20000, contractsAfter: 3 },
+        { id: 'B3', threshold: 30000, contractsAfter: 4 },
+        { id: 'B4', threshold: 40000, contractsAfter: 4 },
     ];
     const NAVY = '#1B2A4A', GOLD = '#C8A951', SLATE = '#64748B', POS = '#2D5016', NEG = '#DC2626';
     const charts = {};
@@ -396,7 +396,7 @@
         $set('kpi-worst', fmtSigned(k.worstTrade));
 
         $set('kpi-dd', '−' + fmtUSD(k.maxDD).replace('−','').replace('$','$'));
-        $set('kpi-dd-sub', k.maxDD > 0 ? `${(k.maxDD / 5000 * 100).toFixed(1)}% of $5K working unit` : '—');
+        $set('kpi-dd-sub', k.maxDD > 0 ? `${(k.maxDD / 10000 * 100).toFixed(1)}% of $10K working unit` : '—');
         $set('kpi-recovery', k.recovery != null ? `${k.recovery} trades` : (k.maxDD > 0 ? 'in progress' : '—'));
         $set('kpi-streak', k.maxStreak + ' in a row');
         $set('kpi-avgrisk', fmtUSD(k.avgRisk));

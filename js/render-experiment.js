@@ -11,10 +11,10 @@
 
     // Buffer thresholds from the locked protocol (Section 01.2).
     const BUFFERS = [
-        { id: 'B1', threshold: 5000 },
-        { id: 'B2', threshold: 10000 },
-        { id: 'B3', threshold: 15000 },
-        { id: 'B4', threshold: 20000 },
+        { id: 'B1', threshold: 10000 },
+        { id: 'B2', threshold: 20000 },
+        { id: 'B3', threshold: 30000 },
+        { id: 'B4', threshold: 40000 },
     ];
     const FALSIFIABILITY_BAR = 0; // rolling-100 EV crossing $0 fires the gate
 

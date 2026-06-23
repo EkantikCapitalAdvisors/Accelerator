@@ -158,7 +158,7 @@
     // Shows the gap between what we currently risk per trade and what the
     // edge mathematically supports. The "8.6× headroom" framing makes the
     // conservative-by-design posture visible without sacrificing precision.
-    const BASE_CAPITAL = 5000;    // $5,000 working unit — consistent with the doubling doctrine
+    const BASE_CAPITAL = 10000;   // $10,000 working unit — consistent with the doubling doctrine
 
     function halfKelly(p, b) {
         if (p == null || b == null || !isFinite(b) || b <= 0) return null;
@@ -336,9 +336,9 @@
         if (mo && root.Ekantik.Charts) root.Ekantik.Charts.monthlyBars(mo, trades);
 
         const netPL = trades.reduce((s, t) => s + (t.dollar_pl || 0), 0);
-        const end = 5000 + netPL;   // $5,000 working unit base
-        // Each $5,000 of accumulated profit is one buffer (the scale-up trigger unit).
-        const BUFFER = 5000;
+        const end = 10000 + netPL;   // $10,000 working unit base
+        // Each $10,000 of accumulated profit is one buffer (the scale-up trigger unit).
+        const BUFFER = 10000;
         const buffers = netPL / BUFFER;
 
         const netEl = $('section-a-net');
