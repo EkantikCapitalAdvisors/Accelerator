@@ -273,7 +273,7 @@
         const body = cleanCache.map(t => cols.map(c => JSON.stringify(t[c] ?? '')).join(',')).join('\n');
         const blob = new Blob([head+'\n'+body], { type:'text/csv' });
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-        a.download = 'ekantik-experiment-trades.csv'; a.click();
+        a.download = 'ekantik-challenge-trades.csv'; a.click();
     }
 
     // ──────────────────────────────────────────────────────────────
