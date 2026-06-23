@@ -17,6 +17,7 @@
         { id: 'B4', threshold: 40000 },
     ];
     const FALSIFIABILITY_BAR = 0; // rolling-100 EV crossing $0 fires the gate
+    const TRIAL_RUN_TARGET = 10000; // Phase 0 → Phase 1 once this much P&L is banked
 
     function fmtUSD(v) {
         if (v == null || !isFinite(v)) return '$—';
@@ -56,6 +57,20 @@
         if ($('xp-ev'))       $('xp-ev').textContent       = evAll != null ? fmtSignedUSD(evAll) : '—';
         if ($('xp-triggers')) $('xp-triggers').textContent = `${fired} / 4`;
         if ($('xp-gate'))     $('xp-gate').textContent     = gateFired ? 'TRIGGERED' : (gateProvisional ? 'Armed · provisional' : 'Armed');
+
+        // ── Phase indicator — auto-switches on the live balance ──
+        // Phase 0 = trial run: bank the first $10,000 of realized P&L at lower
+        // stakes. Phase 1 = the real challenge ($10K → $100K) the moment that
+        // first $10,000 is banked. Drives off cumulative realized profit so it
+        // flips itself with no manual edit.
+        const phaseEl = $('xp-phase');
+        if (phaseEl) {
+            if (cum >= TRIAL_RUN_TARGET) {
+                phaseEl.innerHTML = '<strong>Phase 1:</strong> The real challenge &middot; $10K &rarr; $100K';
+            } else {
+                phaseEl.innerHTML = `<strong>Phase 0:</strong> Trial run &middot; ${fmtUSD(Math.max(0, cum))} of $10K banked`;
+            }
+        }
 
         // ── Trigger ladder ──
         const ladder = $('trigger-ladder');
