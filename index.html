@@ -259,11 +259,13 @@
             <table class="method-risk-table">
                 <thead><tr><th>Parameter</th><th>Threshold</th><th>Consequence</th></tr></thead>
                 <tbody>
-                    <tr><td>Per-contract max weekly loss</td><td class="mono">$1,000</td><td>No more trades that week — stand down to next session</td></tr>
+                    <tr><td>Base weekly max loss <span class="traj-sub">per contract</span></td><td class="mono">$1,000</td><td>No more trades that week — stand down to next session</td></tr>
+                    <tr><td>Earned weekly flex <span class="traj-sub">house money only</span></td><td class="mono">$1,000 &rarr; $2,000</td><td>Weekly cap may double to $2,000 <strong>only</strong> once $2,000 of cumulative profit is banked</td></tr>
                     <tr><td>Consecutive weekly violations</td><td class="mono">2 in a row</td><td>Stand down for the remainder of the month</td></tr>
                     <tr><td>Rolling 100-trade realized EV</td><td class="mono">$0 / trade</td><td>Falsifiability Gate fires — see Section 05</td></tr>
                 </tbody>
             </table>
+            <p class="method-ladder__note"><strong>Earned weekly risk, never borrowed.</strong> The weekly loss cap starts at <strong>$1,000 per contract</strong>. For any week it <strong>may double to $2,000 only after $2,000 of cumulative realized profit has been banked</strong> &mdash; the extra risk is funded entirely by house money, never by base capital. Below $2,000 cumulative profit the cap stays at $1,000. Same never-lose-money logic as the buffer ladder: more is put at risk only once it has been earned, so a drawdown can never reach into the working unit.</p>
 
             <!-- 01.4 · The Target -->
             <div class="component-block-divider"></div>
@@ -365,7 +367,7 @@
                 </div>
                 <div class="cl-kills__chips">
                     <div class="cl-chip"><span class="cl-chip__num">KC-01</span><span class="cl-chip__label">Rolling-100 EV ≤ $0/trade</span><span class="cl-chip__hint">Edge Gate · Expression Layer</span></div>
-                    <div class="cl-chip"><span class="cl-chip__num">KC-02</span><span class="cl-chip__label">Weekly $1,000 cap hit</span><span class="cl-chip__hint">Per-contract · stand down rest of week</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-02</span><span class="cl-chip__label">Weekly cap hit ($1K · $2K if earned)</span><span class="cl-chip__hint">Per-contract · stand down rest of week</span></div>
                     <div class="cl-chip"><span class="cl-chip__num">KC-03</span><span class="cl-chip__label">2 consecutive losing weeks</span><span class="cl-chip__hint">Monthly stand-down</span></div>
                     <div class="cl-chip"><span class="cl-chip__num">KC-04</span><span class="cl-chip__label">Attribution breach (C-01)</span><span class="cl-chip__hint">Missing tag or hand-applied H1</span></div>
                     <div class="cl-chip"><span class="cl-chip__num">KC-05</span><span class="cl-chip__label">Rule-mod breach (C-02)</span><span class="cl-chip__hint">Unwitnessed protocol modification</span></div>
@@ -638,7 +640,7 @@
                     <p class="defense-card__lead">Pre-committed rules. No exceptions. No renegotiation.</p>
                     <ul class="defense-card__list">
                         <li><strong>Daily</strong> &nbsp;·&nbsp; 1 max loss &nbsp;→&nbsp; stand down. Resume next session.</li>
-                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss per contract &nbsp;→&nbsp; stand down for the remainder of the week.</li>
+                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss per contract &mdash; may double to $2,000 only once $2,000 of profit is banked (house money) &nbsp;→&nbsp; stand down for the remainder of the week.</li>
                         <li><strong>Edge recovery</strong> &nbsp;·&nbsp; 2 consecutive losing weeks &nbsp;→&nbsp; virtual account, full month.</li>
                     </ul>
                     <p class="defense-card__footer">The rule about the rules: the operator under loss is a different cognitive agent than the operator who set them. Under stress, the designer is gone. Only the rule remains.</p>
@@ -658,6 +660,23 @@
             <p class="defense-open">
                 A challenge without a falsifiability condition is not a challenge. It is faith. This one runs <strong>two</strong> gates in parallel, from day one. The <strong>Expression Layer</strong> watches the edge&rsquo;s realized math for decay. The <strong>Fidelity Layer</strong> watches whether the published method is what is actually running &mdash; cognitive, structural, and substrate discipline. Since discipline is the real variable here, the Fidelity Layer is the gate that matters most. Both were written before any outside capital is at risk, locked under witness countersignature.
             </p>
+
+            <!-- Simple, at-a-glance protocol-breach status -->
+            <div id="protocol-status" role="status" aria-label="Protocol breach status" style="border:1px solid var(--divider);border-radius:12px;overflow:hidden;margin:8px 0 26px;background:var(--white)">
+                <div id="ps-banner" style="display:flex;align-items:center;gap:16px;padding:18px 22px;background:var(--pass);color:#fff">
+                    <span id="ps-icon" aria-hidden="true" style="font-size:30px;line-height:1;font-weight:700">&#10003;</span>
+                    <div>
+                        <div id="ps-headline" style="font-weight:700;font-size:19px;letter-spacing:.01em">All clear</div>
+                        <div id="ps-sub" style="font-size:13px;opacity:.93;margin-top:3px">0 protocol breaches on record &middot; Tier T0 &mdash; Normal Operations</div>
+                    </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;padding:16px 22px 6px">
+                    <span id="ps-c01" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Attribution discipline</span>
+                    <span id="ps-c02" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Rule-modification integrity</span>
+                    <span id="ps-c03" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Daily routine</span>
+                </div>
+                <div id="ps-log" style="padding:8px 22px 18px;font-size:13px;color:var(--muted)">No protocol breaches recorded. Every breach &mdash; missed tag, unwitnessed rule change, or routine miss &mdash; will appear here the moment it happens, in plain language.</div>
+            </div>
 
             <!-- Gates status strip -->
             <div class="gates-status" id="gates-status" role="status" aria-label="Falsifiability gate status">

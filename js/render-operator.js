@@ -235,17 +235,74 @@
         }
     }
 
+    // ── Simple, at-a-glance protocol-breach panel (top of Section 05) ──
+    // One green "All clear" banner when nothing is breached; turns amber (T1/T2)
+    // or red (T3) and lists each breach in plain language the moment one is logged.
+    function setCheck(el, ok, label) {
+        if (!el) return;
+        el.innerHTML = (ok ? '✓' : '⚠') + ' ' + label;
+        el.style.background = ok ? '#E6F0E6' : '#FBE7E7';
+        el.style.color = ok ? 'var(--pass)' : 'var(--fail)';
+    }
+    async function renderProtocolStatus() {
+        const events = (await fetchJSON('data/breach-events.json')) || [];
+        const sd = (await fetchJSON('data/standdown-state.json')) || {};
+        const tier = sd.current_tier || 'T0';
+        const tierLabel = TIER_LABELS[tier] || tier;
+
+        // Drive the panel off the AUTHORITATIVE breach log (breach-events.json) plus
+        // the stand-down tier — not the raw rolling-30 monitoring counters, which
+        // include legacy pre-tagging trades and would read as alarming false breaches.
+        // Which criteria does a recorded breach touch? (criterion field is tolerant.)
+        const touches = (n) => events.some(e => {
+            const c = String(e.criterion || e.criterion_id || e.type || '');
+            return c.indexOf(String(n)) !== -1;
+        });
+        const c01ok = !touches(1);
+        const c02ok = !touches(2);
+        const c03ok = !touches(3);
+        setCheck($('ps-c01'), c01ok, 'Attribution discipline');
+        setCheck($('ps-c02'), c02ok, 'Rule-modification integrity');
+        setCheck($('ps-c03'), c03ok, 'Daily routine');
+
+        const breachCount = events.length;
+        const clear = breachCount === 0 && tier === 'T0';
+
+        const banner = $('ps-banner'), icon = $('ps-icon'), headline = $('ps-headline'), sub = $('ps-sub'), log = $('ps-log');
+        if (banner) banner.style.background = clear ? 'var(--pass)' : (tier === 'T3' ? 'var(--fail)' : '#B8860B');
+        if (icon) icon.innerHTML = clear ? '✓' : '⚠';
+        if (headline) headline.textContent = clear ? 'All clear' : (breachCount + ' protocol breach' + (breachCount === 1 ? '' : 'es'));
+        if (sub) sub.innerHTML = (clear ? '0 protocol breaches on record' : (breachCount + ' on record')) + ' &middot; Tier ' + tierLabel;
+
+        if (log) {
+            if (!events.length) {
+                log.innerHTML = clear
+                    ? 'No protocol breaches recorded. Every breach &mdash; missed tag, unwitnessed rule change, or routine miss &mdash; will appear here the moment it happens, in plain language.'
+                    : 'Stand-down active. See the criteria and tier detail below.';
+            } else {
+                log.innerHTML = events.slice().reverse().map(e => {
+                    const when = e.date || e.occurred_at || e.timestamp || '';
+                    const what = e.description || e.summary || (e.criterion ? ('Criterion ' + e.criterion) : 'Breach');
+                    const t = e.tier ? (' <strong>[' + e.tier + ']</strong>') : '';
+                    return '<div style="padding:7px 0;border-top:1px solid var(--divider)"><span style="color:var(--fail);font-weight:700">&#9888;</span> <strong>' + when + '</strong>' + t + ' &mdash; ' + what + '</div>';
+                }).join('');
+            }
+        }
+    }
+
     function init() {
         // Stage 2 + live Criterion 01 bind to the live trade feed
         if (root.Ekantik && root.Ekantik.Data) {
             root.Ekantik.Data.onChange(renderExpression);
             root.Ekantik.Data.onChange(recomputeCriterion01);
+            root.Ekantik.Data.onChange(renderProtocolStatus);
             const cur = root.Ekantik.Data.get();
             if (cur) renderExpression(cur);
         }
         // Stage 1 + stand-down read their JSON files (static initial state in Phase 1)
         renderCriteria();
         renderStandDown();
+        renderProtocolStatus();
     }
 
     root.Ekantik = root.Ekantik || {};
