@@ -652,57 +652,58 @@ function parseDiscordTradeText(text) {
             continue;  // keep the trade open; the result line will close it
         }
 
-        // Is this an entry line? Optional stop and optional position size.
+        // Is this an entry line? Direction + price, then stop / size / H-tag in ANY
+        // order (the operator writes them differently across trades):
         //   "s 6837.5"                 — 1 ES (default)
-        //   "sell 7153 stp 7156"       — 1 ES with stop
-        //   "s 7141 5mes"              — 5 MES contracts ≡ 0.5 ES
-        //   "s 7141 stp 7146 2mes"     — 2 MES ≡ 0.2 ES (one-fifth)
+        //   "sell 7153 stp 7156"       — stop with stp keyword
+        //   "s 7450 5mes sl7456"       — size then inline stop (sl<price>)
+        //   "s 7141 stp 7146 2mes"     — stop then size
         //   "b 6855 10 mes"            — 1 ES equivalent (10 MES)
-        //   "s 7000 stp 7010 2es"      — 2 ES (after Buffer 1 fires; 3es / 4es as the ladder permits)
-        //   "b 6992 half"              — legacy keyword (still accepted)
-        //   "s 7386 H2"               — H-tag on entry line (attribution hypothesis, carried to close)
-        //   "s 7386 5mes H2"          — size + H-tag combined
+        //   "s 7000 stp 7010 2es"      — 2 ES (after buffers green-light scaling)
+        //   "b 6992 half H2"           — keyword size + attribution
         //
-        // Size scales the stored points and dollars: MES → mes_count/10 ES;
-        // ES count → that many ES (1 ES = $50/pt). The whole dataset stays in
-        // ES-equivalent terms so it is homogeneous regardless of how it was sized.
-        // H-tag (H1/H2/H3) may appear anywhere after the price/size and is stored
-        // on the pending entry so the close line inherits it automatically.
-        // Stop keyword on entry accepts stp / sl / stop (the standalone adjust
-        // line already accepts the same set, so the two paths agree).
-        const entryMatch = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)(?:\s+(?:stp|sl|stop)\s*(\d+\.?\d*))?(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|third|thirds?|quarter|qtr|full))?(?:\s+(H[123]))?\s*$/i);
-        if (entryMatch) {
-            const dirRaw = entryMatch[1].toLowerCase();
+        // Size scales the stored points and dollars: MES → mes_count/10 ES; ES count
+        // → that many ES (1 ES = $50/pt). The dataset stays in ES-equivalent terms.
+        // Stop accepts sl / stp / stop (space optional); H-tag (H1/H2/H3) carries to
+        // the close. Rather than one rigid regex, the head is matched, then the rest
+        // is scanned token-by-token so order never matters.
+        const entryHead = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)\b(.*)$/i);
+        if (entryHead) {
+            const dirRaw = entryHead[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
-            const entryPrice = parseFloat(entryMatch[2]);
-            const stopPrice = entryMatch[3] ? parseFloat(entryMatch[3]) : 0;
-            const mesCountRaw = entryMatch[4];
-            const esCountRaw  = entryMatch[5];
-            const sizeKeyRaw = (entryMatch[6] || '').toLowerCase();
-            const entryAttribution = entryMatch[7] ? entryMatch[7].toUpperCase() : null;
+            const entryPrice = parseFloat(entryHead[2]);
+            const rest = entryHead[3] || '';
 
-            let sizeFraction = 1;
-            let positionSize = 'full';
-            let mesCount = null;
-            let contracts = 1;
+            // Stop: sl / stp / stop followed by a price (space optional).
+            const stopM = rest.match(/\b(?:sl|stp|stop)\s*(\d+\.?\d*)/i);
+            const stopPrice = stopM ? parseFloat(stopM[1]) : 0;
 
-            if (mesCountRaw) {
-                mesCount = parseInt(mesCountRaw, 10);
+            // Size: Nmes / Nes / half / third / quarter (checked in that order).
+            let sizeFraction = 1, positionSize = 'full', mesCount = null, contracts = 1;
+            const mesM = rest.match(/\b(\d+)\s*mes\b/i);
+            const esM  = rest.match(/\b(\d+)\s*es\b/i);
+            const keyM = rest.match(/\b(half|thirds?|quarter|qtr)\b/i);
+            if (mesM) {
+                mesCount = parseInt(mesM[1], 10);
                 sizeFraction = mesCount / 10;
                 positionSize = `${mesCount} MES`;
                 contracts = 1;                       // sub-ES sizing — one ES line, fractional fill
-            } else if (esCountRaw) {
-                contracts = parseInt(esCountRaw, 10); // 2es / 3es / 4es once buffers green-light scaling
+            } else if (esM) {
+                contracts = parseInt(esM[1], 10);    // 2es / 3es / 4es
                 sizeFraction = contracts;
                 positionSize = `${contracts} ES`;
-            } else if (sizeKeyRaw === 'half')                       { sizeFraction = 0.5;   positionSize = 'half'; }
-            else if (sizeKeyRaw.startsWith('third'))                 { sizeFraction = 1 / 3; positionSize = 'third'; }
-            else if (sizeKeyRaw === 'quarter' || sizeKeyRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
+            } else if (keyM) {
+                const k = keyM[1].toLowerCase();
+                if (k === 'half') { sizeFraction = 0.5; positionSize = 'half'; }
+                else if (k.startsWith('third')) { sizeFraction = 1 / 3; positionSize = 'third'; }
+                else { sizeFraction = 0.25; positionSize = 'quarter'; }
+            }
             // No explicit size token → default to 1 ES (full). The trade-ID prefix
-            // (F/S/T/FT) is now a buffer-phase LABEL only and no longer auto-sizes the
-            // position — that was the old "S = 2 ES" convention, removed because real
-            // position size is governed by the cumulative-profit ladder (Buffer N = N ES)
-            // or an explicit Nes / Nmes / keyword on the entry line.
+            // (F/S/T/FT) is a buffer-phase LABEL only and no longer auto-sizes.
+
+            // Attribution H-tag on the entry line, carried to the close line.
+            const hM = rest.match(/\bH([123])\b/i);
+            const entryAttribution = hM ? ('H' + hM[1]) : null;
 
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
