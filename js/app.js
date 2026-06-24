@@ -26,7 +26,27 @@
         // Kick off first load
         root.Ekantik.Data.load();
 
-        // Periodic trust-strip time refresh (does NOT refetch data)
+        // ── Live polling — re-fetch the trade journal on an interval so the whole
+        // page updates dynamically without a reload. Every panel (EV formula, hero
+        // stats, trigger ladder, phase chip, breach panel, equity arc) subscribes to
+        // Data.onChange, so one refresh re-renders them all. load() always busts the
+        // trades fetch but leaves the slow-changing files cached, so it's cheap.
+        // Paused while the tab is hidden; refreshes immediately on re-focus.
+        const POLL_MS = 60000;
+        let polling = false;
+        async function refresh() {
+            if (polling || document.visibilityState === 'hidden') return;
+            polling = true;
+            try { await root.Ekantik.Data.load(); }
+            catch (e) { /* transient network error — the next tick retries */ }
+            finally { polling = false; }
+        }
+        setInterval(refresh, POLL_MS);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') refresh();
+        });
+
+        // Periodic trust-strip time refresh (updates the "Xm ago" between fetches)
         setInterval(() => {
             const state = root.Ekantik.Data.get();
             if (state && state.trades && root.Ekantik.Hero) {

@@ -484,6 +484,20 @@
         if (root.Ekantik && root.Ekantik.Data) {
             root.Ekantik.Data.onChange(renderAll);
             root.Ekantik.Data.load();
+
+            // Live polling so the dashboard updates dynamically without a reload
+            // (load() busts only the trades fetch; paused while the tab is hidden).
+            let polling = false;
+            async function refresh() {
+                if (polling || document.visibilityState === 'hidden') return;
+                polling = true;
+                try { await root.Ekantik.Data.load(); } catch (e) { /* retry next tick */ }
+                finally { polling = false; }
+            }
+            setInterval(refresh, 60000);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') refresh();
+            });
         }
     }
 
