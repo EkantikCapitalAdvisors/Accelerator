@@ -667,7 +667,9 @@ function parseDiscordTradeText(text) {
         // Stop accepts sl / stp / stop (space optional); H-tag (H1/H2/H3) carries to
         // the close. Rather than one rigid regex, the head is matched, then the rest
         // is scanned token-by-token so order never matters.
-        const entryHead = body.match(/^(s|sell|b|buy)\s+(\d+\.?\d*)\b(.*)$/i);
+        // Direction may be glued to the price with no space ("b7580.5") or spaced
+        // ("b 7580.5"); longer keywords first so "sell"/"buy" win over "s"/"b".
+        const entryHead = body.match(/^(sell|buy|s|b)\s*(\d+\.?\d*)\b(.*)$/i);
         if (entryHead) {
             const dirRaw = entryHead[1].toLowerCase();
             const direction = (dirRaw === 's' || dirRaw === 'sell') ? 'Sell' : 'Buy';
