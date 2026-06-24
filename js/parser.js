@@ -508,10 +508,10 @@ function parseDiscordTradeText(text) {
         if (!line) continue;
 
         // 4. Match trade line: <id>: <content>  (case insensitive). The ID prefix
-        //    encodes the buffer phase (and thus expected size): F = First buffer
-        //    (1 ES), S = Second (2 ES), T = Third (3 ES), FT = Fourth (4 ES) —
-        //    e.g. F84, S1, T12, FT3. The legacy F1–F84 are preserved unchanged:
-        //    they were first-buffer (1 ES) trades, which "F" now formally denotes.
+        //    is a buffer-phase LABEL only: F = First, S = Second, T = Third,
+        //    FT = Fourth — e.g. F84, S1, T12, FT3. It does NOT size the position
+        //    (the old "S = 2 ES" auto-default was removed); size comes from the
+        //    cumulative-profit ladder or an explicit Nes/Nmes/keyword on the entry.
         //    FT is listed first so "FT3" matches Fourth, not First.
         const m = line.match(/^(FT\d+|F\d+|S\d+|T\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
@@ -671,7 +671,6 @@ function parseDiscordTradeText(text) {
             let positionSize = 'full';
             let mesCount = null;
             let contracts = 1;
-            let sizeFromPrefix = false;
 
             if (mesCountRaw) {
                 mesCount = parseInt(mesCountRaw, 10);
@@ -685,24 +684,16 @@ function parseDiscordTradeText(text) {
             } else if (sizeKeyRaw === 'half')                       { sizeFraction = 0.5;   positionSize = 'half'; }
             else if (sizeKeyRaw.startsWith('third'))                 { sizeFraction = 1 / 3; positionSize = 'third'; }
             else if (sizeKeyRaw === 'quarter' || sizeKeyRaw === 'qtr') { sizeFraction = 0.25; positionSize = 'quarter'; }
-            else {
-                // No explicit size token — default by buffer-phase prefix:
-                //   F → 1 ES, S → 2 ES, T → 3 ES, FT → 4 ES.
-                // Operator can always override per-trade with an explicit Nes/Nmes/keyword.
-                const phase = bufferPhaseOf(tradeNum);
-                if (phase) {
-                    contracts = phase;
-                    sizeFraction = phase;
-                    positionSize = phase === 1 ? 'full' : `${phase} ES (default · ${tradeNum.match(/^[A-Z]+/i)[0].toUpperCase()} prefix)`;
-                    sizeFromPrefix = phase > 1;
-                }
-            }
+            // No explicit size token → default to 1 ES (full). The trade-ID prefix
+            // (F/S/T/FT) is now a buffer-phase LABEL only and no longer auto-sizes the
+            // position — that was the old "S = 2 ES" convention, removed because real
+            // position size is governed by the cumulative-profit ladder (Buffer N = N ES)
+            // or an explicit Nes / Nmes / keyword on the entry line.
 
             pending[tradeNum] = {
                 direction, entryPrice, stopPrice,
                 datetime: currentDatetime, date: currentDate,
                 sizeFraction, positionSize, mesCount, contracts,
-                sizeFromPrefix,
                 attribution: entryAttribution  // carried to the close line
             };
             continue;
