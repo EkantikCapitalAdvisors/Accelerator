@@ -534,13 +534,26 @@ function parseDiscordTradeText(text) {
         // is the ES price ~7372, not a +7372-pt result). Signed numbers are
         // always treated as results (the operator was explicit about direction).
         const MAX_RESULT_POINTS = 500;
-        const closeMatch = body.match(/^([+-])?\s*(\d+\.?\d*)(?:\s+(H[123]))?(?:\s+(.+))?$/i);
+        // Result line: a points result, then an OPTIONAL size token (5mes / 2es /
+        // half / third / quarter), then an OPTIONAL attribution tag, then an
+        // OPTIONAL free-text comment. The size token is accepted here as well as on
+        // the entry line, so "F90: s 7440 5mes" and "F90: +3 5mes" both size to 5 MES.
+        const closeMatch = body.match(/^([+-])?\s*(\d+\.?\d*)(?:\s+(\d+)\s*mes\b|\s+(\d+)\s*es\b|\s+(half|thirds?|quarter|qtr))?(?:\s+(H[123]))?(?:\s+(.+))?$/i);
         let attribution = null, attributionBreach = false, comment = '';
-        let resultMatch = null, rawPts = 0;
+        let resultMatch = null, rawPts = 0, closeSize = null;
         if (closeMatch && (closeMatch[1] || Math.abs(parseFloat(closeMatch[2])) <= MAX_RESULT_POINTS)) {
             rawPts = parseFloat((closeMatch[1] || '') + closeMatch[2]);  // e.g. "+" + "3" → +3
-            if (closeMatch[3]) {
-                attribution = closeMatch[3].toUpperCase();
+            // Size token on the result line (optional) — takes precedence over entry sizing.
+            if (closeMatch[3]) { const c = parseInt(closeMatch[3], 10); closeSize = { sizeFraction: c / 10, positionSize: `${c} MES`, mesCount: c, contracts: 1 }; }
+            else if (closeMatch[4]) { const c = parseInt(closeMatch[4], 10); closeSize = { sizeFraction: c, positionSize: `${c} ES`, mesCount: null, contracts: c }; }
+            else if (closeMatch[5]) {
+                const k = closeMatch[5].toLowerCase();
+                if (k === 'half') closeSize = { sizeFraction: 0.5, positionSize: 'half', mesCount: null, contracts: 1 };
+                else if (k.startsWith('third')) closeSize = { sizeFraction: 1 / 3, positionSize: 'third', mesCount: null, contracts: 1 };
+                else closeSize = { sizeFraction: 0.25, positionSize: 'quarter', mesCount: null, contracts: 1 };
+            }
+            if (closeMatch[6]) {
+                attribution = closeMatch[6].toUpperCase();
                 if (attribution === 'H1') attributionBreach = true;
             }
             // Fall back to H-tag from the entry line if the result line didn't repeat it
@@ -549,7 +562,7 @@ function parseDiscordTradeText(text) {
                 attribution = pend.attribution;
                 if (attribution === 'H1') attributionBreach = true;
             }
-            comment = (closeMatch[4] || '').trim();
+            comment = (closeMatch[7] || '').trim();
             resultMatch = true;
         }
         if (resultMatch) {
@@ -557,12 +570,13 @@ function parseDiscordTradeText(text) {
             const entryPrice = entry ? entry.entryPrice : 0;
             const stopPrice = entry ? entry.stopPrice : 0;
             // Position size: full = 1 (default), half = 0.5, third = 1/3, quarter = 0.25.
-            // Scaling is applied to BOTH points and risk so dollar P&L and dollar risk
-            // both reflect the actual partial-position outcome.
-            const sizeFraction = entry && entry.sizeFraction ? entry.sizeFraction : 1;
-            const positionSize = entry && entry.positionSize ? entry.positionSize : 'full';
-            const mesCount     = entry && entry.mesCount     != null ? entry.mesCount : null;
-            const contracts    = entry && entry.contracts    != null ? entry.contracts : 1;
+            // A size token on the result line (closeSize) wins; otherwise inherit the
+            // entry line's sizing; otherwise default to 1 ES. Scaling applies to BOTH
+            // points and risk so dollar P&L and dollar risk reflect the partial fill.
+            const sizeFraction = closeSize ? closeSize.sizeFraction : (entry && entry.sizeFraction ? entry.sizeFraction : 1);
+            const positionSize = closeSize ? closeSize.positionSize : (entry && entry.positionSize ? entry.positionSize : 'full');
+            const mesCount     = closeSize ? closeSize.mesCount : (entry && entry.mesCount != null ? entry.mesCount : null);
+            const contracts    = closeSize ? closeSize.contracts : (entry && entry.contracts != null ? entry.contracts : 1);
             const round2 = v => Math.round(v * 100) / 100;
             const ppt = 50; // ES contract ($50/pt). MES trades scale via sizeFraction
                             // (mes_count / 10) so points and dollars are stored in
