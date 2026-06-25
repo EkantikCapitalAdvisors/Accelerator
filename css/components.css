@@ -4502,10 +4502,10 @@ section.block.light { padding: 96px 0 112px; }
 
 /* Trigger ladder */
 .trigger-ladder {
-    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-    align-items: stretch; gap: 8px; margin: var(--s-3) 0;
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin: var(--s-3) 0;
 }
 .trigger-step {
+    flex: 1 1 190px; min-width: 0;
     background: var(--white); border: 1px solid var(--border); border-radius: 4px;
     padding: var(--s-3); display: flex; flex-direction: column; gap: 6px;
 }
@@ -4521,10 +4521,10 @@ section.block.light { padding: 96px 0 112px; }
 .trigger-step--fired .trigger-step__status { background: var(--gold); color: var(--navy); }
 .trigger-step--active { border-color: var(--navy); box-shadow: var(--shadow-md); }
 .trigger-step--active .trigger-step__status { background: var(--navy); color: var(--ivory); animation: pulse 1.5s ease-in-out infinite; }
-.trigger-step__arrow { align-self: center; color: var(--gold); font-size: 20px; }
+.trigger-step__arrow { flex: 0 0 auto; align-self: center; color: var(--gold); font-size: 20px; }
 @media (max-width: 880px) {
-    .trigger-ladder { grid-template-columns: 1fr; }
-    .trigger-step__arrow { transform: rotate(90deg); justify-self: center; }
+    .trigger-ladder { flex-direction: column; }
+    .trigger-step__arrow { transform: rotate(90deg); align-self: center; }
 }
 .method-ladder__note, .method-traj__close {
     font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--slate);
