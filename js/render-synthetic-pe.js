@@ -72,7 +72,7 @@
             setText('sp-co-net', fmtSigned(s.net));
             setText('sp-co-trades', String(s.n));
             setText('sp-co-bal', fmtSigned(s.net));                          // net profit, not balance
-            setText('sp-co-pct', (s.net / 100000 * 100).toFixed(1) + '% of $100k');
+            setText('sp-co-pct', (s.net / 100000 * 100).toFixed(1) + '% of a 10× run');
             setW('sp-co-fill', s.net / 100000 * 100);
         }
     }
