@@ -317,6 +317,15 @@
   .calc-chart .cap{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);text-align:center;margin-top:9px;line-height:1.5;}
   .calc-formula{font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);line-height:1.75;margin-top:24px;border-left:2px solid var(--line);padding-left:16px;max-width:92ch;}
   .calc-formula b{color:var(--slate);font-weight:600;}
+  .calc-alloc{margin:2px 0 4px;}
+  .calc-alloc-bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,0.06);}
+  .calc-alloc-bar span{display:block;height:100%;transition:width .3s ease;}
+  .calc-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:9px;font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;color:var(--slate);}
+  .calc-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+  .calc-legend b{color:var(--ivory);font-weight:600;}
+  .calc-chart-h{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:10px;}
+  .calc-chart-h span{color:var(--gold);}
+  .calc-cards{grid-template-columns:1fr 1fr 1fr;}
   @media(max-width:860px){ .calc{grid-template-columns:1fr;} .calc-cards{grid-template-columns:1fr 1fr;} }
 </style>
 </head>
@@ -520,84 +529,116 @@
 <section class="block" id="calculator">
   <div class="wrap">
     <span class="sec-num">03 · Model the machine yourself</span>
-    <h2>Set the dials. Watch the <em>two engines</em> drive toward the freedom point.</h2>
+    <h2>Set the dials. Watch the machine <em>throw off cash, build reserves, and compound.</em></h2>
     <p class="intro">
-      An interactive, <strong>illustrative</strong> model of the synthetic-PE architecture: the cash-flow engine
-      throws off realized cash and scales on the buffer ladder; a slice of that cash feeds the compounding engine,
-      which grows under a capped doubling regime. Every input is yours to set — and the full math is shown below.
+      An interactive, <strong>illustrative</strong> model of the full synthetic-PE architecture. You commit a small
+      <strong>working unit</strong> against a <strong>risk-capital reserve</strong>; the cash-flow engine scales on the
+      buffer ladder and throws off realized cash, which you split three ways — <strong>compound it, rebuild reserves,
+      or draw it as cash to use.</strong> Every input is yours; the full math is shown below.
       <strong>This is a hypothetical model, not a forecast or a promise of any outcome.</strong>
     </p>
 
     <div class="calc">
       <!-- INPUTS -->
       <div class="calc-panel">
-        <div class="ph">Your inputs</div>
-
+        <div class="ph">Capital structure</div>
         <div class="calc-field">
-          <div class="row"><label for="pc-cap0">Working capital</label><span class="val" id="pc-cap0-v">$10,000</span></div>
-          <input type="range" id="pc-cap0" min="2000" max="100000" step="1000" value="10000">
-          <div class="hint">The capital you commit to the machine.</div>
+          <div class="row"><label for="pc-W">Working unit (deployed)</label><span class="val" id="pc-W-v">$10,000</span></div>
+          <input type="range" id="pc-W" min="2000" max="50000" step="1000" value="10000">
+          <div class="hint">The slice actually at risk via the buffer ladder.</div>
+        </div>
+        <div class="calc-field">
+          <div class="row"><label for="pc-res">Risk-capital reserve</label><span class="val" id="pc-res-v">1.0× · $10,000</span></div>
+          <input type="range" id="pc-res" min="0" max="6" step="0.5" value="1">
+          <div class="hint">Held in reserve, never deployed — the cushion that protects against ruin and unlocks higher buffer rungs. <b id="pc-committed-v">Total committed: $20,000</b>.</div>
         </div>
 
+        <div class="ph" style="margin-top:24px">Cash-flow engine</div>
         <div class="calc-field">
-          <div class="row"><label for="pc-trades">Cash-flow trades / month</label><span class="val" id="pc-trades-v">28 / mo</span></div>
+          <div class="row"><label for="pc-trades">Trades / month</label><span class="val" id="pc-trades-v">28 / mo</span></div>
           <input type="range" id="pc-trades" min="4" max="60" step="1" value="28">
-          <div class="hint">Qualified fills the cash-flow engine takes per month.</div>
         </div>
-
         <div class="calc-field">
           <div class="row"><label for="pc-R">Expectancy per trade</label><span class="val" id="pc-R-v">+0.33R</span></div>
           <input type="range" id="pc-R" min="0.05" max="0.80" step="0.01" value="0.33">
-          <div class="hint">Live cash-flow engine to date: <b style="color:var(--gold-bright)">+0.33R</b> over 134 fills.</div>
+          <div class="hint">Live engine to date: <b style="color:var(--gold-bright)">+0.33R</b> over 134 fills.</div>
         </div>
-
         <div class="calc-field">
-          <div class="row"><label for="pc-risk">Risk per trade (1R)</label><span class="val" id="pc-risk-v">$200</span></div>
-          <input type="range" id="pc-risk" min="50" max="1000" step="25" value="200">
-          <div class="hint">Dollars risked on a single fill at the base of the buffer ladder.</div>
+          <div class="row"><label for="pc-risk">Risk per trade (1R)</label><span class="val" id="pc-risk-v">$150</span></div>
+          <input type="range" id="pc-risk" min="50" max="1000" step="25" value="150">
+          <div class="hint">Risk on a single fill at the base of the buffer ladder (buffer caps at 3×).</div>
         </div>
 
+        <div class="ph" style="margin-top:24px">Split each month's realized cash</div>
         <div class="calc-field">
-          <div class="row"><label for="pc-route">Route to compounding engine</label><span class="val" id="pc-route-v">30%</span></div>
-          <input type="range" id="pc-route" min="0" max="100" step="5" value="30">
-          <div class="hint">Share of realized cash fed into the compounding engine. The rest is kept free.</div>
+          <div class="row"><label for="pc-comp">→ Compounding engine</label><span class="val" id="pc-comp-v">25%</span></div>
+          <input type="range" id="pc-comp" min="0" max="70" step="5" value="25">
+        </div>
+        <div class="calc-field">
+          <div class="row"><label for="pc-resbuild">→ Rebuild reserves</label><span class="val" id="pc-resbuild-v">15%</span></div>
+          <input type="range" id="pc-resbuild" min="0" max="70" step="5" value="15">
+        </div>
+        <div class="calc-alloc">
+          <div class="calc-alloc-bar">
+            <span id="pc-bar-comp" style="background:var(--gold)"></span>
+            <span id="pc-bar-res" style="background:#7E9CC4"></span>
+            <span id="pc-bar-use" style="background:var(--green)"></span>
+          </div>
+          <div class="calc-legend">
+            <span><i style="background:var(--gold)"></i> Compound <b id="pc-lg-comp">25%</b></span>
+            <span><i style="background:#7E9CC4"></i> Reserves <b id="pc-lg-res">15%</b></span>
+            <span><i style="background:var(--green)"></i> Cash to use <b id="pc-lg-use">60%</b></span>
+          </div>
         </div>
 
+        <div class="ph" style="margin-top:24px">Compounding &amp; horizon</div>
         <div class="calc-field">
           <div class="row"><label for="pc-mult">Compounding multiple / yr</label><span class="val" id="pc-mult-v">2.00× / yr</span></div>
           <input type="range" id="pc-mult" min="1" max="8" step="0.25" value="2">
-          <div class="hint">Cooperative-regime envelope 2×–8×. Bounded at 5× of contributed here; 16× is the design cap.</div>
+          <div class="hint">Cooperative-regime envelope 2×–8×. Bounded at 4× of contributed here; 16× is the design cap.</div>
         </div>
-
         <div class="calc-field">
           <div class="row"><label for="pc-months">Time horizon</label><span class="val" id="pc-months-v">36 mo</span></div>
           <input type="range" id="pc-months" min="6" max="60" step="1" value="36">
-          <div class="hint">How long the machine runs.</div>
         </div>
-
         <div class="calc-field">
-          <div class="row"><label for="pc-oblig">Monthly obligations</label><span class="val" id="pc-oblig-v">$3,000</span></div>
-          <input type="range" id="pc-oblig" min="0" max="20000" step="500" value="3000">
-          <div class="hint">Your monthly cost of living — used to locate the freedom point.</div>
+          <div class="row"><label for="pc-oblig">Monthly obligations</label><span class="val" id="pc-oblig-v">$2,000</span></div>
+          <input type="range" id="pc-oblig" min="0" max="20000" step="250" value="2000">
+          <div class="hint">Your monthly cost of living — the freedom point is when cash-to-use covers it.</div>
         </div>
       </div>
 
       <!-- OUTPUTS -->
       <div class="calc-out">
         <div class="calc-headline">
-          <div class="k">Illustrative ending capital · <span id="pc-horizon-label">36 mo</span></div>
+          <div class="k">In the machine at <span id="pc-horizon-label">36 mo</span> · working unit + reserves + compounder</div>
           <div class="big" id="pc-ending">—</div>
-          <div class="sub"><b id="pc-multiple">—</b> on working capital · <b id="pc-profit">—</b> total profit</div>
+          <div class="sub"><b id="pc-multiple">—</b> on committed capital · plus <b id="pc-drawn-head">—</b> already drawn as cash to use</div>
         </div>
+
         <div class="calc-cards">
-          <div class="calc-card"><div class="k">Cash-flow engine<br>realized cash</div><div class="v" id="pc-cf">—</div></div>
-          <div class="calc-card"><div class="k">Compounding engine<br>grown equity</div><div class="v"><span id="pc-co">—</span> <small id="pc-co-mult"></small></div></div>
-          <div class="calc-card"><div class="k">First $100k<br>in profit</div><div class="v" id="pc-100k">—</div></div>
-          <div class="calc-card"><div class="k">Freedom point<br>cash ≥ obligations</div><div class="v" id="pc-freedom">—</div></div>
+          <div class="calc-card"><div class="k">Reserve buffer<br>at horizon</div><div class="v" id="pc-res-out">—</div></div>
+          <div class="calc-card"><div class="k">Compounder equity<br>at horizon</div><div class="v"><span id="pc-co">—</span> <small id="pc-co-mult"></small></div></div>
+          <div class="calc-card"><div class="k">Cash to use<br>drawn cumulatively</div><div class="v" id="pc-drawn">—</div></div>
+          <div class="calc-card"><div class="k">Total value created<br>capital growth + cash drawn</div><div class="v" id="pc-tvc">—</div></div>
+          <div class="calc-card"><div class="k">First $100k<br>in total value</div><div class="v" id="pc-100k">—</div></div>
+          <div class="calc-card"><div class="k">Freedom point<br>cash-to-use ≥ obligations</div><div class="v" id="pc-freedom">—</div></div>
         </div>
+
         <div class="calc-chart">
-          <svg id="pc-chart" viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative combined-capital trajectory"></svg>
-          <div class="cap"><span style="color:var(--gold-bright)">▎</span> $100k-profit point &nbsp; <span style="color:var(--green)">▎</span> freedom point &nbsp;·&nbsp; schematic, not drawn from any account</div>
+          <div class="calc-chart-h">The machine, stacked <span id="pc-buffer-note"></span></div>
+          <svg id="pc-chart-stack" viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative stacked capital: working unit, reserves, compounder over time"></svg>
+          <div class="calc-legend" style="margin-top:8px">
+            <span><i style="background:#3E4F6E"></i> Working unit</span>
+            <span><i style="background:#7E9CC4"></i> Reserves</span>
+            <span><i style="background:var(--gold)"></i> Compounder</span>
+          </div>
+        </div>
+
+        <div class="calc-chart">
+          <div class="calc-chart-h">Cash to use — cumulative draw</div>
+          <svg id="pc-chart-cash" viewBox="0 0 480 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative cumulative cash drawn to use"></svg>
+          <div class="cap"><span style="color:var(--gold-bright)">▎</span> $100k total-value point &nbsp; <span style="color:var(--green)">▎</span> freedom point &nbsp;·&nbsp; schematic, not drawn from any account</div>
         </div>
       </div>
     </div>
