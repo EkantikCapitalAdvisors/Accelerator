@@ -289,44 +289,60 @@
     .edge-table th,.edge-table td{padding:10px 8px;}
   }
 
-  /* ---------- synthetic-PE calculator ---------- */
-  .calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:26px;margin-top:8px;align-items:start;}
-  .calc-panel{border:1px solid var(--line);border-radius:16px;background:var(--card-2);padding:26px 26px 8px;}
-  .calc-panel .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
-  .calc-field{margin-bottom:18px;}
-  .calc-field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:12px;}
-  .calc-field label{font-family:var(--sans);font-size:.9rem;color:var(--text);font-weight:500;}
-  .calc-field .val{font-family:var(--mono);font-size:.92rem;color:var(--gold-bright);font-weight:600;white-space:nowrap;}
-  .calc-field .hint{font-family:var(--mono);font-size:.58rem;letter-spacing:.02em;color:var(--slate-dim);margin-top:6px;line-height:1.5;}
-  .calc-field input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(200,169,81,0.2);outline:none;margin:2px 0;}
-  .calc-field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--navy-deep);box-shadow:0 0 8px rgba(200,169,81,0.5);}
-  .calc-field input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--navy-deep);}
-  .calc-out{display:flex;flex-direction:column;gap:14px;}
-  .calc-headline{border:1px solid var(--line);border-radius:14px;background:linear-gradient(120deg,rgba(200,169,81,0.09),rgba(34,51,90,0.32));padding:22px 24px;}
-  .calc-headline .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:9px;}
-  .calc-headline .big{font-family:var(--mono);font-size:2.15rem;font-weight:600;color:var(--gold-bright);line-height:1;letter-spacing:-.01em;}
-  .calc-headline .sub{font-family:var(--mono);font-size:.7rem;color:var(--slate);margin-top:10px;}
-  .calc-headline .sub b{color:var(--ivory);font-weight:600;}
-  .calc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .calc-card{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:15px 16px;}
-  .calc-card .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:7px;line-height:1.4;}
-  .calc-card .v{font-family:var(--mono);font-size:1.18rem;color:var(--ivory);font-weight:600;}
-  .calc-card .v small{font-size:.62rem;color:var(--slate);font-weight:400;}
-  .calc-chart{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:14px 14px 9px;}
-  .calc-chart svg{width:100%;height:auto;display:block;}
-  .calc-chart .cap{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);text-align:center;margin-top:9px;line-height:1.5;}
-  .calc-formula{font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);line-height:1.75;margin-top:24px;border-left:2px solid var(--line);padding-left:16px;max-width:92ch;}
-  .calc-formula b{color:var(--slate);font-weight:600;}
-  .calc-alloc{margin:2px 0 4px;}
-  .calc-alloc-bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,0.06);}
-  .calc-alloc-bar span{display:block;height:100%;transition:width .3s ease;}
-  .calc-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:9px;font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;color:var(--slate);}
-  .calc-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
-  .calc-legend b{color:var(--ivory);font-weight:600;}
-  .calc-chart-h{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:10px;}
-  .calc-chart-h span{color:var(--gold);}
-  .calc-cards{grid-template-columns:1fr 1fr 1fr;}
-  @media(max-width:860px){ .calc{grid-template-columns:1fr;} .calc-cards{grid-template-columns:1fr 1fr;} }
+  /* ---------- synthetic-PE leverage calculator ---------- */
+  .pe-toggle{display:flex;gap:6px;background:var(--card);border:1px solid var(--line-soft);border-radius:10px;padding:5px;margin:8px 0 18px;}
+  .pe-toggle button{flex:1;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);background:none;border:none;border-radius:7px;padding:11px 10px;cursor:pointer;transition:all .2s;}
+  .pe-toggle button.on{background:var(--gold);color:var(--navy-deep);font-weight:600;}
+  .pe-toggle.sm button{font-size:.64rem;padding:9px 8px;}
+  .pe-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px;}
+  .pe-card{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:14px 15px;}
+  .pe-card.warn{border-color:rgba(217,138,138,0.4);background:rgba(217,138,138,0.05);}
+  .pe-card .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:8px;}
+  .pe-card .v{font-family:var(--mono);font-size:1.32rem;font-weight:600;color:var(--ivory);line-height:1;letter-spacing:-.01em;}
+  .pe-card .v.gold{color:var(--gold-bright);} .pe-card .v.green{color:var(--green);} .pe-card .v.red{color:var(--red);}
+  .pe-summary{border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,rgba(200,169,81,0.07),rgba(34,51,90,0.28));padding:22px 24px;margin-bottom:18px;}
+  .pe-summary .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  .pe-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:16px;}
+  .pe-summary-grid .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:7px;}
+  .pe-summary-grid .v{font-family:var(--mono);font-size:1.5rem;font-weight:600;line-height:1;}
+  .pe-splitbar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,0.06);}
+  .pe-splitbar span{display:block;height:100%;transition:width .4s ease;}
+  .pe-main{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px;align-items:start;}
+  .pe-config{border:1px solid var(--line);border-radius:16px;background:var(--card-2);padding:22px 22px 18px;}
+  .pe-config .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:4px 0 16px;}
+  .pe-field{margin-bottom:15px;} .pe-field.half{margin-bottom:15px;}
+  .pe-field label{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-bottom:7px;}
+  .pe-input{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid var(--line-soft);border-radius:8px;padding:9px 12px;transition:border-color .2s;}
+  .pe-input:focus-within{border-color:var(--gold);}
+  .pe-input span{font-family:var(--mono);font-size:.85rem;color:var(--slate-dim);}
+  .pe-input input{flex:1;width:100%;background:none;border:none;outline:none;color:var(--ivory);font-family:var(--mono);font-size:.95rem;font-weight:600;min-width:0;}
+  .pe-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .pe-derived{border:1px solid var(--line-soft);border-radius:10px;background:var(--card);padding:13px 14px;margin-bottom:15px;font-family:var(--mono);font-size:.66rem;color:var(--slate);}
+  .pe-derived .r{display:flex;justify-content:space-between;margin:4px 0;} .pe-derived .r b{color:var(--ivory);}
+  .pe-out{display:flex;flex-direction:column;gap:16px;}
+  .pe-panel{border:1px solid var(--line-soft);border-radius:14px;background:var(--card);padding:16px 18px;}
+  .pe-panel .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+  .pe-chart svg{width:100%;height:auto;display:block;}
+  .pe-proj{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.74rem;}
+  .pe-proj th{text-align:right;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-dim);font-weight:500;padding:0 8px 9px;border-bottom:1px solid var(--line-soft);}
+  .pe-proj th:first-child,.pe-proj td:first-child{text-align:left;}
+  .pe-proj td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--line-soft);color:var(--slate);}
+  .pe-proj tr:last-child td{border-bottom:none;}
+  .pe-proj tr.hl td{color:var(--ivory);background:rgba(200,169,81,0.05);font-weight:600;}
+  .pe-proj .pos{color:var(--green);} .pe-proj .gold{color:var(--gold-bright);}
+  .pe-foot{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;}
+  .pe-foot .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+  .pe-arch-row{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px;}
+  .pe-arch-row .ic{font-size:1.05rem;line-height:1.2;}
+  .pe-arch-row .t{font-family:var(--sans);font-size:.9rem;color:var(--ivory);font-weight:600;}
+  .pe-arch-row .s{font-family:var(--mono);font-size:.66rem;color:var(--slate);margin-top:2px;}
+  .pe-guard{font-family:var(--mono);font-size:.74rem;color:var(--slate);line-height:1.5;}
+  .pe-guard div{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+  .pe-guard .ok{color:var(--green);} .pe-guard .no{color:var(--red);}
+  .pe-legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:10px;font-family:var(--mono);font-size:.6rem;color:var(--slate);}
+  .pe-legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;}
+  @media(max-width:860px){ .pe-cards{grid-template-columns:1fr 1fr 1fr;} .pe-summary-grid{grid-template-columns:1fr 1fr;} .pe-main{grid-template-columns:1fr;} .pe-foot{grid-template-columns:1fr;} }
+  @media(max-width:560px){ .pe-cards{grid-template-columns:1fr 1fr;} }
 </style>
 </head>
 <body>
@@ -538,122 +554,134 @@
 <section class="block" id="calculator">
   <div class="wrap">
     <span class="sec-num">03 · Model the machine yourself</span>
-    <h2>Set the dials. Watch the machine <em>throw off cash, build reserves, and compound.</em></h2>
+    <h2>The synthetic-PE machine, <em>made literal.</em></h2>
     <p class="intro">
-      An interactive, <strong>illustrative</strong> model of the full synthetic-PE architecture. You commit a small
-      <strong>working unit</strong> against a <strong>risk-capital reserve</strong>; the cash-flow engine scales on the
-      buffer ladder and throws off realized cash, which you split three ways — <strong>compound it, rebuild reserves,
-      or draw it as cash to use.</strong> Every input is yours; the full math is shown below.
-      <strong>This is a hypothetical model, not a forecast or a promise of any outcome.</strong>
+      This is the whole thesis as one calculator. Borrow prudently (<strong>synthetic leverage</strong>) and split the
+      capital into two sleeves: an <strong>income sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Cash-Flow Engine</a>, throwing off monthly yield that
+      services the debt — and a <strong>compounding sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Compounding Engine</a>, run at the
+      10×-in-7-years pace (<strong>≈38.5% CAGR</strong>). The income covers the carry; the compounding builds the equity;
+      at payoff you own a de-levered, multiplied portfolio. <strong>That is how PE-type wealth is manufactured</strong> — hypothetical and illustrative, not a forecast.
     </p>
 
-    <div class="calc">
-      <!-- INPUTS -->
-      <div class="calc-panel">
-        <div class="ph">Capital structure</div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-W">Working unit (deployed)</label><span class="val" id="pc-W-v">$10,000</span></div>
-          <input type="range" id="pc-W" min="2000" max="50000" step="1000" value="10000">
-          <div class="hint">The slice actually at risk via the buffer ladder.</div>
-        </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-res">Risk-capital reserve</label><span class="val" id="pc-res-v">1.0× · $10,000</span></div>
-          <input type="range" id="pc-res" min="0" max="6" step="0.5" value="1">
-          <div class="hint">Held in reserve, never deployed — the cushion that protects against ruin and unlocks higher buffer rungs. <b id="pc-committed-v">Total committed: $20,000</b>.</div>
-        </div>
+    <div class="pe-toggle">
+      <button type="button" id="pe-mode-standard" class="on">⚖️ Standard</button>
+      <button type="button" id="pe-mode-max">🔥 Max Personal Use</button>
+    </div>
 
-        <div class="ph" style="margin-top:24px">Cash-flow engine</div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-trades">Trades / month</label><span class="val" id="pc-trades-v">28 / mo</span></div>
-          <input type="range" id="pc-trades" min="4" max="60" step="1" value="28">
-        </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-R">Expectancy per trade</label><span class="val" id="pc-R-v">+0.33R</span></div>
-          <input type="range" id="pc-R" min="0.05" max="0.80" step="0.01" value="0.33">
-          <div class="hint">Live engine to date: <b style="color:var(--gold-bright)">+0.33R</b> over 134 fills.</div>
-        </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-risk">Risk per trade (1R)</label><span class="val" id="pc-risk-v">$150</span></div>
-          <input type="range" id="pc-risk" min="50" max="1000" step="25" value="150">
-          <div class="hint">Risk on a single fill at the base of the buffer ladder (buffer caps at 3×).</div>
-        </div>
+    <!-- HEADLINE METRIC CARDS -->
+    <div class="pe-cards">
+      <div class="pe-card"><div class="k">Borrowed</div><div class="v gold" id="pe-borrowed">—</div></div>
+      <div class="pe-card"><div class="k">Invested</div><div class="v gold" id="pe-invested">—</div></div>
+      <div class="pe-card"><div class="k">Mo. Pmt</div><div class="v" id="pe-pmt">—</div></div>
+      <div class="pe-card"><div class="k">Mo. Income</div><div class="v green" id="pe-income">—</div></div>
+      <div class="pe-card" id="pe-card-cov"><div class="k">Coverage</div><div class="v" id="pe-coverage">—</div></div>
+      <div class="pe-card"><div class="k">OOP / mo</div><div class="v" id="pe-oop">—</div></div>
+    </div>
 
-        <div class="ph" style="margin-top:24px">Split each month's realized cash</div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-comp">→ Compounding engine</label><span class="val" id="pc-comp-v">25%</span></div>
-          <input type="range" id="pc-comp" min="0" max="70" step="5" value="25">
-        </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-resbuild">→ Rebuild reserves</label><span class="val" id="pc-resbuild-v">15%</span></div>
-          <input type="range" id="pc-resbuild" min="0" max="70" step="5" value="15">
-        </div>
-        <div class="calc-alloc">
-          <div class="calc-alloc-bar">
-            <span id="pc-bar-comp" style="background:var(--gold)"></span>
-            <span id="pc-bar-res" style="background:#7E9CC4"></span>
-            <span id="pc-bar-use" style="background:var(--green)"></span>
-          </div>
-          <div class="calc-legend">
-            <span><i style="background:var(--gold)"></i> Compound <b id="pc-lg-comp">25%</b></span>
-            <span><i style="background:#7E9CC4"></i> Reserves <b id="pc-lg-res">15%</b></span>
-            <span><i style="background:var(--green)"></i> Cash to use <b id="pc-lg-use">60%</b></span>
+    <!-- PAYOFF SUMMARY -->
+    <div class="pe-summary">
+      <div class="ph">▣ Payoff summary</div>
+      <div class="pe-summary-grid">
+        <div><div class="k">Total interest</div><div class="v gold" id="pe-interest" style="color:var(--gold)">—</div></div>
+        <div><div class="k">Total cost</div><div class="v red" id="pe-cost">—</div></div>
+        <div><div class="k">Payoff in</div><div class="v" id="pe-payoff" style="color:var(--green)">—</div></div>
+        <div><div class="k">Wealth created</div><div class="v" id="pe-wealth" style="color:var(--gold-bright)">—</div></div>
+      </div>
+      <div class="pe-splitbar">
+        <span id="pe-split-comp" style="background:linear-gradient(90deg,#5B7BB4,#7E9CC4)"></span>
+        <span id="pe-split-inc" style="background:linear-gradient(90deg,#4E8E64,var(--green))"></span>
+      </div>
+      <div class="pe-legend" style="justify-content:flex-start;margin-top:10px">
+        <span><i style="background:#7E9CC4;width:9px;height:9px;border-radius:2px"></i> Compounding <b id="pe-split-comp-l" style="color:var(--ivory)">—</b></span>
+        <span><i style="background:var(--green);width:9px;height:9px;border-radius:2px"></i> Income <b id="pe-split-inc-l" style="color:var(--ivory)">—</b></span>
+      </div>
+    </div>
+
+    <!-- CONFIG + OUTPUT -->
+    <div class="pe-main">
+      <!-- CONFIG -->
+      <div class="pe-config">
+        <div class="ph">⚙ Configuration</div>
+
+        <div class="pe-field">
+          <label>Payment strategy</label>
+          <div class="pe-toggle sm" style="margin:0">
+            <button type="button" id="pe-strat-io">Interest-Only</button>
+            <button type="button" id="pe-strat-amort" class="on">Amortized</button>
           </div>
         </div>
 
-        <div class="ph" style="margin-top:24px">Compounding &amp; horizon</div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-mult">Compounding multiple / yr</label><span class="val" id="pc-mult-v">2.00× / yr</span></div>
-          <input type="range" id="pc-mult" min="1" max="8" step="0.25" value="2">
-          <div class="hint">Cooperative-regime envelope 2×–8×. Bounded at 4× of contributed here; 16× is the design cap.</div>
+        <div class="pe-field">
+          <label for="pe-borrow">Amount to borrow</label>
+          <div class="pe-input"><span>$</span><input type="number" id="pe-borrow" value="100000" min="0" step="5000"></div>
         </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-months">Time horizon</label><span class="val" id="pc-months-v">36 mo</span></div>
-          <input type="range" id="pc-months" min="6" max="60" step="1" value="36">
+        <div class="pe-field">
+          <label for="pe-pu">Personal use</label>
+          <div class="pe-input"><span>$</span><input type="number" id="pe-pu" value="0" min="0" step="2500"></div>
         </div>
-        <div class="calc-field">
-          <div class="row"><label for="pc-oblig">Monthly obligations</label><span class="val" id="pc-oblig-v">$2,000</span></div>
-          <input type="range" id="pc-oblig" min="0" max="20000" step="250" value="2000">
-          <div class="hint">Your monthly cost of living — the freedom point is when cash-to-use covers it.</div>
+
+        <div class="pe-derived">
+          <div class="r"><span>Net invested</span><b id="pe-netinvested">$100,000</b></div>
+          <div class="r"><span>Allocation</span><b id="pe-alloc">65% comp / 35% inc</b></div>
+          <div class="pe-splitbar" style="margin-top:9px;height:7px"><span id="pe-sleeve-comp" style="background:#7E9CC4"></span><span id="pe-sleeve-inc" style="background:var(--green)"></span></div>
+        </div>
+
+        <div class="pe-row2">
+          <div class="pe-field"><label for="pe-rate">Interest rate</label><div class="pe-input"><input type="number" id="pe-rate" value="8" min="0" step="0.25"><span>%</span></div></div>
+          <div class="pe-field"><label for="pe-term">Loan term</label><div class="pe-input"><input type="number" id="pe-term" value="7" min="1" max="30" step="1"><span>yrs</span></div></div>
+        </div>
+        <div class="pe-row2">
+          <div class="pe-field"><label for="pe-yield">Monthly yield</label><div class="pe-input"><input type="number" id="pe-yield" value="1.5" min="0" step="0.1"><span>%</span></div></div>
+          <div class="pe-field"><label for="pe-cagr">Target CAGR</label><div class="pe-input"><input type="number" id="pe-cagr" value="38.5" min="0" step="0.5"><span>%</span></div></div>
+        </div>
+        <div class="pe-row2">
+          <div class="pe-field"><label for="pe-comp">Comp. alloc.</label><div class="pe-input"><input type="number" id="pe-comp" value="65" min="0" max="100" step="5"><span>%</span></div></div>
+          <div class="pe-field"><label for="pe-reserves">Reserves</label><div class="pe-input"><input type="number" id="pe-reserves" value="6" min="0" step="1"><span>mo</span></div></div>
         </div>
       </div>
 
-      <!-- OUTPUTS -->
-      <div class="calc-out">
-        <div class="calc-headline">
-          <div class="k">In the machine at <span id="pc-horizon-label">36 mo</span> · working unit + reserves + compounder</div>
-          <div class="big" id="pc-ending">—</div>
-          <div class="sub"><b id="pc-multiple">—</b> on committed capital · plus <b id="pc-drawn-head">—</b> already drawn as cash to use</div>
-        </div>
-
-        <div class="calc-cards">
-          <div class="calc-card"><div class="k">Reserve buffer<br>at horizon</div><div class="v" id="pc-res-out">—</div></div>
-          <div class="calc-card"><div class="k">Compounder equity<br>at horizon</div><div class="v"><span id="pc-co">—</span> <small id="pc-co-mult"></small></div></div>
-          <div class="calc-card"><div class="k">Cash to use<br>drawn cumulatively</div><div class="v" id="pc-drawn">—</div></div>
-          <div class="calc-card"><div class="k">Total value created<br>capital growth + cash drawn</div><div class="v" id="pc-tvc">—</div></div>
-          <div class="calc-card"><div class="k">First $100k<br>in total value</div><div class="v" id="pc-100k">—</div></div>
-          <div class="calc-card"><div class="k">Freedom point<br>cash-to-use ≥ obligations</div><div class="v" id="pc-freedom">—</div></div>
-        </div>
-
-        <div class="calc-chart">
-          <div class="calc-chart-h">The machine, stacked <span id="pc-buffer-note"></span></div>
-          <svg id="pc-chart-stack" viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative stacked capital: working unit, reserves, compounder over time"></svg>
-          <div class="calc-legend" style="margin-top:8px">
-            <span><i style="background:#3E4F6E"></i> Working unit</span>
-            <span><i style="background:#7E9CC4"></i> Reserves</span>
-            <span><i style="background:var(--gold)"></i> Compounder</span>
+      <!-- OUTPUT -->
+      <div class="pe-out">
+        <div class="pe-panel pe-chart">
+          <div class="ph">📈 Equity trajectory</div>
+          <svg id="pe-chart" viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative equity trajectory: portfolio, net equity, and debt over the loan term"></svg>
+          <div class="pe-legend">
+            <span><i style="background:#5B7BB4"></i> Portfolio</span>
+            <span><i style="background:var(--green)"></i> Net equity</span>
+            <span><i style="background:var(--red)"></i> Debt</span>
           </div>
         </div>
-
-        <div class="calc-chart">
-          <div class="calc-chart-h">Cash to use — cumulative draw</div>
-          <svg id="pc-chart-cash" viewBox="0 0 480 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative cumulative cash drawn to use"></svg>
-          <div class="cap"><span style="color:var(--gold-bright)">▎</span> $100k total-value point &nbsp; <span style="color:var(--green)">▎</span> freedom point &nbsp;·&nbsp; schematic, not drawn from any account</div>
+        <div class="pe-panel">
+          <div class="ph">▦ Projections</div>
+          <table class="pe-proj">
+            <thead><tr><th>Period</th><th>Net equity</th><th>Portfolio</th><th>Debt</th><th>IRR</th><th>Multiple</th></tr></thead>
+            <tbody id="pe-proj-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <p class="calc-formula" id="pc-formula"></p>
-    <span class="compliance-pill">Hypothetical model · illustrative · not a forecast or promise</span>
+    <!-- ARCHITECTURE + GUARDRAILS -->
+    <div class="pe-foot">
+      <div class="pe-panel">
+        <div class="ph">Three-engine architecture</div>
+        <div class="pe-arch-row"><span class="ic">🏛</span><div><div class="t">Leverage</div><div class="s" id="pe-arch-lev">—</div></div></div>
+        <div class="pe-arch-row"><span class="ic">📗</span><div><div class="t">Income · Cash-Flow Engine</div><div class="s" id="pe-arch-inc">—</div></div></div>
+        <div class="pe-arch-row"><span class="ic">🚀</span><div><div class="t">Compounding · Compounding Engine</div><div class="s" id="pe-arch-comp">—</div></div></div>
+      </div>
+      <div class="pe-panel">
+        <div class="ph">Risk guardrails</div>
+        <div class="pe-guard">
+          <div id="pe-g-cov">—</div>
+          <div id="pe-g-oop">—</div>
+          <div id="pe-g-res">—</div>
+          <div><span class="ok">✓</span> Auto-delever at 30% drawdown</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="calc-formula" id="pe-formula"></p>
+    <span class="compliance-pill">Hypothetical model · illustrative · involves real leverage and risk of loss · not a forecast, promise, or advice to borrow</span>
   </div>
 </section>
 
