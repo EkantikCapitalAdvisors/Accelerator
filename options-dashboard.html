@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Dashboard · $10k → $100k · Ekantik Capital</title>
+    <meta name="description" content="Live instrumentation of the Ekantik options strategy in the $10,000 → $100,000 challenge — KPIs, equity curve, monthly P&L, and every fill. Public. No login.">
+    <meta name="theme-color" content="#1B2A4A">
+    <link rel="canonical" href="https://accelerator.ekantikcapital.com/options-dashboard.html">
+    <meta name="robots" content="index, follow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="/">ECA<span class="nav__brand-sub">Ekantik Capital</span></a>
+            <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link" href="/">The Challenge</a></li>
+                <li><a class="nav__link" href="/experiment.html">Futures dashboard</a></li>
+                <li><a class="nav__link nav__link--active" href="/options-dashboard.html" aria-current="page">Options dashboard</a></li>
+                <li><a class="nav__link" href="/convexity.html">Convexity</a></li>
+                <li><a class="nav__link" href="/#reach-out">Reach out</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="cftc-banner" role="note">
+        <div class="cftc-banner__inner">
+            <span class="cftc-banner__tag">Options track &middot; $10k &rarr; $100k race</span>
+            <span class="cftc-banner__body">The options side of the $10,000 &rarr; $100,000 challenge. This is a <strong>model portfolio</strong> &mdash; premium-at-risk, educational only &mdash; ahead of its 6/30/2026 live-capital launch; every alert is posted to the public <strong>#option-alerts</strong> Discord channel. <strong>Nothing on this page constitutes an offer or a solicitation.</strong> Hypothetical and projected figures are not realized results. Past performance is not indicative of future results.</span>
+        </div>
+    </div>
+
+    <!-- ═══ DASHBOARD HEADER ═══ -->
+    <section class="block dash-head" id="dash-top">
+        <div class="container">
+            <div class="eyebrow">Options Strategy &middot; Live Instrumentation</div>
+            <h1 class="dash-h1">The options track, instrumented.</h1>
+            <p class="dash-lede">The short-dated long-options strategy in the $10k &rarr; $100k race &mdash; KPIs, equity curve, and every fill, computed live from the option-alerts journal. <a href="/#race" class="link-gold">Back to the race &rarr;</a></p>
+            <div class="experiment-status experiment-status--dash" role="status" aria-label="Options track state">
+                <span class="experiment-status__items">
+                    <span><span class="dot"></span> Live</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Balance: <strong id="od-bal">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>To $100k: <strong id="od-pct">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Net P&amp;L: <strong id="od-net">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Fills: <strong id="od-sample">—</strong></span>
+                </span>
+            </div>
+
+            <!-- Progress to $100k -->
+            <div style="margin-top:22px;max-width:760px">
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">
+                    <span>$10,000 start</span><span>$100,000 target</span>
+                </div>
+                <div style="height:16px;background:#E5E0D0;border-radius:999px;overflow:hidden">
+                    <span id="od-progress-fill" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#1B2A4A,#C8A951);transition:width .6s ease"></span>
+                </div>
+                <p style="font-size:13px;color:var(--muted);margin-top:8px"><strong id="od-progress-label">—</strong> of the way to $100,000.</p>
+            </div>
+
+            <div class="dash-head__cta">
+                <a href="https://discord.gg/NqVYxpY3jR" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Follow every options trade <span class="arr">&rarr;</span></a>
+                <span class="dash-head__cta-note">Each alert &mdash; entry, strike, stop, and exit &mdash; is posted to the public #option-alerts channel in real time. 1R = premium paid at entry.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ KPI GRID ═══ -->
+    <section class="block dash-block" id="dash-kpis">
+        <div class="container">
+            <div class="component-label">Key Performance Indicators &middot; live · all-time</div>
+            <p class="dash-block__sub">Edge, magnitudes, and risk over the full closed-fill sample. 1R is the premium paid at entry on a single long-option position. Sample is pre-asymptotic until 100 qualified trades.</p>
+            <div class="dash-kpi-grid">
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Net P&amp;L</span><span class="dash-kpi-value dash-kpi-value--pos" id="od-netpl">&mdash;</span><span class="dash-kpi-sub">cumulative realized</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Win rate</span><span class="dash-kpi-value" id="od-wr">&mdash;</span><span class="dash-kpi-sub" id="od-wr-sub">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Profit factor</span><span class="dash-kpi-value" id="od-pf">&mdash;</span><span class="dash-kpi-sub">gross profit / gross loss</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">R-expectancy</span><span class="dash-kpi-value" id="od-rexp">&mdash;</span><span class="dash-kpi-sub">per unit of premium risked</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">EV / trade</span><span class="dash-kpi-value" id="od-ev">&mdash;</span><span class="dash-kpi-sub">avg net per trade</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Closed fills</span><span class="dash-kpi-value" id="od-count">&mdash;</span><span class="dash-kpi-sub" id="od-wl">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg win</span><span class="dash-kpi-value dash-kpi-value--pos" id="od-avgwin">&mdash;</span><span class="dash-kpi-sub">mean winning fill</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg loss</span><span class="dash-kpi-value dash-kpi-value--neg" id="od-avgloss">&mdash;</span><span class="dash-kpi-sub">mean losing fill</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Best fill</span><span class="dash-kpi-value dash-kpi-value--pos" id="od-best">&mdash;</span><span class="dash-kpi-sub" id="od-best-id">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Worst fill</span><span class="dash-kpi-value dash-kpi-value--neg" id="od-worst">&mdash;</span><span class="dash-kpi-sub" id="od-worst-id">&mdash;</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Loss streak (max)</span><span class="dash-kpi-value" id="od-streak">&mdash;</span><span class="dash-kpi-sub">longest consecutive losses</span></div>
+                <div class="dash-kpi-card"><span class="dash-kpi-label">Avg risk / trade</span><span class="dash-kpi-value" id="od-avgrisk">&mdash;</span><span class="dash-kpi-sub">1R · premium paid</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ EQUITY CURVE ═══ -->
+    <section class="block dash-block">
+        <div class="container">
+            <div class="component-label">Equity curve &middot; $10,000 base</div>
+            <p class="dash-block__sub">Account balance ($10,000 + cumulative realized P&amp;L) after each closed fill, in sequence. Dashed line marks the $100,000 target.</p>
+            <div style="position:relative;height:340px;background:#1B2A4A;border-radius:10px;padding:14px 10px;margin-top:6px">
+                <canvas id="od-equity"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ MONTHLY P&L ═══ -->
+    <section class="block dash-block">
+        <div class="container">
+            <div class="component-label">Monthly realized profit</div>
+            <p class="dash-block__sub">Net dollar result per month from closed fills. Green = profitable month, red = losing month.</p>
+            <div style="position:relative;height:280px;background:#1B2A4A;border-radius:10px;padding:14px 10px;margin-top:6px">
+                <canvas id="od-monthly"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ EVERY FILL ═══ -->
+    <section class="block dash-block">
+        <div class="container">
+            <div class="component-label">Every fill &middot; options trade log</div>
+            <div class="data-table__wrap data-table__wrap--scroll" style="max-height:560px">
+                <table class="data-table dash-trade-table">
+                    <thead>
+                        <tr><th>ID</th><th>Date / Time</th><th>Underlying</th><th>Strike</th><th>DTE</th><th>Side</th><th class="num">Entry</th><th class="num">Exit</th><th class="num">$ P&amp;L</th><th>Result</th><th class="num">R</th></tr>
+                    </thead>
+                    <tbody id="od-trade-body"><tr><td colspan="11" class="muted italic">Loading…</td></tr></tbody>
+                </table>
+            </div>
+            <p class="muted" style="font-size:12px;margin-top:8px"><em>Each row is a single closed long-option position. Sample is pre-asymptotic until 100 qualified trades.</em></p>
+        </div>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__disclosure">
+                <p class="footer__canon"><strong>Disclosures</strong></p>
+                <p>Ekantik Capital Advisors LLC is the operator and publisher of this page. The options track shown is a <strong>model portfolio for educational purposes only</strong> &mdash; premium-at-risk, not live capital &mdash; ahead of its 6/30/2026 live launch. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or any interest in any investment product.</strong> Options carry substantial risk, including total loss of premium. Past performance is not indicative of future results. Sample is pre-asymptotic.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+      (function () {
+        const toggle = document.getElementById('nav-toggle');
+        const links = document.getElementById('nav-links');
+        if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('nav__links--open'));
+      })();
+    </script>
+    <script src="js/render-options-dash.js"></script>
+</body>
+</html>

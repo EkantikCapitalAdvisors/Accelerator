@@ -31,7 +31,8 @@
             <ul class="nav__links" id="nav-links">
                 <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
                 <li><a class="nav__link nav__link--active" href="/" aria-current="page">The Challenge</a></li>
-                <li><a class="nav__link" href="/experiment.html">Dashboard</a></li>
+                <li><a class="nav__link" href="/experiment.html">Futures dashboard</a></li>
+                <li><a class="nav__link" href="/options-dashboard.html">Options dashboard</a></li>
                 <li><a class="nav__link" href="/convexity.html">Convexity</a></li>
                 <li><a class="nav__link" href="#reach-out">Reach out</a></li>
             </ul>
@@ -105,6 +106,53 @@
             <p class="hero-bridge__text">This is Tense-2 work &mdash; the execution that takes $10,000 to $100,000 as soon as the regime allows. The doublings it produces are Tense-3 evidence &mdash; the multi-year arc the doctrine describes. The point of running this in public is to make the bridge between the two visible. <a href="https://doubles.ekantikcapital.com#mechanisms">Reality Calibration Protocol &#8599;</a></p>
         </div>
     </div>
+
+    <!-- ═══ THE RACE TO $100K · Futures vs Options ═══ -->
+    <section class="block" id="race" style="background:var(--navy,#1B2A4A);color:#FAF8F5">
+        <div class="container section-inner">
+            <div class="eyebrow" style="color:#C8A951">The Race to $100,000 &middot; Live</div>
+            <h2 class="h-section" style="color:#FAF8F5">Two strategies. One target. <em style="color:#C8A951">Which gets there first?</em></h2>
+            <p class="lede" style="color:#cdd3df">Both start at <strong>$10,000</strong> and run the same <strong>$10k &rarr; $100k</strong> challenge in parallel &mdash; one on <strong>ES/MES futures</strong>, one on <strong>short-dated options</strong>. Every fill is public and the standings recalculate live as trades close. <span id="race-gap" style="color:#C8A951;font-weight:600">&mdash;</span></p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:24px">
+                <!-- Futures -->
+                <div id="race-futures" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,169,81,0.25);border-radius:14px;padding:22px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                        <span style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C8A951">Futures &middot; ES/MES</span>
+                        <span id="race-futures-badge" style="font-size:11px;font-weight:700;color:#1B2A4A;background:#C8A951;border-radius:999px;padding:3px 10px"></span>
+                    </div>
+                    <div id="race-futures-bal" style="font-family:var(--font-mono,monospace);font-size:34px;font-weight:700;color:#FAF8F5;letter-spacing:-0.01em">—</div>
+                    <div style="height:10px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;margin:12px 0">
+                        <span id="race-futures-fill" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#C8A951,#e6c977);transition:width .6s ease"></span>
+                    </div>
+                    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#cdd3df">
+                        <span><strong id="race-futures-pct" style="color:#FAF8F5">—</strong> of $100k</span>
+                        <span>Net <strong id="race-futures-net" style="color:#FAF8F5">—</strong></span>
+                        <span><strong id="race-futures-n" style="color:#FAF8F5">—</strong> fills</span>
+                    </div>
+                    <a class="btn btn-gold btn--sm" href="/experiment.html" style="margin-top:16px;display:inline-block">Futures dashboard &rarr;</a>
+                </div>
+                <!-- Options -->
+                <div id="race-options" style="background:rgba(255,255,255,0.04);border:1px solid rgba(200,169,81,0.25);border-radius:14px;padding:22px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                        <span style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C8A951">Options &middot; Convexity</span>
+                        <span id="race-options-badge" style="font-size:11px;font-weight:700;color:#1B2A4A;background:#C8A951;border-radius:999px;padding:3px 10px"></span>
+                    </div>
+                    <div id="race-options-bal" style="font-family:var(--font-mono,monospace);font-size:34px;font-weight:700;color:#FAF8F5;letter-spacing:-0.01em">—</div>
+                    <div style="height:10px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;margin:12px 0">
+                        <span id="race-options-fill" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#C8A951,#e6c977);transition:width .6s ease"></span>
+                    </div>
+                    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#cdd3df">
+                        <span><strong id="race-options-pct" style="color:#FAF8F5">—</strong> of $100k</span>
+                        <span>Net <strong id="race-options-net" style="color:#FAF8F5">—</strong></span>
+                        <span><strong id="race-options-n" style="color:#FAF8F5">—</strong> fills</span>
+                    </div>
+                    <a class="btn btn-gold btn--sm" href="/options-dashboard.html" style="margin-top:16px;display:inline-block">Options dashboard &rarr;</a>
+                </div>
+            </div>
+            <p style="font-size:12px;color:#94A3B8;margin-top:16px"><em>Both tracks start from a $10,000 working base; balance = $10,000 + cumulative realized P&amp;L. Futures is live operator capital; the options track is a model portfolio (premium-at-risk, educational) ahead of its 6/30 live launch. Hypothetical and projected figures are not realized results.</em></p>
+        </div>
+    </section>
 
     <!-- ═══ SECTION 01 — THE METHOD · Disclosed Protocol (ACC-REPOS-FINAL-V1) ═══ -->
     <section class="block method-section" id="method">
@@ -1286,6 +1334,7 @@
     <script src="js/render-edges.js"></script>
     <script src="js/render-experiment.js"></script>
     <script src="js/render-operator.js"></script>
+    <script src="js/render-race.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
