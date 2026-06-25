@@ -237,13 +237,13 @@
 
             <div class="capital-arch">
                 <figure class="capital-arch__figure">
-                    <svg viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ultra-safe growth pyramid: Buffer 6 to 10 times at base, Positive Expectancy 1 times in middle, Compounding Buffer 2 times at apex">
+                    <svg viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reserve-first capital pyramid: Buffer 6 to 10 times at base, Positive Expectancy 1 times in middle, Scaling buffer 2 times at apex">
                         <rect width="460" height="380" fill="#FAF8F5" rx="8"/>
                         <text x="230" y="32" text-anchor="middle" font-family="Cormorant Garamond" font-size="18" font-weight="600" fill="#1B2A4A">Ultra-safe growth · the capital architecture</text>
 
                         <!-- Top tier · Compounding Buffer (2×) -->
                         <polygon points="230,52 154,160 306,160" fill="#94A3B8" stroke="#1B2A4A" stroke-width="1"/>
-                        <text x="230" y="120" text-anchor="middle" font-family="DM Sans" font-size="11" font-weight="600" fill="#FAF8F5">Compounding Buffer</text>
+                        <text x="230" y="120" text-anchor="middle" font-family="DM Sans" font-size="11" font-weight="600" fill="#FAF8F5">Scaling buffer</text>
                         <text x="230" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#FAF8F5">2× &middot; ~$20K</text>
 
                         <!-- Middle tier · Positive Expectancy (1×) -->
@@ -265,13 +265,13 @@
                     <h4 class="capital-arch__h">Implementation on this challenge</h4>
                     <dl class="capital-arch__list">
                         <dt><span class="capital-arch__tag capital-arch__tag--mid">1×</span> Positive Expectancy unit</dt>
-                        <dd><strong>$10,000 working unit</strong> &mdash; the active capital deployed in the market. The operator&rsquo;s position size is anchored here so positive expectancy can express across a meaningful sample (R-expectancy +0.30R/trade live, 84 trades).</dd>
+                        <dd><strong>$10,000 working unit</strong> &mdash; the active capital deployed in the market. The operator&rsquo;s position size is anchored here so positive expectancy can express across a meaningful sample (R-expectancy +0.33R/trade live, 134 trades).</dd>
 
                         <dt><span class="capital-arch__tag capital-arch__tag--base">6&ndash;10×</span> Risk-capital buffer</dt>
                         <dd><strong>$60,000 &ndash; $100,000 held in reserve</strong>, <em>not</em> deployed in active positions. This is what makes the architecture work: ordinary drawdowns on the $10K unit are absorbed by the buffer behind it; the operator never trades scared because the active capital is a fraction of the risk capital.</dd>
 
-                        <dt><span class="capital-arch__tag capital-arch__tag--top">2×</span> Compounding buffer</dt>
-                        <dd><strong>~$20,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is what funds position-size scale-up: after the separate 1-ES trial run banks the first $10K, each further $10K of cumulative profit advances the buffer ladder one rung &mdash; Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap).</dd>
+                        <dt><span class="capital-arch__tag capital-arch__tag--top">2×</span> Scaling buffer</dt>
+                        <dd><strong>~$20,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is the cushion that lets the engine <strong>size up its monthly cash safely</strong>: after the 1-ES trial run banks the first $10K, each further $10K of cumulative profit advances the ladder one rung &mdash; Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). More throughput, not more risk per unit. <em>(The 10&times; <strong>growth</strong> compounding is the <a href="/convexity.html" class="link-inline">Compounding Engine</a>&rsquo;s job; here, scaling only raises the income the reserve can support.)</em></dd>
                     </dl>
                 </div>
             </div>
