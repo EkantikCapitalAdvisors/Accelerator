@@ -141,13 +141,66 @@
                 <td>${escapeHtml(t.expiry || '—')}</td>
                 <td>${escapeHtml(t.option_type || t.direction || '—')}</td>
                 <td class="num mono">${t.entry_price != null ? '$' + t.entry_price : '—'}</td>
-                <td class="num mono">—</td>
+                <td class="num mono">${t.exit_price != null ? '$' + t.exit_price : '—'}</td>
                 <td class="num mono" style="color:${pl >= 0 ? '#2D5016' : '#DC2626'}">${(pl >= 0 ? '+$' : '−$') + Math.abs(pl)}</td>
                 <td>${pl > 0 ? 'Win' : 'Loss'}</td>
                 <td class="num mono">${r != null ? fmtR(r) : '—'}</td>
                 <td class="trade-note">${note || '—'}</td>
             </tr>`;
         }).join('');
+    }
+
+    function renderExtraStats(s, trades) {
+        if ($('cx-net')) {
+            $('cx-net').textContent = s.n ? fmtSignedUSD(s.cum) : '—';
+            $('cx-net').style.color = s.cum >= 0 ? '#C8A951' : '#DC2626';
+        }
+        if ($('cx-count')) $('cx-count').textContent = s.n ? String(s.n) : '—';
+        if ($('cx-wl') && s.n) {
+            const w = trades.filter(t => (t.dollar_pl || 0) > 0).length;
+            $('cx-wl').textContent = `${w} W / ${s.n - w} L`;
+        }
+        if (s.n) {
+            const best = trades.reduce((a, t) => (t.dollar_pl || 0) > (a.dollar_pl || 0) ? t : a);
+            const worst = trades.reduce((a, t) => (t.dollar_pl || 0) < (a.dollar_pl || 0) ? t : a);
+            if ($('cx-best'))    { $('cx-best').textContent = fmtSignedUSD(best.dollar_pl); $('cx-best').style.color = '#C8A951'; }
+            if ($('cx-best-id')) $('cx-best-id').textContent = `${best.trade_num} · ${best.ticker}`;
+            if ($('cx-worst'))    { $('cx-worst').textContent = fmtSignedUSD(worst.dollar_pl); $('cx-worst').style.color = '#DC2626'; }
+            if ($('cx-worst-id')) $('cx-worst-id').textContent = `${worst.trade_num} · ${worst.ticker}`;
+        }
+    }
+
+    let equityChart = null;
+    function renderEquity(trades) {
+        const cv = $('cx-equity');
+        if (!cv || !root.Chart || !trades || !trades.length) return;
+        let cum = 0;
+        const labels = [], data = [];
+        trades.forEach(t => { cum += (t.dollar_pl || 0); labels.push(t.trade_num); data.push(Math.round(cum)); });
+        if (equityChart) equityChart.destroy();
+        equityChart = new root.Chart(cv, {
+            type: 'line',
+            data: { labels, datasets: [{
+                label: 'Cumulative $', data,
+                borderColor: '#C8A951', backgroundColor: 'rgba(200,169,81,0.12)',
+                borderWidth: 2.5, fill: true, tension: 0.15,
+                pointRadius: 3, pointHoverRadius: 5,
+                pointBackgroundColor: data.map(v => v >= 0 ? '#C8A951' : '#DC2626'),
+                pointBorderColor: '#1B2A4A'
+            }] },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: c => 'Running total: ' + (c.parsed.y >= 0 ? '+$' : '−$') + Math.abs(c.parsed.y).toLocaleString() } }
+                },
+                scales: {
+                    x: { ticks: { font: { family: 'JetBrains Mono', size: 10 }, color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+                    y: { ticks: { callback: v => '$' + v.toLocaleString(), font: { family: 'JetBrains Mono', size: 10 }, color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.06)' } }
+                }
+            }
+        });
     }
 
     async function init() {
@@ -157,8 +210,10 @@
         s._buf = bufferProgress(trades);
         renderHero(s);
         renderKpis(s);
+        renderExtraStats(s, trades);
         renderGate(s);
         renderBuffer(s._buf);
+        renderEquity(trades);
         renderTradeLog(trades);
 
         // Reach-out form wiring (mirror the experiment page).

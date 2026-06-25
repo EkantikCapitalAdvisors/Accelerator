@@ -456,6 +456,20 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
                 <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">R-Expectancy</p><p class="stat-card__value" id="cx-rexp">—</p><p class="stat-card__caption">per unit of risk deployed</p></div>
                 <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">Avg risk / trade</p><p class="stat-card__value" id="cx-avgrisk">—</p><p class="stat-card__caption">premium paid per trade · 1R</p></div>
             </div>
+            <div class="edge-triplet" style="margin-top:14px">
+                <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">Net P&amp;L</p><p class="stat-card__value" id="cx-net">—</p><p class="stat-card__caption">cumulative · closed fills</p></div>
+                <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">Closed trades</p><p class="stat-card__value" id="cx-count">—</p><p class="stat-card__caption" id="cx-wl">— W / — L</p></div>
+                <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">Best fill</p><p class="stat-card__value" id="cx-best">—</p><p class="stat-card__caption" id="cx-best-id">—</p></div>
+                <div class="stat-card stat-card--lg stat-card--dark"><p class="stat-card__label">Worst fill</p><p class="stat-card__value" id="cx-worst">—</p><p class="stat-card__caption" id="cx-worst-id">—</p></div>
+            </div>
+
+            <!-- Equity curve -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Cumulative P&amp;L &middot; model-portfolio track record</div>
+            <p class="component-sub" style="margin-bottom:14px">Every closed long-option fill, in sequence, from the published option-alerts journal. This is the <strong>model-portfolio record leading into the live experiment</strong> &mdash; educational, premium-at-risk only. Hover a point for the running total.</p>
+            <div style="position:relative;height:300px;background:#1B2A4A;border-radius:10px;padding:14px 10px">
+                <canvas id="cx-equity"></canvas>
+            </div>
 
             <!-- 03 · Edge Landscape -->
             <div class="component-block-divider"></div>
@@ -595,7 +609,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
         <div class="section__inner section__inner--wide">
             <div class="section-eyebrow">08 · Live Evidence</div>
             <h2 class="defense-h">Live, from the operator&rsquo;s options account.</h2>
-            <p class="defense-open">Every metric below is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. Pre-launch (until 6/30) the panels show baseline / arming state.</p>
+            <p class="defense-open">The panels below are computed live from the <strong>model-portfolio track record</strong> published in the option-alerts journal &mdash; educational, premium-at-risk only, recalculated as each fill closes. <strong>Live-capital deployment opens 6/30/2026</strong>; until the sample reaches 80 qualified trades the Expression Gate is armed but not yet binding.</p>
 
             <!-- Buffer progress widget -->
             <div class="component-block-divider"></div>
