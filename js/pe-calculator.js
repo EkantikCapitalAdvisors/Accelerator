@@ -17,6 +17,15 @@
     let strat = 'amort';     // amort | io
     const COV_FLOOR = 0.25;  // serviceability floor used to size Max Personal Use
 
+    // Money-weighted IRR (monthly cashflows) annualized, via bisection. Returns null if no sign change.
+    function solveIRR(cf) {
+        const npv = r => cf.reduce((a, c, i) => a + c / Math.pow(1 + r, i), 0);
+        let lo = -0.95, hi = 3.0;
+        if (npv(lo) * npv(hi) > 0) return null;
+        for (let k = 0; k < 200; k++) { const m = (lo + hi) / 2; if (npv(m) > 0) lo = m; else hi = m; }
+        return (Math.pow(1 + (lo + hi) / 2, 12) - 1) * 100;
+    }
+
     const fmtUSD = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
     const fmtK = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 100000 ? 0 : 0) + 'k' : fmtUSD(v); };
     const fmtKx = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 10000 ? 0 : 1) + 'k' : fmtUSD(v); };
@@ -51,11 +60,11 @@
 
         const portAt = m => comp0 * Math.pow(1 + gm, m) + inc0;
         const debtAt = m => {
-            if (strat === 'io') return (m >= n ? 0 : p.borrow);
+            if (strat === 'io') return p.borrow; // interest-only: full principal balloons, outstanding through the term
             if (r > 0) return Math.max(0, p.borrow * Math.pow(1 + r, m) - pmt * ((Math.pow(1 + r, m) - 1) / r));
             return Math.max(0, p.borrow - (p.borrow / n) * m);
         };
-        const neAt = m => portAt(m) - (strat === 'io' ? p.borrow : debtAt(m)); // IO: balloon outstanding through term
+        const neAt = m => portAt(m) - debtAt(m);
 
         const series = [];
         for (let m = 0; m <= n; m++) series.push({ m, port: portAt(m), debt: debtAt(m), ne: neAt(m) });
@@ -67,8 +76,12 @@
             const m = Math.round(years * 12);
             const port = portAt(m), debt = debtAt(m), ne = neAt(m);
             const mult = invested > 0 ? port / invested : 0;
-            const irr = (invested > 0 && ne > 0 && years > 0) ? (Math.pow(ne / invested, 1 / years) - 1) * 100 : 0;
-            return { years, port, debt, ne, mult, irr };
+            // True levered-equity IRR: money-weighted on the cash actually committed
+            // (reserves up front + monthly carry) vs the net equity realized at exit.
+            const cf = [-reservesDollar];
+            for (let k = 1; k <= m; k++) cf.push(income - pmt);
+            cf[m] += ne + reservesDollar;
+            return { years, port, debt, ne, mult, irr: solveIRR(cf) };
         }
 
         return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar,
@@ -155,7 +168,7 @@
             return '<tr' + (term ? ' class="hl"' : '') + '><td>' + (term ? '🏆 ' : '') + yr + 'Y</td>' +
                 '<td class="gold">' + fmtKx(r.ne) + '</td><td>' + fmtKx(r.port) + '</td>' +
                 '<td' + (r.debt <= 1 ? ' class="pos"' : '') + '>' + (r.debt <= 1 ? '$0' : fmtKx(r.debt)) + '</td>' +
-                '<td class="pos">' + r.irr.toFixed(1) + '%</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
+                '<td class="pos">' + (r.irr == null ? '—' : r.irr.toFixed(1) + '%') + '</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
         }).join('');
 
         // architecture
@@ -173,9 +186,9 @@
             '<b>How it computes:</b> you borrow ' + fmtUSD(p.borrow) + ' at ' + p.rate + '% over ' + p.term + ' years and invest ' + fmtUSD(c.invested) +
             ' — split <b style="color:#7E9CC4">' + Math.round(compPct) + '% into the compounding sleeve</b> (grows at ' + p.cagr + '% CAGR) and <b style="color:#6FB77F">' + Math.round(100 - compPct) + '% into the income sleeve</b> (yields ' + p.yield + '%/mo = ' + fmtUSD(c.income) + '/mo). ' +
             'The income services the debt; the shortfall (' + fmtUSD(c.oop) + '/mo out of pocket) is your carry. ' +
-            (strat === 'amort' ? 'Amortized: the loan is paid to $0 by the term, so at payoff net equity = the full portfolio.' : 'Interest-only: the principal balloons at the term, so net equity = portfolio − the loan until it is refinanced or paid.') +
-            ' Multiple = portfolio ÷ invested; IRR = annualized growth of net equity on invested capital. ' +
-            '<b>Hypothetical and illustrative</b> — real leverage carries real risk, including loss beyond the capital invested. Not a forecast, projection, or advice to borrow.';
+            (strat === 'amort' ? 'Amortized: the loan is paid to $0 by the term, so at payoff net equity = the full portfolio.' : 'Interest-only: only interest is paid, so the full principal balloons at the term — a real obligation to refinance or repay from the portfolio, not a free ride.') +
+            ' Multiple = portfolio ÷ invested. <b>IRR is the true levered return</b> — money-weighted on the cash you actually commit (reserves up front, monthly carry) versus the net equity realized — so it runs well above the ' + p.cagr + '% asset CAGR because the ' + p.rate + '% borrow cost sits below it. <b>Leverage amplifies in both directions.</b> ' +
+            '<b>The reality these smooth lines omit:</b> real returns arrive with volatility, not as a curve. A ' + p.cagr + '% CAGR sustained for ' + p.term + ' years is an aspirational, unproven assumption; the compounding engine has no live record yet. With leverage, an ordinary drawdown can trigger a margin call or forced deleveraging and can wipe the equity — loss beyond the capital invested is possible. Hypothetical and illustrative; not a forecast, projection, or advice to borrow or trade.';
     }
 
     function bindToggle(aId, bId, set) {
