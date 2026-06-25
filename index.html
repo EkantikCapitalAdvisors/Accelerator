@@ -288,6 +288,36 @@
     .edge-table{font-size:.78rem;}
     .edge-table th,.edge-table td{padding:10px 8px;}
   }
+
+  /* ---------- synthetic-PE calculator ---------- */
+  .calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:26px;margin-top:8px;align-items:start;}
+  .calc-panel{border:1px solid var(--line);border-radius:16px;background:var(--card-2);padding:26px 26px 8px;}
+  .calc-panel .ph{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+  .calc-field{margin-bottom:18px;}
+  .calc-field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:12px;}
+  .calc-field label{font-family:var(--sans);font-size:.9rem;color:var(--text);font-weight:500;}
+  .calc-field .val{font-family:var(--mono);font-size:.92rem;color:var(--gold-bright);font-weight:600;white-space:nowrap;}
+  .calc-field .hint{font-family:var(--mono);font-size:.58rem;letter-spacing:.02em;color:var(--slate-dim);margin-top:6px;line-height:1.5;}
+  .calc-field input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(200,169,81,0.2);outline:none;margin:2px 0;}
+  .calc-field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--navy-deep);box-shadow:0 0 8px rgba(200,169,81,0.5);}
+  .calc-field input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--navy-deep);}
+  .calc-out{display:flex;flex-direction:column;gap:14px;}
+  .calc-headline{border:1px solid var(--line);border-radius:14px;background:linear-gradient(120deg,rgba(200,169,81,0.09),rgba(34,51,90,0.32));padding:22px 24px;}
+  .calc-headline .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:9px;}
+  .calc-headline .big{font-family:var(--mono);font-size:2.15rem;font-weight:600;color:var(--gold-bright);line-height:1;letter-spacing:-.01em;}
+  .calc-headline .sub{font-family:var(--mono);font-size:.7rem;color:var(--slate);margin-top:10px;}
+  .calc-headline .sub b{color:var(--ivory);font-weight:600;}
+  .calc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .calc-card{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:15px 16px;}
+  .calc-card .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:7px;line-height:1.4;}
+  .calc-card .v{font-family:var(--mono);font-size:1.18rem;color:var(--ivory);font-weight:600;}
+  .calc-card .v small{font-size:.62rem;color:var(--slate);font-weight:400;}
+  .calc-chart{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:14px 14px 9px;}
+  .calc-chart svg{width:100%;height:auto;display:block;}
+  .calc-chart .cap{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);text-align:center;margin-top:9px;line-height:1.5;}
+  .calc-formula{font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);line-height:1.75;margin-top:24px;border-left:2px solid var(--line);padding-left:16px;max-width:92ch;}
+  .calc-formula b{color:var(--slate);font-weight:600;}
+  @media(max-width:860px){ .calc{grid-template-columns:1fr;} .calc-cards{grid-template-columns:1fr 1fr;} }
 </style>
 </head>
 <body>
@@ -308,6 +338,7 @@
       <a href="https://doubles.ekantikcapital.com">Doctrine</a>
       <a href="#mechanism">The Machine</a>
       <a href="#engines">The Engines</a>
+      <a href="#calculator">Calculator</a>
       <a href="/cash-flow-engine.html">Cash-Flow Engine</a>
       <a href="https://accelerator.ekantikcapital.com/convexity.html">Compounding Engine</a>
     </div>
@@ -485,10 +516,101 @@
   </div>
 </section>
 
-<!-- 03 · THE FREEDOM ARC -->
+<!-- 03 · THE CALCULATOR -->
+<section class="block" id="calculator">
+  <div class="wrap">
+    <span class="sec-num">03 · Model the machine yourself</span>
+    <h2>Set the dials. Watch the <em>two engines</em> drive toward the freedom point.</h2>
+    <p class="intro">
+      An interactive, <strong>illustrative</strong> model of the synthetic-PE architecture: the cash-flow engine
+      throws off realized cash and scales on the buffer ladder; a slice of that cash feeds the compounding engine,
+      which grows under a capped doubling regime. Every input is yours to set — and the full math is shown below.
+      <strong>This is a hypothetical model, not a forecast or a promise of any outcome.</strong>
+    </p>
+
+    <div class="calc">
+      <!-- INPUTS -->
+      <div class="calc-panel">
+        <div class="ph">Your inputs</div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-cap0">Working capital</label><span class="val" id="pc-cap0-v">$10,000</span></div>
+          <input type="range" id="pc-cap0" min="2000" max="100000" step="1000" value="10000">
+          <div class="hint">The capital you commit to the machine.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-trades">Cash-flow trades / month</label><span class="val" id="pc-trades-v">28 / mo</span></div>
+          <input type="range" id="pc-trades" min="4" max="60" step="1" value="28">
+          <div class="hint">Qualified fills the cash-flow engine takes per month.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-R">Expectancy per trade</label><span class="val" id="pc-R-v">+0.33R</span></div>
+          <input type="range" id="pc-R" min="0.05" max="0.80" step="0.01" value="0.33">
+          <div class="hint">Live cash-flow engine to date: <b style="color:var(--gold-bright)">+0.33R</b> over 134 fills.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-risk">Risk per trade (1R)</label><span class="val" id="pc-risk-v">$200</span></div>
+          <input type="range" id="pc-risk" min="50" max="1000" step="25" value="200">
+          <div class="hint">Dollars risked on a single fill at the base of the buffer ladder.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-route">Route to compounding engine</label><span class="val" id="pc-route-v">30%</span></div>
+          <input type="range" id="pc-route" min="0" max="100" step="5" value="30">
+          <div class="hint">Share of realized cash fed into the compounding engine. The rest is kept free.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-mult">Compounding multiple / yr</label><span class="val" id="pc-mult-v">2.00× / yr</span></div>
+          <input type="range" id="pc-mult" min="1" max="8" step="0.25" value="2">
+          <div class="hint">Cooperative-regime envelope 2×–8×. Bounded at 5× of contributed here; 16× is the design cap.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-months">Time horizon</label><span class="val" id="pc-months-v">36 mo</span></div>
+          <input type="range" id="pc-months" min="6" max="60" step="1" value="36">
+          <div class="hint">How long the machine runs.</div>
+        </div>
+
+        <div class="calc-field">
+          <div class="row"><label for="pc-oblig">Monthly obligations</label><span class="val" id="pc-oblig-v">$3,000</span></div>
+          <input type="range" id="pc-oblig" min="0" max="20000" step="500" value="3000">
+          <div class="hint">Your monthly cost of living — used to locate the freedom point.</div>
+        </div>
+      </div>
+
+      <!-- OUTPUTS -->
+      <div class="calc-out">
+        <div class="calc-headline">
+          <div class="k">Illustrative ending capital · <span id="pc-horizon-label">36 mo</span></div>
+          <div class="big" id="pc-ending">—</div>
+          <div class="sub"><b id="pc-multiple">—</b> on working capital · <b id="pc-profit">—</b> total profit</div>
+        </div>
+        <div class="calc-cards">
+          <div class="calc-card"><div class="k">Cash-flow engine<br>realized cash</div><div class="v" id="pc-cf">—</div></div>
+          <div class="calc-card"><div class="k">Compounding engine<br>grown equity</div><div class="v"><span id="pc-co">—</span> <small id="pc-co-mult"></small></div></div>
+          <div class="calc-card"><div class="k">First $100k<br>in profit</div><div class="v" id="pc-100k">—</div></div>
+          <div class="calc-card"><div class="k">Freedom point<br>cash ≥ obligations</div><div class="v" id="pc-freedom">—</div></div>
+        </div>
+        <div class="calc-chart">
+          <svg id="pc-chart" viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative combined-capital trajectory"></svg>
+          <div class="cap"><span style="color:var(--gold-bright)">▎</span> $100k-profit point &nbsp; <span style="color:var(--green)">▎</span> freedom point &nbsp;·&nbsp; schematic, not drawn from any account</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="calc-formula" id="pc-formula"></p>
+    <span class="compliance-pill">Hypothetical model · illustrative · not a forecast or promise</span>
+  </div>
+</section>
+
+<!-- 04 · THE FREEDOM ARC -->
 <section class="block" id="freedom">
   <div class="wrap">
-    <span class="sec-num">03 · What "free" actually means here</span>
+    <span class="sec-num">04 · What "free" actually means here</span>
     <h2>Freedom is not a number you are promised. It is the point where the <em>machine covers you</em>.</h2>
     <p class="intro">
       Private equity's payoff is ownership: the debt is gone, the equity is yours. Run synthetically on a
@@ -558,7 +680,7 @@
 <!-- 04 · WHY CREDIBLE -->
 <section class="block" id="credible">
   <div class="wrap">
-    <span class="sec-num">04 · The difference between a structure and a story</span>
+    <span class="sec-num">05 · The difference between a structure and a story</span>
     <h2>Most people who touch these instruments lose. We <em>tell you that</em> — then show you our own math, live.</h2>
     <p class="intro">
       The cemetery is full of people who ran convex instruments without an architecture. What separates this is
@@ -616,7 +738,7 @@
 <!-- 05 · OPERATOR -->
 <section class="block" id="operator">
   <div class="wrap">
-    <span class="sec-num">05 · The operator</span>
+    <span class="sec-num">06 · The operator</span>
     <div class="operator">
       <div class="av">HD</div>
       <div>
@@ -636,7 +758,7 @@
 <!-- 06 · ENGAGE -->
 <section class="block" id="engage">
   <div class="wrap">
-    <span class="sec-num">06 · Two ways to engage</span>
+    <span class="sec-num">07 · Two ways to engage</span>
 
     <div class="urgency">
       The cash-flow engine is <span>live now</span>. The compounding engine opens <span>June 30, 2026</span>.
@@ -751,5 +873,6 @@
   });
 </script>
 <script src="js/render-synthetic-pe.js"></script>
+<script src="js/pe-calculator.js"></script>
 </body>
 </html>
