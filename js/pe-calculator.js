@@ -37,8 +37,8 @@
             pu: Math.max(0, num('pe-pu', 0)),
             rate: Math.max(0, num('pe-rate', 8)),
             term: Math.max(1, num('pe-term', 7)),
-            yield: Math.max(0, num('pe-yield', 1.5)),
-            cagr: Math.max(0, num('pe-cagr', 38.5)),
+            yield: Math.max(0, num('pe-yield', 2)),
+            cagr: Math.max(0, num('pe-cagr', 26)),
             comp: Math.min(100, Math.max(0, num('pe-comp', 65))),
             reserves: Math.max(0, num('pe-reserves', 6))
         };
