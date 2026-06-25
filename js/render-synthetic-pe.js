@@ -1,14 +1,15 @@
 // =====================================================
-// Synthetic PE front door — live engine numbers.
+// Synthetic PE front door — live engine numbers + the two challenges.
 // Self-contained (this page has its own styles, no site data layer).
-// Fetches both trade journals, populates the two engine stat blocks and
-// the "$100k proof point" progress bars (cumulative profit / $100k, kept
-// separate per engine). Re-polls every 60s; pauses while the tab is hidden.
+//   • Cash-flow engine challenge: finish net-positive EVERY MONTH.
+//     → shows months-green / total and the current month's running P&L.
+//   • Compounding engine challenge: take $10k → $100k as fast as possible.
+//     → shows balance ($10k base + net) and % of the way to $100k.
+// Re-polls every 60s; pauses while the tab is hidden. NOT a forecast.
 // =====================================================
 (function (root) {
     'use strict';
     const $ = id => document.getElementById(id);
-    const TARGET = 100000;
 
     async function fetchJSON(url) {
         try {
@@ -18,39 +19,61 @@
             return Array.isArray(j) ? j : [];
         } catch (e) { return null; }
     }
+    function net(trades) { return trades.reduce((a, t) => a + (t.dollar_pl || 0), 0); }
     function stats(trades) {
-        const net = trades.reduce((a, t) => a + (t.dollar_pl || 0), 0);
+        const n = net(trades);
         const Rs = trades.map(t => (t.risk_dollars > 0 ? (t.dollar_pl || 0) / t.risk_dollars : null)).filter(x => x != null);
         const r = Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null;
-        return { n: trades.length, net, r };
+        return { n: trades.length, net: n, r };
     }
-    function fmtSigned(v) { return (v >= 0 ? '+$' : '−$') + Math.abs(Math.round(v)).toLocaleString(); }
-    function fmtR(v) { return v == null ? '—' : (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + 'R'; }
-
-    function setText(id, v) { const e = $(id); if (e) e.textContent = v; }
-    function setBar(pctId, fillId, net) {
-        const pct = Math.max(0, Math.min(100, net / TARGET * 100));
-        setText(pctId, pct.toFixed(1) + '%');
-        const f = $(fillId); if (f) f.style.width = Math.max(pct, 0).toFixed(1) + '%';
+    function monthKey(t) {
+        const s = t.entry_time || '';
+        if (/^\d{4}-\d{2}/.test(s)) return s.slice(0, 7);              // "2026-02-04 ..." -> "2026-02"
+        const d = (t.trade_date || '').split('/');                    // "2/4/2026"
+        if (d.length === 3) return d[2] + '-' + ('0' + d[0]).slice(-2);
+        return null;
     }
+    function monthly(trades) {
+        const map = {};
+        trades.forEach(t => { const k = monthKey(t); if (k) map[k] = (map[k] || 0) + (t.dollar_pl || 0); });
+        const keys = Object.keys(map).sort();
+        const positive = keys.filter(k => map[k] > 0).length;
+        const current = keys.length ? map[keys[keys.length - 1]] : 0;
+        return { total: keys.length, positive: positive, current: current, pct: keys.length ? positive / keys.length * 100 : 0 };
+    }
+    const fmtSigned = v => (v >= 0 ? '+$' : '−$') + Math.abs(Math.round(v)).toLocaleString();
+    const fmtUSD = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
+    const fmtR = v => v == null ? '—' : (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + 'R';
+    const setText = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+    const setW = (id, pct) => { const e = $(id); if (e) e.style.width = Math.max(0, Math.min(100, pct)).toFixed(1) + '%'; };
 
     async function render() {
         const [f, o] = await Promise.all([
             fetchJSON('data/tenx_trades.json'),
             fetchJSON('data/options_trades.json')
         ]);
+
+        // --- Cash-flow engine: stats card + "green every month" challenge ---
         if (f) {
             const s = stats(f);
             setText('sp-cf-trades', String(s.n));
             setText('sp-cf-net', fmtSigned(s.net));
             setText('sp-cf-r', fmtR(s.r));
-            setBar('sp-cf-pct', 'sp-cf-fill', s.net);
+            const m = monthly(f);
+            setText('sp-cf-pct', m.positive + ' / ' + m.total);
+            setW('sp-cf-fill', m.pct);
+            setText('sp-cf-month', fmtSigned(m.current));
         }
+
+        // --- Compounding engine: stats card + "$10k -> $100k" challenge ---
         if (o) {
             const s = stats(o);
             setText('sp-co-net', fmtSigned(s.net));
             setText('sp-co-trades', String(s.n));
-            setBar('sp-co-pct', 'sp-co-fill', s.net);
+            const bal = 10000 + s.net;
+            setText('sp-co-bal', fmtUSD(bal));
+            setText('sp-co-pct', (bal / 100000 * 100).toFixed(0) + '% of $100k');
+            setW('sp-co-fill', bal / 100000 * 100);
         }
     }
 
