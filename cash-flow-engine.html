@@ -107,6 +107,75 @@
         </div>
     </div>
 
+    <!-- ═══ THE INCOME MECHANISM · buffer-first, level monthly draw ═══ -->
+    <section style="background:#111C33;color:#E8ECF3;padding:62px 0;border-bottom:1px solid rgba(148,163,184,0.14)">
+      <div class="container section-inner" style="font-family:'DM Sans',system-ui,sans-serif">
+
+        <!-- 3 protection cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+          <div style="border:1px solid rgba(148,163,184,0.16);border-radius:14px;background:rgba(255,255,255,0.025);padding:24px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.7rem;font-weight:600;color:#E0BE63;line-height:1">$50,000</div>
+            <div style="font-weight:700;color:#FAF8F5;margin:8px 0 9px">Principal intact</div>
+            <p style="font-size:.86rem;color:#94A3B8;line-height:1.55;margin:0">The base is never drawn for income — the model draws only from <strong style="color:#cdd3df">realized profit</strong>, never from capital.</p>
+          </div>
+          <div style="border:1px solid rgba(148,163,184,0.16);border-radius:14px;background:rgba(255,255,255,0.025);padding:24px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:600;color:#6FB77F;line-height:1">$500–$1,250 · $2,500</div>
+            <div style="font-weight:700;color:#FAF8F5;margin:8px 0 9px">Daily · weekly max loss</div>
+            <p style="font-size:.86rem;color:#94A3B8;line-height:1.55;margin:0">Broker-enforced hard caps — about <strong style="color:#cdd3df">1–2.5% daily</strong> and <strong style="color:#cdd3df">5% weekly</strong> of your $50,000 base. Losses can't run past these.</p>
+          </div>
+          <div style="border:1px solid rgba(200,169,81,0.3);border-radius:14px;background:rgba(200,169,81,0.05);padding:24px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:#E0BE63;line-height:1">Reserve</div>
+            <div style="font-weight:700;color:#FAF8F5;margin:8px 0 9px">Funded before any draw</div>
+            <p style="font-size:.86rem;color:#94A3B8;line-height:1.55;margin:0">A full reserve is <strong style="color:#cdd3df">banked first</strong>, then keeps funding distributions through soft patches and stand-downs. <strong style="color:#E0BE63">It is the load-bearing part of the machine.</strong></p>
+          </div>
+        </div>
+
+        <!-- the rule -->
+        <div style="max-width:760px;margin:26px auto 0;text-align:center;border:1px solid rgba(148,163,184,0.14);border-radius:14px;background:rgba(255,255,255,0.02);padding:24px 28px">
+          <p style="font-size:1.02rem;color:#cdd3df;line-height:1.6;margin:0 0 12px"><span style="color:#C8A951">≡</span> On a $50,000 account the model draws a fixed <strong style="color:#E0BE63">3% ($1,500) each month</strong>, and <strong style="color:#FAF8F5">every dollar of profit above that builds the reserve</strong> — the buffer and principal protection.</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#6B7A93;line-height:1.6;margin:0">The 3% distribution is a target, not a guarantee, governed by the live edge and the reserve, and is never a claim on your principal. Figures are illustrative.</p>
+        </div>
+
+        <!-- buffer-first headline -->
+        <div style="text-align:center;margin:54px auto 0;max-width:720px">
+          <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:#E0BE63;border:1px solid rgba(200,169,81,0.4);border-radius:999px;padding:7px 16px;margin-bottom:20px">◈ Buffer-first</span>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.4vw,2.5rem);font-weight:600;color:#FAF8F5;line-height:1.18;margin:0 0 16px">Build a $4,500 Buffer, Then a Level Monthly Rhythm</h2>
+          <p style="font-size:1.04rem;color:#94A3B8;line-height:1.62;margin:0">The moment the engine banks a <strong style="color:#E0BE63">$4,500 buffer</strong> — about three months of draws — the model's fixed <strong style="color:#cdd3df">$1,500/month (3%)</strong> begins. The buffer keeps the rhythm level, and <strong style="color:#cdd3df">surplus above it is paid out at year-end</strong>. Principal is never touched.</p>
+        </div>
+
+        <!-- 3 stages -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:38px">
+          <div style="border:1px solid rgba(148,163,184,0.14);border-radius:14px;background:rgba(255,255,255,0.02);padding:24px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#6B7A93;margin-bottom:18px">Stage 1 · Build the buffer</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;height:64px;margin-bottom:16px">
+              <span style="flex:1;height:38%;background:rgba(200,169,81,0.45);border-radius:3px"></span>
+              <span style="flex:1;height:64%;background:rgba(200,169,81,0.7);border-radius:3px"></span>
+              <span style="flex:1;height:100%;background:#C8A951;border-radius:3px"></span>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:#cdd3df"><strong style="color:#E0BE63">Until $4,500 banked</strong> · $0 drawn</div>
+            <p style="font-size:.84rem;color:#94A3B8;line-height:1.5;margin:8px 0 0">Profit first builds the buffer — about three months of draws, held as a cushion.</p>
+          </div>
+          <div style="border:1px solid rgba(148,163,184,0.14);border-radius:14px;background:rgba(255,255,255,0.02);padding:24px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#6B7A93;margin-bottom:18px">Stage 2 · Level monthly draw</div>
+            <div style="height:64px;display:flex;align-items:center;margin-bottom:16px"><span style="width:100%;height:14px;border:1.5px solid #6FB77F;border-radius:999px;background:rgba(111,183,127,0.12)"></span></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:#cdd3df">Level <strong style="color:#6FB77F">$1,500 / month</strong></div>
+            <p style="font-size:.84rem;color:#94A3B8;line-height:1.5;margin:8px 0 0">The moment $4,500 is banked, the model's fixed 3% begins — the buffer keeps it level in soft months.</p>
+          </div>
+          <div style="border:1px solid rgba(148,163,184,0.14);border-radius:14px;background:rgba(255,255,255,0.02);padding:24px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#6B7A93;margin-bottom:18px">Stage 3 · Year-end surplus</div>
+            <div style="height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:8px"><span style="width:44px;height:44px;border-radius:50%;background:rgba(200,169,81,0.15);border:1px solid rgba(200,169,81,0.4);display:grid;place-items:center;font-size:1.3rem">🎁</span></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#E0BE63;text-align:center;margin-bottom:12px">surplus payout</div>
+            <div style="font-weight:700;color:#FAF8F5">Everything above the buffer</div>
+            <p style="font-size:.84rem;color:#94A3B8;line-height:1.5;margin:8px 0 0">All profit beyond the $1,500/mo draw and the $4,500 cushion is paid out at year-end.</p>
+          </div>
+        </div>
+
+        <!-- reserve emphasis / three-way -->
+        <p style="max-width:820px;margin:30px auto 0;padding:20px 26px;border-left:3px solid #C8A951;background:linear-gradient(90deg,rgba(200,169,81,0.07),transparent);border-radius:0 10px 10px 0;font-size:.98rem;color:#cdd3df;line-height:1.62">Every dollar the engine earns splits three ways: the <strong style="color:#6FB77F">income draw</strong> you live on, the <strong style="color:#7E9CC4">surplus that compounds</strong>, and the <strong style="color:#E0BE63">reserve</strong> that sits beneath both. <strong style="color:#FAF8F5">The reserve is what makes the other two safe</strong> — it funds the draw through losing months and keeps the engine from ever touching principal. Build the reserve first; the rest follows.</p>
+
+      </div>
+    </section>
+
 
     <!-- ═══ SECTION 01 — THE METHOD · Disclosed Protocol (ACC-REPOS-FINAL-V1) ═══ -->
     <section class="block method-section" id="method">

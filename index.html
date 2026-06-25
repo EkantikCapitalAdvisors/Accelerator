@@ -607,10 +607,11 @@
     <h2>The synthetic-PE machine, <em>made literal.</em></h2>
     <p class="intro">
       This is the whole thesis as one calculator. Borrow prudently (<strong>synthetic leverage</strong>) and split the
-      capital into two sleeves: an <strong>income sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Cash-Flow Engine</a>, throwing off <strong>~2%/mo</strong> that
-      services the debt — and a <strong>compounding sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Compounding Engine</a>, run at a realistic
-      <strong>~26% CAGR</strong> that compounds $10k toward $100k over time. The income covers the carry; the compounding builds the equity;
-      at payoff you own a de-levered, multiplied portfolio. <strong>That is how PE-type wealth is manufactured</strong> — hypothetical and illustrative, not a forecast.
+      capital into two sleeves — held up by a reserve. An <strong>income sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Cash-Flow Engine</a>, throwing off <strong>~2%/mo</strong> that
+      services the debt — a <strong>compounding sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Compounding Engine</a>, run at a realistic
+      <strong>~26% CAGR</strong> that compounds $10k toward $100k over time — and a <strong>reserve, funded first</strong>, that carries the machine through losing months.
+      The income covers the carry; the compounding builds the equity; <strong>the reserve keeps both alive</strong>. At payoff you own a de-levered, multiplied
+      portfolio. <strong>That is how PE-type wealth is manufactured</strong> — hypothetical and illustrative, not a forecast.
     </p>
 
     <div class="pe-toggle">
@@ -640,11 +641,14 @@
       <div class="pe-splitbar">
         <span id="pe-split-comp" style="background:linear-gradient(90deg,#5B7BB4,#7E9CC4)"></span>
         <span id="pe-split-inc" style="background:linear-gradient(90deg,#4E8E64,var(--green))"></span>
+        <span id="pe-split-res" style="background:linear-gradient(90deg,#9A7B3A,var(--gold))"></span>
       </div>
       <div class="pe-legend" style="justify-content:flex-start;margin-top:10px">
-        <span><i style="background:#7E9CC4;width:9px;height:9px;border-radius:2px"></i> Compounding <b id="pe-split-comp-l" style="color:var(--ivory)">—</b></span>
-        <span><i style="background:var(--green);width:9px;height:9px;border-radius:2px"></i> Income <b id="pe-split-inc-l" style="color:var(--ivory)">—</b></span>
+        <span><i style="background:#7E9CC4;width:9px;height:9px;border-radius:2px"></i> Compounding sleeve <b id="pe-split-comp-l" style="color:var(--ivory)">—</b></span>
+        <span><i style="background:var(--green);width:9px;height:9px;border-radius:2px"></i> Income sleeve <b id="pe-split-inc-l" style="color:var(--ivory)">—</b></span>
+        <span><i style="background:var(--gold);width:9px;height:9px;border-radius:2px"></i> Reserve <b id="pe-split-res-l" style="color:var(--ivory)">—</b></span>
       </div>
+      <p style="font-family:var(--mono);font-size:.64rem;color:var(--slate-dim);margin-top:12px;line-height:1.65;max-width:78ch">The <b style="color:var(--gold)">reserve is funded first</b> — it is the load-bearing part of the machine. It carries the debt through losing months and lets the compounding sleeve ride drawdowns without being sold at the bottom. Income services the carry; compounding builds the equity; <b style="color:var(--gold)">the reserve is what keeps both alive.</b></p>
     </div>
 
     <!-- CONFIG + OUTPUT -->
@@ -663,7 +667,7 @@
 
         <div class="pe-field">
           <label for="pe-borrow">Amount to borrow</label>
-          <div class="pe-input"><span>$</span><input type="number" id="pe-borrow" value="100000" min="0" step="5000"></div>
+          <div class="pe-input"><span>$</span><input type="number" id="pe-borrow" value="50000" min="0" step="5000"></div>
         </div>
         <div class="pe-field">
           <label for="pe-pu">Personal use</label>

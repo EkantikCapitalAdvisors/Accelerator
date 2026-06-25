@@ -33,7 +33,7 @@
     function readVals() {
         const num = (id, d) => { const v = parseFloat($(id).value); return isFinite(v) ? v : d; };
         return {
-            borrow: Math.max(0, num('pe-borrow', 100000)),
+            borrow: Math.max(0, num('pe-borrow', 50000)),
             pu: Math.max(0, num('pe-pu', 0)),
             rate: Math.max(0, num('pe-rate', 8)),
             term: Math.max(1, num('pe-term', 7)),
@@ -146,10 +146,17 @@
         $('pe-payoff').textContent = strat === 'amort' ? (p.term + 'y 0m') : (p.term + 'y (term)');
         $('pe-wealth').textContent = fmtKx(c.wealth);
         const compPct = c.invested > 0 ? c.comp0 / c.invested * 100 : 0;
-        $('pe-split-comp').style.width = compPct + '%';
-        $('pe-split-inc').style.width = (100 - compPct) + '%';
-        $('pe-split-comp-l').textContent = fmtUSD(c.comp0) + ' (' + Math.round(compPct) + '%)';
-        $('pe-split-inc-l').textContent = fmtUSD(c.inc0) + ' (' + Math.round(100 - compPct) + '%)';
+        // payoff-summary breakdown is THREE-way over total committed (compounding / income / reserve)
+        const total3 = c.comp0 + c.inc0 + c.reservesDollar;
+        const cP = total3 > 0 ? c.comp0 / total3 * 100 : 0;
+        const iP = total3 > 0 ? c.inc0 / total3 * 100 : 0;
+        const rP = total3 > 0 ? c.reservesDollar / total3 * 100 : 0;
+        $('pe-split-comp').style.width = cP + '%';
+        $('pe-split-inc').style.width = iP + '%';
+        if ($('pe-split-res')) $('pe-split-res').style.width = rP + '%';
+        $('pe-split-comp-l').textContent = fmtUSD(c.comp0) + ' (' + Math.round(cP) + '%)';
+        $('pe-split-inc-l').textContent = fmtUSD(c.inc0) + ' (' + Math.round(iP) + '%)';
+        if ($('pe-split-res-l')) $('pe-split-res-l').textContent = fmtUSD(c.reservesDollar) + ' (' + Math.round(rP) + '%)';
 
         // derived (config)
         $('pe-netinvested').textContent = fmtUSD(c.invested);
