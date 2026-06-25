@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cash-Flow Engine · Ekantik Capital</title>
+    <meta name="description" content="The Cash-Flow Engine of the Synthetic PE machine — a live, disclosed-protocol ES futures strategy that throws off realized cash. One goal: take a $10,000 working unit to $100,000 in profit, as soon as possible, without ever running the risk of ruin. Public method, public trades, public falsifiability.">
+    <meta name="theme-color" content="#1B2A4A">
+    <link rel="canonical" href="https://accelerator.ekantikcapital.com/cash-flow-engine.html">
+    <meta property="og:title" content="The Cash-Flow Engine · Ekantik Capital">
+    <meta property="og:description" content="The Cash-Flow Engine of the Synthetic PE machine — a live ES futures strategy that throws off realized cash. $10,000 → $100,000 in profit, without running the risk of ruin. Public method, public trades, public falsifiability.">
+    <meta property="og:url" content="https://accelerator.ekantikcapital.com/cash-flow-engine.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+    <!-- ═══ REGION 1 — NAV + TRUST STRIP ═══ -->
+    <header class="nav" role="banner">
+        <div class="nav__inner">
+            <a class="nav__brand" href="https://accelerator.ekantikcapital.com/">
+                ECA<span class="nav__brand-sub">Ekantik Capital</span>
+            </a>
+            <button type="button" id="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="nav__links" id="nav-links">
+                <li><a class="nav__link" href="https://doubles.ekantikcapital.com">Doctrine</a></li>
+                <li><a class="nav__link" href="/">The Machine</a></li>
+                <li><a class="nav__link nav__link--active" href="/cash-flow-engine.html" aria-current="page">Cash-Flow Engine</a></li>
+                <li><a class="nav__link" href="/convexity.html">Compounding Engine</a></li>
+                <li><a class="nav__link" href="/experiment.html">Dashboard</a></li>
+                <li><a class="nav__link" href="#reach-out">Reach out</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ═══ EXPERIMENT DISCLOSURE BANNER ═══ -->
+    <div class="cftc-banner" role="note">
+        <div class="cftc-banner__inner">
+            <span class="cftc-banner__tag">Live challenge &middot; Publicly observable</span>
+            <span class="cftc-banner__body">This page describes a live trading challenge conducted on the operator&rsquo;s own capital, with realized results publicly logged in the Ekantik Discord journal. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or interest in any investment product.</strong> Trajectory figures shown are hypothetical and projected, not realized. Past performance is not indicative of future results.</span>
+        </div>
+    </div>
+
+    <div class="trust-strip" role="status" aria-live="polite">
+        <div class="trust-strip__inner">
+            <div class="trust-strip__group">
+                <span><span class="live-dot"></span>LIVE</span>
+                <span class="trust-strip__sep">|</span>
+                <span>Last fill: <strong id="trust-last-fill">—</strong></span>
+            </div>
+            <div class="trust-strip__group">
+                <span>Updated: <strong id="trust-updated">—</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SECTION 00 — HERO · The Experiment Thesis (ACC-REPOS-FINAL-V1) ═══ -->
+    <header class="hero hero--casino" id="hero" aria-labelledby="hero-h1">
+        <div class="hero__inner-rb">
+            <div class="hero-eyebrow">The Cash-Flow Engine &middot; Live &middot; Publicly Observable</div>
+            <h1 id="hero-h1">One simple challenge, run live in public: take <em>$10,000 to $100,000</em> &mdash; roughly 10&times; &mdash; <em>as soon as possible, without ever running the risk of ruin.</em></h1>
+            <p class="hero-lead">
+                The edge is already proven &mdash; the live record shows it carries the 10&times;. <strong>The challenge is not whether the edge works; it is whether the operator can stay disciplined enough to follow it without deviation.</strong> $10K &rarr; $100K is just over three doublings (log<sub>2</sub> 10 &asymp; 3.3) &mdash; not a leap, just earned compounding the edge already supports.
+            </p>
+            <p class="hero-lead">
+                <strong>The edge is settled. Discipline is the variable.</strong> There is no fixed deadline &mdash; the goal is to get there as soon as possible &mdash; but every step is bounded by the same sit-out and falsifiability architecture, so the path to $100K never runs the risk of ruin. Every fill is posted before exit, so the discipline is observable in real time.
+            </p>
+            <p class="hero-lead">
+                <strong>Two phases, stated up front.</strong> The <strong>first $10,000 is the trial run</strong> &mdash; lower stakes, one job: prove the discipline holds before anything real is on the line. <strong>The real challenge begins the moment that first $10,000 is banked</strong> &mdash; from there it is $10K &rarr; $100K, the full 10&times; on the buffer ladder.
+            </p>
+            <p class="hero-sub">
+                Public method. Public trades. Public falsifiability. Anyone in the world can watch it.
+            </p>
+            <div class="cta-row">
+                <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Watch the challenge live <span class="arr">&rarr;</span></a>
+                <a href="#reach-out" class="btn btn-ghost">Reach out with questions <span class="arr">&rarr;</span></a>
+            </div>
+            <p class="hero-doctrine-link"><a href="https://doubles.ekantikcapital.com">Read the doctrine first &rarr;</a> &middot; for visitors arriving without context</p>
+            <div class="experiment-status" role="status" aria-label="Live challenge state">
+                <span class="experiment-status__label">Challenge state</span>
+                <span class="experiment-status__items">
+                    <span><span class="dot"></span> Live</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span id="xp-phase"><strong>Phase 0:</strong> Trial run &rarr; first $10K</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Sample: <strong id="xp-sample">—</strong> qualified trades</span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Rolling EV: <strong id="xp-ev">—</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Position: <strong id="xp-triggers">— ES</strong></span>
+                    <span class="experiment-status__sep">·</span>
+                    <span>Falsifiability Gate: <strong id="xp-gate">Armed</strong></span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-bridge">
+        <div class="container-narrow">
+            <p class="hero-bridge__text">This is the <strong>Cash-Flow Engine</strong> of the <a href="/">Synthetic PE machine</a> &mdash; the engine that throws off realized cash. Its sibling, the <a href="/convexity.html">Compounding Engine</a>, turns that cash into multiples. Two engines, one architecture &mdash; separate records, never blended. <a href="https://doubles.ekantikcapital.com#mechanisms">Reality Calibration Protocol &#8599;</a></p>
+        </div>
+    </div>
+
+
+    <!-- ═══ SECTION 01 — THE METHOD · Disclosed Protocol (ACC-REPOS-FINAL-V1) ═══ -->
+    <section class="block method-section" id="method">
+        <div class="container section-inner">
+            <div class="eyebrow">01 · The Method</div>
+            <h2 class="h-section">The disclosed protocol.<br>Every parameter. <em>Locked.</em></h2>
+            <p class="lede">
+                The challenge runs against a specific, named protocol. The protocol is not under operator discretion. It is not modified under stress. It does not adapt to the operator&rsquo;s confidence level. It is the same on a winning week as on a losing one. The protocol is below in full.
+            </p>
+
+            <!-- 01.1 · Never Lose Money -->
+            <div class="component-label">01.1 · Never Lose Money &mdash; the base discipline</div>
+            <div class="method-pyramid">
+                <p class="nlm-rule">&ldquo;Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.&rdquo; <span class="nlm-attr">&mdash; Warren Buffett</span></p>
+                <p>Every durable &ldquo;never-lose&rdquo; system &mdash; casinos, insurers, Berkshire &mdash; runs on the same four principles. The outer rings protect the inner core: you only deploy where the edge is proven, you size so no single bet can hurt you, and you cap the downside so a bad regime can never cause permanent impairment.</p>
+
+                <div class="nlm-principles">
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Positive Expectancy</span>
+                        <p>A structural edge that tilts the odds in your favor. Deploy only where advantage can be mathematically proven &mdash; never on hope.</p>
+                        <span class="nlm-principle__where">Instrumented in §02 (live EV) &amp; §03 (edge landscape)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Expected Value</span>
+                        <p>Positive average return per unit of risk, computed before every entry &mdash; and re-measured on every fill.</p>
+                        <span class="nlm-principle__where">Instrumented in §02 (the EV formula, live)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Position Sizing</span>
+                        <p>Never risk too much on a single bet. Size proportionally to capital and edge &mdash; 1 ES per buffer, expressible as &le; 10 MES.</p>
+                        <span class="nlm-principle__where">Instrumented in §01.2 (the trigger ladder)</span>
+                    </div>
+                    <div class="nlm-principle">
+                        <span class="nlm-principle__name">Risk Management</span>
+                        <p>Pre-committed caps and circuit breakers that ensure survival: weekly max-loss stand-downs and the falsifiability gate.</p>
+                        <span class="nlm-principle__where">Instrumented in §04 (Sit-Out) &amp; §05 (the gates)</span>
+                    </div>
+                </div>
+
+                <p>The reason the downside cap matters more than the upside is arithmetic: <strong>losses and gains are not symmetric.</strong> A loss needs a disproportionately larger gain just to return to even &mdash; and past a point, recovery stops being a question of edge and becomes a question of luck.</p>
+                <table class="nlm-table">
+                    <thead><tr><th>Drawdown taken</th><th>Gain required to recover</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">&minus;10%</td><td class="mono">+11%</td></tr>
+                        <tr><td class="mono">&minus;25%</td><td class="mono">+33%</td></tr>
+                        <tr><td class="mono">&minus;50%</td><td class="mono">+100%</td></tr>
+                        <tr><td class="mono">&minus;75%</td><td class="mono">+300%</td></tr>
+                        <tr><td class="mono">&minus;90%</td><td class="mono">+900%</td></tr>
+                    </tbody>
+                </table>
+                <p class="method-pyramid__note">What enforces it is <strong>adherence, not cushion</strong>: the working capital is <strong>$10,000</strong> per unit, and a single ES contract requires only ~$500 in day-trade margin &mdash; so the position is always a fraction of the capital. So long as the four principles hold and the stand-down architecture (&sect;04 Sit-Out, &sect;05 gates) fires on schedule, losses are capped before the $10,000 can reach the risk-of-ruin zone &mdash; the point from which no remaining edge could recover it.</p>
+            </div>
+
+            <!-- 01.1.1 · Capital architecture · the buffer ratio behind the $10K -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.1.1 · The capital architecture &middot; what the $10K assumes behind it</div>
+            <h3 class="component-h">Active capital is the smallest tier. <em>The buffer behind it is the largest.</em></h3>
+            <p class="component-sub">The foundational design separates the <strong>working unit</strong> (active capital at risk) from the larger <strong>risk-capital buffer</strong> held behind it. Positive expectancy alone is not enough &mdash; it compounds only when the buffer behind it is large enough to absorb realistic drawdowns without forcing capitulation. The 1× / 6&ndash;10× / 2× pyramid below is the design; the table beside it maps it onto this challenge.</p>
+
+            <div class="capital-arch">
+                <figure class="capital-arch__figure">
+                    <svg viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ultra-safe growth pyramid: Buffer 6 to 10 times at base, Positive Expectancy 1 times in middle, Compounding Buffer 2 times at apex">
+                        <rect width="460" height="380" fill="#FAF8F5" rx="8"/>
+                        <text x="230" y="32" text-anchor="middle" font-family="Cormorant Garamond" font-size="18" font-weight="600" fill="#1B2A4A">Ultra-safe growth · the capital architecture</text>
+
+                        <!-- Top tier · Compounding Buffer (2×) -->
+                        <polygon points="230,52 154,160 306,160" fill="#94A3B8" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="120" text-anchor="middle" font-family="DM Sans" font-size="11" font-weight="600" fill="#FAF8F5">Compounding Buffer</text>
+                        <text x="230" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#FAF8F5">2× &middot; ~$20K</text>
+
+                        <!-- Middle tier · Positive Expectancy (1×) -->
+                        <polygon points="154,160 306,160 357,240 103,240" fill="#C8A951" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="198" text-anchor="middle" font-family="DM Sans" font-size="12" font-weight="700" fill="#1B2A4A">Positive Expectancy (1×)</text>
+                        <text x="230" y="218" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#1B2A4A">$10,000 &middot; working unit</text>
+
+                        <!-- Bottom tier · Buffer (6-10×) -->
+                        <polygon points="103,240 357,240 420,340 40,340" fill="#1B2A4A" stroke="#1B2A4A" stroke-width="1"/>
+                        <text x="230" y="282" text-anchor="middle" font-family="DM Sans" font-size="13" font-weight="700" fill="#FAF8F5">Buffer (6&ndash;10×)</text>
+                        <text x="230" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#C8A951">~$60K &ndash; $100K risk capital</text>
+                        <text x="230" y="322" text-anchor="middle" font-family="DM Sans" font-size="10" font-style="italic" fill="#94A3B8">held in reserve · not deployed</text>
+
+                        <text x="230" y="364" text-anchor="middle" font-family="DM Sans" font-size="10" font-style="italic" fill="#64748B">*1× = minimum capital buffer to be profitable on positive-expectancy alone</text>
+                    </svg>
+                </figure>
+
+                <div class="capital-arch__mapping">
+                    <h4 class="capital-arch__h">Implementation on this challenge</h4>
+                    <dl class="capital-arch__list">
+                        <dt><span class="capital-arch__tag capital-arch__tag--mid">1×</span> Positive Expectancy unit</dt>
+                        <dd><strong>$10,000 working unit</strong> &mdash; the active capital deployed in the market. The operator&rsquo;s position size is anchored here so positive expectancy can express across a meaningful sample (R-expectancy +0.30R/trade live, 84 trades).</dd>
+
+                        <dt><span class="capital-arch__tag capital-arch__tag--base">6&ndash;10×</span> Risk-capital buffer</dt>
+                        <dd><strong>$60,000 &ndash; $100,000 held in reserve</strong>, <em>not</em> deployed in active positions. This is what makes the architecture work: ordinary drawdowns on the $10K unit are absorbed by the buffer behind it; the operator never trades scared because the active capital is a fraction of the risk capital.</dd>
+
+                        <dt><span class="capital-arch__tag capital-arch__tag--top">2×</span> Compounding buffer</dt>
+                        <dd><strong>~$20,000 accumulated profit</strong> &mdash; earned via the buffer-trigger ladder (<a href="#method" class="link-inline">§01.2</a>). This is what funds position-size scale-up: after the separate 1-ES trial run banks the first $10K, each further $10K of cumulative profit advances the buffer ladder one rung &mdash; Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap).</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="capital-arch__suitability">
+                <p class="suitability__h">Suitability &middot; read carefully before acting on this challenge with your own capital</p>
+                <p>This architecture presumes a buffer ratio of <strong>at least 6× the working unit</strong>. If you are considering acting on what this challenge publishes with your own capital, the structural premise is that you have <strong>roughly $60,000 of risk capital you can afford to lose entirely</strong> sitting behind whatever you might deploy in an active position &mdash; not the $10,000 working unit alone. <strong>Without the buffer, you don&rsquo;t have the architecture; you have the working unit by itself, which is materially more fragile than what the design contemplates.</strong> The operator runs this on personal capital under that architecture; observers without comparable buffer should treat what is published here as research input, not as a signal to follow into live capital deployment. Nothing on this page constitutes an offer, a solicitation, or personalized investment advice.</p>
+            </div>
+
+            <!-- 01.2 · The Trigger Ladder -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.2 · The Trigger Ladder</div>
+            <h3 class="component-h">A separate trial run, then four buffers &mdash; Buffer N runs N contracts.</h3>
+            <p class="component-sub">The <strong>trial run is separate from the ladder</strong> and runs at <strong>1 ES</strong>: one job &mdash; bank the first $10,000 and prove the discipline. Only then does the buffer ladder (the real challenge) begin, and <strong>each buffer runs as many ES contracts as its number</strong> &mdash; Buffer 1 = 1 ES, Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). Each step up requires a fresh $10,000 of cumulative profit.</p>
+            <div class="trigger-ladder" id="trigger-ladder">
+                <div class="trigger-step trigger-step--trial" data-trigger="TRIAL">
+                    <span class="trigger-step__name">Trial run &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">Bank the first $10,000</span>
+                    <span class="trigger-step__action">Separate from the ladder · proves discipline first</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B1">
+                    <span class="trigger-step__name">Buffer 1 &middot; 1 ES</span>
+                    <span class="trigger-step__threshold">$10,000 &mdash; real challenge begins</span>
+                    <span class="trigger-step__action">Run 1 ES</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B2">
+                    <span class="trigger-step__name">Buffer 2 &middot; 2 ES</span>
+                    <span class="trigger-step__threshold">$20,000 cumulative profit</span>
+                    <span class="trigger-step__action">Scale to 2 ES</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B3">
+                    <span class="trigger-step__name">Buffer 3 &middot; 3 ES</span>
+                    <span class="trigger-step__threshold">$30,000 cumulative profit</span>
+                    <span class="trigger-step__action">Scale to 3 ES</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+                <div class="trigger-step__arrow" aria-hidden="true">→</div>
+                <div class="trigger-step" data-trigger="B4">
+                    <span class="trigger-step__name">Buffer 4 &middot; 4 ES</span>
+                    <span class="trigger-step__threshold">$40,000 cumulative profit</span>
+                    <span class="trigger-step__action">Scale to 4 ES · cap</span>
+                    <span class="trigger-step__status" data-status>—</span>
+                </div>
+            </div>
+            <p class="method-ladder__note"><strong>Buffer N runs N contracts.</strong> The trial run and Buffer 1 both run <strong>1 ES</strong> (which the operator may express as up to ten MES; 10 MES = 1 ES); from Buffer 2 on, each step adds exactly one ES &mdash; 2 ES, 3 ES, then 4 ES at the cap. Each step up requires a fresh $10,000 of cumulative profit before it fires. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
+            <p class="ladder-live-note">Prefer to watch the buffers advance as it happens? The whole challenge runs in the open &mdash; follow the live trade journal in the <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">public Discord</a>. Every fill is posted by hand the moment an order goes in, so expect a short delay between the live execution and the post &mdash; close, but not to the millisecond.</p>
+
+            <!-- 01.3 · Risk Parameters -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.3 · The Risk Parameters</div>
+            <table class="method-risk-table">
+                <thead><tr><th>Parameter</th><th>Threshold</th><th>Consequence</th></tr></thead>
+                <tbody>
+                    <tr><td>Base weekly max loss <span class="traj-sub">per contract</span></td><td class="mono">$1,000</td><td>No more trades that week — stand down to next session</td></tr>
+                    <tr><td>Earned weekly flex <span class="traj-sub">house money only</span></td><td class="mono">$1,000 &rarr; $2,000</td><td>Weekly cap may double to $2,000 <strong>only</strong> once $2,000 of cumulative profit is banked</td></tr>
+                    <tr><td>Consecutive weekly violations</td><td class="mono">2 in a row</td><td>Stand down for the remainder of the month</td></tr>
+                    <tr><td>Rolling 100-trade realized EV</td><td class="mono">$0 / trade</td><td>Falsifiability Gate fires — see Section 05</td></tr>
+                </tbody>
+            </table>
+            <p class="method-ladder__note"><strong>Earned weekly risk, never borrowed.</strong> The weekly loss cap starts at <strong>$1,000 per contract</strong>. For any week it <strong>may double to $2,000 only after $2,000 of cumulative realized profit has been banked</strong> &mdash; the extra risk is funded entirely by house money, never by base capital. Below $2,000 cumulative profit the cap stays at $1,000. Same never-lose-money logic as the buffer ladder: more is put at risk only once it has been earned, so a drawdown can never reach into the working unit.</p>
+
+            <!-- 01.4 · The Target -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">01.4 · The Target &middot; Two phases</div>
+            <h3 class="component-h">First the trial run. Then the real thing: <em>$10,000 to $100,000.</em></h3>
+            <p class="lede">
+                The challenge runs in two phases, declared up front. <strong>Phase 0 &mdash; the trial run:</strong> bank the first <strong>$10,000</strong>. Lower stakes, smaller size, one job &mdash; prove the discipline holds and that the published method is exactly what runs, before anything real is on the line. <strong>Phase 1 &mdash; the real challenge:</strong> the moment that first $10,000 is banked, it becomes the working unit and the 10&times; begins &mdash; <strong>$10,000 &rarr; $100,000</strong>, roughly three doublings, <strong>as soon as the edge and the market allow</strong>. No fixed deadline, no leverage on borrowed conviction, and &mdash; the one non-negotiable &mdash; <strong>never running the risk of ruin</strong>. Every gain is earned by the buffer-trigger ladder (&sect;01.2); every loss is capped by the sit-out and falsifiability architecture (&sect;04&ndash;&sect;05) long before capital can reach the point from which no remaining edge could recover it.
+            </p>
+            <div class="hypothetical-disclosure">
+                <p><strong>About this target.</strong> The trial-run threshold ($10,000) and the 10&times; objective ($10,000 &rarr; $100,000) are <strong>stated goals &mdash; hypothetical and aspirational</strong>, not realized results, forecasts, or guarantees. How quickly either is reached, if at all, depends entirely on how the edge expresses in live markets; the timeline is deliberately left open. The Falsifiability Gate (Section 05) supersedes the target and halts the protocol if the rolling-100-trade expectancy crosses zero, regardless of capital level reached. Past performance is not indicative of future results.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ THE COMPOUNDING LADDER · aspirational equity arc ═══ -->
+    <section class="block compounding-ladder-section" id="compounding-ladder">
+        <div class="container section-inner">
+            <p class="eyebrow"><span class="cl-diamond">◆</span> What $10K &rarr; $100K looks like</p>
+            <h2 class="h-section">Equity arc &middot; <em>$10K &rarr; $100K, as soon as the regime allows</em></h2>
+            <p class="lede">One illustrative path under the doubling doctrine. The engine compounds via buffer-earned scaling <strong>1 &rarr; 4 ES</strong> as the profit buffer accumulates. <strong>The target is 10&times; the working unit &mdash; $10,000 to $100,000, approximately three doublings plus change &mdash; reached as soon as the edge and the market allow.</strong> The pace shown is illustrative, not a deadline; a more cooperative regime gets there sooner. Hard constraint, identical on every path: the trailing floor (HWM &minus; 10% of working unit) representing the structural sit-out architecture &mdash; drawdown from any peak is bounded by the weekly cap and monthly stand-down cadence, so the path never runs the risk of ruin.</p>
+
+            <div class="cl-aspirational-note">
+                <strong>Illustrative &middot; under stated assumptions.</strong> The cadence rules, position-scaling logic, and the $10K&rarr;$100K target shown below are <strong>design intent</strong> &mdash; the path in which the edge expresses steadily and all four buffers fire. The live reference dataset (84 closed trades · Feb&ndash;May 2026 · net +$6,695 · R-expectancy +0.30R) supports the underlying methodology; the rules below extend it. Nothing on this page constitutes a forecast or guarantee.
+            </div>
+
+            <div class="eq-legend">
+                <span class="eq-legend__item"><span class="eq-legend__swatch"></span> Engine balance · multiplier of working unit · stair-step, sized up by buffer</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch eq-legend__swatch--dashed"></span> Trailing floor (peak &minus; 10% of working unit)</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch eq-legend__swatch--dot"></span> Position scale-up · buffer fired</span>
+            </div>
+
+            <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Equity arc: the $10,000 working unit grows to $100,000 (10x) via buffer-earned scaling from 1 to 4 ES, as soon as the regime allows; trailing floor at HWM minus 10 percent bounds drawdown on every step">
+                <defs>
+                    <linearGradient id="accelEngineGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#C8A951" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
+                    </linearGradient>
+                </defs>
+
+                <g font-family="DM Sans" font-size="11" fill="#94A3B8">
+                    <line x1="80" y1="60"  x2="1020" y2="60"  stroke="rgba(250,248,245,0.12)"/><text x="68" y="64" text-anchor="end" fill="#FAF8F5">10× ($100K)</text>
+                    <line x1="80" y1="127" x2="1020" y2="127" stroke="rgba(250,248,245,0.08)"/><text x="68" y="131" text-anchor="end">8× ($80K)</text>
+                    <line x1="80" y1="193" x2="1020" y2="193" stroke="rgba(250,248,245,0.08)"/><text x="68" y="197" text-anchor="end">6× ($60K)</text>
+                    <line x1="80" y1="260" x2="1020" y2="260" stroke="rgba(250,248,245,0.08)"/><text x="68" y="264" text-anchor="end">4× ($40K)</text>
+                    <line x1="80" y1="327" x2="1020" y2="327" stroke="rgba(250,248,245,0.08)"/><text x="68" y="331" text-anchor="end">2× ($20K)</text>
+                    <line x1="80" y1="360" x2="1020" y2="360" stroke="rgba(250,248,245,0.35)" stroke-dasharray="4 4"/><text x="68" y="364" text-anchor="end" fill="#FAF8F5" font-weight="600">1× start ($10K)</text>
+                </g>
+
+                <g font-family="DM Sans" font-size="11" fill="#94A3B8">
+                    <line x1="80" y1="420" x2="1020" y2="420" stroke="rgba(250,248,245,0.3)"/>
+                    <text x="80"   y="442" text-anchor="start" fill="#FAF8F5" font-weight="600">start · $10K</text>
+                    <text x="550"  y="442" text-anchor="middle" font-style="italic">time → as soon as the regime allows</text>
+                    <text x="1020" y="442" text-anchor="end" fill="#FAF8F5" font-weight="600">10× · $100K</text>
+                </g>
+
+                <path d="M 80,360 L 110,362 L 145,355 L 180,358 L 220,349 L 260,352 L 300,335 L 315,327 L 350,332 L 390,318 L 430,308 L 470,295 L 510,275 L 550,260 L 590,245 L 630,225 L 670,210 L 710,190 L 750,170 L 785,160 L 820,148 L 860,132 L 900,115 L 940,98 L 980,78 L 1020,60 L 1020,420 L 80,420 Z" fill="url(#accelEngineGrad)"/>
+                <path d="M 80,360 L 110,362 L 145,355 L 180,358 L 220,349 L 260,352 L 300,335 L 315,327 L 350,332 L 390,318 L 430,308 L 470,295 L 510,275 L 550,260 L 590,245 L 630,225 L 670,210 L 710,190 L 750,170 L 785,160 L 820,148 L 860,132 L 900,115 L 940,98 L 980,78 L 1020,60" fill="none" stroke="#C8A951" stroke-width="2.6" stroke-linejoin="round"/>
+
+                <path d="M 80,377 L 315,377 L 315,334 L 550,334 L 550,274 L 785,274 L 785,185 L 1020,185" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
+
+                <circle cx="315" cy="327" r="7" fill="#C8A951" stroke="#1B2A4A" stroke-width="2"/>
+                <circle cx="550" cy="260" r="7" fill="#C8A951" stroke="#1B2A4A" stroke-width="2"/>
+                <circle cx="785" cy="160" r="7" fill="#C8A951" stroke="#1B2A4A" stroke-width="2"/>
+
+                <g font-family="DM Sans" font-size="10.5" fill="#C8A951" font-weight="700">
+                    <text x="170" y="350" text-anchor="middle">trial + B1 · 1 ES</text>
+                    <text x="317" y="318" text-anchor="middle">↑ Buffer 2 · 2 ES</text>
+                    <text x="552" y="251" text-anchor="middle">↑ Buffer 3 · 3 ES</text>
+                    <text x="787" y="151" text-anchor="middle">↑ Buffer 4 · 4 ES (cap)</text>
+                </g>
+
+                <g font-family="DM Sans" font-size="10.5" fill="#DC2626" font-weight="700"><text x="1020" y="200" text-anchor="end">↗ floor: peak − 10%</text></g>
+
+                <rect x="870" y="60"  width="150" height="56" rx="4" fill="#1B2A4A" stroke="#C8A951" stroke-width="1"/>
+                <text x="945" y="78"  text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="JetBrains Mono" letter-spacing="1">TARGET</text>
+                <text x="945" y="98"  text-anchor="middle" font-size="20" font-weight="700" fill="#FAF8F5" font-family="DM Sans">10× ($100K)</text>
+                <text x="945" y="112" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="DM Sans">as soon as the regime allows</text>
+
+                <rect x="870" y="124" width="150" height="50" rx="4" fill="#C8A951"/>
+                <text x="945" y="142" text-anchor="middle" font-size="10" font-weight="700" fill="#1B2A4A" font-family="JetBrains Mono" letter-spacing="1">DOUBLINGS</text>
+                <text x="945" y="162" text-anchor="middle" font-size="18" font-weight="700" fill="#1B2A4A" font-family="DM Sans">≈ 3.3 (log₂ 10)</text>
+
+                <text x="80" y="40" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#C8A951" letter-spacing="1">WORKING UNIT × MULTIPLIER · $10K BASE</text>
+            </svg>
+
+            <div class="eq-callout">
+                <div class="eq-callout__item"><p class="eq-callout__label">Engine target</p><p class="eq-callout__value">10× ($10K&rarr;$100K)<br><span>earned doublings · ASAP</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Doublings (log<sub>2</sub>)</p><p class="eq-callout__value">≈ 3.3<br><span>log<sub>2</sub>(10) = 3.32</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">Peak &minus; 10%<br><span>structural sit-out · weekly $1K cap</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 &rarr; 4 ES<br><span>earned by profit buffer · cap at 4</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Realistic envelope</p><p class="eq-callout__value">2&times; &mdash; 10&times;<br><span>friction-adjusted band</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Per-trade risk</p><p class="eq-callout__value">~3% of unit<br><span>realized avg $303 / $10K · live</span></p></div>
+            </div>
+
+            <div class="cl-kills">
+                <div class="cl-kills__head">
+                    <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
+                    <p class="cl-kills__sub">The ladder halts when any one fires &mdash; regardless of which step has been reached. These are the existing sit-out, falsifiability, and fidelity conditions on the live protocol; nothing new is invented for this visualization.</p>
+                </div>
+                <div class="cl-kills__chips">
+                    <div class="cl-chip"><span class="cl-chip__num">KC-01</span><span class="cl-chip__label">Rolling-100 EV ≤ $0/trade</span><span class="cl-chip__hint">Edge Gate · Expression Layer</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-02</span><span class="cl-chip__label">Weekly cap hit ($1K · $2K if earned)</span><span class="cl-chip__hint">Per-contract · stand down rest of week</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-03</span><span class="cl-chip__label">2 consecutive losing weeks</span><span class="cl-chip__hint">Monthly stand-down</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-04</span><span class="cl-chip__label">Attribution breach (C-01)</span><span class="cl-chip__hint">Missing tag or hand-applied H1</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-05</span><span class="cl-chip__label">Rule-mod breach (C-02)</span><span class="cl-chip__hint">Unwitnessed protocol modification</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-06</span><span class="cl-chip__label">Daily routine &lt; 95% (C-03)</span><span class="cl-chip__hint">Pre-market visualizations · 30-day rolling</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-07</span><span class="cl-chip__label">Loss streak &gt; 4</span><span class="cl-chip__hint">Battery Test 7 · discipline ceiling</span></div>
+                    <div class="cl-chip"><span class="cl-chip__num">KC-08</span><span class="cl-chip__label">Fidelity T2/T3 active</span><span class="cl-chip__hint">Binding Interpretation Rule · gate suspended</span></div>
+                </div>
+            </div>
+
+            <div class="cl-explainer-grid">
+                <article class="cl-explainer-card">
+                    <h3>Disciplined Risk</h3>
+                    <p>Risk per trade stays anchored to a fixed fraction of the working unit. The <em>dollar</em> amount grows because the unit grows; the <em>percentage</em> never escalates. Realized average is currently ~$303/trade on the $10K unit (live, 84 trades).</p>
+                </article>
+                <article class="cl-explainer-card">
+                    <h3>Earned Leverage</h3>
+                    <p>Position size advances only when verified profits compound the base. <strong>The second ES contract is paid for by the first.</strong> Scale is <em>earned</em> &mdash; never borrowed, never assumed, never on operator confidence.</p>
+                </article>
+                <article class="cl-explainer-card">
+                    <h3>Velocity Compounds</h3>
+                    <p>Each buffer shortens the time to the next as throughput grows linearly with contract count. By the 4-ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly. <strong>10&times;</strong> is just over three doublings &mdash; not a leap.</p>
+                </article>
+            </div>
+
+            <p class="cl-compliance">Illustrative and design intent, not forecasts. The headline target (10&times; engine &mdash; $10K &rarr; $100K, &asymp;3.3 doublings, reached as soon as the edge and market allow) is <strong>design intent</strong>, not a forecast. There is no committed timeline; the pace depends on how the edge expresses and is not a different or riskier method when faster. The trailing floor at HWM &minus; 10% represents the <em>structural intent</em> of the existing sit-out cadence (weekly $1,000 cap + 2-week-loss monthly stand-down) &mdash; markets can gap and slip; nothing on this page is a guarantee. Past performance is not indicative of future results. Sample is pre-asymptotic at 84 closed trades.</p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 02 — THE MATH, LIVE + 03 EDGE LANDSCAPE ═══ -->
+    <section class="block edges-section" id="edges">
+        <div class="container section-inner">
+            <div class="eyebrow">02 · The Math, Live · From the Operator&rsquo;s Account</div>
+            <h2 class="h-section">The edge, calculated live.<br><em>Every fill. Every recalculation.</em></h2>
+            <p class="lede">
+                From the operator&rsquo;s ES futures account. Computed live from closed fills. Recalculated each time a fill closes. No backtest values. No simulation. The numbers below populate from the live trade journal.
+            </p>
+
+            <!-- Component A: EV Formula -->
+            <div class="component-label">The Expected-Value Formula</div>
+            <h3 class="component-h">How the edge is calculated. Every fill. Every recalculation.</h3>
+            <p class="component-sub">
+                From the operator&rsquo;s ES futures account. Computed live from closed fills. Recalculated each time a fill closes. No backtest values. No simulation. The numbers below populate from the live trade journal.
+            </p>
+
+            <div class="ev-panel">
+                <div class="ev-panel-label">Expected Value Formula &middot; ES Futures &middot; All-Time</div>
+
+                <div class="ev-equation">
+                    <div class="ev-var var-win">
+                        <div class="ev-var-label">Win Rate</div>
+                        <div class="ev-var-primary" data-bind="win_rate_pct">&mdash;.&mdash;%</div>
+                        <div class="ev-var-secondary"><span data-bind="wins">&mdash;</span> W / <span data-bind="losses">&mdash;</span> L</div>
+                    </div>
+                    <div class="ev-op">&times;</div>
+                    <div class="ev-var var-win">
+                        <div class="ev-var-label">Avg Win</div>
+                        <div class="ev-var-primary" data-bind="avg_win_pts">+&mdash; pts</div>
+                        <div class="ev-var-secondary">$<span data-bind="avg_win_usd">&mdash;</span> per contract</div>
+                    </div>
+                    <div class="ev-op">&minus;</div>
+                    <div class="ev-var var-loss">
+                        <div class="ev-var-label">Loss Rate &times; Avg Loss</div>
+                        <div class="ev-var-primary" data-bind="avg_loss_pts">&minus;&mdash; pts</div>
+                        <div class="ev-var-secondary">$<span data-bind="avg_loss_usd">&mdash;</span> per contract</div>
+                    </div>
+                    <div class="ev-op">=</div>
+                    <div class="ev-var var-edge">
+                        <div class="ev-var-label">Edge per Trade</div>
+                        <div class="ev-var-primary" data-bind="edge_R">+&mdash;.&mdash;R</div>
+                        <div class="ev-var-secondary">$<span data-bind="edge_usd">&mdash;</span> per trade</div>
+                        <div class="ev-var-tertiary">at <span data-bind="daily_risk_pct">&mdash;</span>% daily risk</div>
+                    </div>
+                </div>
+
+                <div class="ev-workings">
+                    <span class="line">EV = (Win% &times; Avg Win pts) &minus; (Loss% &times; Avg Loss pts)</span>
+                    <span class="line">EV = (<span data-bind="win_rate_short">&mdash;</span>% &times; +<span data-bind="avg_win_pts_short">&mdash;</span> pts) &minus; (<span data-bind="loss_rate_short">&mdash;</span>% &times; <span data-bind="avg_loss_pts_short">&mdash;</span> pts)</span>
+                    <span class="line">EV = +<span data-bind="weighted_win">&mdash;</span> pts &minus; <span data-bind="weighted_loss">&mdash;</span> pts</span>
+                    <span class="line final">EV = +<span data-bind="edge_pts">&mdash;</span> pts per trade &nbsp;&equiv;&nbsp; +<span data-bind="edge_R_short">&mdash;</span>R &nbsp;&equiv;&nbsp; $<span data-bind="edge_usd_short">&mdash;</span> per trade</span>
+                </div>
+
+                <div class="ev-readout">
+                    A win rate of <strong><span data-bind="win_rate_pct">&mdash;</span></strong> on an asymmetric trade structure produces a realized edge of <strong>+<span data-bind="edge_R">&mdash;</span></strong> per trade. Risk per contract is held constant at <strong><span data-bind="daily_risk_pct">&mdash;</span>%</strong> of working capital. Variance loses to math at sample sizes where the central limit theorem dominates.
+                </div>
+
+                <div class="ev-context-grid">
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Sample Window</div>
+                        <div class="ev-context-value"><span data-bind="trade_count">&mdash;</span> trades</div>
+                    </div>
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Risk Budget</div>
+                        <div class="ev-context-value">$<span data-bind="risk_budget">&mdash;</span><span class="small">/day</span></div>
+                    </div>
+                    <div class="ev-context-card">
+                        <div class="ev-context-label">Win / Loss Ratio</div>
+                        <div class="ev-context-value" data-bind="wl_ratio">&mdash;</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="ev-disclaimer">
+                Live, from the operator&rsquo;s ES futures account. Sample is pre-asymptotic at this size. Past performance is not indicative of future results.
+            </p>
+
+            <!-- Section 03: Edge Landscape Table -->
+            <div class="component-block-divider"></div>
+
+            <div class="component-label" id="edge-landscape">03 · The Edge Landscape &middot; Where the operator&rsquo;s edge sits</div>
+            <p class="doctrine-anchor"><strong>Where this sits in the doctrine.</strong> The doctrine&rsquo;s Probability &times; Payoff Matrix names <em>Probabilistic Edge &amp; Positive Expectancy</em> as one of eight paths in the High-Probability / High-Payoff quadrant. The migration formula is the same one the challenge runs: positive expectancy + volume + manageable failures. The table below is what that path looks like when instrumented, set against every other documented edge category in capital markets. <a href="https://doubles.ekantikcapital.com#mechanisms">See the matrix &#8599;</a></p>
+            <h3 class="component-h">Every documented edge in capital markets. And where ours sits.</h3>
+            <p class="component-sub">
+                Six rows. Five reference points. One operator. Each row represents a category of capital deployment with documented edge characteristics. The Ekantik row is where our ES futures operator sits inside this universe.
+            </p>
+
+            <div class="edge-table-frame">
+                <div class="edge-table-head">
+                    <div class="edge-table-title-block">
+                        <div class="label">Edge Landscape</div>
+                        <div class="h">Capital deployment by category</div>
+                    </div>
+                    <div class="edge-table-meta">
+                        <span class="live-dot"></span> Ekantik row: extrapolated from live ES fills &middot; as of <span data-bind="last_update">&mdash;</span>
+                    </div>
+                </div>
+
+                <table class="landscape">
+                    <thead>
+                        <tr>
+                            <th>Strategy<span class="th-denom">category of capital deployment</span></th>
+                            <th>Edge / Occurrence<span class="th-denom">% of capital-at-risk per trade</span></th>
+                            <th>Frequency / Mo<span class="th-denom">trades per month</span></th>
+                            <th class="th-sorted">Annual R <span class="unsized-tag">(unsized) &middot; ranked &darr;</span><span class="th-denom">edge &times; frequency &times; 12, in R-units</span></th>
+                            <th>
+                                &frac12; Kelly Allocation
+                                <span class="kelly-help">?
+                                    <span class="tooltip"><strong>Kelly Criterion</strong><br>Optimal fraction of <em>total portfolio capital</em> to deploy for a given edge &mdash; not the same as the &ldquo;Edge / Occurrence&rdquo; column, which is % of capital-at-risk per single trade. Half-Kelly halves variance while retaining most of the geometric growth.</span>
+                                </span>
+                                <span class="th-denom">% of total portfolio capital</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-annual-r="1500">
+                            <td class="row-strategy">Casino &middot; American Roulette<span class="qualifier">House operator</span></td>
+                            <td class="cell-pos">+5.26%</td>
+                            <td class="cell-neutral">&ge; 2,400</td>
+                            <td class="cell-neutral">&asymp; 1,500 R</td>
+                            <td class="cell-dim">1.4%</td>
+                        </tr>
+                        <tr data-annual-r="56">
+                            <td class="row-strategy">Trend-Following CTAs<span class="qualifier">Systematic managed futures</span></td>
+                            <td class="cell-pos">+0.5&ndash;1%</td>
+                            <td class="cell-neutral">10 &ndash; 30</td>
+                            <td class="cell-neutral">&asymp; 56 R</td>
+                            <td class="cell-dim">2.5&ndash;7.5%</td>
+                        </tr>
+                        <tr data-annual-r="42">
+                            <td class="row-strategy">Stat-Arb Pairs / Baskets<span class="qualifier">Quantitative mean-reversion</span></td>
+                            <td class="cell-pos">+0.5&ndash;2%</td>
+                            <td class="cell-neutral">200 &ndash; 500</td>
+                            <td class="cell-neutral">&asymp; 42 R</td>
+                            <td class="cell-dim">1.5&ndash;4%</td>
+                        </tr>
+                        <tr data-annual-r="26">
+                            <td class="row-strategy">High-Frequency Market-Making<span class="qualifier">Spread capture &middot; sub-second</span></td>
+                            <td class="cell-pos">+0.017%</td>
+                            <td class="cell-neutral">&asymp; 100k+</td>
+                            <td class="cell-neutral">&asymp; 26 R</td>
+                            <td class="cell-dim">&asymp; 0.005%</td>
+                        </tr>
+                        <tr class="ekantik-row" data-ekantik data-annual-r="0">
+                            <td class="row-strategy">Ekantik &middot; ES Futures<span class="qualifier">All-time &middot; live operator account</span></td>
+                            <td class="cell-pos">+<span data-bind="edge_pct">&mdash;</span>%</td>
+                            <td class="cell-neutral">&asymp; <span data-bind="trades_per_mo">&mdash;</span></td>
+                            <td class="cell-neutral">&asymp; <span data-bind="annual_R">&mdash;</span> R</td>
+                            <td class="cell-neutral"><span data-bind="half_kelly">&mdash;</span>%</td>
+                        </tr>
+                        <tr data-annual-r="-30">
+                            <td class="row-strategy">Retail Day-Trader &middot; median<span class="qualifier">ESMA / FINRA aggregated</span></td>
+                            <td class="cell-neg">negative</td>
+                            <td class="cell-neutral">500 +</td>
+                            <td class="cell-neg">&minus; 30 R</td>
+                            <td class="cell-dim">0%<br><span class="ann">negative edge</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="table-clarifier">
+                Annual R is shown <em>unsized</em> &mdash; i.e., before applying the Kelly position-size recommendation in the rightmost column. The relevant metric for capital deployment is Annual R &times; Kelly Allocation, which is where structural edge actually expresses itself.
+            </p>
+
+            <div class="sourcing">
+                <p><strong>Sources.</strong> Casino house-edge figures: standard gaming regulatory disclosures; vary by table rules and machine class. Trend-following CTA performance characteristics: SocGen CTA Index, BarclayHedge CTA reports. Stat-arb edge characteristics: academic literature on equity pairs trading and statistical arbitrage. HFT market-making spread economics: SEC Tick Size Pilot data and academic market microstructure literature. Retail trader loss rates: ESMA aggregated broker disclosures, FINRA consumer alerts.</p>
+                <p><strong>The Ekantik row</strong> is computed live from closed fills on the operator&rsquo;s ES futures account, published in the public Discord trade journal, and recalculated each time a fill closes. Sample is pre-asymptotic at the current trade count. Past performance is not indicative of future results.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION §2.1 — THE OPERATOR (Dev Spec §3.2 · Rebuild §4.3 light reframe) ═══ -->
+    <section class="section section--white operator" id="operator" aria-labelledby="operator-h2">
+        <div class="section__inner section__inner--wide">
+            <div class="operator__grid">
+                <div class="operator__portrait">
+                    <div class="portrait-frame" role="img" aria-label="Hiren Desai, Founder & CIO, Ekantik Capital Advisors. Portrait pending.">
+                        <span class="portrait-frame__placeholder">HD</span>
+                    </div>
+                </div>
+                <div class="operator__content">
+                    <h2 class="operator__title" id="operator-h2">The operator.</h2>
+                    <blockquote class="pullquote">
+                        <p>&ldquo;The best metaphor for the last decade is building aircraft autopilot software. You document failure modes before passengers board.&rdquo;</p>
+                    </blockquote>
+                    <p class="operator__attribution">Hiren Desai &nbsp;·&nbsp; Founder &amp; CIO &nbsp;·&nbsp; Ekantik Capital Advisors</p>
+
+                    <div class="credentials-grid">
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">01</span>
+                            <h3 class="credentials-grid__heading">Cybersecurity origin</h3>
+                            <p class="credentials-grid__body">Resilient systems are built by studying what breaks them. Not by hoping they work.</p>
+                        </div>
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">02</span>
+                            <h3 class="credentials-grid__heading">Decade of practice</h3>
+                            <p class="credentials-grid__body">Stress-testing regimes. Mapping failure modes. Refining controls until behavior is predictable across the envelope.</p>
+                        </div>
+                        <div class="credentials-grid__col">
+                            <span class="credentials-grid__num">03</span>
+                            <h3 class="credentials-grid__heading">Operator capital deployed</h3>
+                            <p class="credentials-grid__body">Personal risk capital on every fill in the public Discord log. Not pooled. Not managed. Not shared.</p>
+                        </div>
+                    </div>
+                    <p class="operator__close">The edge described above is the output of that decade. The challenge is whether the operator can follow it with enough discipline &mdash; in public, fill by fill &mdash; to let it compound to 10&times;.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 04 — THE ARCHITECTURE (Never Lose Money + Sit-Out) ═══ -->
+    <section class="section section--ivory defense" id="defense" aria-labelledby="defense-h2">
+        <div class="section__inner section__inner--wide">
+            <div class="epigraph">
+                <p class="quote">&ldquo;Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.&rdquo;</p>
+                <div class="attr">&mdash; Warren Buffett</div>
+            </div>
+
+            <div class="section-eyebrow">04 · The Architecture</div>
+            <h2 class="defense-h" id="defense-h2">How the challenge survives long enough to express the edge.</h2>
+            <p class="defense-open">
+                A proven edge still has to survive the operator. Every challenge needs the conditions under which the operator stops, regardless of conviction &mdash; and the conditions under which it admits the edge itself has decayed. The architecture below is that envelope. The <a href="#falsifiability" class="defense-open__link">Falsifiability Gate (Section 05)</a> is the challenge&rsquo;s termination protocol.
+            </p>
+
+            <div class="defense__layers defense__layers--two">
+                <article class="defense-card defense-card--light">
+                    <span class="defense-card__num">01</span>
+                    <h3 class="defense-card__title">Layer 01 &nbsp;·&nbsp; Never Lose Money</h3>
+                    <p class="defense-card__lead">Rule No. 1, made structural &mdash; through <strong>adherence to the rules</strong>, not a cash cushion. Because a loss needs a disproportionately larger gain to recover (&minus;50% needs +100% back), the discipline is engineered to stop losses long before capital reaches the point from which it cannot recover.</p>
+                    <ul class="defense-card__list">
+                        <li><strong>Working capital</strong> &nbsp;·&nbsp; $10,000 per unit &mdash; the capital at work.</li>
+                        <li><strong>Position</strong> &nbsp;·&nbsp; one ES contract requires only ~$500 in day-trade margin &mdash; a fraction of the working capital, never the whole.</li>
+                        <li><strong>Protection</strong> &nbsp;·&nbsp; the never-lose principles (positive expectancy, expected value, position sizing) plus the Sit-Out and Falsifiability stand-downs cap the downside <em>before</em> the math turns unrecoverable.</li>
+                    </ul>
+                    <p class="defense-card__footer">It is adherence that prevents ruin, not cushion. So long as the operator follows the rules and the stand-down architecture fires on schedule, the $10,000 working unit stays out of the risk-of-ruin zone &mdash; the region where no remaining edge can mathematically recover the loss.</p>
+                </article>
+
+                <article class="defense-card defense-card--light">
+                    <span class="defense-card__num">02</span>
+                    <h3 class="defense-card__title">Layer 02 &nbsp;·&nbsp; The Sit-Out Architecture</h3>
+                    <p class="defense-card__lead">Pre-committed rules. No exceptions. No renegotiation.</p>
+                    <ul class="defense-card__list">
+                        <li><strong>Daily</strong> &nbsp;·&nbsp; 1 max loss <em>or</em> 2 consecutive losses &nbsp;→&nbsp; end the day. Resume next session.</li>
+                        <li><strong>Weekly</strong> &nbsp;·&nbsp; $1,000 max loss per contract &mdash; may double to $2,000 only once $2,000 of profit is banked (house money) &nbsp;→&nbsp; stand down for the remainder of the week.</li>
+                        <li><strong>Edge recovery</strong> &nbsp;·&nbsp; 2 consecutive losing weeks &nbsp;→&nbsp; virtual account, full month.</li>
+                    </ul>
+                    <p class="defense-card__footer">The rule about the rules: the operator under loss is a different cognitive agent than the operator who set them. Under stress, the designer is gone. Only the rule remains.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 05 — THE TWO FALSIFIABILITY GATES ═══ -->
+    <section class="section section--ivory falsifiability-section" id="falsifiability" aria-labelledby="falsifiability-h2">
+        <div class="section__inner section__inner--wide">
+            <div class="section-eyebrow">05 · The Two Falsifiability Gates</div>
+            <h2 class="defense-h" id="falsifiability-h2">Two gates. Both binding. Both reported live.</h2>
+            <p class="defense-open">
+                <strong>This is Condition V of a legitimate founding thesis</strong> &mdash; <em>named abandonment condition</em> &mdash; operationalized in code, witnessed under countersignature, and structurally impossible for the operator to modify under stress. The doctrine names this condition. The architecture below executes it.
+            </p>
+            <p class="defense-open">
+                A challenge without a falsifiability condition is not a challenge. It is faith. This one runs <strong>two</strong> gates in parallel, from day one. The <strong>Expression Layer</strong> watches the edge&rsquo;s realized math for decay. The <strong>Fidelity Layer</strong> watches whether the published method is what is actually running &mdash; cognitive, structural, and substrate discipline. Since discipline is the real variable here, the Fidelity Layer is the gate that matters most. Both were written before any outside capital is at risk, locked under witness countersignature.
+            </p>
+
+            <!-- Simple, at-a-glance protocol-breach status -->
+            <div id="protocol-status" role="status" aria-label="Protocol breach status" style="border:1px solid var(--divider);border-radius:12px;overflow:hidden;margin:8px 0 26px;background:var(--white)">
+                <div id="ps-banner" style="display:flex;align-items:center;gap:16px;padding:18px 22px;background:var(--pass);color:#fff">
+                    <span id="ps-icon" aria-hidden="true" style="font-size:30px;line-height:1;font-weight:700">&#10003;</span>
+                    <div>
+                        <div id="ps-headline" style="font-weight:700;font-size:19px;letter-spacing:.01em">All clear</div>
+                        <div id="ps-sub" style="font-size:13px;opacity:.93;margin-top:3px">0 protocol breaches on record &middot; Tier T0 &mdash; Normal Operations</div>
+                    </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;padding:16px 22px 6px">
+                    <span id="ps-c01" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Attribution discipline</span>
+                    <span id="ps-c02" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Rule-modification integrity</span>
+                    <span id="ps-c03" style="font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;background:#E6F0E6;color:var(--pass)">&#10003; Daily routine</span>
+                </div>
+                <div id="ps-log" style="padding:8px 22px 18px;font-size:13px;color:var(--muted)">No protocol breaches recorded. Every breach &mdash; missed tag, unwitnessed rule change, or routine miss &mdash; will appear here the moment it happens, in plain language.</div>
+            </div>
+
+            <!-- Gates status strip -->
+            <div class="gates-status" id="gates-status" role="status" aria-label="Falsifiability gate status">
+                <div class="gates-status__gate">
+                    <span class="gates-status__label">Expression Gate</span>
+                    <span class="gates-status__value" id="gate-expression-state">Monitoring</span>
+                    <span class="gates-status__detail">Rolling-100 EV: <strong id="gate-expression-ev">—</strong> / trade &middot; R: <strong id="gate-expression-r">—</strong> <span class="gates-status__note">(size-neutral)</span></span>
+                </div>
+                <div class="gates-status__gate">
+                    <span class="gates-status__label">Fidelity Gate</span>
+                    <span class="gates-status__value" id="gate-fidelity-state">Monitoring</span>
+                    <span class="gates-status__detail">Stand-down tier: <strong id="gate-fidelity-tier">T0 — Normal</strong></span>
+                </div>
+            </div>
+
+            <!-- The Binding Interpretation Rule -->
+            <div class="interp-rule">
+                <span class="interp-rule__tag">The Binding Interpretation Rule</span>
+                <p class="interp-rule__body">Edge-Gate firings while a Fidelity-Layer T2 or T3 breach is active in the rolling 30-day window are <strong>interpretation-suspended</strong> pending operator remediation. <em>The edge cannot be declared falsified from data generated during a known transmission-fidelity breach.</em></p>
+                <p class="interp-rule__note">This is published as a load-bearing architectural commitment, not buried in a protocol document. It is what makes parallel monitoring structurally coherent.</p>
+            </div>
+
+            <!-- STAGE 1 — Fidelity Layer -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Stage 1 · Fidelity Layer &mdash; is the published method what is actually running?</div>
+            <div class="criteria-grid">
+                <article class="criterion-card">
+                    <span class="criterion-card__num">01</span>
+                    <h3 class="criterion-card__title">Per-Trade Attribution Discipline</h3>
+                    <span class="criterion-card__track criterion-card__track--auto">Auto-tracked &middot; live from 5/22</span>
+                    <p class="criterion-card__body">Every qualified trade carries an operator tag &mdash; <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong>, logged before the next entry against a pre-decision log. <strong>H1 (edge failed) is never tagged per trade</strong> &mdash; that verdict belongs to the Expression Gate&rsquo;s rolling-100 reading, not to any single trade. A hand-applied H1 is itself a breach.</p>
+                    <div class="criterion-card__metric">
+                        <span>Tags filed (rolling 100)</span><strong id="c01-tags">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Breaches (rolling 30)</span><strong id="c01-breaches">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: zero breaches inside rolling 100-trade window.</p>
+                </article>
+                <article class="criterion-card">
+                    <span class="criterion-card__num">02</span>
+                    <h3 class="criterion-card__title">Rule-Modification Integrity</h3>
+                    <span class="criterion-card__track criterion-card__track--manual">Witness-attested</span>
+                    <p class="criterion-card__body">Zero unannounced or witness-uncountersigned protocol modifications. Every change: 48-hour cool-off · written justification (which layer it addresses) · witness countersignature · public disclosure within 24 hours.</p>
+                    <div class="criterion-card__metric">
+                        <span>Unauthorized modifications</span><strong id="c02-unauthorized">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Days since last modification</span><strong id="c02-days">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: binary &mdash; zero breaches, period.</p>
+                </article>
+                <article class="criterion-card">
+                    <span class="criterion-card__num">03</span>
+                    <h3 class="criterion-card__title">Daily Routine Adherence</h3>
+                    <span class="criterion-card__track criterion-card__track--auto">Auto-tracked &middot; live from 5/22</span>
+                    <p class="criterion-card__body">Three pre-committed daily visualizations, filed before market open: winning/stress rehearsal, predisposal trade decisions, and scaling-up/down law. Scaling triggers are not judgment calls.</p>
+                    <div class="criterion-card__metric">
+                        <span>Adherence (rolling 30 days)</span><strong id="c03-adherence">—</strong>
+                    </div>
+                    <div class="criterion-card__metric">
+                        <span>Current streak</span><strong id="c03-streak">—</strong>
+                    </div>
+                    <p class="criterion-card__threshold">Threshold: &ge; 95% completion across rolling 30 trading days.</p>
+                </article>
+            </div>
+
+            <!-- STAGE 2 — Expression Layer (the original edge gate) -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Stage 2 · Expression Layer &mdash; is the validated edge still expressing?</div>
+            <div class="defense__layers">
+                <article class="defense-card defense-card--dark defense-card--gate">
+                    <span class="defense-card__num">Edge</span>
+                    <h3 class="defense-card__title">The Edge Gate</h3>
+                    <p class="defense-card__sub">The condition under which the challenge ends. Live rolling-100 EV: <strong id="gate-expression-ev-2">—</strong> / trade &middot; rolling-100 R: <strong id="gate-expression-r-2">—</strong> per unit risked. The dollar figure is the locked trigger; the <strong>R figure is size-neutral</strong> &mdash; it does not move when position size scales across buffers, so it reads the edge cleanly through the doubling.</p>
+                    <dl class="defense-card__deflist">
+                        <div class="defense-card__defrow">
+                            <dt>Trigger &nbsp;·&nbsp; Statistical death</dt>
+                            <dd>Rolling 100-qualified-trade realized expectancy drops to <strong>$0 per trade</strong> &mdash; the edge crosses into net-negative territory. The gate is <strong>active (provisional) from 80 trades</strong> and <strong>binding at 100</strong>; an 80-trade window carries only ~12% more sampling error than 100, so the safety net is live well before the full sample, while the binding call waits for it.</dd>
+                        </div>
+                        <div class="defense-card__defrow">
+                            <dt>Action &nbsp;·&nbsp; Immediate stand-down</dt>
+                            <dd>New entries drop to zero size next session. Open positions close at their next defined exit per original trade plan. Strategy moves to research-only. Public Discord notification within <strong>24 hours</strong>, including the rolling-100 expectancy figure and the trade ID that satisfied the trigger.</dd>
+                        </div>
+                        <div class="defense-card__defrow">
+                            <dt>Re-deploy gate &nbsp;·&nbsp; Earned re-entry only</dt>
+                            <dd>Fresh out-of-sample test of <strong>&ge; +$50 per trade over 50 qualified trades</strong> (on virtual / paper / prop-firm capital) &nbsp;&middot;&nbsp; written re-derivation of the structural cause of decay &nbsp;&middot;&nbsp; <strong>48-hour cool-off</strong> after both. All three required.</dd>
+                        </div>
+                    </dl>
+                    <p class="defense-card__footer defense-card__footer--commit"><strong>Public commitment:</strong> every Gate event &mdash; whether triggered, near-triggered, or modification-attempted &mdash; is announced in the public Discord journal within 24 hours. The challenge is not over because the operator says so. The challenge is over because the data crossed the line.</p>
+                    <p class="defense-card__cta">
+                        <a class="link-gold" href="falsifiability-protocol-v2.html" target="_blank" rel="noopener">Read the locked protocol (v2) →</a>
+                        <span class="defense-card__docref">Doc Ref: FP-V2-2026-05 &nbsp;&middot;&nbsp; Expression + Fidelity layers</span>
+                    </p>
+                </article>
+            </div>
+
+            <!-- Three-tier stand-down (Fidelity Layer graduated response) -->
+            <div class="component-block-divider"></div>
+            <div class="component-label">Fidelity-Layer stand-down &mdash; graduated by breach type</div>
+            <div class="tier-grid">
+                <div class="tier-card tier-card--t1">
+                    <span class="tier-card__badge">Tier 1 · Logged breach</span>
+                    <p class="tier-card__trigger">Single isolated breach of Criterion 01 or 03.</p>
+                    <p class="tier-card__response">Logged within 24h + Discord entry. Witness review within 7 days. Stage-1 counter resets to zero. No size/operational change. Resume immediate.</p>
+                </div>
+                <div class="tier-card tier-card--t2">
+                    <span class="tier-card__badge">Tier 2 · Conditions reduced</span>
+                    <p class="tier-card__trigger">3+ breaches of Criterion 01/03 in rolling 30 trades, or sustained sub-95% routine adherence.</p>
+                    <p class="tier-card__response">Position cut to minimum (1 MES, no scaling) for next 20 qualified trades. Daily filing under witness oversight. Resume on 20 clean min-size trades + witness countersignature.</p>
+                </div>
+                <div class="tier-card tier-card--t3">
+                    <span class="tier-card__badge">Tier 3 · Full cessation</span>
+                    <p class="tier-card__trigger">Any Criterion 02 breach, or a second Tier 2 inside rolling 100 trades.</p>
+                    <p class="tier-card__response">Immediate cessation. Discord entry within 24h with structural cause. Witness structural review. Resume on countersigned remediation + 30-day calendar gap + 20 min-size trades.</p>
+                </div>
+            </div>
+            <p class="tier-note"><em>Calibration: launch is <strong>5/22/2026</strong>. Per-trade attribution (Criterion 01) is auto-tracked live from launch; the first 30 days are observation-only while baseline adherence is established, binding from day 31. Witness: <strong>Manish Dharod</strong>, with binding authority over modifications, breach classifications, and Stage-1 resumption events (locked protocol, Article VII). The remaining Phase-3 automation &mdash; daily-routine scoring, automated breach detection, and the stand-down state machine &mdash; rolls out within 30&ndash;60 days of launch.</em></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 05.1 — STAND-DOWN STATE WIDGET ═══ -->
+    <section class="section section--white standdown-section" id="standdown" aria-labelledby="standdown-h2">
+        <div class="section__inner">
+            <div class="section-eyebrow">Stand-Down State · Live</div>
+            <h2 class="section-head__title" id="standdown-h2">The current operating state &mdash; in public, in real time.</h2>
+            <p class="standdown-lede">Failure-state visibility equals success-state visibility. This widget renders the real operating tier with the same prominence whether it&rsquo;s normal operations or a Tier-3 cessation. No retroactive editing &mdash; the audit trail is the artifact.</p>
+            <div class="standdown-widget" id="standdown-widget">
+                <div class="standdown-widget__head">
+                    <span class="standdown-widget__title">Stand-Down State</span>
+                    <span class="standdown-widget__tier" id="sd-tier">T0 — Normal Operations</span>
+                </div>
+                <div class="standdown-widget__grid">
+                    <div class="standdown-widget__row"><span>Last event</span><strong id="sd-last-event">None on record</strong></div>
+                    <div class="standdown-widget__row"><span>Stage 1 counter</span><strong id="sd-counter">— qualified trades</strong></div>
+                    <div class="standdown-widget__row"><span>Active breach events</span><strong id="sd-active-breaches">0</strong></div>
+                    <div class="standdown-widget__row"><span>Pending witness reviews</span><strong id="sd-pending-reviews">0</strong></div>
+                </div>
+                <div class="standdown-widget__resumption hide" id="sd-resumption">
+                    <p class="standdown-widget__resumption-label">Resumption conditions</p>
+                    <div id="sd-resumption-rows"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 08 — LIVE EVIDENCE PANEL ═══ -->
+    <section class="section section--white" id="edge" aria-labelledby="a-h2">
+        <a id="section-a" aria-hidden="true"></a>
+        <div class="section__inner section__inner--wide">
+            <header class="section-head section-head--centered">
+                <div class="section-eyebrow">08 · Live Evidence</div>
+                <h2 class="section-head__title" id="a-h2">The challenge, instrumented.</h2>
+                <p class="section-head__lead">Every metric below is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. Trigger fires render with timestamps. The full instrumentation lives on the challenge dashboard.</p>
+            </header>
+
+            <div class="evidence-dashboard-banner">
+                <a class="btn btn-gold" href="experiment.html">Open the full challenge dashboard <span class="arr">&rarr;</span></a>
+            </div>
+
+            <div class="edge-live edge-live--four">
+                <div class="edge-live__card">
+                    <p class="edge-live__label">Win Rate</p>
+                    <p class="edge-live__value" id="edge-wr">—</p>
+                    <p class="edge-live__caption" id="edge-wr-cap">Live · closed trades</p>
+                </div>
+                <div class="edge-live__card">
+                    <p class="edge-live__label">Profit Factor</p>
+                    <p class="edge-live__value" id="edge-pf">—</p>
+                    <p class="edge-live__caption">Gross wins &divide; gross losses</p>
+                </div>
+                <div class="edge-live__card">
+                    <p class="edge-live__label">EV per trade</p>
+                    <p class="edge-live__value" id="edge-rexp">—</p>
+                    <p class="edge-live__caption" id="edge-rexp-cap">Per unit of risk · live realized</p>
+                </div>
+                <div class="edge-live__card">
+                    <p class="edge-live__label">Avg risk per trade</p>
+                    <p class="edge-live__value" id="edge-avgrisk">—</p>
+                    <p class="edge-live__caption" id="edge-avgrisk-cap">What 1R equals in dollars · live realized</p>
+                </div>
+            </div>
+
+            <div class="r-asym" aria-labelledby="r-asym-h">
+                <p class="r-asym__eyebrow" id="r-asym-h">R-multiple distribution &nbsp;·&nbsp; the asymmetry</p>
+                <div class="r-asym__grid">
+                    <div class="r-asym__cell r-asym__cell--win">
+                        <span class="r-asym__cell-label">Avg win</span>
+                        <span class="r-asym__cell-val" id="r-asym-win">—</span>
+                        <span class="r-asym__cell-sub" id="r-asym-win-sub">in R-units</span>
+                    </div>
+                    <div class="r-asym__cell r-asym__cell--loss">
+                        <span class="r-asym__cell-label">Avg loss</span>
+                        <span class="r-asym__cell-val" id="r-asym-loss">—</span>
+                        <span class="r-asym__cell-sub" id="r-asym-loss-sub">in R-units</span>
+                    </div>
+                    <div class="r-asym__cell r-asym__cell--ratio">
+                        <span class="r-asym__cell-label">Win : Loss ratio</span>
+                        <span class="r-asym__cell-val" id="r-asym-ratio">—</span>
+                        <span class="r-asym__cell-sub">A winning trade outperforms a losing trade by this multiple, in R.</span>
+                    </div>
+                </div>
+                <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
+            </div>
+
+
+            <!-- Risk profile — realized drawdown / streak / worst-trade -->
+            <div class="risk-profile" aria-labelledby="rp-h">
+                <p class="risk-profile__eyebrow" id="rp-h">Risk profile &nbsp;&middot;&nbsp; what the strategy has actually tolerated</p>
+                <h3 class="risk-profile__title">Drawdown is the path the Falsifiability Gate watches.</h3>
+                <p class="risk-profile__lede">Headroom (above) shows what the edge could mathematically support. This is what it has cost the operator&rsquo;s personal capital to produce the live record &mdash; the variance the defense architecture has weathered without modification.</p>
+
+                <div class="risk-profile__grid">
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Max realized drawdown</span>
+                        <span class="risk-profile__value" id="rp-maxdd-r">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-maxdd-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta" id="rp-maxdd-meta">at live sizing &middot; per 1 ES contract equivalent</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Longest losing streak</span>
+                        <span class="risk-profile__value" id="rp-streak">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-streak-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">Battery Test 7 threshold: &le; 4 consecutive losses</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Worst single trade</span>
+                        <span class="risk-profile__value" id="rp-worst">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-worst-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">single deepest realized hit</span>
+                    </div>
+                    <div class="risk-profile__cell">
+                        <span class="risk-profile__label">Recovery from max DD</span>
+                        <span class="risk-profile__value" id="rp-recovery">&mdash;</span>
+                        <span class="risk-profile__sub" id="rp-recovery-sub">computing&hellip;</span>
+                        <span class="risk-profile__meta">trades to restore the prior peak</span>
+                    </div>
+                </div>
+
+                <p class="risk-profile__close" id="rp-close">Computing live risk profile&hellip;</p>
+            </div>
+
+            <aside class="record-panel" aria-labelledby="record-panel-h">
+                <p class="record-panel__eyebrow" id="record-panel-h">The complete record</p>
+                <p class="record-panel__body">There is no separate backtest. The public Discord fills are the entire sample. The operator&rsquo;s personal capital was deployed, every trade was posted before exit, and every metric on this page is computed from that record &mdash; nothing is reconstructed, nothing is selected, nothing is unwound.</p>
+                <p class="record-panel__body">The <a href="#battery" class="link-inline">8-Test Sustainability Battery</a> below is how we evaluate whether a sample of this size carries statistical weight. The <a href="#fills" class="link-inline">public trade log</a> further down is every fill, downloadable as CSV, verifiable against the live market.</p>
+            </aside>
+
+            <h3 class="mt-4">Sample Equity Arc — $10,000 working unit · live</h3>
+            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $10,000 working unit. The arc prints as each Discord fill closes; each dashed line marks a $10,000 profit-buffer threshold (full mechanism in <a href="#method" class="link-inline">§01.2 Trigger Ladder</a>; the $10K&rarr;$100K target path in the <a href="#compounding-ladder" class="link-inline">Compounding Ladder</a> above). Capital resets to the working unit annually.</p>
+            <div class="mini-chart">
+                <canvas id="section-a-equity"></canvas>
+            </div>
+            <div class="mini-stats">
+                <div>
+                    <span class="mini-stats__label">Current balance</span>
+                    <span class="mini-stats__val" id="section-a-balance">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Net P&amp;L</span>
+                    <span class="mini-stats__val" id="section-a-net">—</span>
+                </div>
+                <div>
+                    <span class="mini-stats__label">Profit buffers reached</span>
+                    <span class="mini-stats__val" id="section-a-buffers">—</span>
+                </div>
+            </div>
+
+            <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
+            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month. Independent monthly cash signal — not cumulative wealth.</p>
+            <div class="mini-chart mini-chart--bars">
+                <canvas id="section-a-monthly"></canvas>
+            </div>
+
+            <p class="edge-disclaimer"><em>Past performance is not indicative of future results. Sample is pre-asymptotic at this size. Realized expectancy is published live and is the authoritative reference.</em></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION §2.2.1 — AUTHORITY PANEL (Rebuild §4.5) — NEW ═══ -->
+    <section class="block authority-section">
+        <div class="container-narrow">
+            <div class="section-eyebrow center">The Architecture, At Scale</div>
+            <h3 class="authority-h">Three principles. Three real-life proofs.</h3>
+            <p class="authority-sub">The same defense-plus-compounding architecture, demonstrated by the operators best known for each underlying principle.</p>
+
+            <div class="authority-grid">
+                <div class="auth-card">
+                    <div class="auth-principle-label">Principle 01</div>
+                    <h4 class="auth-principle">&ldquo;Permanent capital, redeployed at higher returns.&rdquo;</h4>
+                    <p class="auth-byline">Demonstrated by <strong>Berkshire Hathaway</strong> &mdash; half a century of compounding from low-cost insurance float.</p>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Insurance float as a low-cost, near-permanent capital base. Strict underwriting discipline. Conservative leverage. Survival before scale.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>~20% CAGR over five decades, compounded by redeploying float into high-ROIC operating businesses rather than chasing variance.</p>
+                    </div>
+                </div>
+
+                <div class="auth-card">
+                    <div class="auth-principle-label">Principle 02</div>
+                    <h4 class="auth-principle">&ldquo;Capped capacity preserves the edge &times; time product.&rdquo;</h4>
+                    <p class="auth-byline">Demonstrated by <strong>Renaissance Medallion Fund</strong> &mdash; closed to outside capital in 1993; ~70% gross annualized for three decades.</p>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Refused new outside capital at the exact moment doing so would have diluted the edge. Strict position-size and risk-budget rules. Employee-only since 1993.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>Small mechanical edges, executed without exception, at a size the market can absorb without degrading the edge. The math compounds because the cap was set before the temptation arrived.</p>
+                    </div>
+                </div>
+
+                <div class="auth-card">
+                    <div class="auth-principle-label">Principle 03</div>
+                    <h4 class="auth-principle">&ldquo;Risk-controlled architecture survives every regime.&rdquo;</h4>
+                    <p class="auth-byline">Demonstrated by <strong>Jane Street</strong> &mdash; employee-owned trading firm, profitable every year since 2000, through every crisis.</p>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Never-lose foundation</div>
+                        <p>Risk limits, position-size controls, and a capital base sized so no single event can take the firm out. Declines external capital that would dilute discipline.</p>
+                    </div>
+                    <div class="auth-layer">
+                        <div class="auth-layer-label">Compounding engine</div>
+                        <p>Small edges &times; massive volume &times; strict risk management &times; decades of operation. Compounding measured in firm equity, not portfolio returns.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="auth-close">
+                We are not inventing this. We are <em class="gold">applying the same architecture to a live, publicly conducted challenge</em> &mdash; a documented, falsifiable trading edge with personal capital on every fill.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 06 — PARTICIPATION (two cards: Witness + Reach Out) ═══ -->
+    <section class="section section--ivory paths" id="participation" aria-labelledby="paths-h2">
+        <div class="section__inner section__inner--wide">
+            <header class="section-head section-head--centered">
+                <div class="section-eyebrow">06 · Participation</div>
+                <h2 class="section-head__title" id="paths-h2">Two ways to engage with the challenge.</h2>
+                <p class="section-head__lead">The challenge is publicly conducted. The purpose of publication is credibility &mdash; to put a real architecture, a real method, and a real falsifiability gate in front of anyone who cares to evaluate them. Two ways to engage, both honest about what they are.</p>
+            </header>
+
+            <div class="participation-grid">
+                <article class="participation-card participation-card--witness">
+                    <span class="participation-card__eyebrow">Witness the challenge</span>
+                    <p class="participation-card__tag">Free · Unlimited · Public Discord community</p>
+                    <p class="participation-card__body">Watch every trade as it executes. See the EV calculation update fill-by-fill. Watch the trigger ladder fire. See the Falsifiability Gate run. Engage with other observers. Ask questions of the operator. No fee, no cap, no relationship required.</p>
+                    <p class="participation-card__body participation-card__caveat"><em>One honest caveat: each fill is posted to Discord by hand, the moment an order is placed. Because a human logs it, expect a short delay between the live execution and the journal entry &mdash; the posts track the trades closely, but not to the millisecond.</em></p>
+                    <p class="participation-card__body">The Discord is more than a journal. It is the community around the work &mdash; where the method gets discussed, where edge cases get debated, and where the challenge is observed by people who want to think rigorously about what it shows.</p>
+                    <p class="participation-card__cta"><a class="btn btn-gold" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Join the public Discord <span class="arr">&rarr;</span></a></p>
+                </article>
+
+                <article class="participation-card participation-card--reach">
+                    <span class="participation-card__eyebrow">Reach out with questions</span>
+                    <p class="participation-card__tag">Concepts · Methodology · Context · Fit</p>
+                    <p class="participation-card__body">If something about the challenge raises questions &mdash; about the method, about the underlying concepts, about how to think about this in your own context &mdash; the operator is reachable directly. Drop a note. The form below opens a private conversation.</p>
+                    <p class="participation-card__body">No agenda on either side. Just a real exchange about the work and whatever you want to understand about it.</p>
+                    <p class="participation-card__cta"><a class="btn btn-ghost-dark" href="#reach-out">Reach out <span class="arr">&rarr;</span></a></p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 08 — SUSTAINABILITY BATTERY (Dev Spec §3.8) ═══ -->
+    <section class="section section--white" id="section-b" aria-labelledby="b-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Sustainability — Verified Eight Ways</span>
+            <h2 id="b-h2">Edge sustainability. Verified eight ways.</h2>
+            <p class="subhead">
+                Every edge can look real in a small sample. This is the battery we re-run against live trade data to prove it isn&rsquo;t. The edge claim in the comparison map above is only credible if the battery says it is. Run it on our data. Run it on yours.
+            </p>
+
+            <p class="battery-callout"><em>Or run it on your own trade data. Your file never leaves your device.</em></p>
+
+            <p class="mono" style="font-size:13px" id="battery-status-banner">Loading…</p>
+
+            <div class="controls-bar" role="toolbar" aria-label="Battery controls">
+                <div class="controls-bar__group">
+                    <span>Last recalculated: <strong id="battery-last-recalc">—</strong></span>
+                    <span class="trust-strip__sep">|</span>
+                    <span>Sample size: <strong id="battery-sample-size">—</strong> trades</span>
+                </div>
+                <div class="controls-bar__buttons">
+                    <button type="button" class="btn btn--secondary btn--sm" id="btn-recalculate">Recalculate now</button>
+                    <button type="button" class="btn btn--tertiary btn--sm" id="btn-reset-data">Reset to Ekantik sample</button>
+                </div>
+            </div>
+
+            <div class="upload-banner hide" id="battery-user-banner">
+                <span>Showing YOUR uploaded data. Results below are computed on your trades.</span>
+                <span class="mono">Click "Reset to Ekantik sample" to return.</span>
+            </div>
+
+            <div id="battery-table" aria-live="polite">Loading battery…</div>
+
+            <div id="battery-failure-note" aria-live="polite"></div>
+
+            <details class="upload-panel">
+                <summary class="upload-panel__summary">Run the battery on your own data</summary>
+                <div class="upload-panel__body">
+                    <p>
+                        Upload a Tradovate CSV, Discord JSON export, or paste raw Discord alert messages. The full 8-test battery runs in your browser — your data never leaves your device.
+                    </p>
+                    <div class="upload-panel__step">
+                        <h4>Step 1 — Upload a file</h4>
+                        <input type="file" id="upload-file" accept=".csv,.json,.txt">
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 2 — or paste text</h4>
+                        <textarea id="upload-textarea" rows="5" style="width:100%; font-family:var(--font-mono); font-size:12px; padding:8px; border:1px solid var(--divider); border-radius:var(--radius-sm); background:var(--white);" placeholder="F37: s 6837.5&#10;F37: +4.5"></textarea>
+                    </div>
+                    <div class="upload-panel__step">
+                        <h4>Step 3 — Run the battery</h4>
+                        <button type="button" class="btn btn--primary btn--sm" id="btn-run-upload">Run battery on this data</button>
+                        <div id="upload-preview" class="mt-2"></div>
+                    </div>
+                </div>
+            </details>
+
+            <div id="battery-edge-hub"></div>
+
+            <div class="glossary">
+                <h3 class="glossary__title">Full Glossary — Understanding the 8 Tests</h3>
+                <p class="muted" style="font-size:13px; margin-top:-8px">Click any attribute above, or expand a card below, for the deep dive — analogy, pass/fail examples, threshold rationale, and the math behind the number.</p>
+                <div id="battery-glossary">Loading glossary…</div>
+            </div>
+
+            <details class="version-history">
+                <summary class="version-history__summary">Battery history — every past run, archived</summary>
+                <table class="data-table mt-2">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th class="num">Sample Size</th>
+                            <th class="num">Tests Passed</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="version-history-body">
+                        <tr><td colspan="4" class="muted italic">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </details>
+
+            <a class="transparency-link" href="https://github.com/EkantikCapitalAdvisors" target="_blank" rel="noopener">View the battery source code →</a>
+
+            <p class="lede mt-4" style="color: var(--muted)">
+                A battery is only as credible as the data feeding it. The next section is how you can see every fill, in real time, as it happens.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 5 — SECTION C: Validation (Discord card + trade log only) ═══ -->
+    <section class="section section--cream" id="section-c" aria-labelledby="c-h2">
+        <div class="section__inner">
+            <span class="eyebrow">Validation — your eyes, not our word</span>
+            <h2 id="c-h2">Every fill, in public.</h2>
+            <p class="subhead">
+                Every metric on this page is computed from these fills. You can watch each one happen.
+            </p>
+
+            <div class="validation-row">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Live Alerts</h3>
+                        <span class="mono muted" style="font-size:11px">Last 5 fills</span>
+                    </div>
+                    <div id="discord-feed" class="discord-feed">Loading…</div>
+                    <p class="muted italic mt-3" style="font-size:12px">Live mirror of the last 5 fills from the Discord trade journal. The journal is <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer"><strong>open to anyone</strong></a> &mdash; no submission required &mdash; and every executed trade posts there in real time.</p>
+                    <div class="callout callout--small mt-3" role="note">
+                        <p class="callout__title" style="font-size:13px">Discord posts run ~60 seconds behind the actual fill.</p>
+                        <p class="callout__body" style="font-size:13px">The operator types each alert in by hand <em>after</em> the order is entered at the broker, so by the time you read &ldquo;Short @ 7141&rdquo; on Discord the entry was already taken. The feed exists so you can verify every fill against real markets and study how the strategy reasons about entries, exits, sizing, and stops &mdash; <strong>it is a window into the mechanism, not a signal to follow</strong>. Don&rsquo;t try to mirror entries off the timestamps.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Public Trade Log</h3>
+                        <span class="mono muted" style="font-size:11px" id="trade-log-count">—</span>
+                    </div>
+                    <div class="filter-bar" id="trade-log-filter" role="group" aria-label="Filter trades by date range"></div>
+                    <div class="data-table__wrap data-table__wrap--scroll">
+                        <table class="data-table" style="font-size:12px">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date/Time</th>
+                                    <th>Dir</th>
+                                    <th class="num">Entry</th>
+                                    <th class="num">Exit</th>
+                                    <th class="num">Pts</th>
+                                    <th class="num">$ P&amp;L</th>
+                                    <th>Result</th>
+                                    <th class="num">R</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trade-log-body">
+                                <tr><td colspan="9" class="muted italic">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button type="button" class="btn btn--secondary btn--sm" id="btn-download-csv">Download full trade log (CSV)</button>
+                    </div>
+                    <p class="muted italic mt-2" style="font-size:12px">Full log available. Download it, run it through any evaluator you trust.</p>
+                </div>
+            </div>
+
+            <div class="cta-row">
+                <a class="btn btn--primary" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Watch the challenge live →</a>
+                <a class="btn btn--secondary" href="#reach-out">Reach out with questions →</a>
+                <a class="btn btn--tertiary" href="https://doubles.ekantikcapital.com">Read the doctrine</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ DOCTRINE ECHO — closing loop (ACC-DOCTRINE-ALIGN-V1) ═══ -->
+    <section class="section section--ivory doctrine-echo" aria-labelledby="doctrine-echo-h">
+        <div class="container-narrow">
+            <div class="section-eyebrow">The doctrine&rsquo;s close, restated here.</div>
+            <blockquote class="doctrine-echo__quote" id="doctrine-echo-h">Don&rsquo;t pick a profession. Pick a mechanism.</blockquote>
+            <p class="doctrine-echo__body">This page is one mechanism, running live, in public. The doctrine is the framework for recognizing the structural signature when you see it in your own domain &mdash; your career, your business, your capital allocation, your edge.</p>
+            <p class="doctrine-echo__links"><a href="https://doubles.ekantikcapital.com">Return to the doctrine &rarr;</a> &middot; <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Witness this mechanism live &rarr;</a></p>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 09 — REACH OUT (private inquiry · zero financial info) ═══ -->
+    <section class="section section--white" id="reach-out" aria-labelledby="reach-h2">
+        <div class="section__inner">
+            <div class="section-eyebrow">09 · Reach Out</div>
+            <h2 class="section-head__title" id="reach-h2">Reach out.</h2>
+            <p class="reach-intro">Have a question about the challenge, the method, or how to think about this in your own context? Drop a note below. The operator reads each one personally. This is a private inquiry path &mdash; not an application, not an offer acceptance, and not an expression of intent to participate in anything.</p>
+
+            <form class="reach-form" id="reach-form" action="https://formspree.io/f/__FORMSPREE_ACCELERATOR__" method="POST" novalidate>
+                <div class="reach-form__grid">
+                    <div class="ind-field">
+                        <label for="reach-name">Name *</label>
+                        <input type="text" id="reach-name" name="name" maxlength="100" required autocomplete="name" placeholder="First and last">
+                    </div>
+                    <div class="ind-field">
+                        <label for="reach-email">Email *</label>
+                        <input type="email" id="reach-email" name="email" required autocomplete="email">
+                    </div>
+                </div>
+                <div class="ind-field">
+                    <label for="reach-message">What would you like to discuss? *</label>
+                    <textarea id="reach-message" name="message" rows="4" maxlength="600" required placeholder="Questions about method, concepts, fit, anything — 1–3 sentences."></textarea>
+                </div>
+                <div class="ind-submit-row">
+                    <button type="submit" class="btn btn--primary btn--xl" id="reach-submit" disabled>Send note</button>
+                    <p id="reach-error" class="ind-error hide" role="alert"></p>
+                </div>
+                <p class="ind-submit-note"><em>Replies typically within 48 hours. Submissions establish a private contact channel; they create no obligation on either side. This form collects no financial information and does not constitute an application, subscription, or expression of intent to invest.</em></p>
+                <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px">
+            </form>
+
+            <div class="ind-thanks hide" id="reach-thanks" role="status">
+                <h3>Note received.</h3>
+                <p>Thanks for reaching out. The operator reads each note personally and typically replies within 48 hours. This exchange creates no obligation on either side.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REGION 6 — FOOTER ═══ -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer__inner">
+            <div class="footer__architecture">
+                <div>
+                    <p class="eyebrow">Doctrine</p>
+                    <a href="https://doubles.ekantikcapital.com">The Doubling Engine →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Accelerator</p>
+                    <a href="/">accelerator.ekantikcapital.com →</a>
+                </div>
+                <div>
+                    <p class="eyebrow">Reach out</p>
+                    <a href="#reach-out">Reach out with questions &rarr;</a>
+                </div>
+            </div>
+
+            <div class="footer__disclosure" id="disclosures">
+                <p class="footer__canon"><strong>Disclosures</strong></p>
+                <p>Ekantik Capital Advisors LLC is the operator of this challenge and the publisher of this page. The challenge described is a live trading exercise conducted on the operator&rsquo;s own capital, with realized results publicly logged in the Ekantik Discord journal.</p>
+                <p>The trajectory figures shown are hypothetical and projected &mdash; not realized &mdash; and reflect the architecture&rsquo;s structural behavior under stated regime conditions. Hypothetical performance has inherent limitations. The figures should not be relied upon as a prediction of actual results. Past performance is not indicative of future results.</p>
+                <p><strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or any interest in any investment product.</strong> Inquiry submissions and Discord participation create no obligation on either side and do not constitute an application, subscription, or expression of intent to invest.</p>
+                <p>Trigger events, sit-out events, and any Falsifiability Gate activity are announced in the public Discord journal within 24 hours of occurrence. Sample is pre-asymptotic.</p>
+                <p>© 2026 Ekantik Capital Advisors LLC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script src="js/parser.js"></script>
+    <script src="js/battery.js"></script>
+    <script src="js/battery-ui.js"></script>
+    <script src="js/kpis.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/render-hero.js"></script>
+    <script src="js/render-section-a.js"></script>
+    <script src="js/render-section-b.js"></script>
+    <script src="js/render-section-c.js"></script>
+    <script src="js/render-edges.js"></script>
+    <script src="js/render-experiment.js"></script>
+    <script src="js/render-operator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

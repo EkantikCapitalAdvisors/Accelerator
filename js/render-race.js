@@ -1,8 +1,9 @@
 // =====================================================
 // The Race to $100k — futures vs options leaderboard (landing page).
-// Both strategies start at $10,000; balance = $10k + cumulative realized
-// P&L. Fetches both trade journals, renders the two race cards, marks the
-// leader, and re-polls every 60s so the standings update without a reload.
+// The challenge is $100,000 in cumulative realized PROFIT (not balance).
+// Progress = net profit / $100k. Headline number per strategy is the
+// profit banked; balance ($10k base + profit) is shown as context.
+// Fetches both trade journals, marks the leader, re-polls every 60s.
 // =====================================================
 (function (root) {
     'use strict';
@@ -23,18 +24,18 @@
 
     function setCard(prefix, trades, leading) {
         const n = trades.length, nt = net(trades), bal = BASE + nt;
-        const pct = Math.max(0, Math.min(100, bal / TARGET * 100));
-        if ($(prefix + '-bal')) $(prefix + '-bal').textContent = fmtUSD(bal);
+        const pct = Math.max(0, Math.min(100, nt / TARGET * 100)); // profit toward $100k
+        if ($(prefix + '-bal')) $(prefix + '-bal').textContent = fmtSigned(nt);   // headline = profit
         if ($(prefix + '-pct')) $(prefix + '-pct').textContent = pct.toFixed(1) + '%';
-        if ($(prefix + '-net')) $(prefix + '-net').textContent = fmtSigned(nt);
+        if ($(prefix + '-net')) $(prefix + '-net').textContent = fmtUSD(bal);     // context = balance
         if ($(prefix + '-n')) $(prefix + '-n').textContent = String(n);
-        if ($(prefix + '-fill')) $(prefix + '-fill').style.width = pct.toFixed(1) + '%';
+        if ($(prefix + '-fill')) $(prefix + '-fill').style.width = Math.max(pct, 0).toFixed(1) + '%';
         const badge = $(prefix + '-badge');
         if (badge) {
             badge.textContent = leading ? '◆ Leading' : '';
             badge.style.display = leading ? 'inline-block' : 'none';
         }
-        return bal;
+        return nt;
     }
 
     async function render() {
