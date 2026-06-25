@@ -164,7 +164,8 @@
     }
 
     async function render() {
-        const trades = await fetchJSON('data/options_trades.json');
+        const all = await fetchJSON('data/options_trades.json');
+        const trades = Array.isArray(all) ? all.filter(t => t.outcome !== 'Open') : all;  // open positions excluded until closed
         const s = compute(trades);
         renderHead(s);
         renderKpis(s);

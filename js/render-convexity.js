@@ -204,7 +204,7 @@
     }
 
     async function init() {
-        const trades = await fetchJSON(TRADES_URL) || [];
+        const trades = (await fetchJSON(TRADES_URL) || []).filter(t => t.outcome !== 'Open');  // open positions excluded until closed
         const s = computeSummary(trades);
         s._trades = trades;
         s._buf = bufferProgress(trades);

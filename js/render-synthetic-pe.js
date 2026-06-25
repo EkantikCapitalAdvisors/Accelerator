@@ -68,7 +68,7 @@
         // --- Compounding engine: stats card + "$10k -> $100k" challenge ---
         // Progress is measured on NET PROFIT toward $100k (not the account balance).
         if (o) {
-            const s = stats(o);
+            const s = stats(o.filter(t => t.outcome !== 'Open'));  // open positions don't count until closed
             setText('sp-co-net', fmtSigned(s.net));
             setText('sp-co-trades', String(s.n));
             setText('sp-co-bal', fmtSigned(s.net));                          // net profit, not balance
