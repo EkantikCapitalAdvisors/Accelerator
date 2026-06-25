@@ -63,14 +63,15 @@
         if ($('xp-gate'))     $('xp-gate').textContent     = gateFired ? 'TRIGGERED' : (gateProvisional ? 'Armed · provisional' : 'Armed');
 
         // ── Phase indicator — auto-switches on the live balance ──
-        // Phase 0 = trial run: bank the first $10,000 of realized P&L at lower
-        // stakes. Phase 1 = the real challenge ($10K → $100K) the moment that
-        // first $10,000 is banked. Drives off cumulative realized profit so it
-        // flips itself with no manual edit.
+        // Phase 0 = trial run: prove the discipline at 1 ES by banking the first
+        // $10,000 at lower stakes. Phase 1 = the live scorecard the moment that
+        // first $10,000 is banked — the challenge is to finish every month
+        // net-positive (the 10× growth challenge lives on the Compounding Engine).
+        // Drives off cumulative realized profit so it flips itself with no edit.
         const phaseEl = $('xp-phase');
         if (phaseEl) {
             if (cum >= TRIAL_RUN_TARGET) {
-                phaseEl.innerHTML = '<strong>Phase 1:</strong> The real challenge &middot; $10K &rarr; $100K';
+                phaseEl.innerHTML = '<strong>Phase 1:</strong> Live scorecard &middot; finish every month net-positive';
             } else {
                 phaseEl.innerHTML = `<strong>Phase 0:</strong> Trial run &middot; ${fmtUSD(Math.max(0, cum))} of $10K banked`;
             }
