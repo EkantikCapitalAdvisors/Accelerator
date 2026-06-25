@@ -289,6 +289,21 @@
     .edge-table th,.edge-table td{padding:10px 8px;}
   }
 
+  /* ---------- the machine is everywhere ---------- */
+  .universal{margin-top:46px;}
+  .universal-h{font-family:var(--serif);font-size:clamp(1.5rem,2.9vw,2.05rem);color:var(--ivory);max-width:26ch;margin-bottom:12px;font-weight:600;line-height:1.2;}
+  .universal-h em{font-style:italic;color:var(--gold);}
+  .universal-sub{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--gold-bright);margin-bottom:26px;line-height:1.6;}
+  .ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .ex-card{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:20px 20px;}
+  .ex-card .ex-k{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+  .ex-card p{font-size:.88rem;color:var(--slate);line-height:1.56;}
+  .ex-card p strong{color:var(--text);font-weight:600;} .ex-card p em{color:var(--slate-dim);font-style:italic;}
+  .universal-close{margin-top:28px;padding:22px 28px;border-left:3px solid var(--gold);background:linear-gradient(90deg,rgba(200,169,81,0.07),transparent);border-radius:0 10px 10px 0;font-size:1.06rem;color:var(--text);line-height:1.62;max-width:80ch;}
+  .universal-close strong{color:var(--ivory);font-weight:600;} .universal-close em{color:var(--gold-bright);font-style:italic;} .universal-close span{font-family:var(--serif);font-style:italic;font-size:1.22rem;color:var(--gold);}
+  @media(max-width:860px){ .ex-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:560px){ .ex-grid{grid-template-columns:1fr;} }
+
   /* ---------- synthetic-PE leverage calculator ---------- */
   .pe-toggle{display:flex;gap:6px;background:var(--card);border:1px solid var(--line-soft);border-radius:10px;padding:5px;margin:8px 0 18px;}
   .pe-toggle button{flex:1;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);background:none;border:none;border-radius:7px;padding:11px 10px;cursor:pointer;transition:all .2s;}
@@ -433,6 +448,39 @@
     </div>
 
     <p class="pull">A structure can be copied. A secret cannot. <span>Private equity is a structure</span> — and it has been hiding in plain sight, behind a velvet rope marked <em>institutional access only</em>.</p>
+
+    <!-- THE MACHINE IS EVERYWHERE -->
+    <div class="universal">
+      <h3 class="universal-h">And it isn't just private equity. <em>Every durable fortune runs this same machine.</em></h3>
+      <p class="universal-sub">Borrow at a reasonable rate · let cash flow carry the debt · compound the rest. Look closely and the same three ingredients are everywhere.</p>
+      <div class="ex-grid">
+        <div class="ex-card">
+          <div class="ex-k">The U.S. government</div>
+          <p>Borrows at the lowest rates on earth (Treasuries), services it with tax revenue, and compounds the economy it borrows against. It has run on debt for most of its history and grown <strong>richer</strong>, not poorer — leverage in service of a compounding base.</p>
+        </div>
+        <div class="ex-card">
+          <div class="ex-k">Banks</div>
+          <p>Borrow at near-zero — your deposits — lend and invest at higher rates, and compound the spread. The entire business <em>is</em> cheap leverage + cash flow + compounding, wearing a different name.</p>
+        </div>
+        <div class="ex-card">
+          <div class="ex-k">Berkshire &amp; insurers</div>
+          <p>Insurance "float" is borrowed money at near-zero or negative cost — premiums held before claims — invested and compounded for decades. Buffett's real edge was never stock-picking; it was <strong>cheap, permanent leverage.</strong></p>
+        </div>
+        <div class="ex-card">
+          <div class="ex-k">Homeowners</div>
+          <p>A mortgage is cheap, 30-year leverage on an appreciating asset; income carries the payment; equity compounds as the loan amortizes beneath it. The most common wealth-builder in America — the same machine, retail-sized.</p>
+        </div>
+        <div class="ex-card">
+          <div class="ex-k">University endowments</div>
+          <p>The Yale model: take a fixed cash-flow draw, compound the rest in high-return assets, lever prudently — and do it for <strong>centuries</strong>. Permanence is just the machine, left running.</p>
+        </div>
+        <div class="ex-card">
+          <div class="ex-k">Private equity</div>
+          <p>Buy with mostly debt, let the company's cash flow retire it, compound the equity through value creation, own a de-levered and larger asset at exit. The template this page is named for.</p>
+        </div>
+      </div>
+      <p class="universal-close">Same three ingredients, every time: <strong>borrow at a reasonable rate, throw off cash flow to carry it, and compound the rest.</strong> That combination — not a job, not a salary — is what actually buys <strong>freedom</strong>. The machine was never the secret. The only thing that ever varied was <em>access</em>. <span>Synthetic PE is that access</span> — the same three ingredients, rebuilt with liquid instruments, on your own balance sheet.</p>
+    </div>
   </div>
 </section>
 
