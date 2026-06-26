@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compounding Engine · Dashboard · Ekantik Capital</title>
-    <meta name="description" content="Live instrumentation of the Compounding Engine — options strategy KPIs, equity curve, monthly P&L, and every fill, toward the first $100,000 in profit. Public. No login.">
+    <meta name="description" content="Live instrumentation of the Compounding Engine — options strategy KPIs, equity curve, monthly P&L, and every fill, toward the first $50,000 in profit. Public. No login.">
     <meta name="theme-color" content="#1B2A4A">
     <link rel="canonical" href="https://accelerator.ekantikcapital.com/options-dashboard.html">
     <meta name="robots" content="index, follow">
@@ -35,8 +35,8 @@
 
     <div class="cftc-banner" role="note">
         <div class="cftc-banner__inner">
-            <span class="cftc-banner__tag">Options track &middot; $10k &rarr; $100k race</span>
-            <span class="cftc-banner__body">The options side of the $10,000 &rarr; $100,000 challenge. This is a <strong>model portfolio</strong> &mdash; premium-at-risk, educational only &mdash; ahead of its 6/30/2026 live-capital launch; every alert is posted to the public <strong>#option-alerts</strong> Discord channel. <strong>Nothing on this page constitutes an offer or a solicitation.</strong> Hypothetical and projected figures are not realized results. Past performance is not indicative of future results.</span>
+            <span class="cftc-banner__tag">Options track &middot; $5k &rarr; $50k race</span>
+            <span class="cftc-banner__body">The options side of the $5,000 &rarr; $50,000 challenge. This is a <strong>model portfolio</strong> &mdash; premium-at-risk, educational only &mdash; ahead of its 6/30/2026 live-capital launch; every alert is posted to the public <strong>#option-alerts</strong> Discord channel. <strong>Nothing on this page constitutes an offer or a solicitation.</strong> Hypothetical and projected figures are not realized results. Past performance is not indicative of future results.</span>
         </div>
     </div>
 
@@ -45,14 +45,14 @@
         <div class="container">
             <div class="eyebrow">Options Strategy &middot; Live Instrumentation</div>
             <h1 class="dash-h1">The options track, instrumented.</h1>
-            <p class="dash-lede">The short-dated long-options strategy in the $10k &rarr; $100k race &mdash; KPIs, equity curve, and every fill, computed live from the option-alerts journal. <a href="/#race" class="link-gold">Back to the race &rarr;</a></p>
+            <p class="dash-lede">The short-dated long-options strategy in the $5k &rarr; $50k race &mdash; KPIs, equity curve, and every fill, computed live from the option-alerts journal. <a href="/#race" class="link-gold">Back to the race &rarr;</a></p>
             <div class="experiment-status experiment-status--dash" role="status" aria-label="Options track state">
                 <span class="experiment-status__items">
                     <span><span class="dot"></span> Live</span>
                     <span class="experiment-status__sep">·</span>
                     <span>Balance: <strong id="od-bal">—</strong></span>
                     <span class="experiment-status__sep">·</span>
-                    <span>To $100k: <strong id="od-pct">—</strong></span>
+                    <span>To $50k: <strong id="od-pct">—</strong></span>
                     <span class="experiment-status__sep">·</span>
                     <span>Net P&amp;L: <strong id="od-net">—</strong></span>
                     <span class="experiment-status__sep">·</span>
@@ -60,15 +60,15 @@
                 </span>
             </div>
 
-            <!-- Progress to $100k -->
+            <!-- Progress to $50k -->
             <div style="margin-top:22px;max-width:760px">
                 <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">
-                    <span>$10,000 start</span><span>$100,000 target</span>
+                    <span>$5,000 start</span><span>$50,000 target</span>
                 </div>
                 <div style="height:16px;background:#E5E0D0;border-radius:999px;overflow:hidden">
                     <span id="od-progress-fill" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#1B2A4A,#C8A951);transition:width .6s ease"></span>
                 </div>
-                <p style="font-size:13px;color:var(--muted);margin-top:8px"><strong id="od-progress-label">—</strong> of the way to $100,000.</p>
+                <p style="font-size:13px;color:var(--muted);margin-top:8px"><strong id="od-progress-label">—</strong> of the way to $50,000.</p>
             </div>
 
             <div class="dash-head__cta">
@@ -103,8 +103,8 @@
     <!-- ═══ EQUITY CURVE ═══ -->
     <section class="block dash-block">
         <div class="container">
-            <div class="component-label">Equity curve &middot; $10,000 base<span id="od-equity-since"></span></div>
-            <p class="dash-block__sub">Account balance ($10,000 + cumulative realized P&amp;L) after each closed fill, in sequence, <span id="od-equity-range">since the first fill</span>. Dashed line marks the $100,000 target.</p>
+            <div class="component-label">Equity curve &middot; $5,000 base<span id="od-equity-since"></span></div>
+            <p class="dash-block__sub">Account balance ($5,000 + cumulative realized P&amp;L) after each closed fill, in sequence, <span id="od-equity-range">since the first fill</span>. Dashed line marks the $50,000 target.</p>
             <div style="position:relative;height:340px;background:#1B2A4A;border-radius:10px;padding:14px 10px;margin-top:6px">
                 <canvas id="od-equity"></canvas>
             </div>

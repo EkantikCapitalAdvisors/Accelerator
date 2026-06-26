@@ -1,15 +1,15 @@
 // =====================================================
-// Options Dashboard ($10k → $100k) — live renderer.
-//   · Status strip + progress-to-$100k bar
+// Options Dashboard ($5k → $50k) — live renderer.
+//   · Status strip + progress-to-$50k bar
 //   · KPI grid (net, WR, PF, R-exp, EV, magnitudes, streak, avg risk)
-//   · Equity curve ($10k base) + monthly P&L (Chart.js)
+//   · Equity curve ($5k base) + monthly P&L (Chart.js)
 //   · Every-fill trade log
 // Reads data/options_trades.json; re-polls every 60s (pauses when hidden).
 // =====================================================
 (function (root) {
     'use strict';
     const $ = id => document.getElementById(id);
-    const BASE = 10000, TARGET = 100000;
+    const BASE = 5000, TARGET = 50000;
     const NAVY = '#1B2A4A', GOLD = '#C8A951', POS = '#2D5016', NEG = '#DC2626';
 
     function fmtUSD(v) { return (v == null || !isFinite(v)) ? '$—' : (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString(); }

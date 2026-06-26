@@ -3,8 +3,8 @@
 // Self-contained (this page has its own styles, no site data layer).
 //   • Cash-flow engine challenge: finish net-positive EVERY MONTH.
 //     → shows months-green / total and the current month's running P&L.
-//   • Compounding engine challenge: take $10k → $100k as fast as possible.
-//     → shows NET PROFIT and its % of $100k (e.g. +$2,219 = 2.2%), not balance.
+//   • Compounding engine challenge: take $5k → $50k as fast as possible.
+//     → shows NET PROFIT and its % of a 10× run ($50k), not balance.
 // Re-polls every 60s; pauses while the tab is hidden. NOT a forecast.
 // =====================================================
 (function (root) {
@@ -65,15 +65,15 @@
             setText('sp-cf-month', fmtSigned(m.current));
         }
 
-        // --- Compounding engine: stats card + "$10k -> $100k" challenge ---
-        // Progress is measured on NET PROFIT toward $100k (not the account balance).
+        // --- Compounding engine: stats card + "$5k -> $50k" challenge ---
+        // Progress is measured on NET PROFIT toward $50k (not the account balance).
         if (o) {
             const s = stats(o.filter(t => t.outcome !== 'Open'));  // open positions don't count until closed
             setText('sp-co-net', fmtSigned(s.net));
             setText('sp-co-trades', String(s.n));
             setText('sp-co-bal', fmtSigned(s.net));                          // net profit, not balance
-            setText('sp-co-pct', (s.net / 100000 * 100).toFixed(1) + '% of a 10× run');
-            setW('sp-co-fill', s.net / 100000 * 100);
+            setText('sp-co-pct', (s.net / 50000 * 100).toFixed(1) + '% of a 10× run');
+            setW('sp-co-fill', s.net / 50000 * 100);
         }
     }
 
