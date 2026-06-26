@@ -1005,7 +1005,17 @@
     if(!open){l.style.position='absolute';l.style.top='62px';l.style.left='0';l.style.right='0';l.style.flexDirection='column';l.style.background='rgba(17,28,51,0.98)';l.style.padding='18px 24px';l.style.gap='16px';l.style.borderBottom='1px solid rgba(148,163,184,0.14)';}
   });
 </script>
-<script src="js/render-synthetic-pe.js?v=20260625b"></script>
-<script src="js/pe-calculator.js?v=20260625b"></script>
+<script>
+  // Always load the calculator/renderer fresh — defeats stale browser/CDN caching of these files.
+  (function () {
+    var t = Date.now();
+    ['js/render-synthetic-pe.js', 'js/pe-calculator.js'].forEach(function (src) {
+      var s = document.createElement('script');
+      s.src = src + '?t=' + t;
+      s.async = false; // preserve execution order; run after download
+      document.body.appendChild(s);
+    });
+  })();
+</script>
 </body>
 </html>
