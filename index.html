@@ -849,24 +849,25 @@
       <div class="heloc-step"><div class="n">5</div><h4>Repay &amp; keep</h4><p>At maturity, repay the principal from the gains — and keep the free-and-clear equity.</p></div>
     </div>
 
-    <!-- Worked example — computed live by js/heloc-example.js from the SAME engine
-         (js/synthetic-pe-engine.js) that powers the calculator above, using the
-         HELOC preset defined in that script. Edit the preset there, not these numbers. -->
+    <!-- Worked example — rendered live by js/heloc-example.js from the SAME engine
+         (js/synthetic-pe-engine.js) that powers the calculator above. It mirrors the
+         calculator's current inputs (interest-only, the HELOC way), so it updates as you
+         tune the calculator. The numbers below are just the initial pre-JS fallback. -->
     <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:24px 26px">
-      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">A worked example · illustrative · <a href="#calculator" style="color:var(--gold-bright)">same engine as the calculator</a></div>
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">A worked example · illustrative · <a href="#calculator" style="color:var(--gold-bright)">live from the calculator above ↑</a></div>
       <div class="heloc-ex">
-        <div class="box"><div class="k">Your cash at risk</div><div class="v" id="hx-cash">~$3,200</div><div class="s" id="hx-cash-s">reserve + uncovered carry</div></div>
+        <div class="box"><div class="k">Your cash at risk</div><div class="v" id="hx-cash">~$2,000</div><div class="s" id="hx-cash-s">reserve + uncovered carry</div></div>
         <span class="op">+</span>
-        <div class="box"><div class="k">HELOC deployed</div><div class="v" id="hx-deploy">$80,000</div><div class="s" id="hx-deploy-s">@ ~8%, interest-only</div></div>
+        <div class="box"><div class="k">HELOC deployed</div><div class="v" id="hx-deploy">$50,000</div><div class="s" id="hx-deploy-s">@ ~8%, interest-only</div></div>
         <span class="op">→</span>
-        <div class="box"><div class="k">Portfolio · <span id="hx-term">7</span> yr</div><div class="v" id="hx-port">~$145,000</div><div class="s" id="hx-port-s">illustrative</div></div>
+        <div class="box"><div class="k">Portfolio · <span id="hx-term">7</span> yr</div><div class="v" id="hx-port">~$90,000</div><div class="s" id="hx-port-s">illustrative</div></div>
       </div>
       <div class="heloc-ex" style="margin-top:13px">
-        <div class="box"><div class="k">Income covers interest</div><div class="v" style="color:var(--green)" id="hx-income">~$1,280/mo</div><div class="s" id="hx-income-s">serviced by the Cash-Flow Engine</div></div>
+        <div class="box"><div class="k">Income covers interest</div><div class="v" style="color:var(--green)" id="hx-income">~$800/mo</div><div class="s" id="hx-income-s">serviced by the Cash-Flow Engine</div></div>
         <span class="op">−</span>
-        <div class="box"><div class="k">Repay HELOC</div><div class="v" style="color:var(--red)" id="hx-repay">−$80,000</div><div class="s">principal at maturity</div></div>
+        <div class="box"><div class="k">Repay HELOC</div><div class="v" style="color:var(--red)" id="hx-repay">−$50,000</div><div class="s">principal at maturity</div></div>
         <span class="op">=</span>
-        <div class="box win"><div class="k">Net equity kept</div><div class="v" id="hx-net">~$65,000</div><div class="s">on a fraction of your own cash</div></div>
+        <div class="box win"><div class="k">Net equity kept</div><div class="v" id="hx-net">~$40,000</div><div class="s">on a fraction of your own cash</div></div>
       </div>
       <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:15px;line-height:1.6">Figures are <b style="color:var(--slate)">hypothetical and illustrative</b>, run on the same two-sleeve engine as the calculator (<span id="hx-assump">~26% CAGR compounding sleeve · ~2%/mo income sleeve</span>) — not a forecast or a typical result. A higher return compounds faster; a worse one can leave the line unpaid. The income only <em>helps</em> cover the interest — coverage is not guaranteed.</p>
     </div>
