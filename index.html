@@ -304,6 +304,47 @@
   @media(max-width:860px){ .ex-grid{grid-template-columns:1fr 1fr;} }
   @media(max-width:560px){ .ex-grid{grid-template-columns:1fr;} }
 
+  /* ---------- model allocation ---------- */
+  .alloc-band{display:grid;grid-template-columns:0.55fr 1fr 1fr;gap:3px;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin-top:8px;}
+  .alloc-seg{padding:30px 24px;}
+  .alloc-seg .pct{font-family:var(--mono);font-size:2.3rem;font-weight:600;line-height:1;letter-spacing:-.01em;}
+  .alloc-seg .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;margin-top:11px;}
+  .alloc-seg .sub{font-size:.82rem;color:var(--slate);margin-top:9px;line-height:1.5;}
+  @media(max-width:680px){ .alloc-band{grid-template-columns:1fr;} }
+
+  /* ---------- comparison table ---------- */
+  .cmp{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:8px;}
+  .cmp th,.cmp td{padding:17px 20px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  .cmp thead th{background:linear-gradient(90deg,#9A7B3A,var(--gold));color:var(--navy-deep);font-family:var(--sans);font-weight:700;font-size:.94rem;border-bottom:none;}
+  .cmp thead th .win{display:inline-block;font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;background:var(--navy-deep);color:var(--gold-bright);padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:middle;}
+  .cmp tbody td:first-child{font-weight:600;color:var(--ivory);font-family:var(--sans);}
+  .cmp .v{font-family:var(--mono);font-weight:600;font-size:.96rem;}
+  .cmp .v.good{color:var(--green);} .cmp .v.bad{color:var(--red);} .cmp .v.warn{color:var(--gold-bright);}
+  .cmp .s{font-size:.77rem;color:var(--slate-dim);margin-top:6px;line-height:1.4;}
+  .cmp tbody tr:last-child td{border-bottom:none;}
+  .cmp tbody tr:nth-child(odd) td{background:rgba(255,255,255,0.015);}
+  @media(max-width:680px){ .cmp th,.cmp td{padding:12px 12px;font-size:.84rem;} .cmp .v{font-size:.85rem;} }
+
+  /* ---------- HELOC ---------- */
+  .heloc-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;margin-top:8px;}
+  .heloc-step{padding:22px 18px;background:var(--card);}
+  .heloc-step:not(:last-child){border-right:1px solid var(--line-soft);}
+  .heloc-step .n{width:26px;height:26px;border-radius:50%;background:rgba(200,169,81,0.15);border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font-family:var(--mono);font-size:.8rem;font-weight:600;margin-bottom:13px;}
+  .heloc-step h4{font-family:var(--serif);font-size:1.12rem;color:var(--ivory);margin-bottom:6px;}
+  .heloc-step p{font-size:.8rem;color:var(--slate);line-height:1.5;}
+  .heloc-ex{display:flex;flex-wrap:wrap;align-items:stretch;gap:11px;}
+  .heloc-ex .box{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:15px 17px;flex:1;min-width:120px;}
+  .heloc-ex .box.win{border-color:var(--green);background:rgba(111,183,127,0.06);}
+  .heloc-ex .box .k{font-family:var(--mono);font-size:.55rem;letter-spacing:.07em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:8px;}
+  .heloc-ex .box .v{font-family:var(--mono);font-size:1.45rem;font-weight:600;color:var(--gold-bright);line-height:1;}
+  .heloc-ex .box.win .v{color:var(--green);}
+  .heloc-ex .box .s{font-size:.68rem;color:var(--slate-dim);margin-top:6px;}
+  .heloc-ex .op{display:flex;align-items:center;font-family:var(--mono);font-size:1.3rem;color:var(--slate-dim);}
+  .heloc-warn{margin-top:26px;border:1px solid var(--red);border-radius:12px;background:rgba(217,138,138,0.07);padding:18px 22px;font-size:.86rem;color:#E8C9C9;line-height:1.6;}
+  .heloc-warn b{color:#F0D6D6;}
+  @media(max-width:860px){ .heloc-flow{grid-template-columns:1fr 1fr 1fr;} .heloc-ex .op{display:none;} }
+  @media(max-width:560px){ .heloc-flow{grid-template-columns:1fr 1fr;} }
+
   /* ---------- synthetic-PE leverage calculator ---------- */
   .pe-toggle{display:flex;gap:6px;background:var(--card);border:1px solid var(--line-soft);border-radius:10px;padding:5px;margin:8px 0 18px;}
   .pe-toggle button{flex:1;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);background:none;border:none;border-radius:7px;padding:11px 10px;cursor:pointer;transition:all .2s;}
@@ -737,6 +778,99 @@
 
     <p class="calc-formula" id="pe-formula"></p>
     <span class="compliance-pill">Hypothetical model · illustrative · involves real leverage and risk of loss · not a forecast, promise, or advice to borrow</span>
+  </div>
+</section>
+
+<!-- 03.5 · MODEL ALLOCATION -->
+<section class="block" id="allocation">
+  <div class="wrap">
+    <span class="sec-num">▸ The model allocation</span>
+    <h2>Every dollar gets <em>one of three jobs.</em></h2>
+    <p class="intro">
+      The machine isn't a single bet — it's an <strong>allocation</strong>. A fifth is held in <strong>reserve</strong> (the
+      load-bearing cushion), and the rest is split evenly between the two engines: the <strong>Compounding Engine</strong>
+      that builds equity, and the <strong>Cash-Flow Engine</strong> that throws off the income to carry the leverage. The
+      calculator above lets you tune it; this is the model default.
+    </p>
+    <div class="alloc-band">
+      <div class="alloc-seg" style="background:rgba(126,156,196,0.14)"><div class="pct" style="color:#9FB6D4">20%</div><div class="lbl" style="color:#9FB6D4">Reserves</div><div class="sub">Funded first. Carries the debt through losing months — never touched.</div></div>
+      <div class="alloc-seg" style="background:rgba(200,169,81,0.12)"><div class="pct" style="color:var(--gold-bright)">40%</div><div class="lbl" style="color:var(--gold-bright)">Compounding Engine</div><div class="sub">Convex growth — builds free-and-clear equity at the $5k → $50k pace.</div></div>
+      <div class="alloc-seg" style="background:rgba(111,183,127,0.12)"><div class="pct" style="color:var(--green)">40%</div><div class="lbl" style="color:var(--green)">Cash-Flow Engine</div><div class="sub">Monthly income — services the debt, finishes green every month.</div></div>
+    </div>
+    <span class="compliance-pill">Model allocation · illustrative · adjustable in the calculator above</span>
+  </div>
+</section>
+
+<!-- 03.6 · WHY SYNTHETIC PE -->
+<section class="block" id="vs-traditional">
+  <div class="wrap">
+    <span class="sec-num">▸ Synthetic PE vs traditional PE</span>
+    <h2>The same machine — <em>without the velvet rope.</em></h2>
+    <p class="intro">
+      Traditional private equity earns its returns behind a wall: seven-figure minimums, decade-long lockups,
+      two-and-twenty fees, quarterly opacity, and no control. Rebuilt synthetically with liquid instruments, the
+      <strong>same structure keeps the engine and drops the wall</strong> — at comparable target returns.
+    </p>
+    <div style="overflow-x:auto">
+      <table class="cmp">
+        <thead><tr><th>Feature</th><th>◆ Synthetic PE <span class="win">Accessible</span></th><th>Traditional PE</th></tr></thead>
+        <tbody>
+          <tr><td>Minimum</td><td><span class="v good">$50K – $500K</span><div class="s">Open to far more investors</div></td><td><span class="v bad">$1M – $5M+</span><div class="s">Institutional only</div></td></tr>
+          <tr><td>Liquidity</td><td><span class="v good">Full — exit anytime</span><div class="s">Liquid, exchange-traded instruments</div></td><td><span class="v bad">7–10 year lockup</span><div class="s">Capital is trapped</div></td></tr>
+          <tr><td>Fees</td><td><span class="v good">Flat · conditional</span><div class="s">Charged only if targets are met</div></td><td><span class="v bad">2% + 20% carry</span><div class="s">A permanent drag on returns</div></td></tr>
+          <tr><td>Transparency</td><td><span class="v good">Full · real-time</span><div class="s">Every fill posted in public before exit</div></td><td><span class="v bad">Quarterly reports</span><div class="s">Limited visibility</div></td></tr>
+          <tr><td>Control</td><td><span class="v good">High — your own balance sheet</span><div class="s">Tune the allocation anytime</div></td><td><span class="v bad">None</span><div class="s">The GP makes every decision</div></td></tr>
+          <tr><td>Income</td><td><span class="v good">From day one</span><div class="s">The Cash-Flow Engine pays monthly</div></td><td><span class="v bad">5–7 years out</span><div class="s">The J-curve — nothing until exit</div></td></tr>
+          <tr><td>Target IRR</td><td><span class="v warn">15–25% · illustrative</span><div class="s">Optimized, liquid leverage</div></td><td><span class="v warn">15–25%</span><div class="s">Comparable — but illiquid &amp; opaque</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="compliance-pill">Illustrative comparison · target/hypothetical figures, not guarantees · not investment advice or an offer</span>
+  </div>
+</section>
+
+<!-- 03.7 · HELOC -->
+<section class="block" id="heloc">
+  <div class="wrap">
+    <span class="sec-num">▸ Where the leverage comes from</span>
+    <h2>You may already own the borrowing power: <em>your stuck home equity.</em></h2>
+    <p class="intro">
+      The hard part of the machine is the first ingredient — <strong>borrowing at a reasonable rate</strong>. Most homeowners
+      are already sitting on it: equity in the house, earning <strong>0%</strong>. A home-equity line (HELOC) puts that idle
+      capital to work — the Cash-Flow Engine covers the interest, the Compounding Engine builds the equity, and at maturity
+      you repay the line and keep what the machine made.
+    </p>
+
+    <div class="heloc-flow">
+      <div class="heloc-step"><div class="n">1</div><h4>Access</h4><p>Open a HELOC against your home equity — typically up to ~80% LTV — at a reasonable rate.</p></div>
+      <div class="heloc-step"><div class="n">2</div><h4>Deploy</h4><p>Put the line to work in the machine — the 20 / 40 / 40 reserves · compounding · cash-flow allocation.</p></div>
+      <div class="heloc-step"><div class="n">3</div><h4>Cover</h4><p>The Cash-Flow Engine's monthly income helps service the HELOC interest — the carry, covered.</p></div>
+      <div class="heloc-step"><div class="n">4</div><h4>Compound</h4><p>The Compounding Engine builds equity while the line stays level or amortizes beneath it.</p></div>
+      <div class="heloc-step"><div class="n">5</div><h4>Repay &amp; keep</h4><p>At maturity, repay the principal from the gains — and keep the free-and-clear equity.</p></div>
+    </div>
+
+    <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:24px 26px">
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">A worked example · illustrative</div>
+      <div class="heloc-ex">
+        <div class="box"><div class="k">Your cash at risk</div><div class="v">~$5,000</div><div class="s">reserve + uncovered carry</div></div>
+        <span class="op">+</span>
+        <div class="box"><div class="k">HELOC deployed</div><div class="v">$80,000</div><div class="s">@ ~8%, interest-only</div></div>
+        <span class="op">→</span>
+        <div class="box"><div class="k">Portfolio · 7 yr</div><div class="v">~$213,000</div><div class="s">illustrative ~15% blended</div></div>
+      </div>
+      <div class="heloc-ex" style="margin-top:13px">
+        <div class="box"><div class="k">Income covers interest</div><div class="v" style="color:var(--green)">~$533/mo</div><div class="s">serviced by the Cash-Flow Engine</div></div>
+        <span class="op">−</span>
+        <div class="box"><div class="k">Repay HELOC</div><div class="v" style="color:var(--red)">−$80,000</div><div class="s">principal at maturity</div></div>
+        <span class="op">=</span>
+        <div class="box win"><div class="k">Net equity kept</div><div class="v">~$133,000</div><div class="s">on a fraction of your own cash</div></div>
+      </div>
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:15px;line-height:1.6">Figures are <b style="color:var(--slate)">hypothetical and illustrative</b> at an assumed ~15% blended return — not a forecast or a typical result. A higher return compounds faster; a worse one can leave the line unpaid. The income only <em>helps</em> cover the interest — coverage is not guaranteed.</p>
+    </div>
+
+    <div class="heloc-warn">
+      <b>⚠ This is leverage against your home — read carefully.</b> A HELOC makes <b>your house the collateral</b>. If the engines underperform, the income falls short, or rates rise, you still owe the line — and a default puts the home at risk. This is the most aggressive way to run the machine and is <b>not suitable for most people</b>. Nothing here is an offer, a solicitation, or advice to borrow, take out a HELOC, or trade. Understand the terms, hold adequate independent reserves, and consult a licensed financial and tax advisor before acting. Past performance is not indicative of future results; loss of capital — and of the collateral — is possible.
+    </div>
   </div>
 </section>
 
