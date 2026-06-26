@@ -8,7 +8,7 @@
 // Amortized vs interest-only; Standard vs Max-Personal-Use draw.
 // Hypothetical and illustrative. NOT a forecast or advice to borrow.
 // =====================================================
-(function () {
+(function (root) {
     'use strict';
     const $ = id => document.getElementById(id);
     if (!$('pe-borrow')) return;
@@ -17,14 +17,9 @@
     let strat = 'amort';     // amort | io
     const COV_FLOOR = 0.25;  // serviceability floor used to size Max Personal Use
 
-    // Money-weighted IRR (monthly cashflows) annualized, via bisection. Returns null if no sign change.
-    function solveIRR(cf) {
-        const npv = r => cf.reduce((a, c, i) => a + c / Math.pow(1 + r, i), 0);
-        let lo = -0.95, hi = 3.0;
-        if (npv(lo) * npv(hi) > 0) return null;
-        for (let k = 0; k < 200; k++) { const m = (lo + hi) / 2; if (npv(m) > 0) lo = m; else hi = m; }
-        return (Math.pow(1 + (lo + hi) / 2, 12) - 1) * 100;
-    }
+    // All leverage math lives in the shared engine (js/synthetic-pe-engine.js) so the
+    // calculator and the HELOC worked example can never drift apart.
+    const compute = p => root.SyntheticPE.compute(Object.assign({}, p, { strat: strat }));
 
     const fmtUSD = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
     const fmtK = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 100000 ? 0 : 0) + 'k' : fmtUSD(v); };
@@ -44,49 +39,6 @@
         };
     }
 
-    function compute(p) {
-        const r = p.rate / 100 / 12, n = Math.round(p.term * 12);
-        const invested = Math.max(0, p.borrow - p.pu);
-        const comp0 = invested * p.comp / 100;
-        const inc0 = invested * (1 - p.comp / 100);
-        const pmt = strat === 'amort'
-            ? (r > 0 ? p.borrow * r / (1 - Math.pow(1 + r, -n)) : p.borrow / n)
-            : p.borrow * r;
-        const income = inc0 * p.yield / 100;
-        const coverage = pmt > 0 ? income / pmt : 0;
-        const oop = Math.max(0, pmt - income);
-        const gm = Math.pow(1 + p.cagr / 100, 1 / 12) - 1;
-        const reservesDollar = pmt * p.reserves;
-
-        const portAt = m => comp0 * Math.pow(1 + gm, m) + inc0;
-        const debtAt = m => {
-            if (strat === 'io') return p.borrow; // interest-only: full principal balloons, outstanding through the term
-            if (r > 0) return Math.max(0, p.borrow * Math.pow(1 + r, m) - pmt * ((Math.pow(1 + r, m) - 1) / r));
-            return Math.max(0, p.borrow - (p.borrow / n) * m);
-        };
-        const neAt = m => portAt(m) - debtAt(m);
-
-        const series = [];
-        for (let m = 0; m <= n; m++) series.push({ m, port: portAt(m), debt: debtAt(m), ne: neAt(m) });
-
-        const totInt = strat === 'amort' ? pmt * n - p.borrow : p.borrow * r * n;
-        const wealth = neAt(n);
-
-        function proj(years) {
-            const m = Math.round(years * 12);
-            const port = portAt(m), debt = debtAt(m), ne = neAt(m);
-            const mult = invested > 0 ? port / invested : 0;
-            // True levered-equity IRR: money-weighted on the cash actually committed
-            // (reserves up front + monthly carry) vs the net equity realized at exit.
-            const cf = [-reservesDollar];
-            for (let k = 1; k <= m; k++) cf.push(income - pmt);
-            cf[m] += ne + reservesDollar;
-            return { years, port, debt, ne, mult, irr: solveIRR(cf) };
-        }
-
-        return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar,
-            totInt, totCost: p.borrow + totInt, wealth, n, series, portAt, proj };
-    }
 
     function maxPersonalUse(p) {
         // largest draw that keeps coverage ≥ floor (coverage falls linearly with pu; pmt is pu-independent)
@@ -229,4 +181,4 @@
         });
 
     render();
-})();
+})(typeof window !== 'undefined' ? window : globalThis);
