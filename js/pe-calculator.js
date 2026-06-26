@@ -213,7 +213,20 @@
         strat = (on.id === 'pe-strat-io') ? 'io' : 'amort';
     });
     ['pe-borrow', 'pe-pu', 'pe-rate', 'pe-term', 'pe-yield', 'pe-cagr', 'pe-comp', 'pe-reserves']
-        .forEach(id => { const el = $(id); if (el) el.addEventListener('input', () => { if (id === 'pe-pu' && mode === 'max') mode = 'standard', $('pe-mode-standard').classList.add('on'), $('pe-mode-max').classList.remove('on'); render(); }); });
+        .forEach(id => {
+            const el = $(id); if (!el) return;
+            const onEdit = () => {
+                if (id === 'pe-pu' && mode === 'max') {
+                    mode = 'standard';
+                    $('pe-mode-standard').classList.add('on');
+                    $('pe-mode-max').classList.remove('on');
+                }
+                render();
+            };
+            // listen for both: 'input' (live typing/spinner) and 'change' (commit/blur) for robustness
+            el.addEventListener('input', onEdit);
+            el.addEventListener('change', onEdit);
+        });
 
     render();
 })();
