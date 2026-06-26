@@ -19,7 +19,7 @@
         term: 7,         // years
         yield: 2,        // income sleeve, %/mo
         cagr: 26,        // compounding sleeve, % CAGR
-        comp: 65,        // % of invested into the compounding sleeve
+        comp: 20,        // % of invested into the compounding sleeve (suggested 20/60/20 split)
         reserves: 6,     // months of payment held as the reserve
         strat: 'io'      // interest-only — principal balloons at maturity
     };

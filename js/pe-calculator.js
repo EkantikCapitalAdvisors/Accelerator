@@ -3,7 +3,7 @@
 // The PE machine made literal: borrow (synthetic leverage), split the
 // proceeds into an INCOME sleeve (Cash-Flow Engine — monthly yield that
 // services the debt) and a COMPOUNDING sleeve (Compounding Engine — run at
-// the 10×-in-7-yr pace, ~38.5% CAGR). Income covers the carry; compounding
+// the ~26% CAGR design pace, ≈10× over a decade). Income covers the carry; compounding
 // builds equity; at payoff you own the de-levered, multiplied portfolio.
 // Amortized vs interest-only; Standard vs Max-Personal-Use draw.
 // Hypothetical and illustrative. NOT a forecast or advice to borrow.
@@ -34,7 +34,7 @@
             term: Math.max(1, num('pe-term', 7)),
             yield: Math.max(0, num('pe-yield', 2)),
             cagr: Math.max(0, num('pe-cagr', 26)),
-            comp: Math.min(100, Math.max(0, num('pe-comp', 65))),
+            comp: Math.min(100, Math.max(0, num('pe-comp', 20))),
             reserves: Math.max(0, num('pe-reserves', 6))
         };
     }

@@ -305,7 +305,7 @@
   @media(max-width:560px){ .ex-grid{grid-template-columns:1fr;} }
 
   /* ---------- model allocation ---------- */
-  .alloc-band{display:grid;grid-template-columns:0.55fr 1fr 1fr;gap:3px;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin-top:8px;}
+  .alloc-band{display:grid;grid-template-columns:1fr 3fr 1fr;gap:3px;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin-top:8px;}
   .alloc-seg{padding:30px 24px;}
   .alloc-seg .pct{font-family:var(--mono);font-size:2.3rem;font-weight:600;line-height:1;letter-spacing:-.01em;}
   .alloc-seg .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;margin-top:11px;}
@@ -482,7 +482,7 @@
         <p>Value creation grows the equity while the obligation shrinks beneath it.</p>
       </div>
       <div class="step">
-        <div class="n">Part 04</div>
+        <div class="n">The payoff</div>
         <h4>Ownership</h4>
         <p>At the end of the arc: the debt is gone, the equity is yours, free and clear.</p>
       </div>
@@ -529,7 +529,7 @@
 <section class="block" id="engines">
   <div class="wrap">
     <span class="sec-num">02 · The same structure, rebuilt synthetically</span>
-    <h2>You will not buy a company. You will run the <em>same four-part machine</em> on instruments you can exit in seconds.</h2>
+    <h2>You will not buy a company. You will run the <em>same three-part machine</em> on instruments you can exit in seconds.</h2>
     <p class="intro">
       Each part of the private-equity machine has a synthetic counterpart — built from instruments whose
       downside is <strong>defined to the dollar before you ever take a position</strong>. Two engines do the
@@ -636,7 +636,7 @@
           <div style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:7px">The convex booster that <strong style="color:var(--slate)">retires the leverage and builds the equity fastest</strong> — ~26% CAGR design pace (≈10× over a decade is an illustration of the pace, not the goal).</div>
         </div>
       </div>
-      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:18px;line-height:1.6">Two separate records, never blended. The cash-flow engine keeps the machine paid; the compounding engine builds the equity. The win is the same for both — <strong style="color:var(--slate)">the debt repaid, the target hit, the asset yours</strong>. Live and recalculating. Hypothetical and illustrative; not a forecast or a promise of any outcome.</p>
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:18px;line-height:1.6">Live and recalculating. Hypothetical and illustrative; not a forecast or a promise of any outcome.</p>
     </div>
   </div>
 </section>
@@ -718,7 +718,7 @@
 
         <div class="pe-derived">
           <div class="r"><span>Net invested</span><b id="pe-netinvested">$50,000</b></div>
-          <div class="r"><span>Allocation</span><b id="pe-alloc">65% comp / 35% inc</b></div>
+          <div class="r"><span>Allocation</span><b id="pe-alloc">20% comp / 80% inc</b></div>
           <div class="pe-splitbar" style="margin-top:9px;height:7px"><span id="pe-sleeve-comp" style="background:#7E9CC4"></span><span id="pe-sleeve-inc" style="background:var(--green)"></span></div>
         </div>
 
@@ -731,7 +731,7 @@
           <div class="pe-field"><label for="pe-cagr">Target CAGR</label><div class="pe-input"><input type="number" id="pe-cagr" value="26" min="0" step="0.5"><span>%</span></div></div>
         </div>
         <div class="pe-row2">
-          <div class="pe-field"><label for="pe-comp">Comp. alloc.</label><div class="pe-input"><input type="number" id="pe-comp" value="65" min="0" max="100" step="5"><span>%</span></div></div>
+          <div class="pe-field"><label for="pe-comp">Comp. alloc.</label><div class="pe-input"><input type="number" id="pe-comp" value="20" min="0" max="100" step="5"><span>%</span></div></div>
           <div class="pe-field"><label for="pe-reserves">Reserves</label><div class="pe-input"><input type="number" id="pe-reserves" value="6" min="0" step="1"><span>mo</span></div></div>
         </div>
       </div>
@@ -760,7 +760,7 @@
     <!-- ARCHITECTURE + GUARDRAILS -->
     <div class="pe-foot">
       <div class="pe-panel">
-        <div class="ph">Three-engine architecture</div>
+        <div class="ph">Leverage + two engines</div>
         <div class="pe-arch-row"><span class="ic">🏛</span><div><div class="t">Leverage</div><div class="s" id="pe-arch-lev">—</div></div></div>
         <div class="pe-arch-row"><span class="ic">📗</span><div><div class="t">Income · Cash-Flow Engine</div><div class="s" id="pe-arch-inc">—</div></div></div>
         <div class="pe-arch-row"><span class="ic">🚀</span><div><div class="t">Compounding · Compounding Engine</div><div class="s" id="pe-arch-comp">—</div></div></div>
@@ -784,20 +784,20 @@
 <!-- 03.5 · MODEL ALLOCATION -->
 <section class="block" id="allocation">
   <div class="wrap">
-    <span class="sec-num">▸ The model allocation</span>
+    <span class="sec-num">▸ The suggested allocation</span>
     <h2>Every dollar gets <em>one of three jobs.</em></h2>
     <p class="intro">
-      The machine isn't a single bet — it's an <strong>allocation</strong>. A fifth is held in <strong>reserve</strong> (the
-      load-bearing cushion), and the rest is split evenly between the two engines: the <strong>Compounding Engine</strong>
-      that builds equity, and the <strong>Cash-Flow Engine</strong> that throws off the income to carry the leverage. The
-      calculator above lets you tune it; this is the model default.
+      The machine isn't a single bet — it's an <strong>allocation</strong>, and we suggest a deliberately conservative one. A fifth stays in
+      <strong>reserve</strong> (the load-bearing cushion). The majority goes to the <strong>Cash-Flow Engine</strong> — the income that
+      services the leverage and holds coverage above 1× — with a smaller, convex <strong>Compounding Engine</strong> sleeve doing the
+      equity-building. The calculator above lets you tune it; this is a <strong>suggested starting split, not a rule</strong>.
     </p>
     <div class="alloc-band">
       <div class="alloc-seg" style="background:rgba(126,156,196,0.14)"><div class="pct" style="color:#9FB6D4">20%</div><div class="lbl" style="color:#9FB6D4">Reserves</div><div class="sub">Funded first. Carries the debt through losing months — never touched.</div></div>
-      <div class="alloc-seg" style="background:rgba(200,169,81,0.12)"><div class="pct" style="color:var(--gold-bright)">40%</div><div class="lbl" style="color:var(--gold-bright)">Compounding Engine</div><div class="sub">Convex growth — builds free-and-clear equity at the $5k → $50k pace.</div></div>
-      <div class="alloc-seg" style="background:rgba(111,183,127,0.12)"><div class="pct" style="color:var(--green)">40%</div><div class="lbl" style="color:var(--green)">Cash-Flow Engine</div><div class="sub">Monthly income — services the debt, finishes green every month.</div></div>
+      <div class="alloc-seg" style="background:rgba(111,183,127,0.12)"><div class="pct" style="color:var(--green)">60%</div><div class="lbl" style="color:var(--green)">Cash-Flow Engine</div><div class="sub">Monthly income — services the debt, holds coverage above 1×, finishes green every month.</div></div>
+      <div class="alloc-seg" style="background:rgba(200,169,81,0.12)"><div class="pct" style="color:var(--gold-bright)">20%</div><div class="lbl" style="color:var(--gold-bright)">Compounding Engine</div><div class="sub">The smaller convex sleeve — builds free-and-clear equity at the $5k → $50k pace.</div></div>
     </div>
-    <span class="compliance-pill">Model allocation · illustrative · adjustable in the calculator above</span>
+    <span class="compliance-pill">Suggested allocation · illustrative · adjustable in the calculator above</span>
   </div>
 </section>
 
@@ -843,7 +843,7 @@
 
     <div class="heloc-flow">
       <div class="heloc-step"><div class="n">1</div><h4>Access</h4><p>Open a HELOC against your home equity — typically up to ~80% LTV — at a reasonable rate.</p></div>
-      <div class="heloc-step"><div class="n">2</div><h4>Deploy</h4><p>Put the line to work in the machine — the 20 / 40 / 40 reserves · compounding · cash-flow allocation.</p></div>
+      <div class="heloc-step"><div class="n">2</div><h4>Deploy</h4><p>Put the line to work in the machine — the suggested 20 / 60 / 20 reserve · cash-flow · compounding split.</p></div>
       <div class="heloc-step"><div class="n">3</div><h4>Cover</h4><p>The Cash-Flow Engine's monthly income helps service the HELOC interest — the carry, covered.</p></div>
       <div class="heloc-step"><div class="n">4</div><h4>Compound</h4><p>The Compounding Engine builds equity while the line stays level or amortizes beneath it.</p></div>
       <div class="heloc-step"><div class="n">5</div><h4>Repay &amp; keep</h4><p>At maturity, repay the principal from the gains — and keep the free-and-clear equity.</p></div>
@@ -859,14 +859,14 @@
         <span class="op">+</span>
         <div class="box"><div class="k">HELOC deployed</div><div class="v" id="hx-deploy">$80,000</div><div class="s" id="hx-deploy-s">@ ~8%, interest-only</div></div>
         <span class="op">→</span>
-        <div class="box"><div class="k">Portfolio · <span id="hx-term">7</span> yr</div><div class="v" id="hx-port">~$290,000</div><div class="s" id="hx-port-s">illustrative</div></div>
+        <div class="box"><div class="k">Portfolio · <span id="hx-term">7</span> yr</div><div class="v" id="hx-port">~$145,000</div><div class="s" id="hx-port-s">illustrative</div></div>
       </div>
       <div class="heloc-ex" style="margin-top:13px">
-        <div class="box"><div class="k">Income covers interest</div><div class="v" style="color:var(--green)" id="hx-income">~$560/mo</div><div class="s" id="hx-income-s">serviced by the Cash-Flow Engine</div></div>
+        <div class="box"><div class="k">Income covers interest</div><div class="v" style="color:var(--green)" id="hx-income">~$1,280/mo</div><div class="s" id="hx-income-s">serviced by the Cash-Flow Engine</div></div>
         <span class="op">−</span>
         <div class="box"><div class="k">Repay HELOC</div><div class="v" style="color:var(--red)" id="hx-repay">−$80,000</div><div class="s">principal at maturity</div></div>
         <span class="op">=</span>
-        <div class="box win"><div class="k">Net equity kept</div><div class="v" id="hx-net">~$210,000</div><div class="s">on a fraction of your own cash</div></div>
+        <div class="box win"><div class="k">Net equity kept</div><div class="v" id="hx-net">~$65,000</div><div class="s">on a fraction of your own cash</div></div>
       </div>
       <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:15px;line-height:1.6">Figures are <b style="color:var(--slate)">hypothetical and illustrative</b>, run on the same two-sleeve engine as the calculator (<span id="hx-assump">~26% CAGR compounding sleeve · ~2%/mo income sleeve</span>) — not a forecast or a typical result. A higher return compounds faster; a worse one can leave the line unpaid. The income only <em>helps</em> cover the interest — coverage is not guaranteed.</p>
     </div>
