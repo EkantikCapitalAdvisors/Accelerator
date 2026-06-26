@@ -71,9 +71,6 @@
             <p class="hero-lead">
                 <strong>The edge is settled. Discipline is the variable.</strong> There is no number to chase and no deadline &mdash; just the same scorecard every month: <strong>end it net-positive</strong>. Every step is bounded by the same sit-out and falsifiability architecture, so a green month is never bought by running the risk of ruin. Every fill is posted before exit, so the discipline is observable in real time.
             </p>
-            <p class="hero-lead">
-                <strong>How it scales.</strong> The engine runs a small <strong>working unit</strong> on the buffer ladder &mdash; as banked profit builds the reserve behind it, position size steps up (Buffer N = N ES) and the monthly cash it throws off grows with it. The scorecard never changes, though: <strong>every month, finish green.</strong>
-            </p>
             <p class="hero-sub">
                 Public method. Public trades. Public falsifiability. Anyone in the world can watch it.
             </p>
@@ -87,13 +84,9 @@
                 <span class="experiment-status__items">
                     <span><span class="dot"></span> Live</span>
                     <span class="experiment-status__sep">·</span>
-                    <span id="xp-phase"><strong>Phase 0:</strong> Trial run &rarr; first $10K</span>
-                    <span class="experiment-status__sep">·</span>
                     <span>Sample: <strong id="xp-sample">—</strong> qualified trades</span>
                     <span class="experiment-status__sep">·</span>
                     <span>Rolling EV: <strong id="xp-ev">—</strong></span>
-                    <span class="experiment-status__sep">·</span>
-                    <span>Position: <strong id="xp-triggers">— ES</strong></span>
                     <span class="experiment-status__sep">·</span>
                     <span>Falsifiability Gate: <strong id="xp-gate">Armed</strong></span>
                 </span>
@@ -205,8 +198,8 @@
                     </div>
                     <div class="nlm-principle">
                         <span class="nlm-principle__name">Position Sizing</span>
-                        <p>Never risk too much on a single bet. Size proportionally to capital and edge &mdash; 1 ES per buffer, expressible as &le; 10 MES.</p>
-                        <span class="nlm-principle__where">Instrumented in §01.2 (the trigger ladder)</span>
+                        <p>Never risk too much on a single bet. Size small and fixed &mdash; a single ES, expressible as &le; 10 MES, so one position is always a fraction of the capital.</p>
+                        <span class="nlm-principle__where">Instrumented in §01.2 (the risk parameters)</span>
                     </div>
                     <div class="nlm-principle">
                         <span class="nlm-principle__name">Risk Management</span>
@@ -229,53 +222,9 @@
                 <p class="method-pyramid__note">What enforces it is <strong>adherence, not cushion</strong>: the working capital is <strong>$10,000</strong> per unit, and a single ES contract requires only ~$500 in day-trade margin &mdash; so the position is always a fraction of the capital. So long as the four principles hold and the stand-down architecture (&sect;04 Sit-Out, &sect;05 gates) fires on schedule, losses are capped before the $10,000 can reach the risk-of-ruin zone &mdash; the point from which no remaining edge could recover it.</p>
             </div>
 
-            <!-- 01.2 · The Trigger Ladder -->
+            <!-- 01.2 · Risk Parameters -->
             <div class="component-block-divider"></div>
-            <div class="component-label">01.2 · The Trigger Ladder</div>
-            <h3 class="component-h">A separate trial run, then four buffers &mdash; Buffer N runs N contracts.</h3>
-            <p class="component-sub">The <strong>trial run is separate from the ladder</strong> and runs at <strong>1 ES</strong>: one job &mdash; bank the first $10,000 and prove the discipline. Only then does the buffer ladder (the live, scaled engine) begin, and <strong>each buffer runs as many ES contracts as its number</strong> &mdash; Buffer 1 = 1 ES, Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). Each step up requires a fresh $10,000 of cumulative profit.</p>
-            <div class="trigger-ladder" id="trigger-ladder">
-                <div class="trigger-step trigger-step--trial" data-trigger="TRIAL">
-                    <span class="trigger-step__name">Trial run &middot; 1 ES</span>
-                    <span class="trigger-step__threshold">Bank the first $10,000</span>
-                    <span class="trigger-step__action">Separate from the ladder · proves discipline first</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B1">
-                    <span class="trigger-step__name">Buffer 1 &middot; 1 ES</span>
-                    <span class="trigger-step__threshold">$10,000 &mdash; ladder scaling begins</span>
-                    <span class="trigger-step__action">Run 1 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B2">
-                    <span class="trigger-step__name">Buffer 2 &middot; 2 ES</span>
-                    <span class="trigger-step__threshold">$20,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 2 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B3">
-                    <span class="trigger-step__name">Buffer 3 &middot; 3 ES</span>
-                    <span class="trigger-step__threshold">$30,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 3 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B4">
-                    <span class="trigger-step__name">Buffer 4 &middot; 4 ES</span>
-                    <span class="trigger-step__threshold">$40,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 4 ES · cap</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-            </div>
-            <p class="method-ladder__note"><strong>Buffer N runs N contracts.</strong> The trial run and Buffer 1 both run <strong>1 ES</strong> (which the operator may express as up to ten MES; 10 MES = 1 ES); from Buffer 2 on, each step adds exactly one ES &mdash; 2 ES, 3 ES, then 4 ES at the cap. Each step up requires a fresh $10,000 of cumulative profit before it fires. No early activation. No discretionary override. The trigger fires when the milestone is reached, or it does not fire. The operator&rsquo;s confidence is not an input. Each trigger fire is announced in the public Discord journal within 24 hours.</p>
-            <p class="ladder-live-note">Prefer to watch the buffers advance as it happens? The whole challenge runs in the open &mdash; follow the live trade journal in the <a href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">public Discord</a>. Every fill is posted by hand the moment an order goes in, so expect a short delay between the live execution and the post &mdash; close, but not to the millisecond.</p>
-
-            <!-- 01.3 · Risk Parameters -->
-            <div class="component-block-divider"></div>
-            <div class="component-label">01.3 · The Risk Parameters</div>
+            <div class="component-label">01.2 · The Risk Parameters</div>
             <table class="method-risk-table">
                 <thead><tr><th>Parameter</th><th>Threshold</th><th>Consequence</th></tr></thead>
                 <tbody>
@@ -285,14 +234,14 @@
                     <tr><td>Rolling 100-trade realized EV</td><td class="mono">$0 / trade</td><td>Falsifiability Gate fires — see Section 05</td></tr>
                 </tbody>
             </table>
-            <p class="method-ladder__note"><strong>Earned weekly risk, never borrowed.</strong> The weekly loss cap starts at <strong>$1,000 per contract</strong>. For any week it <strong>may double to $2,000 only after $2,000 of cumulative realized profit has been banked</strong> &mdash; the extra risk is funded entirely by house money, never by base capital. Below $2,000 cumulative profit the cap stays at $1,000. Same never-lose-money logic as the buffer ladder: more is put at risk only once it has been earned, so a drawdown can never reach into the working unit.</p>
+            <p class="method-ladder__note"><strong>Earned weekly risk, never borrowed.</strong> The weekly loss cap starts at <strong>$1,000 per contract</strong>. For any week it <strong>may double to $2,000 only after $2,000 of cumulative realized profit has been banked</strong> &mdash; the extra risk is funded entirely by house money, never by base capital. Below $2,000 cumulative profit the cap stays at $1,000. Same never-lose-money logic throughout: more is put at risk only once it has been earned, so a drawdown can never reach into the working unit.</p>
 
-            <!-- 01.4 · The Target -->
+            <!-- 01.3 · The Target -->
             <div class="component-block-divider"></div>
-            <div class="component-label">01.4 · The Scorecard &middot; A green month</div>
-            <h3 class="component-h">First the trial run. Then the scorecard that never changes: <em>finish every month net-positive.</em></h3>
+            <div class="component-label">01.3 · The Scorecard &middot; A green month</div>
+            <h3 class="component-h">The scorecard that never changes: <em>finish every month net-positive.</em></h3>
             <p class="lede">
-                The challenge runs in two stages, declared up front. <strong>Phase 0 &mdash; the trial run:</strong> at a single ES, prove the discipline holds and that the published method is exactly what runs, before the ladder scales. <strong>Phase 1 &mdash; the live scorecard:</strong> once the trial proves out, the buffer ladder scales the working unit (<strong>Buffer N = N ES</strong>) and the engine&rsquo;s job is simple and judged monthly &mdash; <strong>finish every month net-positive</strong>. No target number, no deadline, no leverage on borrowed conviction, and &mdash; the one non-negotiable &mdash; <strong>never running the risk of ruin</strong>. Every gain is earned by the buffer-trigger ladder (&sect;01.2); every loss is capped by the sit-out and falsifiability architecture (&sect;04&ndash;&sect;05) long before capital can reach the point from which no remaining edge could recover it. (The 10&times; growth challenge lives on the <a href="/convexity.html" class="link-inline">Compounding Engine</a>; here, the bar is reliability.)
+                The engine runs a <strong>fixed working unit</strong>, and its job is simple and judged monthly &mdash; <strong>finish every month net-positive</strong>. No target number, no deadline, no leverage on borrowed conviction, and &mdash; the one non-negotiable &mdash; <strong>never running the risk of ruin</strong>. Every loss is capped by the sit-out and falsifiability architecture (&sect;04&ndash;&sect;05) long before capital can reach the point from which no remaining edge could recover it. (The 10&times; growth challenge lives on the <a href="/convexity.html" class="link-inline">Compounding Engine</a>; here, the bar is reliability.)
             </p>
             <div class="hypothetical-disclosure">
                 <p><strong>About this scorecard.</strong> A net-positive month is the <strong>stated objective &mdash; and it is hypothetical and aspirational</strong>, not a realized result, forecast, or guarantee. Whether any given month finishes green depends entirely on how the edge expresses in live markets. The Falsifiability Gate (Section 05) supersedes everything and halts the protocol if the rolling-100-trade expectancy crosses zero. Past performance is not indicative of future results.</p>
@@ -831,7 +780,7 @@
             </aside>
 
             <h3 class="mt-4">Sample Equity Arc — $10,000 working unit · live</h3>
-            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $10,000 working unit. The arc prints as each Discord fill closes; each dashed line marks a $10,000 profit-buffer threshold (full mechanism in <a href="#method" class="link-inline">§01.2 Trigger Ladder</a>). Capital resets to the working unit annually.</p>
+            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $10,000 working unit. The arc prints as each Discord fill closes. Capital resets to the working unit annually.</p>
             <div class="mini-chart">
                 <canvas id="section-a-equity"></canvas>
             </div>
@@ -930,7 +879,7 @@
                 <article class="participation-card participation-card--witness">
                     <span class="participation-card__eyebrow">Witness the challenge</span>
                     <p class="participation-card__tag">Free · Unlimited · Public Discord community</p>
-                    <p class="participation-card__body">Watch every trade as it executes. See the EV calculation update fill-by-fill. Watch the trigger ladder fire. See the Falsifiability Gate run. Engage with other observers. Ask questions of the operator. No fee, no cap, no relationship required.</p>
+                    <p class="participation-card__body">Watch every trade as it executes. See the EV calculation update fill-by-fill. See the Falsifiability Gate run. Engage with other observers. Ask questions of the operator. No fee, no cap, no relationship required.</p>
                     <p class="participation-card__body participation-card__caveat"><em>One honest caveat: each fill is posted to Discord by hand, the moment an order is placed. Because a human logs it, expect a short delay between the live execution and the journal entry &mdash; the posts track the trades closely, but not to the millisecond.</em></p>
                     <p class="participation-card__body">The Discord is more than a journal. It is the community around the work &mdash; where the method gets discussed, where edge cases get debated, and where the challenge is observed by people who want to think rigorously about what it shows.</p>
                     <p class="participation-card__cta"><a class="btn btn-gold" href="https://discord.gg/GprT4S8Vrj" target="_blank" rel="noopener noreferrer">Join the public Discord <span class="arr">&rarr;</span></a></p>
