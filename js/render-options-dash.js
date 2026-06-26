@@ -95,6 +95,20 @@
         destroy('eq');
         let cum = 0; const labels = [], data = [];
         trades.forEach(t => { cum += (t.dollar_pl || 0); labels.push(t.trade_num); data.push(Math.round(BASE + cum)); });
+        // starting (and ending) month/year, from the first/last fill in sequence
+        const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monYr = t => {
+            const it = t && t.entry_time || '';
+            if (/^\d{4}-\d{2}/.test(it)) return MO[+it.slice(5, 7) - 1] + ' ' + it.slice(0, 4);
+            const d = (t && t.trade_date || '').split('/');
+            return d.length === 3 ? MO[+d[0] - 1] + ' ' + d[2] : '';
+        };
+        if (trades.length) {
+            const start = monYr(trades[0]), end = monYr(trades[trades.length - 1]);
+            const since = $('od-equity-since'); if (since) since.textContent = start ? ' · since ' + start : '';
+            const range = $('od-equity-range');
+            if (range) range.textContent = start ? (end && end !== start ? start + ' → ' + end : 'since ' + start) : 'since the first fill';
+        }
         charts.eq = new root.Chart(cv, {
             type: 'line',
             data: { labels, datasets: [{

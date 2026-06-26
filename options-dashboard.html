@@ -103,8 +103,8 @@
     <!-- ═══ EQUITY CURVE ═══ -->
     <section class="block dash-block">
         <div class="container">
-            <div class="component-label">Equity curve &middot; $10,000 base</div>
-            <p class="dash-block__sub">Account balance ($10,000 + cumulative realized P&amp;L) after each closed fill, in sequence. Dashed line marks the $100,000 target.</p>
+            <div class="component-label">Equity curve &middot; $10,000 base<span id="od-equity-since"></span></div>
+            <p class="dash-block__sub">Account balance ($10,000 + cumulative realized P&amp;L) after each closed fill, in sequence, <span id="od-equity-range">since the first fill</span>. Dashed line marks the $100,000 target.</p>
             <div style="position:relative;height:340px;background:#1B2A4A;border-radius:10px;padding:14px 10px;margin-top:6px">
                 <canvas id="od-equity"></canvas>
             </div>
