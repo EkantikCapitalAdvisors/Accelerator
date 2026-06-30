@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cash-Flow Engine · Dashboard · Ekantik Capital</title>
-    <meta name="description" content="Full live instrumentation of the Cash-Flow Engine — trigger ladder, cumulative trajectory, monthly breakdown, contract-count history, and every fill. Public. No login.">
+    <meta name="description" content="Full live instrumentation of the Cash-Flow Engine — cumulative trajectory, monthly breakdown, and every fill. Public. No login.">
     <meta name="theme-color" content="#1B2A4A">
     <link rel="canonical" href="https://accelerator.ekantikcapital.com/experiment.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,8 +55,6 @@
                     <span class="experiment-status__sep">·</span>
                     <span>Rolling EV: <strong id="xp-ev">—</strong></span>
                     <span class="experiment-status__sep">·</span>
-                    <span>Position: <strong id="xp-triggers">— ES</strong></span>
-                    <span class="experiment-status__sep">·</span>
                     <span>Gate: <strong id="xp-gate">Armed</strong></span>
                 </span>
             </div>
@@ -83,7 +81,7 @@
                 <span class="dash-tf-window" id="dash-tf-window">&mdash;</span>
             </div>
 
-            <p class="dash-block__sub">Edge, magnitudes, and risk metrics over the selected window. Trade table below also filters. Charts and the trigger ladder remain all-time as context.</p>
+            <p class="dash-block__sub">Edge, magnitudes, and risk metrics over the selected window. Trade table below also filters. Charts remain all-time as context.</p>
 
             <div class="dash-kpi-grid">
                 <!-- Edge -->
@@ -109,66 +107,11 @@
         </div>
     </section>
 
-    <!-- ═══ 1 · TRIGGER LADDER ═══ -->
-    <section class="block dash-block" id="dash-ladder">
-        <div class="container">
-            <div class="component-label">The Trigger Ladder · Live</div>
-            <p class="dash-block__sub">The trial run is separate and runs at 1 ES — bank the first $10,000. Then the buffer ladder begins, and each buffer runs as many ES as its number: Buffer 1 = 1 ES, Buffer 2 = 2 ES, Buffer 3 = 3 ES, Buffer 4 = 4 ES (cap). Each step up requires a fresh $10,000 of cumulative profit; the trigger is binary, frozen, and announced in the public Discord journal within 24 hours.</p>
-            <div class="trigger-ladder" id="trigger-ladder">
-                <div class="trigger-step trigger-step--trial" data-trigger="TRIAL">
-                    <span class="trigger-step__name">Trial run &middot; 1 ES</span>
-                    <span class="trigger-step__threshold">Bank the first $10,000</span>
-                    <span class="trigger-step__action">Separate from the ladder · proves discipline first</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B1">
-                    <span class="trigger-step__name">Buffer 1 &middot; 1 ES</span>
-                    <span class="trigger-step__threshold">$10,000 &mdash; real challenge begins</span>
-                    <span class="trigger-step__action">Run 1 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B2">
-                    <span class="trigger-step__name">Buffer 2 &middot; 2 ES</span>
-                    <span class="trigger-step__threshold">$20,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 2 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B3">
-                    <span class="trigger-step__name">Buffer 3 &middot; 3 ES</span>
-                    <span class="trigger-step__threshold">$30,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 3 ES</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-                <div class="trigger-step__arrow" aria-hidden="true">→</div>
-                <div class="trigger-step" data-trigger="B4">
-                    <span class="trigger-step__name">Buffer 4 &middot; 4 ES</span>
-                    <span class="trigger-step__threshold">$40,000 cumulative profit</span>
-                    <span class="trigger-step__action">Scale to 4 ES · cap</span>
-                    <span class="trigger-step__status" data-status>—</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ 2 · NEXT-TRIGGER FORECAST ═══ -->
-    <section class="block dash-block" id="dash-forecast">
-        <div class="container">
-            <div class="component-label">Next-Trigger Forecast</div>
-            <div class="forecast-card" id="forecast-card">
-                <p id="forecast-body">Computing live projection&hellip;</p>
-                <p class="forecast-card__caveat"><em>Projection assumes current cadence continues. Real cadence is regime-dependent. The trigger fires when the milestone is reached, or it does not fire — projection is descriptive only.</em></p>
-            </div>
-        </div>
-    </section>
-
     <!-- ═══ 3 · CUMULATIVE TRAJECTORY ═══ -->
     <section class="block dash-block" id="dash-trajectory">
         <div class="container">
             <div class="component-label">Cumulative Trajectory · Live</div>
-            <p class="dash-block__sub">Realized cumulative profit, fill by fill. Gold markers annotate trigger fires. The dashed slate line is the falsifiability-gate reference (rolling-100 EV at $0).
+            <p class="dash-block__sub">Realized cumulative profit, fill by fill. The dashed slate line is the falsifiability-gate reference (rolling-100 EV at $0).
                 <label class="floor-toggle"><input type="checkbox" id="floor-toggle"> Show floor case</label>
             </p>
             <div class="dash-chart"><canvas id="chart-trajectory"></canvas></div>
@@ -179,17 +122,8 @@
     <section class="block dash-block" id="dash-monthly">
         <div class="container">
             <div class="component-label">Monthly Realized Profit</div>
-            <p class="dash-block__sub">Realized profit per month. Buffer trigger thresholds drawn as horizontal markers. Hover any bar for monthly detail.</p>
+            <p class="dash-block__sub">Realized profit per month. Hover any bar for monthly detail.</p>
             <div class="dash-chart"><canvas id="chart-monthly"></canvas></div>
-        </div>
-    </section>
-
-    <!-- ═══ 5 · CONTRACT COUNT HISTORY ═══ -->
-    <section class="block dash-block" id="dash-contracts">
-        <div class="container">
-            <div class="component-label">Contract Count History · Live</div>
-            <p class="dash-block__sub">Position-size ceiling scales linearly with trigger fires. Each step up is annotated to the trigger that fired it.</p>
-            <div class="dash-chart"><canvas id="chart-contracts"></canvas></div>
         </div>
     </section>
 

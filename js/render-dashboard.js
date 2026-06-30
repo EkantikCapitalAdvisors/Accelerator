@@ -174,17 +174,8 @@
             floor.push(Math.round(baseEv * (i+1) * 0.5));
             fullLabels.push(d ? `${tn} · ${d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}` : tn);
         });
-        // trigger fire markers
-        const fireAnno = {};
-        let running = 0, b = 0;
-        clean.forEach((t,i) => {
-            running += (t.dollar_pl||0);
-            while (b < BUFFERS.length && running >= BUFFERS[b].threshold) {
-                fireAnno[i] = BUFFERS[b].id; b++;
-            }
-        });
-        const ds = [{ label:'Cumulative ($)', data, borderColor:NAVY, backgroundColor:'rgba(27,42,74,0.06)', borderWidth:2, fill:true, tension:0.15, pointRadius: labels.map((_,i)=>fireAnno[i]?5:0), pointBackgroundColor:GOLD, pointBorderColor:GOLD }];
-        if (showFloor) ds.push({ label:'Floor case (1 ES)', data:floor, borderColor:SLATE, borderDash:[6,4], borderWidth:1.5, fill:false, pointRadius:0, tension:0.1 });
+        const ds = [{ label:'Cumulative ($)', data, borderColor:NAVY, backgroundColor:'rgba(27,42,74,0.06)', borderWidth:2, fill:true, tension:0.15, pointRadius:0 }];
+        if (showFloor) ds.push({ label:'Floor case', data:floor, borderColor:SLATE, borderDash:[6,4], borderWidth:1.5, fill:false, pointRadius:0, tension:0.1 });
         charts.traj = new root.Chart(cv, {
             type:'line',
             data:{ labels, datasets: ds },
@@ -192,8 +183,7 @@
                 interaction:{ mode:'index', intersect:false },
                 plugins:{ legend:{ display:true, labels:{ font:{family:'DM Sans'} } },
                     tooltip:{ callbacks:{
-                        title: items => fullLabels[items[0].dataIndex] || '',
-                        afterBody:(items)=>{ const i=items[0].dataIndex; return fireAnno[i]?['▲ '+fireAnno[i]+' fired here']:[]; }
+                        title: items => fullLabels[items[0].dataIndex] || ''
                     } } },
                 scales:{ x:{ ticks:{ maxTicksLimit:12, font:{family:'JetBrains Mono', size:10} } },
                     y:{ ticks:{ callback:v=>'$'+v.toLocaleString(), font:{family:'JetBrains Mono', size:10} } } } }
