@@ -525,6 +525,79 @@
   </div>
 </section>
 
+<!-- 01.5 · ROI → ROE · how synthetic PE makes the move -->
+<section class="block" id="roe">
+  <div class="wrap">
+    <span class="sec-num">▸ The number that actually builds wealth</span>
+    <h2>You were taught to chase <em>ROI</em>. The machine is built on <em>ROE</em>.</h2>
+    <p class="intro">
+      <strong>Return on investment</strong> asks how hard your <em>cash</em> works — supply the whole amount, let it grow, hope it
+      outruns inflation. <strong>Return on equity</strong> asks how hard a <em>small slice of your own capital</em> works once it
+      controls a far larger position. Borrow at a reasonable rate, let the cash-flow engine carry the debt, let the compounding
+      engine build the equity — and the same dollar of yours does the work of many. <strong>That is the whole move synthetic PE makes.</strong>
+    </p>
+
+    <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px">
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px">Same starting cash · two different machines · illustrative</div>
+
+      <!-- the reframe -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:26px">
+        <div style="border:1px solid var(--line-soft);border-radius:12px;background:rgba(217,138,138,0.05);padding:18px 20px">
+          <div style="display:flex;align-items:baseline;gap:12px">
+            <span style="font-family:var(--serif);font-weight:700;font-size:2.1rem;line-height:1;color:var(--slate);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:3px">ROI</span>
+            <span style="font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-dim)">Return on Investment</span>
+          </div>
+          <p style="font-size:.92rem;color:var(--slate);margin-top:10px;line-height:1.55">How hard your <strong style="color:var(--slate)">saved cash</strong> works. You put up the whole amount; it grows on its own and inflation eats much of the gain. The number you were taught to chase.</p>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:12px;background:rgba(200,169,81,0.06);padding:18px 20px">
+          <div style="display:flex;align-items:baseline;gap:12px">
+            <span style="font-family:var(--serif);font-weight:700;font-size:2.1rem;line-height:1;color:var(--gold-bright)">ROE</span>
+            <span style="font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Return on Equity</span>
+          </div>
+          <p style="font-size:.92rem;color:var(--text);margin-top:10px;line-height:1.55">How hard a <strong style="color:var(--ivory)">small slice of your own equity</strong> works once it controls a larger position — leverage carries the rest, the two engines do the work. The number the machine is built on.</p>
+        </div>
+      </div>
+
+      <!-- two-path chart -->
+      <svg viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" role="img" aria-label="Two wealth paths from the same starting equity over time: a gentle ROI 'save and invest' curve only just above inflation, and a steep ROE 'synthetic PE' curve compounding far above it.">
+        <defs>
+          <linearGradient id="roeFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C8A951" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#C8A951" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="roeLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#C8A951"/><stop offset="100%" stop-color="#E0BE63"/>
+          </linearGradient>
+        </defs>
+        <!-- axes -->
+        <line x1="70" y1="30" x2="70" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <line x1="70" y1="300" x2="880" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <!-- inflation -->
+        <line x1="70" y1="282" x2="860" y2="250" stroke="rgba(148,163,184,0.4)" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <text x="856" y="242" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="11" fill="#6B7A93">inflation</text>
+        <!-- ROI curve -->
+        <path d="M70,288 C 350,282 560,252 860,205" fill="none" stroke="#94A3B8" stroke-width="2.4"/>
+        <text x="600" y="240" font-family="'JetBrains Mono',monospace" font-size="12.5" fill="#94A3B8">Save &amp; invest · ROI</text>
+        <!-- ROE fill + curve -->
+        <path d="M70,288 C 410,288 660,240 860,55 L 860,300 L 70,300 Z" fill="url(#roeFill)"/>
+        <path d="M70,288 C 410,288 660,240 860,55" fill="none" stroke="url(#roeLine)" stroke-width="3"/>
+        <text x="426" y="108" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="20" fill="#E0BE63">Synthetic PE · ROE</text>
+        <text x="426" y="128" font-family="'JetBrains Mono',monospace" font-size="11" fill="#6FB77F">compounding does the work</text>
+        <!-- start marker -->
+        <circle cx="70" cy="288" r="5" fill="#C8A951" stroke="#111C33" stroke-width="2"/>
+        <text x="84" y="282" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#94A3B8">a small slice of your equity</text>
+        <!-- axis labels -->
+        <text x="30" y="168" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93" transform="rotate(-90 30 168)">WEALTH</text>
+        <text x="475" y="328" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93">TIME →</text>
+      </svg>
+
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:14px;line-height:1.6">Both paths start from the <b style="color:var(--slate)">same slice of your own capital</b>. ROI puts that cash to work alone — a gentle climb, much of it surrendered to inflation. ROE puts a <em>fraction</em> of it down, borrows the rest at a reasonable rate, and lets the <b style="color:var(--green)">Cash-Flow Engine</b> carry the debt while the <b style="color:var(--gold)">Compounding Engine</b> builds the equity. The gap between the curves is what <b style="color:var(--gold)">leverage + compounding</b> open up. <b style="color:var(--slate)">Conceptual and illustrative</b> — not a forecast, projection, or promise. <a href="#calculator" style="color:var(--gold-bright)">Model the numbers yourself ↓</a></p>
+    </div>
+
+    <span class="compliance-pill">Educational analogy · ROE vs ROI is a framing, not a product or a guaranteed outcome · involves real leverage and risk of loss</span>
+  </div>
+</section>
+
 <!-- 02 · THE SYNTHETIC TRANSLATION -->
 <section class="block" id="engines">
   <div class="wrap">
