@@ -774,13 +774,16 @@
           the stream that services obligations and funds the compounding engine.
         </p>
         <div class="stats">
-          <div class="stat"><div class="v" id="sp-cf-trades">134</div><div class="l">closed trades</div></div>
-          <div class="stat"><div class="v" id="sp-cf-net">+$8,853</div><div class="l">net · live</div></div>
-          <div class="stat"><div class="v" id="sp-cf-r">+0.33R</div><div class="l">per trade</div></div>
+          <div class="stat"><div class="v" id="sp-cf-trades">140</div><div class="l">closed trades</div></div>
+          <div class="stat"><div class="v" id="sp-cf-r">+0.32R</div><div class="l">per trade · live</div></div>
+          <div class="stat"><div class="v">~30R</div><div class="l">annual R · conservative</div></div>
         </div>
         <p style="font-size:.84rem;">
-          Live, recalculated as each fill closes (Feb–Jun 2026). <strong>Pre-asymptotic and hypothetical-forward</strong> — a
-          sample of this size is not a sustainability claim. Every fill is posted in public before exit.
+          Live, recalculated as each fill closes (Feb–Jun 2026). We size the edge in <strong>R</strong> — multiples of the risk taken on each
+          trade — because a raw dollar figure means nothing without the account behind it, while <strong>R is size-neutral</strong>: it reads the
+          same on a $10k account or a $1M one. <strong>Annual R</strong> is simply how many of those risk-units the edge banks in a year; we quote a
+          deliberately <strong>conservative ~30R</strong>, well below the live run-rate. Pre-asymptotic — a sample of this size is not a
+          sustainability claim; every fill is posted in public before exit.
         </p>
         <div class="status"><span class="live">● Live</span> · disclosed protocol · falsifiability gate armed</div>
         <a class="eng-link" href="/cash-flow-engine.html">Open the live cash-flow experiment →</a>
