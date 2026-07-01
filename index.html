@@ -601,19 +601,19 @@
 <!-- 01.6 · The compounding retires the leverage -->
 <section class="block" id="payoff">
   <div class="wrap">
-    <span class="sec-num">▸ Then the machine pays off the leverage</span>
-    <h2>The leverage doesn't linger. <em>It amortizes away as the equity compounds.</em></h2>
+    <span class="sec-num">▸ Why the return is on your equity</span>
+    <h2>Put down a slice. The asset compounds on its <em>full value</em> — and the whole gain is yours.</h2>
     <p class="intro">
-      Leverage is only borrowed for as long as the machine needs it. The debt <strong>amortizes down over the term</strong> — serviced by the
-      Cash-Flow Engine's income — while the <strong>Compounding Engine</strong> builds the portfolio above it. The gap between them is equity that
-      belongs to you, <strong>widening from both sides</strong>: the debt falling, the portfolio rising. By maturity the leverage is retired and the
-      multiplied, de-levered portfolio is yours — free and clear.
+      Leverage lets a <strong>small downpayment</strong> control a much larger asset. The asset <strong>compounds on its full value</strong> —
+      its growth has nothing to do with the loan — while the borrowed principal <strong>amortizes away</strong> on its own schedule. Because no
+      loan growth offsets the gain, the entire appreciation lands on your equity: a <strong>small amount in becomes a large net equity out</strong>.
+      That ratio is your <strong>return on equity</strong>.
     </p>
 
     <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px">
-      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">The debt amortizes down · the compounding builds equity · illustrative</div>
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Small downpayment · the asset compounds on its full value · the loan amortizes independently · illustrative</div>
 
-      <svg viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" role="img" aria-label="The compounding portfolio rises while the borrowed principal amortizes down to zero by maturity; the widening gap between them is net equity.">
+      <svg viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" role="img" aria-label="A small downpayment controls a larger asset; the asset compounds on its full value while the loan amortizes independently, so the widening gap — your net equity — grows large relative to the downpayment: return on equity.">
         <defs>
           <linearGradient id="eqGap" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#6FB77F" stop-opacity="0.20"/>
@@ -626,29 +626,35 @@
         <!-- axes -->
         <line x1="70" y1="30" x2="70" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
         <line x1="70" y1="300" x2="880" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
-        <!-- net-equity gap (between the compounding portfolio and the amortizing debt) -->
-        <path d="M70,248 C 400,246 645,190 858,64 L 858,298 C 690,280 420,252 70,248 Z" fill="url(#eqGap)"/>
-        <!-- debt: amortizes down over the term to zero at maturity -->
-        <path d="M70,248 C 420,252 690,280 858,298" fill="none" stroke="#D98A8A" stroke-width="2.6"/>
-        <text x="86" y="240" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#D98A8A">Borrowed principal · amortizing to zero</text>
-        <!-- portfolio compounding -->
-        <path d="M70,248 C 400,246 645,190 858,64" fill="none" stroke="url(#portLine2)" stroke-width="3"/>
-        <text x="118" y="150" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="20" fill="#E0BE63">Portfolio · built by compounding</text>
-        <!-- net equity label -->
-        <text x="470" y="232" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#6FB77F">net equity · grows from both sides</text>
+        <!-- your equity = the widening gap between the asset and the loan -->
+        <path d="M70,238 C 400,236 645,180 858,56 L 858,296 C 690,286 420,262 70,258 Z" fill="url(#eqGap)"/>
+        <!-- ROE headline -->
+        <text x="95" y="48" font-family="'JetBrains Mono',monospace" font-size="12.5" fill="#E0BE63">Small equity in → large equity out = ROE</text>
+        <!-- the loan: amortizes down, independent of the asset -->
+        <path d="M70,258 C 420,262 690,286 858,296" fill="none" stroke="#D98A8A" stroke-width="2.6"/>
+        <text x="296" y="285" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#D98A8A">The loan · amortizes independently</text>
+        <!-- the asset: compounds on its full value -->
+        <path d="M70,238 C 400,236 645,180 858,56" fill="none" stroke="url(#portLine2)" stroke-width="3"/>
+        <text x="150" y="136" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="20" fill="#E0BE63">The asset · compounds on its full value</text>
+        <!-- your equity label -->
+        <text x="600" y="206" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#6FB77F">your equity</text>
+        <!-- downpayment (your equity in) at the start -->
+        <path d="M82,236 h-8 v24 h8" fill="none" stroke="#6FB77F" stroke-width="1.6"/>
+        <line x1="78" y1="260" x2="78" y2="273" stroke="#6FB77F" stroke-width="1" stroke-dasharray="2 3"/>
+        <text x="74" y="285" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#6FB77F">your downpayment</text>
         <!-- maturity marker -->
-        <line x1="858" y1="52" x2="858" y2="300" stroke="rgba(200,169,81,0.4)" stroke-width="1" stroke-dasharray="3 4"/>
-        <circle cx="858" cy="64" r="5" fill="#C8A951" stroke="#111C33" stroke-width="2"/>
-        <text x="850" y="52" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#E0BE63">at maturity · debt retired</text>
-        <!-- net equity created — bracketed at maturity (portfolio minus the retired debt) -->
-        <path d="M866,66 h7 v230 h-7" fill="none" stroke="#6FB77F" stroke-width="1.6"/>
-        <text x="889" y="181" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="500" fill="#6FB77F" transform="rotate(-90 889 181)">NET EQUITY CREATED</text>
+        <line x1="858" y1="48" x2="858" y2="300" stroke="rgba(200,169,81,0.4)" stroke-width="1" stroke-dasharray="3 4"/>
+        <circle cx="858" cy="56" r="5" fill="#C8A951" stroke="#111C33" stroke-width="2"/>
+        <text x="850" y="44" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#E0BE63">at maturity · loan gone</text>
+        <!-- net equity created — bracketed at maturity (asset minus the retired loan) -->
+        <path d="M866,58 h7 v238 h-7" fill="none" stroke="#6FB77F" stroke-width="1.6"/>
+        <text x="889" y="177" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="500" fill="#6FB77F" transform="rotate(-90 889 177)">NET EQUITY CREATED</text>
         <!-- axis labels -->
         <text x="30" y="168" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93" transform="rotate(-90 30 168)">WEALTH</text>
         <text x="470" y="328" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93">TIME →</text>
       </svg>
 
-      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:14px;line-height:1.6">The <b style="color:var(--red)">borrowed principal amortizes to zero</b> over the term — serviced by the <b style="color:var(--green)">Cash-Flow Engine</b> — while the <b style="color:var(--gold)">Compounding Engine</b> grows the portfolio above it. The <b style="color:var(--green)">green gap is net equity</b>, widening from both sides at once: the debt falling, the portfolio rising. By maturity the debt is retired and the whole portfolio is yours, free and clear — <b style="color:var(--green)">that surplus is the net equity created</b>. <b style="color:var(--slate)">Illustrative</b> — a worse path can leave the balance unpaid. <a href="#calculator" style="color:var(--gold-bright)">See the full trajectory in the calculator ↓</a></p>
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:14px;line-height:1.6">You put down a <b style="color:var(--green)">small slice — the downpayment</b>. The <b style="color:var(--gold)">asset compounds on its full value</b>, unrelated to the loan, while the <b style="color:var(--red)">borrowed principal amortizes independently</b> to zero. Because no loan growth offsets the gain, the <b style="color:var(--green)">entire appreciation becomes your net equity</b> — a large equity out on a small equity in. <b style="color:var(--gold)">That is return on equity (ROE).</b> <b style="color:var(--slate)">Illustrative</b> — schematic, not to scale; a worse path can leave the balance unpaid. <a href="#calculator" style="color:var(--gold-bright)">Model it in the calculator ↓</a></p>
     </div>
 
     <span class="compliance-pill">Hypothetical and illustrative · not a forecast · leverage can amplify losses as well as gains · loss of capital is possible</span>
