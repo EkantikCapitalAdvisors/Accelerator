@@ -598,6 +598,61 @@
   </div>
 </section>
 
+<!-- 01.6 · The compounding retires the leverage -->
+<section class="block" id="payoff">
+  <div class="wrap">
+    <span class="sec-num">▸ Then the compounding pays off the leverage</span>
+    <h2>The growth doesn't just build equity. <em>It retires the debt.</em></h2>
+    <p class="intro">
+      Leverage is only borrowed for as long as the machine needs it. The <strong>Compounding Engine</strong> grows the portfolio while the
+      borrowed principal sits <strong>level beneath it</strong> — and the widening gap is equity that belongs to you. At maturity you
+      <strong>repay the principal out of the gains</strong> and keep the free-and-clear equity. The compounding is what pays the debt off — you never had to.
+    </p>
+
+    <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px">
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Compounding grows · the principal is repaid from the gains · illustrative</div>
+
+      <svg viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" role="img" aria-label="The compounding portfolio rises while the borrowed principal stays level beneath it; the widening gap is net equity, and at maturity the principal is repaid out of the gains.">
+        <defs>
+          <linearGradient id="eqGap" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#6FB77F" stop-opacity="0.20"/>
+            <stop offset="100%" stop-color="#6FB77F" stop-opacity="0.03"/>
+          </linearGradient>
+          <linearGradient id="portLine2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#C8A951"/><stop offset="100%" stop-color="#E0BE63"/>
+          </linearGradient>
+        </defs>
+        <!-- axes -->
+        <line x1="70" y1="30" x2="70" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <line x1="70" y1="300" x2="880" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <!-- net-equity gap (portfolio down to the debt level) -->
+        <path d="M70,248 C 400,246 650,188 880,62 L 880,248 L 70,248 Z" fill="url(#eqGap)"/>
+        <!-- debt: held level, then repaid at maturity -->
+        <path d="M70,248 L 812,248" fill="none" stroke="#D98A8A" stroke-width="2.6"/>
+        <path d="M812,248 L 812,300" fill="none" stroke="#D98A8A" stroke-width="2" stroke-dasharray="4 4"/>
+        <text x="80" y="266" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#D98A8A">Borrowed principal · held level</text>
+        <!-- portfolio compounding -->
+        <path d="M70,248 C 400,246 650,188 880,62" fill="none" stroke="url(#portLine2)" stroke-width="3"/>
+        <text x="118" y="150" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="20" fill="#E0BE63">Portfolio · built by compounding</text>
+        <!-- net equity label -->
+        <text x="486" y="236" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#6FB77F">net equity the compounding builds</text>
+        <!-- payoff marker -->
+        <line x1="812" y1="98" x2="812" y2="300" stroke="rgba(200,169,81,0.4)" stroke-width="1" stroke-dasharray="3 4"/>
+        <circle cx="812" cy="98" r="5" fill="#C8A951" stroke="#111C33" stroke-width="2"/>
+        <text x="812" y="84" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#E0BE63">at maturity</text>
+        <text x="806" y="286" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10" fill="#D98A8A">principal repaid ↓</text>
+        <!-- axis labels -->
+        <text x="30" y="168" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93" transform="rotate(-90 30 168)">WEALTH</text>
+        <text x="470" y="328" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93">TIME →</text>
+      </svg>
+
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:14px;line-height:1.6">The <b style="color:var(--gold)">Compounding Engine</b> grows the portfolio while the <b style="color:var(--red)">borrowed principal</b> stays level beneath it. The widening <b style="color:var(--green)">green gap is net equity</b> — equity the compounding builds. <b style="color:var(--slate)">At maturity you repay the principal out of the gains</b> and keep the free-and-clear equity: the compounding retires the leverage, so you never had to service it from your own pocket. <b style="color:var(--slate)">Illustrative</b> — a worse path can leave the principal unpaid. <a href="#calculator" style="color:var(--gold-bright)">See the full trajectory in the calculator ↓</a></p>
+    </div>
+
+    <span class="compliance-pill">Hypothetical and illustrative · not a forecast · leverage can amplify losses as well as gains · loss of capital is possible</span>
+  </div>
+</section>
+
 <!-- 02 · THE SYNTHETIC TRANSLATION -->
 <section class="block" id="engines">
   <div class="wrap">
