@@ -667,6 +667,71 @@
   </div>
 </section>
 
+<!-- 01.7 · The cycle repeats over the life of the loan -->
+<section class="block" id="cycles">
+  <div class="wrap">
+    <span class="sec-num">▸ And you can run it again</span>
+    <h2>The loan lasts decades. The cycle turns in years — so it <em>repeats</em>, each turn compounding on the last.</h2>
+    <p class="intro">
+      A home loan runs for <strong>decades</strong>; the synthetic-PE cycle turns in a handful of <strong>years</strong>. So the same move —
+      borrow, cover the carry, compound, repay and keep — can be run <strong>several times</strong> over the life of one loan. Each turn banks
+      net equity and redeploys onto a larger base, so the equity doesn't just grow — it <strong>compounds across cycles</strong>.
+    </p>
+
+    <div style="margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px">
+      <div style="font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">One home loan · several synthetic-PE cycles · each compounding on the last · illustrative</div>
+
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" role="img" aria-label="Over the decades-long life of one home loan, the shorter synthetic-PE cycle runs several times; each turn banks net equity and redeploys, so the cumulative equity accelerates cycle after cycle.">
+        <defs>
+          <linearGradient id="cycFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#6FB77F" stop-opacity="0.20"/>
+            <stop offset="100%" stop-color="#6FB77F" stop-opacity="0.03"/>
+          </linearGradient>
+          <linearGradient id="cycLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#C8A951"/><stop offset="100%" stop-color="#E0BE63"/>
+          </linearGradient>
+        </defs>
+        <!-- axes -->
+        <line x1="70" y1="40" x2="70" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <line x1="70" y1="300" x2="878" y2="300" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
+        <!-- cumulative net equity fill -->
+        <path d="M70,288 C 160,286 215,274 270,266 C 360,262 415,234 470,218 C 560,210 615,168 670,142 C 760,132 815,84 870,48 L 870,300 L 70,300 Z" fill="url(#cycFill)"/>
+        <!-- cycle dividers -->
+        <line x1="270" y1="66" x2="270" y2="300" stroke="rgba(148,163,184,0.18)" stroke-width="1" stroke-dasharray="3 4"/>
+        <line x1="470" y1="66" x2="470" y2="300" stroke="rgba(148,163,184,0.18)" stroke-width="1" stroke-dasharray="3 4"/>
+        <line x1="670" y1="66" x2="670" y2="300" stroke="rgba(148,163,184,0.18)" stroke-width="1" stroke-dasharray="3 4"/>
+        <!-- the accumulating cycles curve -->
+        <path d="M70,288 C 160,286 215,274 270,266 C 360,262 415,234 470,218 C 560,210 615,168 670,142 C 760,132 815,84 870,48" fill="none" stroke="url(#cycLine)" stroke-width="3"/>
+        <!-- banked-equity dots at each cycle's end (redeploy points) -->
+        <circle cx="270" cy="266" r="4.5" fill="#6FB77F" stroke="#111C33" stroke-width="2"/>
+        <circle cx="470" cy="218" r="4.5" fill="#6FB77F" stroke="#111C33" stroke-width="2"/>
+        <circle cx="670" cy="142" r="4.5" fill="#6FB77F" stroke="#111C33" stroke-width="2"/>
+        <circle cx="870" cy="48" r="5" fill="#C8A951" stroke="#111C33" stroke-width="2"/>
+        <text x="280" y="258" font-family="'JetBrains Mono',monospace" font-size="12.5" fill="#6FB77F">↻</text>
+        <text x="480" y="210" font-family="'JetBrains Mono',monospace" font-size="12.5" fill="#6FB77F">↻</text>
+        <text x="680" y="134" font-family="'JetBrains Mono',monospace" font-size="12.5" fill="#6FB77F">↻</text>
+        <!-- cycle labels -->
+        <text x="170" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#94A3B8">Cycle 1</text>
+        <text x="370" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#94A3B8">Cycle 2</text>
+        <text x="570" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#94A3B8">Cycle 3</text>
+        <text x="770" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#E0BE63">Cycle 4</text>
+        <text x="170" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#6B7A93">borrow · compound · repay &amp; keep</text>
+        <!-- the point -->
+        <text x="470" y="126" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="18" fill="#E0BE63">each turn compounds on the last</text>
+        <text x="862" y="38" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#C8A951">net equity, stacked across cycles</text>
+        <!-- home-loan span bracket -->
+        <path d="M70,310 v6 h808 v-6" fill="none" stroke="rgba(148,163,184,0.45)" stroke-width="1.2"/>
+        <text x="474" y="334" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#94A3B8">one home loan · runs for decades</text>
+        <text x="30" y="170" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93" transform="rotate(-90 30 170)">NET EQUITY</text>
+      </svg>
+
+      <p style="font-family:var(--mono);font-size:.66rem;color:var(--slate-dim);margin-top:14px;line-height:1.6">Over one long home loan, the cycle runs several short turns. Each turn — <b style="color:var(--gold)">borrow, cover the carry, compound, repay &amp; keep</b> — banks <b style="color:var(--green)">net equity</b> and redeploys onto a bigger base (<b style="color:var(--green)">↻</b>), so the equity <b style="color:var(--green)">compounds across cycles</b> and the curve accelerates. <b style="color:var(--slate)">Illustrative</b> — schematic, not to scale; each turn carries the same leverage risk, and a bad turn can bank nothing. <a href="#calculator" style="color:var(--gold-bright)">Model one turn in the calculator ↓</a></p>
+    </div>
+
+    <span class="compliance-pill">Hypothetical and illustrative · repeating leverage repeats the risk · not a forecast or a promise · loss of capital is possible</span>
+  </div>
+</section>
+
 <!-- 02 · THE SYNTHETIC TRANSLATION -->
 <section class="block" id="engines">
   <div class="wrap">
