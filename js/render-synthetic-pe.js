@@ -69,7 +69,9 @@
         // Progress is measured on NET PROFIT toward $50k (not the account balance).
         if (o) {
             const s = stats(o.filter(t => t.outcome !== 'Open'));  // open positions don't count until closed
-            setText('sp-co-net', fmtSigned(s.net));
+            // Size-neutral multiple on the $5k model capital (the $5k → $50k run),
+            // instead of a raw dollar net that means nothing without the base.
+            setText('sp-co-mult', '~' + ((5000 + s.net) / 5000).toFixed(1) + '×');
             setText('sp-co-trades', String(s.n));
             setText('sp-co-bal', fmtSigned(s.net));                          // net profit, not balance
             setText('sp-co-pct', (s.net / 50000 * 100).toFixed(1) + '% of a 10× run');
