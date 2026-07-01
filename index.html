@@ -716,12 +716,15 @@
         <text x="570" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#94A3B8">Cycle 3</text>
         <text x="770" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#E0BE63">Cycle 4</text>
         <text x="170" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#6B7A93">borrow · compound · repay &amp; keep</text>
+        <text x="370" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#6FB77F">↻ run it again</text>
+        <text x="570" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#6FB77F">↻ and again</text>
+        <text x="770" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#6FB77F">↻ and again</text>
         <!-- the point -->
         <text x="470" y="126" font-family="'Cormorant Garamond',serif" font-style="italic" font-size="18" fill="#E0BE63">each turn compounds on the last</text>
         <text x="862" y="38" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#C8A951">net equity, stacked across cycles</text>
         <!-- home-loan span bracket -->
         <path d="M70,310 v6 h808 v-6" fill="none" stroke="rgba(148,163,184,0.45)" stroke-width="1.2"/>
-        <text x="474" y="334" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#94A3B8">one home loan · runs for decades</text>
+        <text x="474" y="334" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#94A3B8">one home loan · ~30 years · four ~7-year turns fit inside</text>
         <text x="30" y="170" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#6B7A93" transform="rotate(-90 30 170)">NET EQUITY</text>
       </svg>
 
@@ -858,9 +861,9 @@
       capital into two sleeves — held up by a reserve. An <strong>income sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Cash-Flow Engine</a>, throwing off <strong>~2%/mo</strong> that
       services the debt — a <strong>compounding sleeve</strong> — your <a href="#engines" style="color:var(--gold-bright)">Compounding Engine</a>, run at a realistic
       <strong>~26% CAGR</strong> — the convex booster that retires the leverage fastest — and a <strong>reserve, funded first</strong>, that carries the machine through losing months.
-      The income covers the carry; the compounding builds the equity; <strong>the reserve keeps both alive</strong>. The goal isn't a number on a stake — it's to
-      <strong>repay what you borrowed and reach your target as fast as possible</strong>, then own the de-levered, multiplied portfolio free and clear.
-      <strong>That is how PE-type wealth is manufactured</strong> — hypothetical and illustrative, not a forecast.
+      The income covers the carry; the compounding builds the equity; <strong>the reserve — the slice of your own cash actually at risk, your <a href="#payoff" style="color:var(--gold-bright)">downpayment</a> — keeps both alive</strong>. The goal isn't a number on a stake — it's to
+      <strong>repay what you borrowed</strong> and own the de-levered, multiplied portfolio free and clear. What you're really solving for is <strong>return on that equity</strong> (ROE): a small amount in, a large <strong>net equity</strong> out.
+      This models <strong>one turn</strong> of the cycle — <a href="#cycles" style="color:var(--gold-bright)">repay, then redeploy and run it again</a>. <strong>That is how PE-type wealth is manufactured</strong> — hypothetical and illustrative, not a forecast.
     </p>
 
     <div class="pe-toggle">
@@ -885,7 +888,7 @@
         <div><div class="k">Total interest</div><div class="v gold" id="pe-interest" style="color:var(--gold)">—</div></div>
         <div><div class="k">Total cost</div><div class="v red" id="pe-cost">—</div></div>
         <div><div class="k">Payoff in</div><div class="v" id="pe-payoff" style="color:var(--green)">—</div></div>
-        <div><div class="k">Wealth created</div><div class="v" id="pe-wealth" style="color:var(--gold-bright)">—</div></div>
+        <div><div class="k">Net equity created</div><div class="v" id="pe-wealth" style="color:var(--gold-bright)">—</div></div>
       </div>
       <div class="pe-splitbar">
         <span id="pe-split-comp" style="background:linear-gradient(90deg,#5B7BB4,#7E9CC4)"></span>
@@ -957,7 +960,7 @@
         <div class="pe-panel">
           <div class="ph">▦ Projections</div>
           <table class="pe-proj">
-            <thead><tr><th>Period</th><th>Net equity</th><th>Portfolio</th><th>Debt</th><th>IRR</th><th>Multiple</th></tr></thead>
+            <thead><tr><th>Period</th><th>Net equity</th><th>Portfolio</th><th>Debt</th><th>IRR · ROE</th><th>Multiple</th></tr></thead>
             <tbody id="pe-proj-body"></tbody>
           </table>
         </div>
