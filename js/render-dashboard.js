@@ -293,10 +293,24 @@
     // Timeframe filter + KPI grid
     // ──────────────────────────────────────────────────────────────
     let currentTf = 'all';
+    let customRange = null;   // { from: Date, to: Date } when currentTf === 'custom'
+
+    // Parse a native <input type="date"> value ("YYYY-MM-DD") as a LOCAL date.
+    // end=true snaps to 23:59:59.999 so the "to" bound is inclusive of the whole day.
+    function parseLocalDate(v, end) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
+        if (!m) return null;
+        return end ? new Date(+m[1], +m[2] - 1, +m[3], 23, 59, 59, 999)
+                   : new Date(+m[1], +m[2] - 1, +m[3], 0, 0, 0, 0);
+    }
 
     function filterByTimeframe(trades, tf) {
         if (!tf || tf === 'all' || !trades.length) return trades;
         const tsOf = t => parseTS(t.entry_time || t.entryTime || t.trade_date || t.datetime);
+        if (tf === 'custom') {
+            if (!customRange) return trades;
+            return trades.filter(t => { const d = tsOf(t); return d && d >= customRange.from && d <= customRange.to; });
+        }
         const latest = trades.reduce((max, t) => { const d = tsOf(t); return d && (!max || d > max) ? d : max; }, null);
         if (!latest) return trades;
         const cutoff = new Date(latest);
@@ -424,6 +438,28 @@
         });
     }
 
+    // Read the two date inputs, build an inclusive local range, and re-render
+    // KPIs + trade table over it. Silently no-ops until both dates are set;
+    // swaps the bounds if the user picks them in reverse order.
+    function applyCustom() {
+        const fromEl = $('dash-tf-from'), toEl = $('dash-tf-to');
+        if (!fromEl || !toEl || !fromEl.value || !toEl.value) return;
+        let from = parseLocalDate(fromEl.value, false);
+        let to   = parseLocalDate(toEl.value, true);
+        if (!from || !to) return;
+        if (from > to) { const t = from; from = to; to = t; }
+        customRange = { from, to };
+        setActiveTf('custom');
+        try {
+            localStorage.setItem('ekantik-dash-tf', 'custom');
+            localStorage.setItem('ekantik-dash-custom', JSON.stringify({ from: fromEl.value, to: toEl.value }));
+        } catch (e) {}
+        if (root.Ekantik && root.Ekantik.Data) {
+            const cur = root.Ekantik.Data.get();
+            if (cur) renderAll(cur);
+        }
+    }
+
     function renderAll(state) {
         const all = cleanTrades((state && state.trades) || []);
         if (!all.length) return;
@@ -457,17 +493,42 @@
         const csv = $('dash-csv'); if (csv) csv.addEventListener('click', downloadCSV);
 
         // Timeframe selector — re-render KPIs + trade table on click.
-        // Persist the chosen window in localStorage.
+        // Persist the chosen window in localStorage (presets + custom range).
         try { const saved = localStorage.getItem('ekantik-dash-tf'); if (saved) currentTf = saved; } catch (e) {}
+        if (currentTf === 'custom') {
+            // Restore a previously chosen custom range into the inputs + state.
+            try {
+                const raw = localStorage.getItem('ekantik-dash-custom');
+                if (raw) {
+                    const cr = JSON.parse(raw);
+                    const f = $('dash-tf-from'), t = $('dash-tf-to');
+                    if (f) f.value = cr.from || '';
+                    if (t) t.value = cr.to || '';
+                    const from = parseLocalDate(cr.from, false), to = parseLocalDate(cr.to, true);
+                    if (from && to) customRange = (from > to) ? { from: to, to: from } : { from, to };
+                }
+            } catch (e) {}
+            if (!customRange) currentTf = 'all';   // fall back if the range couldn't be restored
+        }
         setActiveTf(currentTf);
         document.querySelectorAll('.dash-tf-chip').forEach(b => {
+            if (b.id === 'dash-tf-apply') { b.addEventListener('click', applyCustom); return; }
             b.addEventListener('click', () => {
+                customRange = null;                 // leaving custom mode
                 setActiveTf(b.dataset.tf);
                 try { localStorage.setItem('ekantik-dash-tf', currentTf); } catch (e) {}
                 if (root.Ekantik && root.Ekantik.Data) {
                     const cur = root.Ekantik.Data.get();
                     if (cur) renderAll(cur);
                 }
+            });
+        });
+        // Auto-apply once both dates are set, so the range takes effect without a second click.
+        ['dash-tf-from', 'dash-tf-to'].forEach(id => {
+            const el = $(id);
+            if (el) el.addEventListener('change', () => {
+                const f = $('dash-tf-from'), t = $('dash-tf-to');
+                if (f && t && f.value && t.value) applyCustom();
             });
         });
 

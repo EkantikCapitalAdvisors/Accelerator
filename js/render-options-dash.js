@@ -30,6 +30,53 @@
         const d = new Date(raw); return isNaN(d.getTime()) ? null : d;
     }
 
+    // ── Window filter (preset chips + custom date range) ──────────────
+    // KPIs and the trade log honor the selected window; the equity curve,
+    // monthly bars, and race-to-$50k header stay all-time as context.
+    let lastTrades = [];        // last fetched closed-fill set, for re-paint without re-fetch
+    let currentTf = 'all';
+    let customRange = null;     // { from: Date, to: Date } when currentTf === 'custom'
+
+    // Parse an <input type="date"> value ("YYYY-MM-DD") as a LOCAL date.
+    // end=true snaps to end-of-day so the "to" bound includes the whole day.
+    function parseLocalDate(v, end) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
+        if (!m) return null;
+        return end ? new Date(+m[1], +m[2] - 1, +m[3], 23, 59, 59, 999)
+                   : new Date(+m[1], +m[2] - 1, +m[3], 0, 0, 0, 0);
+    }
+
+    function filterByTimeframe(trades, tf) {
+        if (!tf || tf === 'all' || !trades.length) return trades;
+        const tsOf = t => parseTS(t.entry_time || t.trade_date || t.datetime);
+        if (tf === 'custom') {
+            if (!customRange) return trades;
+            return trades.filter(t => { const d = tsOf(t); return d && d >= customRange.from && d <= customRange.to; });
+        }
+        const latest = trades.reduce((max, t) => { const d = tsOf(t); return d && (!max || d > max) ? d : max; }, null);
+        if (!latest) return trades;
+        const cutoff = new Date(latest);
+        switch (tf) {
+            case '7d':  cutoff.setDate(cutoff.getDate() - 7); break;
+            case '30d': cutoff.setDate(cutoff.getDate() - 30); break;
+            case '90d': cutoff.setDate(cutoff.getDate() - 90); break;
+            case 'mtd': cutoff.setDate(1); cutoff.setHours(0, 0, 0, 0); break;
+            case 'ytd': cutoff.setMonth(0, 1); cutoff.setHours(0, 0, 0, 0); break;
+            default: return trades;
+        }
+        return trades.filter(t => { const d = tsOf(t); return d && d >= cutoff; });
+    }
+
+    function windowLabel(trades) {
+        if (!trades.length) return '0 fills in window';
+        const ds = trades.map(t => parseTS(t.entry_time || t.trade_date)).filter(Boolean).sort((a, b) => a - b);
+        const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const span = ds.length && ds[0].getTime() !== ds[ds.length - 1].getTime()
+            ? `${fmt(ds[0])} → ${fmt(ds[ds.length - 1])}`
+            : (ds.length ? fmt(ds[0]) : '');
+        return `${trades.length} fills${span ? ' · ' + span : ''}`;
+    }
+
     function compute(trades) {
         const pls = trades.map(t => t.dollar_pl || 0);
         const wins = trades.filter(t => (t.dollar_pl || 0) > 0);
@@ -177,18 +224,90 @@
         }).join('');
     }
 
+    // Paint from the last fetched set. Header + charts are all-time; KPIs and
+    // the trade log honor the selected window. Called on every fetch and on
+    // every window change (no re-fetch needed for the latter).
+    function paint() {
+        renderHead(compute(lastTrades));          // race-to-$50k progress is cumulative → all-time
+        renderEquity(lastTrades);                 // context charts stay all-time
+        renderMonthly(lastTrades);
+        const windowed = filterByTimeframe(lastTrades, currentTf);
+        renderKpis(compute(windowed));
+        renderTradeLog(windowed);
+        const win = $('od-tf-window'); if (win) win.textContent = windowLabel(windowed);
+    }
+
     async function render() {
         const all = await fetchJSON('data/options_trades.json');
-        const trades = Array.isArray(all) ? all.filter(t => t.outcome !== 'Open') : all;  // open positions excluded until closed
-        const s = compute(trades);
-        renderHead(s);
-        renderKpis(s);
-        renderEquity(trades);
-        renderMonthly(trades);
-        renderTradeLog(trades);
+        lastTrades = Array.isArray(all) ? all.filter(t => t.outcome !== 'Open') : [];  // open positions excluded until closed
+        paint();
+    }
+
+    function setActiveTf(tf) {
+        currentTf = tf;
+        document.querySelectorAll('.dash-tf-chip').forEach(b => {
+            const on = b.dataset.tf === tf;
+            b.classList.toggle('dash-tf-chip--active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+
+    // Read the two date inputs, build an inclusive local range, re-paint over it.
+    // No-ops until both dates are set; swaps the bounds if picked in reverse.
+    function applyCustom() {
+        const fromEl = $('od-tf-from'), toEl = $('od-tf-to');
+        if (!fromEl || !toEl || !fromEl.value || !toEl.value) return;
+        let from = parseLocalDate(fromEl.value, false);
+        let to   = parseLocalDate(toEl.value, true);
+        if (!from || !to) return;
+        if (from > to) { const t = from; from = to; to = t; }
+        customRange = { from, to };
+        setActiveTf('custom');
+        try {
+            localStorage.setItem('ekantik-odash-tf', 'custom');
+            localStorage.setItem('ekantik-odash-custom', JSON.stringify({ from: fromEl.value, to: toEl.value }));
+        } catch (e) {}
+        paint();
+    }
+
+    function wireWindow() {
+        // Restore a persisted window (preset or custom range).
+        try { const saved = localStorage.getItem('ekantik-odash-tf'); if (saved) currentTf = saved; } catch (e) {}
+        if (currentTf === 'custom') {
+            try {
+                const raw = localStorage.getItem('ekantik-odash-custom');
+                if (raw) {
+                    const cr = JSON.parse(raw);
+                    const f = $('od-tf-from'), t = $('od-tf-to');
+                    if (f) f.value = cr.from || '';
+                    if (t) t.value = cr.to || '';
+                    const from = parseLocalDate(cr.from, false), to = parseLocalDate(cr.to, true);
+                    if (from && to) customRange = (from > to) ? { from: to, to: from } : { from, to };
+                }
+            } catch (e) {}
+            if (!customRange) currentTf = 'all';
+        }
+        setActiveTf(currentTf);
+        document.querySelectorAll('.dash-tf-chip').forEach(b => {
+            if (b.id === 'od-tf-apply') { b.addEventListener('click', applyCustom); return; }
+            b.addEventListener('click', () => {
+                customRange = null;
+                setActiveTf(b.dataset.tf);
+                try { localStorage.setItem('ekantik-odash-tf', currentTf); } catch (e) {}
+                paint();
+            });
+        });
+        ['od-tf-from', 'od-tf-to'].forEach(id => {
+            const el = $(id);
+            if (el) el.addEventListener('change', () => {
+                const f = $('od-tf-from'), t = $('od-tf-to');
+                if (f && t && f.value && t.value) applyCustom();
+            });
+        });
     }
 
     function init() {
+        wireWindow();
         render();
         setInterval(() => { if (document.visibilityState !== 'hidden') render(); }, 60000);
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') render(); });
