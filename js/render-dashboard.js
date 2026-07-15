@@ -235,6 +235,18 @@
 
     // ─── trade table ───
     let sortKey = 'time', sortDir = 1, cleanCache = [];
+    // Actual contract size on the trade — e.g. "1 ES", "5 MES", "2 MES".
+    // Falls back to the free-text position_size tag if a record lacks contracts.
+    function sizeStr(t) {
+        if (t.contracts != null && t.product) return t.contracts + ' ' + t.product;
+        return t.position_size || '—';
+    }
+    // Rank for sorting the Size column by notional exposure (ES = $50/pt, MES = $5/pt).
+    function sizeRank(t) {
+        const mult = t.product === 'ES' ? 50 : (t.product === 'MES' ? 5 : 0);
+        return (t.contracts || 0) * mult;
+    }
+
     function renderTable(clean) {
         cleanCache = clean;
         const tbody = $('dash-trade-body'); if (!tbody) return;
@@ -243,7 +255,7 @@
             dir: t => t.direction || '', entry: t => t.entry_price || 0,
             pts: t => t.points_pl || 0, pl: t => t.dollar_pl || 0,
             r: t => (t.risk_dollars ? (t.dollar_pl||0)/t.risk_dollars : 0),
-            size: t => t.position_size || '', dur: t => t.exit_time || ''
+            size: t => sizeRank(t), dur: t => t.exit_time || ''
         };
         const rows = clean.slice().sort((a,b) => {
             const av = accessor[sortKey](a), bv = accessor[sortKey](b);
@@ -264,7 +276,7 @@
                 <td class="num mono">${t.points_pl!=null?(t.points_pl>0?'+':'')+t.points_pl:'—'}</td>
                 <td class="num mono" style="color:${pl>=0?POS:NEG}">${fmtSigned(pl)}</td>
                 <td class="num mono">${fmtR(r)}</td>
-                <td>${t.position_size||'—'}</td>
+                <td class="mono">${esc(sizeStr(t))}</td>
                 <td class="mono" style="font-size:11px">${durationStr(t)}</td>
                 <td class="trade-note">${note||'—'}</td>
             </tr>`;
@@ -281,7 +293,7 @@
         });
     }
     function downloadCSV() {
-        const cols = ['trade_num','entry_time','exit_time','direction','entry_price','points_pl','dollar_pl','risk_dollars','position_size','product'];
+        const cols = ['trade_num','entry_time','exit_time','direction','entry_price','points_pl','dollar_pl','risk_dollars','contracts','product','position_size'];
         const head = cols.join(',');
         const body = cleanCache.map(t => cols.map(c => JSON.stringify(t[c] ?? '')).join(',')).join('\n');
         const blob = new Blob([head+'\n'+body], { type:'text/csv' });
