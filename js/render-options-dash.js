@@ -90,12 +90,27 @@
         trades.forEach(t => { if ((t.dollar_pl || 0) <= 0) { streak++; maxStreak = Math.max(maxStreak, streak); } else streak = 0; });
         const best = trades.length ? trades.reduce((a, t) => (t.dollar_pl || 0) > (a.dollar_pl || 0) ? t : a) : null;
         const worst = trades.length ? trades.reduce((a, t) => (t.dollar_pl || 0) < (a.dollar_pl || 0) ? t : a) : null;
+
+        // R-expectancy and its annualization. Annual R = per-trade R-expectancy
+        // extrapolated to a full calendar year at the window's observed cadence.
+        // Needs ≥2 dated fills and ≥1 day of span; short windows annualize noisily.
+        const rexp = Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null;
+        const ts = trades.map(t => parseTS(t.entry_time || t.trade_date)).filter(Boolean).sort((a, b) => a - b);
+        const span = ts.length >= 2 ? { start: ts[0], end: ts[ts.length - 1] } : null;
+        let annualR = null, tradesPerYear = null;
+        if (rexp != null && span) {
+            const days = Math.max(1, (span.end - span.start) / 86400000);
+            tradesPerYear = (trades.length / days) * 365;
+            annualR = rexp * tradesPerYear;
+        }
+
         return {
             n: trades.length, net, bal: BASE + net,
             wr: trades.length ? wins.length / trades.length : 0,
             wins: wins.length, losses: losses.length,
             pf: gl > 0 ? gp / gl : (gp > 0 ? Infinity : 0),
-            rexp: Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null,
+            rexp,
+            annualR, tradesPerYear,
             ev: trades.length ? net / trades.length : null,
             avgWin: wins.length ? gp / wins.length : null,
             avgLoss: losses.length ? -gl / losses.length : null,
@@ -121,6 +136,8 @@
         if ($('od-wr-sub')) $('od-wr-sub').textContent = s.n ? `${s.wins} W / ${s.losses} L` : '—';
         set('od-pf', s.n ? (isFinite(s.pf) ? s.pf.toFixed(2) : '∞') : '—');
         set('od-rexp', s.rexp != null ? fmtR(s.rexp) : '—');
+        set('od-annualr', s.annualR != null ? (s.annualR >= 0 ? '+' : '') + s.annualR.toFixed(0) + 'R' : '—');
+        if ($('od-annualr-sub')) $('od-annualr-sub').textContent = s.tradesPerYear != null ? `~${Math.round(s.tradesPerYear)} fills/yr extrapolated` : 'extrapolated from cadence';
         set('od-ev', s.ev != null ? fmtSigned(s.ev) : '—');
         set('od-count', s.n ? String(s.n) : '—');
         if ($('od-wl')) $('od-wl').textContent = s.n ? `${s.wins} W / ${s.losses} L` : '—';
