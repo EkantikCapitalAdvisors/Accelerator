@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Compounding Engine · $10K → $100K, As Fast As Possible · Ekantik Capital</title>
-    <meta name="description" content="The Compounding Engine's challenge: take $10,000 → $100,000 as fast as possible — the full 10× (≈3.3 doublings) via earned geometric doubling on convex short-dated options. Disclosed protocol, tighter caps by design. Live experiment launches June 30, 2026.">
+    <meta name="description" content="The Compounding Engine's challenge: take $10,000 → $100,000 as fast as possible — the full 10× (≈3.3 doublings) via earned geometric doubling on convex short-dated options. Disclosed protocol, tighter caps by design. Live since June 30, 2026.">
     <meta name="theme-color" content="#1B2A4A">
     <link rel="canonical" href="https://accelerator.ekantikcapital.com/convexity.html">
     <meta property="og:title" content="The Compounding Engine · $10K → $100K, As Fast As Possible · Ekantik Capital">
@@ -38,15 +38,15 @@
     <!-- ═══ DISCLOSURE BANNER ═══ -->
     <div class="cftc-banner" role="note">
         <div class="cftc-banner__inner">
-            <span class="cftc-banner__tag">Pre-launch &middot; Live from June 30, 2026 &middot; Publicly Observable</span>
-            <span class="cftc-banner__body">This page describes a live trading experiment to be conducted on the operator&rsquo;s own capital in long short-dated options, with realized results publicly logged in the Convexity Experiment Discord journal. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or interest in any investment product.</strong> Trajectory figures shown are hypothetical and projected, not realized. Past performance is not indicative of future results. This experiment runs on <strong>convex instruments (options)</strong> carrying different risk characteristics than the linear instrument (futures) of the parent experiment; participants are presumed to understand options risk independently.</span>
+            <span class="cftc-banner__tag">Live since June 30, 2026 &middot; Publicly Observable</span>
+            <span class="cftc-banner__body">This page describes a live trading experiment conducted on the operator&rsquo;s own capital in long short-dated options, with realized results publicly logged in the Convexity Experiment Discord journal. <strong>Nothing on this page constitutes an offer to sell, or a solicitation of an offer to buy, any security or interest in any investment product.</strong> Trajectory figures shown are hypothetical and projected, not realized. Past performance is not indicative of future results. This experiment runs on <strong>convex instruments (options)</strong> carrying different risk characteristics than the linear instrument (futures) of the parent experiment; participants are presumed to understand options risk independently.</span>
         </div>
     </div>
 
     <!-- ═══ SECTION 00 — HERO ═══ -->
     <header class="hero hero--casino" id="hero" aria-labelledby="cx-hero-h1">
         <div class="hero__inner-rb">
-            <div class="hero-eyebrow">The Compounding Engine &middot; $10K &rarr; $100K, As Fast As Possible &middot; Live June 30, 2026</div>
+            <div class="hero-eyebrow">The Compounding Engine &middot; $10K &rarr; $100K, As Fast As Possible &middot; Live since June 30, 2026</div>
             <h1 id="cx-hero-h1">The challenge: take <em>$10,000 &rarr; $100,000 as fast as possible</em> &mdash; the full 10&times; (&approx;3.3 doublings) earned through geometric doubling on convex instruments, under a disclosed protocol anyone can watch.</h1>
             <p class="hero-lead">
                 $10K to $100K is <strong>log<sub>2</sub>(10) &approx; 3.32 doublings</strong>. The Compounding Engine&rsquo;s job is to compress those ~3.3 doublings into the shortest operating window the architecture will safely permit. Where the parent Experiment instruments the Doubling Doctrine on a linear payoff &mdash; ES futures &mdash; the Compounding Engine instruments the same doctrine on a convex payoff: long short-dated options (0&ndash;7 DTE) on SPX and single-stock underlyings. The trigger ladder is <strong>geometric</strong>: position size doubles when a six-uncorrelated-trade profit buffer has been earned. The architecture installs the doctrine&rsquo;s <em>Earned Doubling Law</em> in its strictest form &mdash; size advances only on won capital toward the $100K target, and reverts one step the moment that capital is returned.
@@ -60,9 +60,9 @@
             <div class="experiment-status" role="status" aria-label="Live experiment state">
                 <span class="experiment-status__label">Experiment state</span>
                 <span class="experiment-status__items">
-                    <span><span class="dot"></span> Pre-launch</span>
+                    <span><span class="dot"></span> Live</span>
                     <span class="experiment-status__sep">·</span>
-                    <span>Launch: <strong>6/30/2026</strong></span>
+                    <span>Live since: <strong>6/30/2026</strong></span>
                     <span class="experiment-status__sep">·</span>
                     <span>Sample: <strong id="cx-sample">—</strong> trades</span>
                     <span class="experiment-status__sep">·</span>
@@ -320,7 +320,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
             <p class="lede">The challenge is $10K &rarr; $100K, ~3.3 earned doublings, as fast as possible. This is one illustrative working-unit arc under the doubling doctrine on the convex instrument &mdash; the engine block that, run cooperatively, clears the 10&times; with room to spare: just <strong>~3.3 of these doublings carries $10K past $100K</strong>. The engine compounds via earned doublings, position size growing geometrically <strong>1 &rarr; 2 &rarr; 4 &rarr; 8 &rarr; 16 contracts</strong> as each six-uncorrelated-trade buffer is earned. <strong>Cooperative ceiling: 4 doublings (16&times;) on the working unit &mdash; clipped pending live record.</strong> Hard constraint: the trailing floor at HWM &minus; 12% of the working unit, matching the weekly $1,200 cap. The X-axis is calendar months for visual comparability; the real driver is <em>regime-window time</em> &mdash; gamma instruments compound on regime presence, not on calendar.</p>
 
             <div class="cl-aspirational-note">
-                <strong>Aspirational &middot; pre-launch &middot; under stated assumptions.</strong> The Convexity Experiment launches 6/30/2026. The cooperative scenario assumes every buffer fires and no revert event occurs (the realistic envelope is 2&times;&ndash;8&times; per the trajectory table above). <strong>No live convex trades on record yet</strong> &mdash; the live experiment from 6/30 onward is what will generate a statistically meaningful track on this exact framework. Nothing on this page constitutes a forecast or guarantee.
+                <strong>Aspirational &middot; live &middot; under stated assumptions.</strong> The Convexity Experiment has been live since 6/30/2026, with real closed fills now on record (see Sample, above) &mdash; but the sample remains well short of the 80/100-trade Expression Gate thresholds, and <strong>no buffer doubling has fired yet</strong>, so the engine is still running at its 1&times; base size. The cooperative scenario above assumes every buffer fires and no revert event occurs (the realistic envelope is 2&times;&ndash;8&times; per the trajectory table above) &mdash; it remains a projection until the ladder itself has live doublings to show. Nothing on this page constitutes a forecast or guarantee.
             </div>
 
             <div class="eq-legend">
@@ -441,7 +441,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
                 </article>
             </div>
 
-            <p class="cl-compliance">Aspirational and illustrative. Headline targets (16&times; engine ceiling, 4 doublings, 12-month window) are <strong>design intent</strong>, not forecasts &mdash; the cooperative scenario where every buffer fires and no revert occurs. The realistic envelope per the trajectory table is 2&times;&ndash;8&times; (mixed window, 1&ndash;3 doublings). The trailing floor at HWM &minus; 12% mirrors the structural intent of the existing convex sit-out cadence. <strong>No live convex trades on record yet</strong>; the Convexity Experiment launches 6/30/2026. Past performance is not indicative of future results.</p>
+            <p class="cl-compliance">Aspirational and illustrative. Headline targets (16&times; engine ceiling, 4 doublings, 12-month window) are <strong>design intent</strong>, not forecasts &mdash; the cooperative scenario where every buffer fires and no revert occurs. The realistic envelope per the trajectory table is 2&times;&ndash;8&times; (mixed window, 1&ndash;3 doublings). The trailing floor at HWM &minus; 12% mirrors the structural intent of the existing convex sit-out cadence. <strong>The Convexity Experiment has been live since 6/30/2026</strong>, with real fills now on record and no buffer doubling fired yet. Past performance is not indicative of future results.</p>
         </div>
     </section>
 
@@ -579,7 +579,7 @@ Daily constraint: maximum one loss per day. Trade stops for the day on
         <div class="section__inner section__inner--wide">
             <div class="section-eyebrow">08 · Live Evidence</div>
             <h2 class="defense-h">Live, from the operator&rsquo;s options account.</h2>
-            <p class="defense-open">The panels below are computed live from the <strong>model-portfolio track record</strong> published in the option-alerts journal &mdash; educational, premium-at-risk only, recalculated as each fill closes. <strong>Live-capital deployment opens 6/30/2026</strong>; until the sample reaches 80 qualified trades the Expression Gate is armed but not yet binding.</p>
+            <p class="defense-open">The panels below are computed live from the <strong>model-portfolio track record</strong> published in the option-alerts journal &mdash; educational, premium-at-risk only, recalculated as each fill closes. <strong>The experiment has been live since 6/30/2026</strong>; until the sample reaches 80 qualified trades the Expression Gate is armed but not yet binding.</p>
 
             <!-- Buffer progress widget -->
             <div class="component-block-divider"></div>
