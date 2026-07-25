@@ -37,6 +37,10 @@
     //              (the "goal"), off the portfolio gain above invested capital. Sunk,
     //              not returned — but contingent on reaching term, unlike fees. Defaults
     //              to 0 so callers that don't pass it are unaffected.
+    //   mgmtPct  — optional recurring annual fee (%) of invested capital, deducted
+    //              monthly (mgmtPct/100 * invested / 12 per month) from the IRR cash
+    //              flow. Unlike fees/carryPct it is spread across the whole hold, not
+    //              a single lump. Defaults to 0.
     //   strat    — 'amort' (pay to $0 by term) | 'io' (interest-only, principal balloons)
     function compute(p) {
         const strat = p.strat === 'io' ? 'io' : 'amort';
@@ -54,6 +58,7 @@
         const reservesDollar = pmt * (p.reserves || 0);
         const feesDollar = Math.max(0, p.fees || 0);
         const carryPct = Math.max(0, p.carryPct || 0);
+        const mgmtMonthly = Math.max(0, p.mgmtPct || 0) / 100 * invested / 12;
 
         const portAt = m => comp0 * Math.pow(1 + gm, m) + inc0;
         const debtAt = m => {
@@ -82,12 +87,13 @@
             const atGoal = m >= n;
             const carryDollar = atGoal ? carryPct / 100 * Math.max(0, port - invested) : 0;
             // True levered-equity IRR: money-weighted on the cash actually committed
-            // (fees + reserves up front + monthly carry) vs the net equity realized
-            // at exit. The reserve is returned at exit; fees and carry are sunk and are not.
+            // (fees + reserves up front + monthly carry + any recurring mgmt fee) vs
+            // the net equity realized at exit. The reserve is returned at exit; fees,
+            // carry, and mgmt fees are sunk and are not.
             const cf = [-(reservesDollar + feesDollar)];
-            for (let k = 1; k <= m; k++) cf.push(income - pmt);
+            for (let k = 1; k <= m; k++) cf.push(income - pmt - mgmtMonthly);
             cf[m] += ne + reservesDollar - carryDollar;
-            return { years, port, debt, ne, mult, carryDollar, irr: solveIRR(cf) };
+            return { years, port, debt, ne, mult, carryDollar, mgmtPaid: mgmtMonthly * m, irr: solveIRR(cf) };
         }
 
         return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar, feesDollar, cashAtRisk,
