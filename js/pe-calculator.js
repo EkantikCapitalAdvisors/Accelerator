@@ -149,6 +149,13 @@
                 '<td class="pos">' + irrCell + '</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
         }).join('');
 
+        // vs-traditional comparison table — Target IRR row, live from this same engine
+        // so it can never drift from what the calculator above actually shows.
+        if ($('vt-irr-synth')) {
+            const goalIrr = programFeeIRR(p, p.term);
+            $('vt-irr-synth').textContent = goalIrr == null ? '—' : '~' + Math.round(goalIrr) + '%*';
+        }
+
         // architecture
         $('pe-arch-lev').textContent = fmtUSD(p.borrow) + ' at ' + p.rate + '%' + (p.pu > 0 ? ' · ' + fmtUSD(p.pu) + ' personal use' : '');
         $('pe-arch-inc').textContent = fmtUSD(c.inc0) + ' → ' + fmtUSD(c.income) + '/mo (' + p.yield + '%/mo)';
