@@ -123,7 +123,7 @@
     function renderTradeLog(trades) {
         const tbody = $('cx-trade-body'); if (!tbody) return;
         if (!trades || !trades.length) {
-            tbody.innerHTML = '<tr><td colspan="12" class="muted italic">Pre-launch. Live fills begin 6/30/2026.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="12" class="muted italic">Live since 6/30/2026 — awaiting the first closed fill.</td></tr>';
             return;
         }
         tbody.innerHTML = trades.slice().reverse().map(t => {

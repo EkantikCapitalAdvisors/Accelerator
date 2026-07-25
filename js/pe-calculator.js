@@ -197,7 +197,7 @@
             (c.feesDollar > 0
                 ? 'The ' + fmtUSD(c.feesDollar) + ' one-time fee above is subtracted at drawdown and never returned, so it lowers IRR directly — a larger share of a smaller committed-cash base. '
                 : 'No one-time fees are assumed here; a HELOC\'s real closing costs would subtract from the committed-cash base and lower IRR — add them above to see the effect. ') +
-            '<b>The reality these smooth lines omit:</b> real returns arrive with volatility, not as a curve. A ' + p.cagr + '% CAGR sustained for ' + p.term + ' years is an aspirational, unproven assumption; the compounding engine has no live record yet. With leverage, an ordinary drawdown can trigger a margin call or forced deleveraging and can wipe the equity — loss beyond the capital invested is possible. Hypothetical and illustrative; not a forecast, projection, or advice to borrow or trade.';
+            '<b>The reality these smooth lines omit:</b> real returns arrive with volatility, not as a curve. A ' + p.cagr + '% CAGR sustained for ' + p.term + ' years is an aspirational, unproven assumption; the compounding engine has been live since 6/30/2026, but its sample is still too small to call this CAGR proven. With leverage, an ordinary drawdown can trigger a margin call or forced deleveraging and can wipe the equity — loss beyond the capital invested is possible. Hypothetical and illustrative; not a forecast, projection, or advice to borrow or trade.';
     }
 
     function bindToggle(aId, bId, set) {
