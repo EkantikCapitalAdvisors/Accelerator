@@ -400,6 +400,55 @@
   @media(max-width:860px){ .pe-cards{grid-template-columns:1fr 1fr 1fr;} .pe-summary-grid{grid-template-columns:1fr 1fr;} .pe-main{grid-template-columns:1fr;} .pe-foot{grid-template-columns:1fr;} }
   @media(max-width:560px){ .pe-cards{grid-template-columns:1fr 1fr;} }
 
+  /* ---------- the record: actual completed cases ---------- */
+  .ac-case{border:1px solid var(--line);border-radius:14px;background:var(--card-2);margin-top:22px;overflow:hidden;}
+  .ac-case.lost{border-color:rgba(217,138,138,0.34);}
+  .ac-head{display:flex;align-items:center;gap:14px;padding:20px 26px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,0.02);}
+  .ac-num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--navy-deep);font-family:var(--mono);font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .ac-case.lost .ac-num{background:var(--red);}
+  .ac-head h3{font-family:var(--serif);font-size:1.32rem;color:var(--ivory);margin:0;line-height:1.25;font-weight:600;}
+  .ac-head .sub{font-family:var(--mono);font-size:.62rem;color:var(--slate-dim);margin-top:3px;}
+  .ac-badge{margin-left:auto;flex:none;font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;border-radius:999px;padding:6px 13px;}
+  .ac-badge.win{color:var(--green);background:rgba(111,183,127,0.12);border:1px solid rgba(111,183,127,0.4);}
+  .ac-badge.loss{color:var(--red);background:rgba(217,138,138,0.10);border:1px solid rgba(217,138,138,0.4);}
+  .ac-body{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;padding:24px 26px;}
+  .ac-h{font-family:var(--mono);font-size:.56rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+  .ac-body p{font-size:.95rem;line-height:1.72;color:var(--slate);margin:0 0 18px;}
+  .ac-body p strong{color:var(--text);font-weight:600;}
+  .ac-quote{border-left:3px solid var(--gold);background:rgba(200,169,81,0.07);border-radius:0 10px 10px 0;padding:14px 18px;margin:0 0 18px;font-family:var(--serif);font-style:italic;font-size:1.06rem;line-height:1.6;color:var(--ivory);}
+  .ac-tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.72rem;}
+  .ac-tbl td{padding:9px 0;border-bottom:1px solid rgba(148,163,184,0.09);color:var(--slate);}
+  .ac-tbl td:last-child{text-align:right;color:var(--ivory);font-weight:600;white-space:nowrap;}
+  .ac-tbl tr.rule td{border-bottom:1px solid var(--line);}
+  .ac-tbl tr.big td{font-size:.86rem;padding-top:13px;}
+  .ac-load{display:block;width:100%;margin-top:16px;background:var(--navy-soft);border:1px solid var(--line);color:var(--gold-bright);font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;padding:12px;border-radius:9px;cursor:pointer;transition:all .2s;}
+  .ac-load:hover{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+  .ac-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 26px 20px;}
+  .ac-fact{border:1px solid var(--line-soft);border-radius:10px;background:var(--card);padding:14px 16px;}
+  .ac-fact .k{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:6px;}
+  .ac-fact .v{font-family:var(--serif);font-size:1.06rem;color:var(--ivory);}
+  .ac-fact .n{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);margin-top:5px;line-height:1.5;}
+  .ac-truth{margin:0 26px 24px;border:1px solid rgba(200,169,81,0.3);background:rgba(200,169,81,0.05);border-radius:10px;padding:16px 20px;}
+  .ac-truth p{font-family:var(--mono);font-size:.62rem;line-height:1.75;color:var(--slate-dim);margin:0;}
+  .ac-truth b{color:var(--slate);}
+  .ac-lesson{margin-top:26px;border-left:3px solid var(--gold);background:rgba(200,169,81,0.07);border-radius:0 12px 12px 0;padding:22px 26px;}
+  .ac-lesson h3{font-family:var(--serif);font-size:1.42rem;color:var(--ivory);margin:0 0 10px;font-weight:600;line-height:1.3;}
+  .ac-lesson p{font-size:1rem;line-height:1.72;color:var(--slate);margin:0 0 12px;}
+  .ac-lesson p:last-child{margin-bottom:0;}
+  .ac-lesson strong{color:var(--text);}
+  .ac-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+  .ac-card{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:16px 18px;}
+  .ac-card h4{font-family:var(--sans);font-size:.86rem;color:var(--ivory);margin:0 0 8px;font-weight:600;}
+  .ac-card p{font-family:var(--mono);font-size:.6rem;line-height:1.65;color:var(--slate-dim);margin:0;}
+  @media(max-width:860px){
+    .ac-body{grid-template-columns:1fr;gap:20px;padding:20px 16px;}
+    .ac-facts{grid-template-columns:1fr;padding:0 16px 16px;}
+    .ac-truth{margin:0 16px 18px;}
+    .ac-head{padding:16px;flex-wrap:wrap;}
+    .ac-badge{margin-left:0;}
+    .ac-cards{grid-template-columns:1fr;}
+  }
+
   /* ---------- amortization arbitrage ---------- */
   .aa-panel{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px;}
   .aa-eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
@@ -469,7 +518,7 @@
       <a href="https://doubles.ekantikcapital.com">Doctrine</a>
       <a href="#mechanism">The Machine</a>
       <a href="#roe">Return on Equity</a>
-      <a href="#arbitrage">The Arithmetic</a>
+      <a href="#arbitrage">The Record</a>
       <a href="#engines">The Engines</a>
       <a href="#calculator">Calculator</a>
       <a href="/cash-flow-engine.html">Cash-Flow Engine</a>
@@ -722,19 +771,132 @@
 <!-- 01.6 · The arithmetic: amortizing debt vs. protected compounding -->
 <section class="block" id="arbitrage">
   <div class="wrap">
-    <span class="sec-num">▸ The arithmetic underneath</span>
-    <h2>You pay interest on money you <em>no longer have</em> — while the whole amount keeps compounding.</h2>
+    <span class="sec-num">▸ The record</span>
+    <h2>You have <em>already run this machine</em> — on a house. Here is the completed record.</h2>
     <p class="intro">
-      Here is the piece almost everyone misses. On an amortizing loan the balance falls with every payment, so you are
-      charged interest on a base that <strong>shrinks underneath you</strong> — by the midpoint you owe roughly half of
-      what you borrowed. But the money you <em>deployed</em> is still working on the <strong>full amount</strong>, and a
-      protected base <strong>never gives a year back</strong>. One side melts. The other side compounds.
-      <strong>The gap between them is the entire strategy</strong> — and it is why the ability to compound <em>safely</em>
-      is worth more than a bigger headline number.
+      Everything above this point is a diagram. This is not. Below are two California mortgages taken from the same
+      thirty years of real index data and run through <strong>identical arithmetic to opposite conclusions</strong>. One
+      turned $35,454 into <strong>+$444,810</strong>. The other destroyed <strong>$365,601</strong>. Same asset, same
+      structure, same fixed-rate amortizing loan. The only variable that differed is the one this entire business is
+      built around — <strong>whether the owner could keep paying, and was never forced to sell.</strong>
     </p>
 
-    <div class="aa-panel">
-      <div class="aa-eyebrow">Run it against a debt you actually carry</div>
+    <!-- CASE 1 -->
+    <div class="ac-case">
+      <div class="ac-head">
+        <div class="ac-num">1</div>
+        <div>
+          <h3>The California house, 1996 to today</h3>
+          <div class="sub">You have already done this once</div>
+        </div>
+        <span class="ac-badge win">Comes out ahead</span>
+      </div>
+
+      <div class="ac-body">
+        <div>
+          <div class="ac-h">The situation</div>
+          <p>1996. The statewide median California home costs <strong>$177,270</strong> and you have <strong>$35,454</strong> — not a fortune, a fifth of a house. Thirty-year money costs <strong>7.89%</strong>, which everyone that year agrees is expensive. You buy anyway, because in 1996 that is simply what one does.</p>
+
+          <div class="ac-h">The move</div>
+          <p>You put up a fifth and a lender puts up the rest, fixed, for thirty years. Then the structure asks only two things of you: <strong>make the payment, and do not sell.</strong> The house compounds on the entire $177,270. You compound on your $35,454. That gap between the two bases is the whole fortune.</p>
+
+          <div class="ac-quote">California houses did not make anyone rich by rising 5.37% a year. Amortized debt did, by letting a fifth of the money own all of the asset for thirty years.</div>
+
+          <div class="ac-h">Why it worked anyway</div>
+          <p>Notice what did <em>not</em> happen here. The money cost <strong>7.89%</strong> and the house compounded at <strong>5.37%</strong>. The loan was <strong>more expensive than the asset was productive</strong> — every year, for thirty years — and it still returned twenty-four times the capital at risk. <strong>The spread was never the engine.</strong> Five dollars of asset compounding on one dollar of yours, against a balance that fell every month for three decades: that was the engine.</p>
+        </div>
+
+        <div>
+          <table class="ac-tbl">
+            <tr><td>Purchase price, 1996</td><td>$177,270</td></tr>
+            <tr><td>Your own capital, 20% down</td><td>$35,454</td></tr>
+            <tr><td>Financed</td><td>$141,816 at 7.89%</td></tr>
+            <tr><td>Payment</td><td>$1,030/mo for 30 yrs</td></tr>
+            <tr><td>Total interest over the term</td><td style="color:var(--red)">$228,891</td></tr>
+            <tr><td>Effective cost of the money</td><td>5.38%/yr</td></tr>
+            <tr class="rule"><td>The house at year 30, at 5.37%/yr</td><td style="color:var(--green)">$850,971</td></tr>
+            <tr class="big"><td>Net position</td><td style="color:var(--green)">+$444,810</td></tr>
+            <tr><td>Return on your own capital</td><td style="color:var(--gold-bright)">24× at 11.18%/yr</td></tr>
+          </table>
+          <button type="button" class="ac-load" data-amt="141816" data-apr="7.89" data-yrs="30" data-growth="5.37">Load these terms into the calculator ↓</button>
+        </div>
+      </div>
+
+      <div class="ac-facts">
+        <div class="ac-fact"><div class="k">Who makes the payment</div><div class="v">You</div><div class="n">out of a payment that never rose while your income did</div></div>
+        <div class="ac-fact"><div class="k">What is pledged against it</div><div class="v">The house itself</div><div class="n">the collateral and the compounding asset are the same thing</div></div>
+      </div>
+
+      <div class="ac-truth">
+        <div class="ac-h">What has to be true</div>
+        <p>This is the one case here with <b>no floor beneath it</b>, and that distinction is the entire reason case 2 exists. Values use the <b>FHFA all-transactions repeat-sales index for California</b> (1996 Q1 = 203.48 → 2026 Q1 = 976.79), which tracks the same homes over time rather than whichever houses happened to sell. The mortgage rate is a 1996 thirty-year fixed; the Freddie Mac survey averaged <b>7.81%</b> across that year and ranged 7.03%–8.32%. The <b>24×</b> is the house value against the capital at risk; net of the $228,891 of interest it is <b>17.5×</b>. Net position counts <b>every dollar in</b> — down payment plus all 360 payments — against the value of the house. Property tax, insurance, maintenance and transaction costs are not modelled, and every one of them reduces the result; conversely the payments also replaced rent, which this treatment ignores entirely. <b>A completed thirty-year record is history. It is not a forecast.</b></p>
+      </div>
+    </div>
+
+    <!-- CASE 2 -->
+    <div class="ac-case lost">
+      <div class="ac-head">
+        <div class="ac-num">2</div>
+        <div>
+          <h3>The same house, ten years later</h3>
+          <div class="sub">Identical arithmetic · opposite outcome</div>
+        </div>
+        <span class="ac-badge loss">Wiped out</span>
+      </div>
+
+      <div class="ac-body">
+        <div>
+          <div class="ac-h">The situation</div>
+          <p>2006. The same statewide-median house now costs <strong>$555,986</strong> — the index has more than tripled since 1996. Money is <em>cheaper</em> than the 1996 buyer paid: <strong>6.41%</strong>. Everything the first buyer did right, this buyer does too. A fifth down. Thirty-year fixed. Make the payment. Hold the asset.</p>
+
+          <div class="ac-h">What happened</div>
+          <p>Then, in 2008, the income stops. By mid-2011 the index has fallen from <strong>638 to 385</strong> — about <strong>40%</strong>. The house is worth $335,295. You have paid $144,911 in interest and retired only $30,550 of principal, so you still owe <strong>$414,238</strong>. Selling does not release capital; <strong>it crystallises a debt.</strong></p>
+
+          <div class="ac-quote">The 1996 buyer was never forced to sell. This one was. That is the entire difference between +$444,810 and −$365,601.</div>
+
+          <div class="ac-h">And the one who could keep paying</div>
+          <p>The same 2006 buyer who <em>held</em> still owns the house. Twenty years in it is worth $850,971 against a $246,271 balance — <strong>$604,700 of equity</strong>, still $174,919 behind on cash in, with ten years left to run. They bought at the worst moment in California history, at 6.41% money against an asset that has compounded at just <strong>2.15%</strong> a year since — the worst spread on this page — and they are recovering. <strong>Not because they were right. Because they were never forced to be.</strong></p>
+        </div>
+
+        <div>
+          <table class="ac-tbl">
+            <tr><td>Purchase price, 2006</td><td>$555,986</td></tr>
+            <tr><td>Your own capital, 20% down</td><td>$111,197</td></tr>
+            <tr><td>Financed</td><td>$444,788 at 6.41%</td></tr>
+            <tr><td>Payment</td><td>$2,785/mo · 2.7× the 1996 buyer</td></tr>
+            <tr><td>Interest paid by mid-2011</td><td style="color:var(--red)">$144,911</td></tr>
+            <tr><td>Principal retired in 5¼ years</td><td>$30,550</td></tr>
+            <tr><td>The house in 2011, index −39.7%</td><td style="color:var(--red)">$335,295</td></tr>
+            <tr class="rule"><td>Still owed</td><td style="color:var(--red)">$414,238</td></tr>
+            <tr><td>Equity at the forced sale</td><td style="color:var(--red)">−$78,943</td></tr>
+            <tr class="big"><td>Net position</td><td style="color:var(--red)">−$365,601</td></tr>
+          </table>
+          <button type="button" class="ac-load" data-amt="444788" data-apr="6.41" data-yrs="30" data-growth="2.15">Load these terms into the calculator ↓</button>
+        </div>
+      </div>
+
+      <div class="ac-facts">
+        <div class="ac-fact"><div class="k">Who makes the payment</div><div class="v">You — until 2008</div><div class="n">when the income that carried it stopped</div></div>
+        <div class="ac-fact"><div class="k">What forced the sale</div><div class="v">Not the price</div><div class="n">the price only mattered because the payment could no longer be made</div></div>
+      </div>
+
+      <div class="ac-truth">
+        <div class="ac-h">What has to be true</div>
+        <p>Same index, same method, same treatment of costs as case 1 (2006 Q1 = 638.19 → 2011 Q2 = 384.87). The rate is the <b>2006 Freddie Mac annual average of 6.41%</b>. The forced sale is priced at the index, with <b>no transaction costs, no missed-payment penalties and no deficiency judgement</b> — all three would make it worse. <b>This is not an argument that 2006 buyers were foolish.</b> They ran the identical structure the 1996 buyer ran, at a lower rate, and the arithmetic destroyed them anyway. The variable was never intelligence or entry price. <b>It was staying power.</b></p>
+      </div>
+    </div>
+
+    <!-- THE LESSON -->
+    <div class="ac-lesson">
+      <h3>Two identical machines. The one that survived had a reserve.</h3>
+      <p>Put the two side by side and the conclusion is unavoidable. <strong>The leverage was not the risk.</strong> Both buyers used the same leverage, and the one who paid the <em>higher</em> rate against the <em>slower</em> asset made $444,810. <strong>The risk was being a forced seller</strong> — and what makes someone a forced seller is never the asset. It is running out of the cash that services the debt.</p>
+      <p>That is the whole reason this machine is built the way it is: the <a href="#engines" style="color:var(--gold-bright)">income sleeve</a> exists to cover the carry so the position is never liquidated to make a payment, and the <a href="#calculator" style="color:var(--gold-bright)">reserve is funded first</a> so a losing stretch is survivable rather than terminal. <strong>Case 2 is what the reserve is for.</strong> It is not a conservatism tax — it is the difference between the two rows above.</p>
+    </div>
+
+    <!-- THE TOOL -->
+    <div class="aa-panel" id="aa-tool" style="margin-top:34px">
+      <div class="aa-eyebrow">Now run the arithmetic on any debt you actually carry</div>
+      <p class="aa-sub" style="margin:-6px 0 18px">One difference worth naming: this tool compounds the <b style="color:var(--ivory)">borrowed dollars</b>. The cases above compound the <b style="color:var(--ivory)">whole house</b> — a fifth down gives you title to all of it — which is why their net positions are larger on the same loan. Same arithmetic, wider base. <a href="#payoff" style="color:var(--gold-bright)">That gap is return on equity ↑</a></p>
 
       <div class="aa-presets">
         <button type="button" class="aa-preset on" data-amt="100000" data-apr="6" data-yrs="10"><b>Home equity line</b><span>$100,000 · 6.00% · 10 yrs</span></button>
@@ -793,6 +955,21 @@
 
       <p class="aa-sub">The number nobody quotes you: your <b style="color:var(--ivory)" id="aa-avgbal">—</b> average outstanding balance. <span id="aa-avgbal-note">—</span>. <b style="color:var(--gold-bright)">You rent a balance that keeps shrinking. You earn on one that never does.</b></p>
 
+      <div class="ac-cards">
+        <div class="ac-card">
+          <h4>1 · The debt shrinks under you</h4>
+          <p>Across the full term your average outstanding balance is only <b style="color:var(--ivory)" id="ac-c1">—</b>. You are never billed on the full amount except on day one. That is why the loan behaves like a cheaper one than the paperwork says.</p>
+        </div>
+        <div class="ac-card">
+          <h4>2 · The asset does not shrink</h4>
+          <p>A protected base has no drawdown and no recovery years. Every year compounds on a base at least as large as the year before — so growth is charged on a rising number while interest is charged on a falling one.</p>
+        </div>
+        <div class="ac-card">
+          <h4>3 · The loan ends. The compounding does not.</h4>
+          <p>Interest stops at the final payment and is frozen forever. The base keeps going. Every year after payoff is growth against a cost that can no longer increase — <b style="color:var(--gold-bright)">that is where the record above comes from.</b></p>
+        </div>
+      </div>
+
       <!-- THE PICTURE -->
       <div style="margin-top:26px">
         <div class="aa-eyebrow">What you pay vs. what you earn — every year of the loan</div>
@@ -802,7 +979,8 @@
 
       <!-- THE LEDGER -->
       <div style="margin-top:26px">
-        <div class="aa-eyebrow">The whole thing, year by year — nothing hidden</div>
+        <details>
+        <summary class="aa-eyebrow" style="cursor:pointer;list-style:none">▸ The whole thing, year by year — nothing hidden</summary>
         <div class="aa-scroll">
           <table class="aa-ledger">
             <thead>
@@ -819,6 +997,7 @@
           </table>
         </div>
         <p class="aa-sub">Read the two middle columns against each other. <b style="color:var(--red)">The loan balance melts</b>, so the interest charged on it falls every single year. <b style="color:var(--gold-bright)">The protected base never resets</b>, so the growth earned on it rises every single year. Nothing clever is happening here — this is just what amortization does when you put it next to compounding.</p>
+        </details>
       </div>
     </div>
 
@@ -845,7 +1024,7 @@
       <p class="aa-sub">This is the reason the machine is built the way it is. The leverage is not the clever part — anyone can borrow. <b style="color:var(--gold-bright)">The clever part is a base that does not go backwards</b>, because the payment arrives on schedule whether your capital had a good year or not. <a href="#engines" style="color:var(--gold-bright)">That is what the reserve and the income sleeve are for →</a></p>
     </div>
 
-    <span class="compliance-pill">Hypothetical and illustrative arithmetic · not a forecast, a promise, or advice · returns are not smooth in reality · leverage amplifies losses as well as gains · loss of capital is possible</span>
+    <span class="compliance-pill">Cases 1 and 2 are completed historical records from the FHFA California repeat-sales index and the Freddie Mac rate survey · past results do not indicate future results · the calculator below is hypothetical and illustrative, not a forecast, promise, or advice · leverage amplifies losses as well as gains · loss of capital is possible</span>
   </div>
 </section>
 
