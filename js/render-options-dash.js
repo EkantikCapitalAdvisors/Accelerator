@@ -1,15 +1,15 @@
 // =====================================================
-// Options Dashboard ($5k → $50k) — live renderer.
-//   · Status strip + progress-to-$50k bar
+// Options Dashboard ($10k → $100k) — live renderer.
+//   · Status strip + progress-to-$100k bar
 //   · KPI grid (net, WR, PF, R-exp, EV, magnitudes, streak, avg risk)
-//   · Equity curve ($5k base) + monthly P&L (Chart.js)
+//   · Equity curve ($10k base) + monthly P&L (Chart.js)
 //   · Every-fill trade log
 // Reads data/options_trades.json; re-polls every 60s (pauses when hidden).
 // =====================================================
 (function (root) {
     'use strict';
     const $ = id => document.getElementById(id);
-    const BASE = 5000, TARGET = 50000;
+    const BASE = 10000, TARGET = 100000;
     const NAVY = '#1B2A4A', GOLD = '#C8A951', POS = '#2D5016', NEG = '#DC2626';
 
     function fmtUSD(v) { return (v == null || !isFinite(v)) ? '$—' : (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString(); }
@@ -32,7 +32,7 @@
 
     // ── Window filter (preset chips + custom date range) ──────────────
     // KPIs and the trade log honor the selected window; the equity curve,
-    // monthly bars, and race-to-$50k header stay all-time as context.
+    // monthly bars, and race-to-$100k header stay all-time as context.
     let lastTrades = [];        // last fetched closed-fill set, for re-paint without re-fetch
     let currentTf = 'all';
     let customRange = null;     // { from: Date, to: Date } when currentTf === 'custom'
@@ -245,7 +245,7 @@
     // the trade log honor the selected window. Called on every fetch and on
     // every window change (no re-fetch needed for the latter).
     function paint() {
-        renderHead(compute(lastTrades));          // race-to-$50k progress is cumulative → all-time
+        renderHead(compute(lastTrades));          // race-to-$100k progress is cumulative → all-time
         renderEquity(lastTrades);                 // context charts stay all-time
         renderMonthly(lastTrades);
         const windowed = filterByTimeframe(lastTrades, currentTf);
