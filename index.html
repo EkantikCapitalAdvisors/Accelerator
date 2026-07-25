@@ -399,6 +399,56 @@
   .pe-legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;}
   @media(max-width:860px){ .pe-cards{grid-template-columns:1fr 1fr 1fr;} .pe-summary-grid{grid-template-columns:1fr 1fr;} .pe-main{grid-template-columns:1fr;} .pe-foot{grid-template-columns:1fr;} }
   @media(max-width:560px){ .pe-cards{grid-template-columns:1fr 1fr;} }
+
+  /* ---------- amortization arbitrage ---------- */
+  .aa-panel{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:26px 28px;}
+  .aa-eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .aa-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+  .aa-preset{background:rgba(255,255,255,0.03);border:1px solid var(--line-soft);border-radius:10px;padding:9px 14px;cursor:pointer;text-align:left;transition:all .2s;}
+  .aa-preset:hover{border-color:var(--gold);}
+  .aa-preset.on{border-color:var(--gold);background:rgba(200,169,81,0.10);}
+  .aa-preset b{display:block;font-family:var(--sans);font-size:.78rem;color:var(--ivory);font-weight:600;margin-bottom:3px;}
+  .aa-preset span{font-family:var(--mono);font-size:.56rem;color:var(--slate-dim);}
+  .aa-inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+  .aa-inputs .pe-field{margin-bottom:0;}
+  .aa-reveal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+  .aa-rev{border:1px solid var(--line-soft);border-radius:12px;background:var(--card);padding:16px 18px;}
+  .aa-rev.hero{border-color:rgba(111,183,127,0.45);background:rgba(111,183,127,0.06);}
+  .aa-rev .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:9px;}
+  .aa-rev .v{font-family:var(--mono);font-size:1.62rem;font-weight:600;line-height:1;color:var(--ivory);letter-spacing:-.02em;}
+  .aa-rev.hero .v{color:var(--green);} .aa-rev.earns .v{color:var(--gold-bright);}
+  .aa-rev .n{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);margin-top:9px;line-height:1.55;}
+  .aa-verdict{border-radius:10px;padding:14px 18px;font-size:.94rem;line-height:1.65;color:var(--text);margin-bottom:22px;}
+  .aa-verdict.good{background:rgba(111,183,127,0.07);border-left:3px solid var(--green);}
+  .aa-verdict.bad{background:rgba(217,138,138,0.07);border-left:3px solid var(--red);}
+  .aa-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px;}
+  .aa-stat .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-dim);margin-bottom:8px;}
+  .aa-stat .v{font-family:var(--mono);font-size:1.32rem;font-weight:600;color:var(--ivory);line-height:1;letter-spacing:-.01em;}
+  .aa-stat .n{font-family:var(--mono);font-size:.56rem;color:var(--slate-dim);margin-top:7px;line-height:1.5;}
+  .aa-sub{font-family:var(--mono);font-size:.64rem;color:var(--slate-dim);line-height:1.65;margin-top:16px;}
+  .aa-scroll{max-height:430px;overflow:auto;margin-top:10px;border:1px solid var(--line-soft);border-radius:10px;}
+  .aa-ledger{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.66rem;}
+  .aa-ledger th{position:sticky;top:0;background:#16233f;text-align:right;color:var(--slate-dim);font-weight:500;letter-spacing:.07em;text-transform:uppercase;font-size:.52rem;padding:10px;border-bottom:1px solid var(--line-soft);}
+  .aa-ledger td{text-align:right;padding:7px 10px;color:var(--slate);border-bottom:1px solid rgba(148,163,184,0.07);white-space:nowrap;}
+  .aa-ledger th:first-child,.aa-ledger td:first-child{text-align:left;color:var(--slate-dim);}
+  .aa-ledger tr.cross td{background:rgba(111,183,127,0.08);}
+  .aa-safety{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+  .aa-safe{border-radius:12px;padding:18px 20px;}
+  .aa-safe.prot{border:1px solid rgba(111,183,127,0.45);background:rgba(111,183,127,0.06);}
+  .aa-safe.vol{border:1px solid rgba(217,138,138,0.45);background:rgba(217,138,138,0.05);}
+  .aa-safe .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;}
+  .aa-safe.prot .k{color:var(--green);} .aa-safe.vol .k{color:var(--red);}
+  .aa-safe .v{font-family:var(--mono);font-size:1.7rem;font-weight:600;line-height:1;letter-spacing:-.02em;}
+  .aa-safe.prot .v{color:var(--green);} .aa-safe.vol .v{color:var(--red);}
+  .aa-safe .n{font-family:var(--mono);font-size:.58rem;color:var(--slate-dim);margin-top:10px;line-height:1.55;}
+  .aa-punch{margin-top:14px;border-left:3px solid var(--gold);background:rgba(200,169,81,0.07);border-radius:0 10px 10px 0;padding:16px 20px;font-size:.96rem;line-height:1.7;color:var(--text);}
+  @media(max-width:860px){
+    .aa-panel{padding:20px 16px;}
+    .aa-inputs{grid-template-columns:1fr 1fr;}
+    .aa-reveal{grid-template-columns:1fr;}
+    .aa-stats{grid-template-columns:1fr 1fr;}
+    .aa-safety{grid-template-columns:1fr;}
+  }
 </style>
 </head>
 <body>
@@ -419,6 +469,7 @@
       <a href="https://doubles.ekantikcapital.com">Doctrine</a>
       <a href="#mechanism">The Machine</a>
       <a href="#roe">Return on Equity</a>
+      <a href="#arbitrage">The Arithmetic</a>
       <a href="#engines">The Engines</a>
       <a href="#calculator">Calculator</a>
       <a href="/cash-flow-engine.html">Cash-Flow Engine</a>
@@ -665,6 +716,136 @@
     </div>
 
     <span class="compliance-pill">Hypothetical and illustrative · not a forecast · leverage can amplify losses as well as gains · loss of capital is possible</span>
+  </div>
+</section>
+
+<!-- 01.6 · The arithmetic: amortizing debt vs. protected compounding -->
+<section class="block" id="arbitrage">
+  <div class="wrap">
+    <span class="sec-num">▸ The arithmetic underneath</span>
+    <h2>You pay interest on money you <em>no longer have</em> — while the whole amount keeps compounding.</h2>
+    <p class="intro">
+      Here is the piece almost everyone misses. On an amortizing loan the balance falls with every payment, so you are
+      charged interest on a base that <strong>shrinks underneath you</strong> — by the midpoint you owe roughly half of
+      what you borrowed. But the money you <em>deployed</em> is still working on the <strong>full amount</strong>, and a
+      protected base <strong>never gives a year back</strong>. One side melts. The other side compounds.
+      <strong>The gap between them is the entire strategy</strong> — and it is why the ability to compound <em>safely</em>
+      is worth more than a bigger headline number.
+    </p>
+
+    <div class="aa-panel">
+      <div class="aa-eyebrow">Run it against a debt you actually carry</div>
+
+      <div class="aa-presets">
+        <button type="button" class="aa-preset on" data-amt="100000" data-apr="6" data-yrs="10"><b>Home equity line</b><span>$100,000 · 6.00% · 10 yrs</span></button>
+        <button type="button" class="aa-preset" data-amt="35000" data-apr="7.5" data-yrs="5"><b>Auto loan</b><span>$35,000 · 7.50% · 5 yrs</span></button>
+        <button type="button" class="aa-preset" data-amt="60000" data-apr="6.5" data-yrs="10"><b>Student loan</b><span>$60,000 · 6.50% · 10 yrs</span></button>
+        <button type="button" class="aa-preset" data-amt="400000" data-apr="6.25" data-yrs="30"><b>Mortgage</b><span>$400,000 · 6.25% · 30 yrs</span></button>
+        <button type="button" class="aa-preset" data-amt="15000" data-apr="22" data-yrs="5"><b>Credit card</b><span>$15,000 · 22.00% · 5 yrs</span></button>
+      </div>
+
+      <div class="aa-inputs">
+        <div class="pe-field">
+          <label for="aa-amt">Amount financed</label>
+          <div class="pe-input"><span>$</span><input type="number" id="aa-amt" value="100000" min="500" step="5000"></div>
+        </div>
+        <div class="pe-field">
+          <label for="aa-apr">Loan APR</label>
+          <div class="pe-input"><input type="number" id="aa-apr" value="6" min="0" max="40" step="0.25"><span>%</span></div>
+        </div>
+        <div class="pe-field">
+          <label for="aa-yrs">Amortization years</label>
+          <div class="pe-input"><input type="number" id="aa-yrs" value="10" min="1" max="40" step="1"><span>yrs</span></div>
+        </div>
+        <div class="pe-field">
+          <label for="aa-growth">Protected growth</label>
+          <div class="pe-input"><input type="number" id="aa-growth" value="4" min="0" max="30" step="0.5"><span>%</span></div>
+        </div>
+      </div>
+
+      <!-- THE REVEAL -->
+      <div class="aa-reveal">
+        <div class="aa-rev">
+          <div class="k">Stated loan rate</div>
+          <div class="v" id="aa-stated">—</div>
+          <div class="n">what the paperwork says you pay</div>
+        </div>
+        <div class="aa-rev hero">
+          <div class="k">What it actually costs</div>
+          <div class="v" id="aa-effective">—</div>
+          <div class="n" id="aa-effective-note">—</div>
+        </div>
+        <div class="aa-rev earns">
+          <div class="k">What the base earns</div>
+          <div class="v" id="aa-earns">—</div>
+          <div class="n" id="aa-earns-note">—</div>
+        </div>
+      </div>
+
+      <div class="aa-verdict good" id="aa-verdict">—</div>
+
+      <div class="aa-stats">
+        <div class="aa-stat"><div class="k">Monthly payment</div><div class="v" id="aa-pmt">—</div><div class="n" id="aa-pmt-note">—</div></div>
+        <div class="aa-stat"><div class="k">Total interest</div><div class="v" id="aa-interest" style="color:var(--red)">—</div><div class="n" id="aa-interest-note">—</div></div>
+        <div class="aa-stat"><div class="k">Growth on protected base</div><div class="v" id="aa-growth-val" style="color:var(--gold-bright)">—</div><div class="n" id="aa-growth-note">—</div></div>
+        <div class="aa-stat"><div class="k">Net position</div><div class="v" id="aa-net">—</div><div class="n" id="aa-net-note">—</div></div>
+      </div>
+
+      <p class="aa-sub">The number nobody quotes you: your <b style="color:var(--ivory)" id="aa-avgbal">—</b> average outstanding balance. <span id="aa-avgbal-note">—</span>. <b style="color:var(--gold-bright)">You rent a balance that keeps shrinking. You earn on one that never does.</b></p>
+
+      <!-- THE PICTURE -->
+      <div style="margin-top:26px">
+        <div class="aa-eyebrow">What you pay vs. what you earn — every year of the loan</div>
+        <div id="aa-chart"></div>
+        <p class="aa-sub" id="aa-crossover">—</p>
+      </div>
+
+      <!-- THE LEDGER -->
+      <div style="margin-top:26px">
+        <div class="aa-eyebrow">The whole thing, year by year — nothing hidden</div>
+        <div class="aa-scroll">
+          <table class="aa-ledger">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Loan balance</th>
+                <th>Interest paid</th>
+                <th>Protected base</th>
+                <th>Growth earned</th>
+                <th>Cumulative net</th>
+              </tr>
+            </thead>
+            <tbody id="aa-ledger-body"></tbody>
+          </table>
+        </div>
+        <p class="aa-sub">Read the two middle columns against each other. <b style="color:var(--red)">The loan balance melts</b>, so the interest charged on it falls every single year. <b style="color:var(--gold-bright)">The protected base never resets</b>, so the growth earned on it rises every single year. Nothing clever is happening here — this is just what amortization does when you put it next to compounding.</p>
+      </div>
+    </div>
+
+    <!-- THE CLIMAX: why "protected" is the whole game -->
+    <div style="margin-top:34px">
+      <div class="aa-eyebrow">Now change one thing — and only one thing</div>
+      <p style="color:var(--slate);font-size:1rem;line-height:1.7;max-width:70ch;margin-bottom:16px">
+        Keep the same loan. Keep the same <em>average</em> return. Change only <strong>how it arrives</strong> —
+        smoothly, or in swings with a year that gives capital back.
+      </p>
+      <div class="aa-safety">
+        <div class="aa-safe prot">
+          <div class="k">Protected · never gives a year back</div>
+          <div class="v" id="aa-safe-prot">—</div>
+          <div class="n" id="aa-safe-prot-note">—</div>
+        </div>
+        <div class="aa-safe vol">
+          <div class="k">Unprotected · identical average return</div>
+          <div class="v" id="aa-safe-vol">—</div>
+          <div class="n" id="aa-safe-vol-note">—</div>
+        </div>
+      </div>
+      <div class="aa-punch" id="aa-safe-punch">—</div>
+      <p class="aa-sub">This is the reason the machine is built the way it is. The leverage is not the clever part — anyone can borrow. <b style="color:var(--gold-bright)">The clever part is a base that does not go backwards</b>, because the payment arrives on schedule whether your capital had a good year or not. <a href="#engines" style="color:var(--gold-bright)">That is what the reserve and the income sleeve are for →</a></p>
+    </div>
+
+    <span class="compliance-pill">Hypothetical and illustrative arithmetic · not a forecast, a promise, or advice · returns are not smooth in reality · leverage amplifies losses as well as gains · loss of capital is possible</span>
   </div>
 </section>
 
@@ -1362,7 +1543,7 @@
   // Always load the calculator/renderer fresh — defeats stale browser/CDN caching of these files.
   (function () {
     var t = Date.now();
-    ['js/synthetic-pe-engine.js', 'js/render-synthetic-pe.js', 'js/pe-calculator.js', 'js/heloc-example.js'].forEach(function (src) {
+    ['js/synthetic-pe-engine.js', 'js/render-synthetic-pe.js', 'js/pe-calculator.js', 'js/heloc-example.js', 'js/amortization-arbitrage.js'].forEach(function (src) {
       var s = document.createElement('script');
       s.src = src + '?t=' + t;
       s.async = false; // preserve execution order; run after download
