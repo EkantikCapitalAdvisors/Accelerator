@@ -124,6 +124,7 @@
 
         // The line that does the work: you never actually held the full amount.
         set('aa-avgbal', fmtUSD(m.loan.avgBalance));
+        set('ac-c1', fmtUSD(m.loan.avgBalance));
         set('aa-avgbal-note', 'you borrowed ' + fmtUSD(m.P) + ' — but this is the balance you were ' +
             'actually charged on, averaged across the term');
 
@@ -277,6 +278,22 @@
         ['aa-amt', 'aa-apr', 'aa-yrs', 'aa-growth'].forEach(id => {
             const el = $(id);
             if (el) { el.addEventListener('input', renderAll); el.addEventListener('change', renderAll); }
+        });
+
+        // "Load these terms into the calculator" on each historical case — drops
+        // that case's real numbers into the tool and scrolls to it.
+        document.querySelectorAll('.ac-load').forEach(b => {
+            b.addEventListener('click', () => {
+                const d = b.dataset;
+                if ($('aa-amt'))    $('aa-amt').value = d.amt;
+                if ($('aa-apr'))    $('aa-apr').value = d.apr;
+                if ($('aa-yrs'))    $('aa-yrs').value = d.yrs;
+                if ($('aa-growth')) $('aa-growth').value = d.growth;
+                document.querySelectorAll('.aa-preset').forEach(o => o.classList.remove('on'));
+                renderAll();
+                const tool = $('aa-tool');
+                if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         });
 
         document.querySelectorAll('.aa-preset').forEach(b => {
