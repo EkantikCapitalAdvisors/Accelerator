@@ -1329,10 +1329,10 @@
         <div class="pe-panel">
           <div class="ph">▦ Projections</div>
           <table class="pe-proj">
-            <thead><tr><th>Period</th><th>Net equity</th><th>Portfolio</th><th>Debt</th><th>IRR · ROE*</th><th>Multiple</th></tr></thead>
+            <thead><tr><th>Period</th><th>Net equity</th><th>Portfolio</th><th>Debt</th><th>IRR · ROE*</th><th>MOIC*</th></tr></thead>
             <tbody id="pe-proj-body"></tbody>
           </table>
-          <p style="font-family:var(--mono);font-size:.6rem;color:var(--slate-dim);line-height:1.6;margin-top:10px">*IRR is net of Ekantik&rsquo;s fee for structuring and running this leverage arrangement, considering an industry-standard fee structure. Actual terms are proposed and finalized individually with each participant. Net equity, portfolio, and multiple are gross of that fee.</p>
+          <p style="font-family:var(--mono);font-size:.6rem;color:var(--slate-dim);line-height:1.6;margin-top:10px">*IRR and net MOIC are net of Ekantik&rsquo;s fee for structuring and running this leverage arrangement, considering an industry-standard fee structure. Actual terms are proposed and finalized individually with each participant. Net equity, portfolio, and gross MOIC are unaffected by that fee. IRR and MOIC measure different things and can move in opposite directions as you change the compounding allocation &mdash; see &ldquo;How it computes&rdquo; below.</p>
         </div>
       </div>
     </div>
@@ -1403,10 +1403,11 @@
           <tr><td>Control</td><td><span class="v good">High — your own balance sheet</span><div class="s">Tune the allocation anytime</div></td><td><span class="v bad">None</span><div class="s">The GP makes every decision</div></td></tr>
           <tr><td>Income</td><td><span class="v good">From day one</span><div class="s">The Cash-Flow Engine pays monthly</div></td><td><span class="v bad">5–7 years out</span><div class="s">The J-curve — nothing until exit</div></td></tr>
           <tr><td>Target IRR</td><td><span class="v good" id="vt-irr-synth" style="font-size:1.15em">~45%*</span><div class="s">Net of fees · from the calculator above, at the modeled term &mdash; the leverage is the difference</div></td><td><span class="v warn">15–25%</span><div class="s">Net of the same fee structure — no leverage on your own capital</div></td></tr>
+          <tr><td>MOIC*</td><td><span class="v warn" id="vt-moic-synth" style="font-size:1.15em">~1.5x</span><div class="s">Net · yours to dial — rises with the compounding allocation you choose above, as IRR falls</div></td><td><span class="v warn">2.0x – 2.5x</span><div class="s">Net · 5&ndash;7yr hold, per Cambridge Associates &mdash; fixed by the GP, not you</div></td></tr>
         </tbody>
       </table>
     </div>
-    <p style="font-family:var(--mono);font-size:.62rem;color:var(--slate-dim);line-height:1.6;margin:10px 0 8px">*Synthetic PE Target IRR is computed live from the calculator above, at its current inputs and net of an industry-standard fee assumption &mdash; it updates if those inputs change and is not fixed at any single number.</p>
+    <p style="font-family:var(--mono);font-size:.62rem;color:var(--slate-dim);line-height:1.6;margin:10px 0 8px">*Synthetic PE Target IRR and MOIC are computed live from the calculator above, at its current inputs and net of an industry-standard fee assumption &mdash; both update if those inputs change and are not fixed at any single number. IRR and MOIC move in opposite directions as you change the compounding allocation: a traditional PE fund fixes that trade-off for you, this doesn&rsquo;t. Traditional PE figures are industry benchmarks (Cambridge Associates), not any specific fund&rsquo;s results.</p>
     <span class="compliance-pill">Illustrative comparison · target/hypothetical figures, not guarantees · not investment advice or an offer</span>
   </div>
 </section>
