@@ -37,6 +37,16 @@
     function fmtIRR(irr) {
         return irr == null ? '—' : Math.round(irr) + '%';
     }
+    // Net MOIC (Multiple on Invested Capital) — the ILPA-standard companion metric to
+    // IRR, shown net of the same program-fee assumption. Gross MOIC (portfolio ÷
+    // invested) is fee-independent, since fees only touch cash flows, not portAt/debtAt.
+    function programFeeMOIC(p, yr) {
+        const pp = Object.assign({}, p, { mgmtPct: PROGRAM_MGMT_PCT, carryPct: PROGRAM_CARRY_PCT });
+        const cc = compute(pp);
+        const r = cc.proj(yr);
+        const netTotalValue = (r.ne - r.carryDollar) - r.mgmtPaid;
+        return cc.invested > 0 ? netTotalValue / cc.invested : 0;
+    }
 
     const fmtUSD = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
     const fmtK = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 100000 ? 0 : 0) + 'k' : fmtUSD(v); };
@@ -143,17 +153,23 @@
         $('pe-proj-body').innerHTML = yrs.map(yr => {
             const r = c.proj(yr), term = (yr === p.term);
             const irrCell = fmtIRR(programFeeIRR(p, yr));
+            const netMoic = programFeeMOIC(p, yr);
+            const moicCell = r.mult.toFixed(1) + 'x <span style="opacity:.6;font-size:.85em">&middot; ' + netMoic.toFixed(1) + 'x net</span>';
             return '<tr' + (term ? ' class="hl"' : '') + '><td>' + (term ? '🏆 ' : '') + yr + 'Y</td>' +
                 '<td class="gold">' + fmtKx(r.ne) + '</td><td>' + fmtKx(r.port) + '</td>' +
                 '<td' + (r.debt <= 1 ? ' class="pos"' : '') + '>' + (r.debt <= 1 ? '$0' : fmtKx(r.debt)) + '</td>' +
-                '<td class="pos">' + irrCell + '</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
+                '<td class="pos">' + irrCell + '</td><td>' + moicCell + '</td></tr>';
         }).join('');
 
-        // vs-traditional comparison table — Target IRR row, live from this same engine
-        // so it can never drift from what the calculator above actually shows.
+        // vs-traditional comparison table — Target IRR + MOIC rows, live from this same
+        // engine so they can never drift from what the calculator above actually shows.
         if ($('vt-irr-synth')) {
             const goalIrr = programFeeIRR(p, p.term);
             $('vt-irr-synth').textContent = goalIrr == null ? '—' : '~' + Math.round(goalIrr) + '%*';
+        }
+        if ($('vt-moic-synth')) {
+            const goalMoic = programFeeMOIC(p, p.term);
+            $('vt-moic-synth').textContent = '~' + goalMoic.toFixed(1) + 'x*';
         }
 
         // architecture
@@ -176,7 +192,7 @@
             ' — split <b style="color:#7E9CC4">' + Math.round(compPct) + '% into the compounding sleeve</b> (grows at ' + p.cagr + '% CAGR) and <b style="color:#6FB77F">' + Math.round(100 - compPct) + '% into the income sleeve</b> (yields ' + p.yield + '%/mo = ' + fmtUSD(c.income) + '/mo). ' +
             'The income services the debt; the shortfall (' + fmtUSD(c.oop) + '/mo out of pocket) is your carry. ' +
             (strat === 'amort' ? 'Amortized: the loan is paid to $0 by the term, so at payoff net equity = the full portfolio.' : 'Interest-only: only interest is paid, so the full principal balloons at the term — a real obligation to refinance or repay from the portfolio, not a free ride.') +
-            ' Multiple = portfolio ÷ invested. <b>IRR is the true levered return</b> — money-weighted on the cash you actually commit (' + (c.feesDollar > 0 ? 'fees + reserves up front, monthly carry' : 'reserves up front, monthly carry') + ') versus the net equity realized. That committed-cash base is small when coverage is near 1× — often just the reserve (and any fees) — which is what pushes IRR well above the ' + p.cagr + '% asset CAGR, not the rate spread alone. ' +
+            ' <b>MOIC</b> (Multiple on Invested Capital, the standard PE companion metric to IRR) = portfolio ÷ invested, gross; net MOIC nets out the same program-fee assumption as IRR below. MOIC and IRR measure different things and can move in opposite directions: MOIC tracks how much the compounding sleeve actually multiplied your invested capital, independent of financing; IRR is the true levered return — money-weighted on the cash you actually commit (' + (c.feesDollar > 0 ? 'fees + reserves up front, monthly carry' : 'reserves up front, monthly carry') + ') versus the net equity realized. That committed-cash base is small when coverage is near 1× — often just the reserve (and any fees) — which is what pushes IRR well above the ' + p.cagr + '% asset CAGR, not the rate spread alone. ' +
             '<b>This is also why dragging the compounding allocation up can lower IRR, not raise it:</b> more into the compounding sleeve means less into the income sleeve that funds the loan payment, so more of that payment shifts to your own pocket every month — coverage here is ' + c.coverage.toFixed(2) + 'x' + (c.oop > 0 ? ' (' + fmtUSD(c.oop) + '/mo out of pocket)' : '') + '. A bigger, longer-held cash commitment lowers the rate of return on that cash even as the portfolio it buys grows larger — IRR is a rate on your money, not a score for the deal\'s size. <b>Leverage amplifies in both directions.</b> ' +
             (c.feesDollar > 0
                 ? 'The ' + fmtUSD(c.feesDollar) + ' one-time fee above is subtracted at drawdown and never returned, so it lowers IRR directly — a larger share of a smaller committed-cash base. '
