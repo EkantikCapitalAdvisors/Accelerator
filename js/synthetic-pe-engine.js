@@ -21,7 +21,7 @@
         return (Math.pow(1 + (lo + hi) / 2, 12) - 1) * 100;
     }
 
-    // p: { borrow, pu, rate, term, yield, cagr, comp, reserves, strat:'amort'|'io' }
+    // p: { borrow, pu, rate, term, yield, cagr, comp, reserves, fees, strat:'amort'|'io' }
     //   borrow   — principal drawn (the HELOC / synthetic line)
     //   pu       — personal-use draw skimmed off the top (not invested)
     //   rate     — annual borrow rate, %
@@ -30,6 +30,9 @@
     //   cagr     — compounding-sleeve annual CAGR, %
     //   comp     — % of invested capital into the compounding sleeve (rest is income)
     //   reserves — months of payment held aside as the reserve
+    //   fees     — one-time $ (closing costs / origination) paid at drawdown and never
+    //              returned — unlike the reserve, which comes back at exit. Optional,
+    //              defaults to 0 so callers that don't pass it are unaffected.
     //   strat    — 'amort' (pay to $0 by term) | 'io' (interest-only, principal balloons)
     function compute(p) {
         const strat = p.strat === 'io' ? 'io' : 'amort';
@@ -45,6 +48,7 @@
         const oop = Math.max(0, pmt - income);
         const gm = Math.pow(1 + p.cagr / 100, 1 / 12) - 1;
         const reservesDollar = pmt * (p.reserves || 0);
+        const feesDollar = Math.max(0, p.fees || 0);
 
         const portAt = m => comp0 * Math.pow(1 + gm, m) + inc0;
         const debtAt = m => {
@@ -58,9 +62,10 @@
         for (let m = 0; m <= n; m++) series.push({ m, port: portAt(m), debt: debtAt(m), ne: neAt(m) });
 
         const totInt = strat === 'amort' ? pmt * n - p.borrow : p.borrow * r * n;
-        // Out-of-pocket cash actually committed: the reserve up front + any monthly
-        // shortfall the income doesn't cover, summed across the term ("cash at risk").
-        const cashAtRisk = reservesDollar + oop * n;
+        // Out-of-pocket cash actually committed: the one-time fee + the reserve up
+        // front + any monthly shortfall the income doesn't cover, summed across the
+        // term ("cash at risk").
+        const cashAtRisk = feesDollar + reservesDollar + oop * n;
         const wealth = neAt(n);
 
         function proj(years) {
@@ -68,14 +73,15 @@
             const port = portAt(m), debt = debtAt(m), ne = neAt(m);
             const mult = invested > 0 ? port / invested : 0;
             // True levered-equity IRR: money-weighted on the cash actually committed
-            // (reserves up front + monthly carry) vs the net equity realized at exit.
-            const cf = [-reservesDollar];
+            // (fees + reserves up front + monthly carry) vs the net equity realized
+            // at exit. The reserve is returned at exit; fees are sunk and are not.
+            const cf = [-(reservesDollar + feesDollar)];
             for (let k = 1; k <= m; k++) cf.push(income - pmt);
             cf[m] += ne + reservesDollar;
             return { years, port, debt, ne, mult, irr: solveIRR(cf) };
         }
 
-        return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar, cashAtRisk,
+        return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar, feesDollar, cashAtRisk,
             totInt, totCost: p.borrow + totInt, wealth, n, series, portAt, debtAt, neAt, proj };
     }
 

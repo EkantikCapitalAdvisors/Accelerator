@@ -35,7 +35,8 @@
             yield: Math.max(0, num('pe-yield', 2)),
             cagr: Math.max(0, num('pe-cagr', 26)),
             comp: Math.min(100, Math.max(0, num('pe-comp', 20))),
-            reserves: Math.max(0, num('pe-reserves', 6))
+            reserves: Math.max(0, num('pe-reserves', 6)),
+            fees: Math.max(0, num('pe-fees', 0))
         };
     }
 
@@ -140,13 +141,20 @@
         $('pe-g-cov').innerHTML = (c.coverage >= 1 ? ok : no) + ' Coverage ≥ 1x (' + c.coverage.toFixed(2) + 'x)';
         $('pe-g-oop').innerHTML = (c.oop <= c.income ? ok : no) + ' Out-of-pocket: ' + fmtUSD(c.oop) + '/mo';
         $('pe-g-res').innerHTML = (p.reserves >= 3 ? ok : no) + ' Reserves: ' + p.reserves + 'mo (' + fmtUSD(c.reservesDollar) + ')';
+        if ($('pe-g-fees')) {
+            $('pe-g-fees').innerHTML = '◦ Fees: ' + fmtUSD(c.feesDollar) + ' one-time' +
+                (c.feesDollar > 0 ? ' (sunk — lowers IRR, not returned at exit)' : ' (closing costs — add your lender\'s real number ↑)');
+        }
 
         $('pe-formula').innerHTML =
             '<b>How it computes:</b> you borrow ' + fmtUSD(p.borrow) + ' at ' + p.rate + '% over ' + p.term + ' years and invest ' + fmtUSD(c.invested) +
             ' — split <b style="color:#7E9CC4">' + Math.round(compPct) + '% into the compounding sleeve</b> (grows at ' + p.cagr + '% CAGR) and <b style="color:#6FB77F">' + Math.round(100 - compPct) + '% into the income sleeve</b> (yields ' + p.yield + '%/mo = ' + fmtUSD(c.income) + '/mo). ' +
             'The income services the debt; the shortfall (' + fmtUSD(c.oop) + '/mo out of pocket) is your carry. ' +
             (strat === 'amort' ? 'Amortized: the loan is paid to $0 by the term, so at payoff net equity = the full portfolio.' : 'Interest-only: only interest is paid, so the full principal balloons at the term — a real obligation to refinance or repay from the portfolio, not a free ride.') +
-            ' Multiple = portfolio ÷ invested. <b>IRR is the true levered return</b> — money-weighted on the cash you actually commit (reserves up front, monthly carry) versus the net equity realized — so it runs well above the ' + p.cagr + '% asset CAGR because the ' + p.rate + '% borrow cost sits below it. <b>Leverage amplifies in both directions.</b> ' +
+            ' Multiple = portfolio ÷ invested. <b>IRR is the true levered return</b> — money-weighted on the cash you actually commit (' + (c.feesDollar > 0 ? 'fees + reserves up front, monthly carry' : 'reserves up front, monthly carry') + ') versus the net equity realized. That committed-cash base is small when coverage is near 1× — often just the reserve (and any fees) — which is what pushes IRR well above the ' + p.cagr + '% asset CAGR, not the rate spread alone. <b>Leverage amplifies in both directions.</b> ' +
+            (c.feesDollar > 0
+                ? 'The ' + fmtUSD(c.feesDollar) + ' one-time fee above is subtracted at drawdown and never returned, so it lowers IRR directly — a larger share of a smaller committed-cash base. '
+                : 'No one-time fees are assumed here; a HELOC\'s real closing costs would subtract from the committed-cash base and lower IRR — add them above to see the effect. ') +
             '<b>The reality these smooth lines omit:</b> real returns arrive with volatility, not as a curve. A ' + p.cagr + '% CAGR sustained for ' + p.term + ' years is an aspirational, unproven assumption; the compounding engine has no live record yet. With leverage, an ordinary drawdown can trigger a margin call or forced deleveraging and can wipe the equity — loss beyond the capital invested is possible. Hypothetical and illustrative; not a forecast, projection, or advice to borrow or trade.';
     }
 
@@ -164,7 +172,7 @@
         on.classList.add('on'); off.classList.remove('on');
         strat = (on.id === 'pe-strat-io') ? 'io' : 'amort';
     });
-    ['pe-borrow', 'pe-pu', 'pe-rate', 'pe-term', 'pe-yield', 'pe-cagr', 'pe-comp', 'pe-reserves']
+    ['pe-borrow', 'pe-pu', 'pe-rate', 'pe-term', 'pe-yield', 'pe-cagr', 'pe-comp', 'pe-reserves', 'pe-fees']
         .forEach(id => {
             const el = $(id); if (!el) return;
             const onEdit = () => {
