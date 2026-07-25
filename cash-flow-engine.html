@@ -673,126 +673,18 @@
             <header class="section-head section-head--centered">
                 <div class="section-eyebrow">08 · Live Evidence</div>
                 <h2 class="section-head__title" id="a-h2">The challenge, instrumented.</h2>
-                <p class="section-head__lead">Every metric below is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. Trigger fires render with timestamps. The full instrumentation lives on the challenge dashboard.</p>
+                <p class="section-head__lead">Every metric here is realized &mdash; measured from closed fills on the operator&rsquo;s own capital, recalculated as each new fill closes. The KPI grid, R-multiple and drawdown profile, and the equity/monthly charts are instrumented live on the challenge dashboard, kept as one authoritative instance rather than duplicated here.</p>
             </header>
 
             <div class="evidence-dashboard-banner">
                 <a class="btn btn-gold" href="experiment.html">Open the full challenge dashboard <span class="arr">&rarr;</span></a>
             </div>
 
-            <div class="edge-live edge-live--four">
-                <div class="edge-live__card">
-                    <p class="edge-live__label">Win Rate</p>
-                    <p class="edge-live__value" id="edge-wr">—</p>
-                    <p class="edge-live__caption" id="edge-wr-cap">Live · closed trades</p>
-                </div>
-                <div class="edge-live__card">
-                    <p class="edge-live__label">Profit Factor</p>
-                    <p class="edge-live__value" id="edge-pf">—</p>
-                    <p class="edge-live__caption">Gross wins &divide; gross losses</p>
-                </div>
-                <div class="edge-live__card">
-                    <p class="edge-live__label">EV per trade</p>
-                    <p class="edge-live__value" id="edge-rexp">—</p>
-                    <p class="edge-live__caption" id="edge-rexp-cap">Per unit of risk · live realized</p>
-                </div>
-                <div class="edge-live__card">
-                    <p class="edge-live__label">Avg risk per trade</p>
-                    <p class="edge-live__value" id="edge-avgrisk">—</p>
-                    <p class="edge-live__caption" id="edge-avgrisk-cap">What 1R equals in dollars · live realized</p>
-                </div>
-            </div>
-
-            <div class="r-asym" aria-labelledby="r-asym-h">
-                <p class="r-asym__eyebrow" id="r-asym-h">R-multiple distribution &nbsp;·&nbsp; the asymmetry</p>
-                <div class="r-asym__grid">
-                    <div class="r-asym__cell r-asym__cell--win">
-                        <span class="r-asym__cell-label">Avg win</span>
-                        <span class="r-asym__cell-val" id="r-asym-win">—</span>
-                        <span class="r-asym__cell-sub" id="r-asym-win-sub">in R-units</span>
-                    </div>
-                    <div class="r-asym__cell r-asym__cell--loss">
-                        <span class="r-asym__cell-label">Avg loss</span>
-                        <span class="r-asym__cell-val" id="r-asym-loss">—</span>
-                        <span class="r-asym__cell-sub" id="r-asym-loss-sub">in R-units</span>
-                    </div>
-                    <div class="r-asym__cell r-asym__cell--ratio">
-                        <span class="r-asym__cell-label">Win : Loss ratio</span>
-                        <span class="r-asym__cell-val" id="r-asym-ratio">—</span>
-                        <span class="r-asym__cell-sub">A winning trade outperforms a losing trade by this multiple, in R.</span>
-                    </div>
-                </div>
-                <p class="r-asym__lede" id="r-asym-lede">Win rate and R-multiple move independently. A strategy can lose more trades and still earn more per unit of risk &mdash; if wins are large enough relative to losses. This is the structural reason R-expectancy holds.</p>
-            </div>
-
-
-            <!-- Risk profile — realized drawdown / streak / worst-trade -->
-            <div class="risk-profile" aria-labelledby="rp-h">
-                <p class="risk-profile__eyebrow" id="rp-h">Risk profile &nbsp;&middot;&nbsp; what the strategy has actually tolerated</p>
-                <h3 class="risk-profile__title">Drawdown is the path the Falsifiability Gate watches.</h3>
-                <p class="risk-profile__lede">Headroom (above) shows what the edge could mathematically support. This is what it has cost the operator&rsquo;s personal capital to produce the live record &mdash; the variance the defense architecture has weathered without modification.</p>
-
-                <div class="risk-profile__grid">
-                    <div class="risk-profile__cell">
-                        <span class="risk-profile__label">Max realized drawdown</span>
-                        <span class="risk-profile__value" id="rp-maxdd-r">&mdash;</span>
-                        <span class="risk-profile__sub" id="rp-maxdd-sub">computing&hellip;</span>
-                        <span class="risk-profile__meta" id="rp-maxdd-meta">at live sizing &middot; per 1 ES contract equivalent</span>
-                    </div>
-                    <div class="risk-profile__cell">
-                        <span class="risk-profile__label">Longest losing streak</span>
-                        <span class="risk-profile__value" id="rp-streak">&mdash;</span>
-                        <span class="risk-profile__sub" id="rp-streak-sub">computing&hellip;</span>
-                        <span class="risk-profile__meta">Battery Test 7 threshold: &le; 4 consecutive losses</span>
-                    </div>
-                    <div class="risk-profile__cell">
-                        <span class="risk-profile__label">Worst single trade</span>
-                        <span class="risk-profile__value" id="rp-worst">&mdash;</span>
-                        <span class="risk-profile__sub" id="rp-worst-sub">computing&hellip;</span>
-                        <span class="risk-profile__meta">single deepest realized hit</span>
-                    </div>
-                    <div class="risk-profile__cell">
-                        <span class="risk-profile__label">Recovery from max DD</span>
-                        <span class="risk-profile__value" id="rp-recovery">&mdash;</span>
-                        <span class="risk-profile__sub" id="rp-recovery-sub">computing&hellip;</span>
-                        <span class="risk-profile__meta">trades to restore the prior peak</span>
-                    </div>
-                </div>
-
-                <p class="risk-profile__close" id="rp-close">Computing live risk profile&hellip;</p>
-            </div>
-
             <aside class="record-panel" aria-labelledby="record-panel-h">
                 <p class="record-panel__eyebrow" id="record-panel-h">The complete record</p>
                 <p class="record-panel__body">There is no separate backtest. The public Discord fills are the entire sample. The operator&rsquo;s personal capital was deployed, every trade was posted before exit, and every metric on this page is computed from that record &mdash; nothing is reconstructed, nothing is selected, nothing is unwound.</p>
-                <p class="record-panel__body">The <a href="#battery" class="link-inline">8-Test Sustainability Battery</a> below is how we evaluate whether a sample of this size carries statistical weight. The <a href="#fills" class="link-inline">public trade log</a> further down is every fill, downloadable as CSV, verifiable against the live market.</p>
+                <p class="record-panel__body">The <a href="#section-b" class="link-inline">8-Test Sustainability Battery</a> below is how we evaluate whether a sample of this size carries statistical weight. The <a href="#section-c" class="link-inline">public trade log</a> further down is every fill, downloadable as CSV, verifiable against the live market.</p>
             </aside>
-
-            <h3 class="mt-4">Sample Equity Arc — $10,000 working unit · live</h3>
-            <p class="muted" style="font-size:13px">Live equity progression on the operator&rsquo;s own capital, from the $10,000 working unit. The arc prints as each Discord fill closes. Capital resets to the working unit annually.</p>
-            <div class="mini-chart">
-                <canvas id="section-a-equity"></canvas>
-            </div>
-            <div class="mini-stats">
-                <div>
-                    <span class="mini-stats__label">Current balance</span>
-                    <span class="mini-stats__val" id="section-a-balance">—</span>
-                </div>
-                <div>
-                    <span class="mini-stats__label">Net P&amp;L</span>
-                    <span class="mini-stats__val" id="section-a-net">—</span>
-                </div>
-                <div>
-                    <span class="mini-stats__label">Profit buffers reached</span>
-                    <span class="mini-stats__val" id="section-a-buffers">—</span>
-                </div>
-            </div>
-
-            <h3 class="mt-4">Monthly P&amp;L — contribution per month</h3>
-            <p class="muted" style="font-size:13px">Net dollar result per month, summed from closed fills. Green = profitable month, red = losing month. Independent monthly cash signal — not cumulative wealth.</p>
-            <div class="mini-chart mini-chart--bars">
-                <canvas id="section-a-monthly"></canvas>
-            </div>
 
             <p class="edge-disclaimer"><em>Past performance is not indicative of future results. Sample is pre-asymptotic at this size. Realized expectancy is published live and is the authoritative reference.</em></p>
         </div>
@@ -1000,31 +892,10 @@
                 <div class="card">
                     <div class="card__header">
                         <h3>Public Trade Log</h3>
-                        <span class="mono muted" style="font-size:11px" id="trade-log-count">—</span>
                     </div>
-                    <div class="filter-bar" id="trade-log-filter" role="group" aria-label="Filter trades by date range"></div>
-                    <div class="data-table__wrap data-table__wrap--scroll">
-                        <table class="data-table" style="font-size:12px">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date/Time</th>
-                                    <th>Dir</th>
-                                    <th class="num">Entry</th>
-                                    <th class="num">Exit</th>
-                                    <th class="num">Pts</th>
-                                    <th class="num">$ P&amp;L</th>
-                                    <th>Result</th>
-                                    <th class="num">R</th>
-                                </tr>
-                            </thead>
-                            <tbody id="trade-log-body">
-                                <tr><td colspan="9" class="muted italic">Loading…</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <p class="muted" style="font-size:13px;line-height:1.6;margin-top:2px">Every closed fill &mdash; ID, entry/exit, points, $ P&amp;L, R &mdash; with a date-range filter and CSV export, lives on the challenge dashboard as the single authoritative log.</p>
                     <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
-                        <button type="button" class="btn btn--secondary btn--sm" id="btn-download-csv">Download full trade log (CSV)</button>
+                        <a class="btn btn--primary btn--sm" href="experiment.html">Open the full trade log <span class="arr">&rarr;</span></a>
                     </div>
                     <p class="muted italic mt-2" style="font-size:12px">Full log available. Download it, run it through any evaluator you trust.</p>
                 </div>
