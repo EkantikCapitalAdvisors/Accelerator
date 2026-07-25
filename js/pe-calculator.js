@@ -21,6 +21,31 @@
     // calculator and the HELOC worked example can never drift apart.
     const compute = p => root.SyntheticPE.compute(Object.assign({}, p, { strat: strat }));
 
+    // Ekantik's fee for structuring and running this leverage arrangement is
+    // negotiated individually per participant and is not published on this page.
+    // These two representative structures bound the IRR range shown in the
+    // Projections table so the figure isn't misleadingly precise (see the fine
+    // print under that table). They stack on top of whatever one-time HELOC
+    // cost the visitor enters above — a separate cost, paid to their own lender.
+    const PROGRAM_FEE_SCENARIOS = [
+        p => ({ fees: p.borrow * 0.10, carryPct: 30 }),
+        p => ({ fees: p.borrow * 0.20, carryPct: 0 })
+    ];
+    function programFeeIRRRange(p, yr) {
+        const irrs = PROGRAM_FEE_SCENARIOS.map(scenario => {
+            const s = scenario(p);
+            const pp = Object.assign({}, p, { fees: (p.fees || 0) + s.fees, carryPct: s.carryPct });
+            return compute(pp).proj(yr).irr;
+        }).filter(v => v != null);
+        if (!irrs.length) return null;
+        return { lo: Math.min.apply(null, irrs), hi: Math.max.apply(null, irrs) };
+    }
+    function fmtIRRRange(rng) {
+        if (rng == null) return '—';
+        const a = Math.round(rng.lo), b = Math.round(rng.hi);
+        return (a === b ? a + '%' : Math.min(a, b) + '–' + Math.max(a, b) + '%');
+    }
+
     const fmtUSD = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
     const fmtK = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 100000 ? 0 : 0) + 'k' : fmtUSD(v); };
     const fmtKx = v => { const a = Math.abs(v); return a >= 1000 ? (v < 0 ? '−$' : '$') + (a / 1000).toFixed(a >= 10000 ? 0 : 1) + 'k' : fmtUSD(v); };
@@ -125,10 +150,11 @@
         if (yrs[yrs.length - 1] !== p.term) yrs.push(p.term);
         $('pe-proj-body').innerHTML = yrs.map(yr => {
             const r = c.proj(yr), term = (yr === p.term);
+            const irrCell = fmtIRRRange(programFeeIRRRange(p, yr));
             return '<tr' + (term ? ' class="hl"' : '') + '><td>' + (term ? '🏆 ' : '') + yr + 'Y</td>' +
                 '<td class="gold">' + fmtKx(r.ne) + '</td><td>' + fmtKx(r.port) + '</td>' +
                 '<td' + (r.debt <= 1 ? ' class="pos"' : '') + '>' + (r.debt <= 1 ? '$0' : fmtKx(r.debt)) + '</td>' +
-                '<td class="pos">' + (r.irr == null ? '—' : r.irr.toFixed(1) + '%') + '</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
+                '<td class="pos">' + irrCell + '</td><td>' + r.mult.toFixed(1) + 'x</td></tr>';
         }).join('');
 
         // architecture

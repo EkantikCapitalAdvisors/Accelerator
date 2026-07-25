@@ -33,6 +33,10 @@
     //   fees     — one-time $ (closing costs / origination) paid at drawdown and never
     //              returned — unlike the reserve, which comes back at exit. Optional,
     //              defaults to 0 so callers that don't pass it are unaffected.
+    //   carryPct — optional contingent profit share (%), taken ONLY at full-term payoff
+    //              (the "goal"), off the portfolio gain above invested capital. Sunk,
+    //              not returned — but contingent on reaching term, unlike fees. Defaults
+    //              to 0 so callers that don't pass it are unaffected.
     //   strat    — 'amort' (pay to $0 by term) | 'io' (interest-only, principal balloons)
     function compute(p) {
         const strat = p.strat === 'io' ? 'io' : 'amort';
@@ -49,6 +53,7 @@
         const gm = Math.pow(1 + p.cagr / 100, 1 / 12) - 1;
         const reservesDollar = pmt * (p.reserves || 0);
         const feesDollar = Math.max(0, p.fees || 0);
+        const carryPct = Math.max(0, p.carryPct || 0);
 
         const portAt = m => comp0 * Math.pow(1 + gm, m) + inc0;
         const debtAt = m => {
@@ -72,13 +77,17 @@
             const m = Math.round(years * 12);
             const port = portAt(m), debt = debtAt(m), ne = neAt(m);
             const mult = invested > 0 ? port / invested : 0;
+            // Contingent carry: only due if this projection reaches full-term payoff
+            // (the "goal") — an interim exit owes no carry.
+            const atGoal = m >= n;
+            const carryDollar = atGoal ? carryPct / 100 * Math.max(0, port - invested) : 0;
             // True levered-equity IRR: money-weighted on the cash actually committed
             // (fees + reserves up front + monthly carry) vs the net equity realized
-            // at exit. The reserve is returned at exit; fees are sunk and are not.
+            // at exit. The reserve is returned at exit; fees and carry are sunk and are not.
             const cf = [-(reservesDollar + feesDollar)];
             for (let k = 1; k <= m; k++) cf.push(income - pmt);
-            cf[m] += ne + reservesDollar;
-            return { years, port, debt, ne, mult, irr: solveIRR(cf) };
+            cf[m] += ne + reservesDollar - carryDollar;
+            return { years, port, debt, ne, mult, carryDollar, irr: solveIRR(cf) };
         }
 
         return { invested, comp0, inc0, pmt, income, coverage, oop, gm, reservesDollar, feesDollar, cashAtRisk,
