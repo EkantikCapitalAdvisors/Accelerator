@@ -766,5 +766,29 @@
     "attribution": null,
     "attribution_breach": false,
     "upload_batch": "opt-1784913379579"
+  },
+  {
+    "datetime": "2026-07-27 10:38 AM",
+    "entry_time": "2026-07-27 10:38 AM",
+    "exit_time": "",
+    "trade_num": "O33",
+    "ticker": "SPX",
+    "option_type": "",
+    "strike": 7420,
+    "expiry": "0DTE",
+    "direction": "Buy",
+    "entry_price": 4.2,
+    "stop_price": 0,
+    "exit_target": "",
+    "notes": "will notify of changes to exits",
+    "dollar_pl": 380,
+    "risk_dollars": 0,
+    "is_win": true,
+    "outcome": "Win",
+    "trade_date": "7/27/2026",
+    "source": "discord",
+    "attribution": null,
+    "attribution_breach": false,
+    "upload_batch": "opt-1785244571714"
   }
 ]
