@@ -241,6 +241,15 @@
         }).join('');
     }
 
+    function downloadCSV() {
+        const cols = ['trade_num', 'entry_time', 'ticker', 'strike', 'expiry', 'option_type', 'direction', 'entry_price', 'exit_price', 'dollar_pl', 'risk_dollars', 'outcome'];
+        const head = cols.join(',');
+        const body = lastTrades.map(t => cols.map(c => JSON.stringify(t[c] ?? '')).join(',')).join('\n');
+        const blob = new Blob([head + '\n' + body], { type: 'text/csv' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = 'ekantik-options-trades.csv'; a.click();
+    }
+
     // Paint from the last fetched set. Header + charts are all-time; KPIs and
     // the trade log honor the selected window. Called on every fetch and on
     // every window change (no re-fetch needed for the latter).
@@ -325,6 +334,7 @@
 
     function init() {
         wireWindow();
+        const csv = $('od-csv'); if (csv) csv.addEventListener('click', downloadCSV);
         render();
         setInterval(() => { if (document.visibilityState !== 'hidden') render(); }, 60000);
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') render(); });
