@@ -88,6 +88,23 @@
         // longest losing streak
         let streak = 0, maxStreak = 0;
         trades.forEach(t => { if ((t.dollar_pl || 0) <= 0) { streak++; maxStreak = Math.max(maxStreak, streak); } else streak = 0; });
+
+        // Max drawdown (deepest peak-to-trough on cumulative realized P&L) + recovery
+        let cum = 0, peak = 0, maxDD = 0, troughIdx = -1, peakAtTrough = 0;
+        trades.forEach((t, i) => {
+            cum += t.dollar_pl || 0;
+            if (cum > peak) peak = cum;
+            const dd = peak - cum;
+            if (dd > maxDD) { maxDD = dd; troughIdx = i; peakAtTrough = peak; }
+        });
+        let recovery = null;
+        if (troughIdx >= 0 && maxDD > 0) {
+            let cum2 = 0;
+            for (let i = 0; i < trades.length; i++) {
+                cum2 += trades[i].dollar_pl || 0;
+                if (i > troughIdx && cum2 >= peakAtTrough) { recovery = i - troughIdx; break; }
+            }
+        }
         const best = trades.length ? trades.reduce((a, t) => (t.dollar_pl || 0) > (a.dollar_pl || 0) ? t : a) : null;
         const worst = trades.length ? trades.reduce((a, t) => (t.dollar_pl || 0) < (a.dollar_pl || 0) ? t : a) : null;
 
@@ -115,7 +132,7 @@
             avgWin: wins.length ? gp / wins.length : null,
             avgLoss: losses.length ? -gl / losses.length : null,
             avgRisk: trades.length ? trades.reduce((a, t) => a + (t.risk_dollars || 0), 0) / trades.length : null,
-            maxStreak, best, worst
+            maxStreak, best, worst, maxDD, recovery
         };
     }
 
@@ -147,6 +164,9 @@
         if ($('od-best-id') && s.best) $('od-best-id').textContent = `${s.best.trade_num} · ${s.best.ticker}`;
         set('od-worst', s.worst ? fmtSigned(s.worst.dollar_pl) : '—');
         if ($('od-worst-id') && s.worst) $('od-worst-id').textContent = `${s.worst.trade_num} · ${s.worst.ticker}`;
+        set('od-dd', s.n ? '−' + fmtUSD(s.maxDD).replace('−', '') : '—');
+        if ($('od-dd-sub')) $('od-dd-sub').textContent = s.maxDD > 0 ? `${(s.maxDD / BASE * 100).toFixed(1)}% of $10K working unit` : 'deepest peak-to-trough';
+        set('od-recovery', s.recovery != null ? `${s.recovery} trades` : (s.maxDD > 0 ? 'in progress' : '—'));
         set('od-streak', s.n ? s.maxStreak + (s.maxStreak === 1 ? ' trade' : ' trades') : '—');
         set('od-avgrisk', s.avgRisk != null ? fmtUSD(s.avgRisk) : '—');
     }
