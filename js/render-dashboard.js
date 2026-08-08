@@ -375,14 +375,17 @@
         const span = ts.length >= 2 ? { start: ts[0], end: ts[ts.length-1] } : null;
 
         // Annual R — R-expectancy extrapolated to a full calendar year at the
-        // window's observed trade cadence. Needs ≥2 trades and ≥1 day of span;
-        // very-short windows produce noisy annualizations and should be read
-        // with that in mind.
+        // window's observed trade cadence. A short window's cadence is a bad
+        // estimator of the whole year (a couple of busy days reads as "88
+        // trades/month" once multiplied out) — only extrapolate once the
+        // window covers at least MIN_SPAN_DAYS; otherwise leave it unset and
+        // say so, rather than show a noisy number.
+        const MIN_SPAN_DAYS = 14;
         const rexp = Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null;
+        const spanDays = span ? (span.end - span.start) / 86400000 : null;
         let annualR = null, tradesPerYear = null;
-        if (rexp != null && span) {
-            const days = Math.max(1, (span.end - span.start) / 86400000);
-            tradesPerYear = (n / days) * 365;
+        if (rexp != null && span && spanDays >= MIN_SPAN_DAYS) {
+            tradesPerYear = (n / spanDays) * 365;
             annualR = rexp * tradesPerYear;
         }
 
@@ -401,7 +404,7 @@
             evPerTrade: net / n,
             avgRisk: risks.length ? risks.reduce((a, v) => a + v, 0) / risks.length : 0,
             maxDD, recovery, maxStreak,
-            span
+            span, spanDays
         };
     }
 
@@ -420,10 +423,11 @@
         $set('kpi-wr-sub', `${k.wins} W · ${k.losses} L`);
         $set('kpi-pf',     isFinite(k.pf) ? k.pf.toFixed(2) : '∞');
         $set('kpi-rexp',   fmtR(k.rexp));
+        const tooShort = k.spanDays != null && k.spanDays < 14 && k.tradesPerYear == null;
         $set('kpi-annualr', k.annualR != null ? (k.annualR >= 0 ? '+' : '') + k.annualR.toFixed(0) + 'R' : '—');
-        $set('kpi-annualr-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : 'extrapolated from cadence');
+        $set('kpi-annualr-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : (tooShort ? 'window <14d — not extrapolated' : 'extrapolated from cadence'));
         $set('kpi-tpm', k.tradesPerMonth != null ? k.tradesPerMonth.toFixed(1) : '—');
-        $set('kpi-tpm-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : 'avg cadence in window');
+        $set('kpi-tpm-sub', k.tradesPerYear != null ? `~${Math.round(k.tradesPerYear)} trades/yr extrapolated` : (tooShort ? 'window <14d — not extrapolated' : 'avg cadence in window'));
         $set('kpi-ev',     fmtSigned(k.evPerTrade));
         $set('kpi-ev-sub', `net ${fmtSigned(k.net)} over window`);
 

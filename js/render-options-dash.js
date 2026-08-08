@@ -110,14 +110,18 @@
 
         // R-expectancy and its annualization. Annual R = per-trade R-expectancy
         // extrapolated to a full calendar year at the window's observed cadence.
-        // Needs ≥2 dated fills and ≥1 day of span; short windows annualize noisily.
+        // A short window's cadence is a bad estimator of the whole year (a
+        // couple of busy days reads as absurdly high once multiplied out) —
+        // only extrapolate once the window covers at least MIN_SPAN_DAYS;
+        // otherwise leave it unset and say so, rather than show a noisy number.
+        const MIN_SPAN_DAYS = 14;
         const rexp = Rs.length ? Rs.reduce((a, v) => a + v, 0) / Rs.length : null;
         const ts = trades.map(t => parseTS(t.entry_time || t.trade_date)).filter(Boolean).sort((a, b) => a - b);
         const span = ts.length >= 2 ? { start: ts[0], end: ts[ts.length - 1] } : null;
+        const spanDays = span ? (span.end - span.start) / 86400000 : null;
         let annualR = null, tradesPerYear = null;
-        if (rexp != null && span) {
-            const days = Math.max(1, (span.end - span.start) / 86400000);
-            tradesPerYear = (trades.length / days) * 365;
+        if (rexp != null && span && spanDays >= MIN_SPAN_DAYS) {
+            tradesPerYear = (trades.length / spanDays) * 365;
             annualR = rexp * tradesPerYear;
         }
 
@@ -127,7 +131,7 @@
             wins: wins.length, losses: losses.length,
             pf: gl > 0 ? gp / gl : (gp > 0 ? Infinity : 0),
             rexp,
-            annualR, tradesPerYear,
+            annualR, tradesPerYear, spanDays,
             ev: trades.length ? net / trades.length : null,
             avgWin: wins.length ? gp / wins.length : null,
             avgLoss: losses.length ? -gl / losses.length : null,
@@ -154,7 +158,8 @@
         set('od-pf', s.n ? (isFinite(s.pf) ? s.pf.toFixed(2) : '∞') : '—');
         set('od-rexp', s.rexp != null ? fmtR(s.rexp) : '—');
         set('od-annualr', s.annualR != null ? (s.annualR >= 0 ? '+' : '') + s.annualR.toFixed(0) + 'R' : '—');
-        if ($('od-annualr-sub')) $('od-annualr-sub').textContent = s.tradesPerYear != null ? `~${Math.round(s.tradesPerYear)} fills/yr extrapolated` : 'extrapolated from cadence';
+        const odTooShort = s.spanDays != null && s.spanDays < 14 && s.tradesPerYear == null;
+        if ($('od-annualr-sub')) $('od-annualr-sub').textContent = s.tradesPerYear != null ? `~${Math.round(s.tradesPerYear)} fills/yr extrapolated` : (odTooShort ? 'window <14d — not extrapolated' : 'extrapolated from cadence');
         set('od-ev', s.ev != null ? fmtSigned(s.ev) : '—');
         set('od-count', s.n ? String(s.n) : '—');
         if ($('od-wl')) $('od-wl').textContent = s.n ? `${s.wins} W / ${s.losses} L` : '—';
