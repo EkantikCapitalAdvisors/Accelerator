@@ -439,7 +439,7 @@
         $set('kpi-worst', fmtSigned(k.worstTrade));
 
         $set('kpi-dd', '−' + fmtUSD(k.maxDD).replace('−','').replace('$','$'));
-        $set('kpi-dd-sub', k.maxDD > 0 ? `${(k.maxDD / 10000 * 100).toFixed(1)}% of $10K working unit` : '—');
+        $set('kpi-dd-sub', k.maxDD > 0 ? `${(k.maxDD / 20000 * 100).toFixed(1)}% of $20K working unit` : '—');
         $set('kpi-recovery', k.recovery != null ? `${k.recovery} trades` : (k.maxDD > 0 ? 'in progress' : '—'));
         $set('kpi-streak', k.maxStreak + ' in a row');
         $set('kpi-avgrisk', fmtUSD(k.avgRisk));
