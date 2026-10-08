@@ -790,5 +790,29 @@
     "attribution": null,
     "attribution_breach": false,
     "upload_batch": "opt-1785244571714"
+  },
+  {
+    "datetime": "",
+    "entry_time": "",
+    "exit_time": "",
+    "trade_num": "O34",
+    "ticker": "SPX",
+    "option_type": "",
+    "strike": 7420,
+    "expiry": "0DTE",
+    "direction": "Buy",
+    "entry_price": 5,
+    "stop_price": 0,
+    "exit_target": "",
+    "notes": "will notify of changes to exits",
+    "dollar_pl": -200,
+    "risk_dollars": 0,
+    "is_win": false,
+    "outcome": "Loss",
+    "trade_date": "",
+    "source": "discord",
+    "attribution": null,
+    "attribution_breach": false,
+    "upload_batch": "opt-1791494315438"
   }
 ]
