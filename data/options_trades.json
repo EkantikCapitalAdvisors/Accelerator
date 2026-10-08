@@ -862,5 +862,29 @@
     "attribution": null,
     "attribution_breach": false,
     "upload_batch": "opt-1791494425097"
+  },
+  {
+    "datetime": "",
+    "entry_time": "",
+    "exit_time": "",
+    "trade_num": "O37",
+    "ticker": "SPX",
+    "option_type": "",
+    "strike": 7795,
+    "expiry": "0DTE",
+    "direction": "Buy",
+    "entry_price": 3.3,
+    "stop_price": 3,
+    "exit_target": "2x unless told",
+    "notes": "",
+    "dollar_pl": -50,
+    "risk_dollars": 30,
+    "is_win": false,
+    "outcome": "Loss",
+    "trade_date": "",
+    "source": "discord",
+    "attribution": null,
+    "attribution_breach": false,
+    "upload_batch": "opt-1791494457011"
   }
 ]
