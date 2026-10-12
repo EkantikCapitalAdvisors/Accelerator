@@ -136,8 +136,10 @@ const DB = {
         for (let i = 0; i < 4; i++) {
             const existing = await DB._read(tableName);
             const keys = new Set(existing.map(makeKey));
-            const newRows = trades
-                .filter(t => !keys.has(makeTradeKey(t)))
+            // Assign the next free ID per series to every genuinely new trade
+            // (whatever ID was typed); skip true re-imports. See resolveTradeIds.
+            const { fresh, renumbered, skipped } = resolveTradeIds(existing, trades, makeTradeKey, keys);
+            const newRows = fresh
                 .map(t => ({
                     week_key:     getWeekKey(t.date),
                     trade_num:    t.tradeNum    || '',
@@ -167,12 +169,12 @@ const DB = {
                     source:       t.source      || 'tradovate',
                     upload_batch: batchId
                 }));
-            if (newRows.length === 0) return; // all dupes
+            if (newRows.length === 0) return { added: 0, skipped: skipped.length, renumbered: [], ids: [] }; // all dupes
 
             try {
                 await DB._write(tableName, [...existing, ...newRows],
                     `Update ${tableName}: +${newRows.length} trades [${batchId}]`);
-                return;
+                return { added: newRows.length, skipped: skipped.length, renumbered, ids: newRows.map(r => r.trade_num) };
             } catch (e) {
                 if (isShaConflict(e) && i < 3) {
                     console.warn(`[GitHubDB] saveTrades retry ${i + 1}/4 after conflict:`, e.message);
@@ -455,6 +457,75 @@ function bufferPhaseOf(id) {
     return { F: 1, S: 2, T: 3, FT: 4 }[m[1]] || null;
 }
 
+// ─── Trade-ID assignment (used by DB.saveTrades) ─────────────────────────────
+// The ID typed in Discord ("F5:", "S12:") is only a LABEL used to pair an entry
+// with its close inside one paste. On save, every NEW trade is given the next
+// free number in its series (F, S, T, FT, …) no matter what was typed — so IDs
+// never collide, never skip, and a real trade is never silently dropped because
+// its typed ID happened to exist already.
+//
+// A trade is treated as a RE-IMPORT (and skipped) only when the same ID already
+// exists AND the content matches (same direction + entry price, or same entry
+// time) — so re-pasting an old export stays idempotent.
+//
+// Trades with no ID (e.g. Tradovate CSV) keep the original content-key dedupe.
+// An unknown prefix (e.g. "X9") continues the series of the latest saved ID.
+function resolveTradeIds(existing, incoming, makeTradeKey, existingKeys) {
+    const ID_RE = /^([A-Z]{1,2})(\d+)$/i;
+    const KNOWN = ['F', 'S', 'T', 'FT'];
+    const maxBy = {};
+    let lastPrefix = null;
+    existing.forEach(r => {
+        const m = ID_RE.exec(String(r.trade_num || ''));
+        if (!m) return;
+        const p = m[1].toUpperCase();
+        maxBy[p] = Math.max(maxBy[p] || 0, parseInt(m[2], 10));
+        lastPrefix = p;
+    });
+
+    const sameTrade = (r, t) => {
+        const px = parseFloat(r.entry_price), tp = parseFloat(t.entryPrice);
+        const priceAndDir = isFinite(px) && isFinite(tp) && Math.abs(px - tp) < 0.01 &&
+            String(r.direction || '') === String(t.direction || '');
+        const rt = String(r.entry_time || '').trim();
+        const tt = String(t.entryTime || t.datetime || '').trim();
+        return priceAndDir || (rt !== '' && rt === tt);
+    };
+
+    const byId = {};
+    existing.forEach(r => {
+        const id = String(r.trade_num || '').toUpperCase();
+        if (id) (byId[id] = byId[id] || []).push(r);
+    });
+
+    const seenKeys = new Set(existingKeys || []);
+    const batchById = {};
+    const fresh = [], renumbered = [], skipped = [];
+
+    incoming.forEach(t => {
+        const typed = String(t.tradeNum || '').toUpperCase();
+        if (!typed) {                                   // ID-less → content-key dedupe
+            const k = makeTradeKey(t);
+            if (seenKeys.has(k)) { skipped.push(t); return; }
+            seenKeys.add(k); fresh.push(t); return;
+        }
+        const dupOfSaved = (byId[typed] || []).some(r => sameTrade(r, t));
+        const dupInBatch = (batchById[typed] || []).some(b => sameTrade({
+            entry_price: b.entryPrice, direction: b.direction, entry_time: b.entryTime || b.datetime
+        }, t));
+        if (dupOfSaved || dupInBatch) { skipped.push(t); return; }
+
+        const m = ID_RE.exec(typed);
+        const prefix = (m && KNOWN.includes(m[1])) ? m[1] : (lastPrefix || 'F');
+        maxBy[prefix] = (maxBy[prefix] || 0) + 1;
+        const id = prefix + maxBy[prefix];
+        if (id !== typed) renumbered.push({ from: typed, to: id });
+        (batchById[typed] = batchById[typed] || []).push(t);
+        fresh.push(Object.assign({}, t, { tradeNum: id }));
+    });
+    return { fresh, renumbered, skipped };
+}
+
 function parseDiscordTradeText(text) {
     const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
     const pending = {};   // tradeNum → { direction, entryPrice, stopPrice, datetime, date }
@@ -479,7 +550,7 @@ function parseDiscordTradeText(text) {
         // 2. Date+time line: "Ekantik Capital  4/13/2026 8:33 AM" or bare "4/2/2026 10:12 AM"
         //    Also handles: "Ekantik Capital — 4/13/2026 8:33 AM" or with (edited)
         const headerMatch = line.match(/(?:^|\s)(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i);
-        if (headerMatch && !line.match(/^(FT\d+|F\d+|S\d+|T\d+)/i)) {
+        if (headerMatch && !line.match(/^[A-Z]{1,2}\d+/i)) {
             const datePart = headerMatch[1]; // e.g. "4/13/2026"
             const timePart = headerMatch[2]; // e.g. "8:33 AM"
             const dp = datePart.split('/');
@@ -491,7 +562,7 @@ function parseDiscordTradeText(text) {
 
         // 2b. Time-only header: "Ekantik Capital  9:29 AM" (no date, use current date)
         const timeOnlyMatch = line.match(/^.+?\s+(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM))\s*$/i);
-        if (timeOnlyMatch && !line.match(/^(FT\d+|F\d+|S\d+|T\d+)/i)) {
+        if (timeOnlyMatch && !line.match(/^[A-Z]{1,2}\d+/i)) {
             const timePart = timeOnlyMatch[1];
             if (currentDatetime) {
                 // Update time portion only
@@ -513,7 +584,7 @@ function parseDiscordTradeText(text) {
         //    (the old "S = 2 ES" auto-default was removed); size comes from the
         //    cumulative-profit ladder or an explicit Nes/Nmes/keyword on the entry.
         //    FT is listed first so "FT3" matches Fourth, not First.
-        const m = line.match(/^(FT\d+|F\d+|S\d+|T\d+)\s*:\s*(.+)$/i);
+        const m = line.match(/^([A-Z]{1,2}\d+)\s*:\s*(.+)$/i);
         if (!m) continue;
         const tradeNum = m[1].toUpperCase();
         const body = m[2].trim();

@@ -373,8 +373,13 @@
                     setResult(`Committed ${added}/${parsedTrades.length} options trades as batch ${batchId} (dupes skipped).`, 'var(--pass)');
                 } else {
                     const batchId = 'discord-' + Date.now();
-                    await DB.saveTrades('tenx_trades', parsedTrades, batchId);
-                    setResult(`✓ Committed ${parsedTrades.length} trades as batch ${batchId}.`, 'var(--pass)');
+                    const res = await DB.saveTrades('tenx_trades', parsedTrades, batchId);
+                    const added = res ? res.added : parsedTrades.length;
+                    const dupes = res && res.skipped ? ` · ${res.skipped} already saved (skipped)` : '';
+                    const renum = res && res.renumbered && res.renumbered.length
+                        ? ` · IDs auto-assigned: ${res.renumbered.map(r => `${r.from} → <strong>${r.to}</strong>`).join(', ')}`
+                        : '';
+                    setResult(`✓ Committed ${added}/${parsedTrades.length} trades as batch ${batchId}${dupes}${renum}.`, 'var(--pass)');
                 }
                 resetPreview();
                 fileInput.value = ''; showFileName();
