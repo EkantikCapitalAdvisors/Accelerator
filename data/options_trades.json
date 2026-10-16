@@ -910,5 +910,29 @@
     "attribution": null,
     "attribution_breach": false,
     "upload_batch": "opt-1791494495934"
+  },
+  {
+    "datetime": "2026-10-09 9:20 AM",
+    "entry_time": "2026-10-09 9:20 AM",
+    "exit_time": "",
+    "trade_num": "O39",
+    "ticker": "SPX",
+    "option_type": "",
+    "strike": 7805,
+    "expiry": "0DTE",
+    "direction": "Buy",
+    "entry_price": 3.8,
+    "stop_price": 1.5,
+    "exit_target": "2x unless told",
+    "notes": "",
+    "dollar_pl": 20,
+    "risk_dollars": 230,
+    "is_win": true,
+    "outcome": "Win",
+    "trade_date": "10/9/2026",
+    "source": "discord",
+    "attribution": null,
+    "attribution_breach": false,
+    "upload_batch": "opt-1792180779238"
   }
 ]
